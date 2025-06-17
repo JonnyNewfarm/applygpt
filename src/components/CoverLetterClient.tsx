@@ -26,7 +26,7 @@ export default function CoverLetterClient() {
       } else {
         setCoverLetter(data.coverLetter);
       }
-    } catch (err) {
+    } catch {
       setCoverLetter("");
       alert("Failed to generate cover letter");
     }
