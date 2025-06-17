@@ -20,24 +20,28 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   const buf = await buffer(req);
-  const sig = req.headers["stripe-signature"]!;
+  const sig = req.headers["stripe-signature"] as string;
 
   let event: Stripe.Event;
 
   try {
-    event = stripe.webhooks.constructEvent(buf, sig, process.env.STRIPE_WEBHOOK_SECRET!);
-  } catch (err: any) {
-    console.error("Webhook signature verification failed.", err.message);
-    return res.status(400).send(`Webhook Error: ${err.message}`);
+    event = stripe.webhooks.constructEvent(
+      buf,
+      sig,
+      process.env.STRIPE_WEBHOOK_SECRET!
+    );
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : "Unknown error";
+    console.error("Webhook signature verification failed.", errorMessage);
+    return res.status(400).send(`Webhook Error: ${errorMessage}`);
   }
 
   try {
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
-
-        // You can mark user as subscribed or save stripeCustomerId here if you want
-        // But subscription info might come in subscription events below
+        // Optional: log or store info
+        console.log("Checkout completed for:", session.customer_email);
         break;
       }
 
@@ -47,32 +51,30 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const subscription = event.data.object as Stripe.Subscription;
         const customerId = subscription.customer as string;
 
-        // Find the user with this Stripe customer ID
         const user = await prisma.user.findFirst({
           where: { stripeCustomerId: customerId },
         });
 
         if (user) {
-          // Update user's subscription status in your DB
           await prisma.user.update({
             where: { id: user.id },
             data: {
-              subscriptionStatus: subscription.status, // e.g. 'active', 'past_due', 'canceled'
+              subscriptionStatus: subscription.status, // 'active', 'past_due', etc.
             },
           });
         } else {
-          console.warn(`User with customer ID ${customerId} not found.`);
+          console.warn(`No user found for Stripe customer ID: ${customerId}`);
         }
         break;
       }
 
       default:
-        console.log(`Unhandled event type ${event.type}`);
+        console.log(`Unhandled event type: ${event.type}`);
     }
 
-    res.json({ received: true });
+    res.status(200).json({ received: true });
   } catch (error) {
-    console.error("Error handling webhook event:", error);
+    console.error("Error handling Stripe webhook:", error);
     res.status(500).send("Internal Server Error");
   }
 }
