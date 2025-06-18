@@ -1,8 +1,7 @@
 {
-  "cron": [
-    {
-      "path": "/api/reset-generation-count",
-      "schedule": "0 0 1 * *"
+  "functions": {
+    "api/reset-generation-count.ts": {
+      "schedule": "*/5 * * * *"
     }
-  ]
+  }
 }
