@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import prisma from "../../../../lib/prisma";
 
 export async function GET(req: Request) {
-  // Check Authorization header to secure this endpoint
   if (req.headers.get("Authorization") !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
