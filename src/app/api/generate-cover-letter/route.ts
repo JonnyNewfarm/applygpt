@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../../../lib/auth";
-import  prisma  from "../../../../lib/prisma";
+import prisma from "../../../../lib/prisma";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -12,6 +12,15 @@ export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.email) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  // Fetch user by email to get user.id
+  const user = await prisma.user.findUnique({
+    where: { email: session.user.email },
+  });
+
+  if (!user) {
+    return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
 
   const { resume, jobAd, tone = "professional" } = await req.json();
@@ -50,23 +59,23 @@ Cover Letter:
 
     const coverLetter = completion.choices[0].message?.content ?? "";
 
-    // Save resume (overwrite or upsert)
+    // Upsert resume with correct user id
     await prisma.resume.upsert({
-      where: { userId: session.user.id },
+      where: { userId: user.id },
       update: { content: resume },
       create: {
         content: resume,
-        user: { connect: { email: session.user.email } },
+        user: { connect: { id: user.id } },
       },
     });
 
-    // Save generated cover letter
+    // Save generated cover letter linked to user id
     await prisma.coverLetter.create({
       data: {
         content: coverLetter,
         tone,
         jobAd,
-        user: { connect: { email: session.user.email } },
+        user: { connect: { id: user.id } },
       },
     });
 
