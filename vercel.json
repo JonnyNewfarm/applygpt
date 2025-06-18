@@ -1,6 +1,6 @@
 {
   "functions": {
-    "api/reset-generation-count.ts": {
+    "api/reset-generation-count/route.ts": {
       "schedule": "*/5 * * * *"
     }
   }
