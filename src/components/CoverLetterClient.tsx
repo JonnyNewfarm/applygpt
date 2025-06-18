@@ -8,8 +8,8 @@ export default function CoverLetterClient() {
   const [tone, setTone] = useState("professional");
   const [loading, setLoading] = useState(false);
   const [coverLetter, setCoverLetter] = useState("");
+  const [resumeSaved, setResumeSaved] = useState(false);
 
-  // Fetch saved resume when logged in
   useEffect(() => {
     async function fetchResume() {
       const res = await fetch("/api/resume");
@@ -45,6 +45,25 @@ export default function CoverLetterClient() {
     setLoading(false);
   }
 
+  async function onSaveResume() {
+    try {
+      const res = await fetch("/api/resume", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content: resume }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "Error saving resume");
+      } else {
+        setResumeSaved(true);
+        setTimeout(() => setResumeSaved(false), 2000);
+      }
+    } catch {
+      alert("Failed to save resume");
+    }
+  }
+
   return (
     <main style={{ padding: 20 }}>
       <h1>Generate Cover Letter</h1>
@@ -59,6 +78,16 @@ export default function CoverLetterClient() {
           placeholder="Paste your resume here..."
         />
       </label>
+
+      <button
+        onClick={onSaveResume}
+        style={{ marginTop: 10, padding: "8px 16px" }}
+      >
+        Save Resume
+      </button>
+      {resumeSaved && (
+        <span style={{ marginLeft: 10, color: "green" }}>Saved!</span>
+      )}
 
       <label style={{ marginTop: 20, display: "block" }}>
         Paste Job Description:
