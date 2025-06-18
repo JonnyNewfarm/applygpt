@@ -17,7 +17,7 @@ export async function GET(req: Request) {
       },
     });
 
-    console.log("✅ Generation counts reset");
+    console.log("Generation counts reset");
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Error resetting generation count:", error);
