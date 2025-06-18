@@ -1,7 +1,0 @@
-{
-  "functions": {
-    "api/reset-generation-count/route.ts": {
-      "schedule": "*/5 * * * *"
-    }
-  }
-}

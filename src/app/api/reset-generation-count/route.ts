@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 import prisma from "../../../../lib/prisma";
 
-export async function POST() {
+export const runtime = "edge";
+export const cron = "*/5 * * * *";
+export async function GET() {
   try {
     await prisma.user.updateMany({
       where: {
