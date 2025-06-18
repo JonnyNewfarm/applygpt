@@ -40,8 +40,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
-        // Optional: log or store info
         console.log("Checkout completed for:", session.customer_email);
+        // Optional: You can save the customerId or update user here if needed
         break;
       }
 
@@ -51,17 +51,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const subscription = event.data.object as Stripe.Subscription;
         const customerId = subscription.customer as string;
 
+        // Find user by Stripe customer ID
         const user = await prisma.user.findFirst({
           where: { stripeCustomerId: customerId },
         });
 
         if (user) {
+          // Update user's subscription status and hasPaid flag
+          const isActive = subscription.status === "active";
+
           await prisma.user.update({
             where: { id: user.id },
             data: {
-              subscriptionStatus: subscription.status, // 'active', 'past_due', etc.
+              subscriptionStatus: subscription.status, // 'active', 'past_due', 'canceled', etc.
+              hasPaid: isActive,
             },
           });
+
+          console.log(`Updated user ${user.email} subscription to ${subscription.status}, hasPaid: ${isActive}`);
         } else {
           console.warn(`No user found for Stripe customer ID: ${customerId}`);
         }
