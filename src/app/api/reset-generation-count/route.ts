@@ -1,9 +1,12 @@
 import { NextResponse } from "next/server";
 import prisma from "../../../../lib/prisma";
 
-export const runtime = "edge";
-export const cron = "*/5 * * * *";
-export async function GET() {
+export async function GET(req: Request) {
+  // Check Authorization header to secure this endpoint
+  if (req.headers.get("Authorization") !== `Bearer ${process.env.CRON_SECRET}`) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     await prisma.user.updateMany({
       where: {
@@ -15,7 +18,7 @@ export async function GET() {
       },
     });
 
-    console.log("✅ Monthly generation counts reset");
+    console.log("✅ Generation counts reset");
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("❌ Error resetting generation count:", error);
