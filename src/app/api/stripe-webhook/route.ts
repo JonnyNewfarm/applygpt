@@ -1,4 +1,3 @@
-// src/app/api/stripe-webhook/route.ts
 import { NextRequest } from "next/server";
 import Stripe from "stripe";
 import prisma from "../../../../lib/prisma";
@@ -52,7 +51,42 @@ export async function POST(req: NextRequest) {
       }
 
       case "customer.subscription.created":
-      case "customer.subscription.updated":
+      case "customer.subscription.updated": {
+        const subscription = event.data.object as Stripe.Subscription;
+        const customerId = subscription.customer as string;
+
+        const user = await prisma.user.findFirst({
+          where: { stripeCustomerId: customerId },
+        });
+
+        if (!user) {
+          console.warn(`⚠️ No user found for Stripe customer ID: ${customerId}`);
+          break;
+        }
+
+        const priceId = subscription.items.data[0].price.id;
+
+        let generationLimit: number | null = null;
+        if (priceId === process.env.STRIPE_BASIC_PRICE_ID) generationLimit = 100;
+        if (priceId === process.env.STRIPE_PRO_PRICE_ID) generationLimit = 200;
+        if (priceId === process.env.STRIPE_UNLIMITED_PRICE_ID) generationLimit = null;
+
+        const isActive = subscription.status === "active";
+
+        await prisma.user.update({
+          where: { id: user.id },
+          data: {
+            subscriptionStatus: subscription.status,
+            hasPaid: isActive,
+            generationLimit,
+            generationCount: 0,
+          },
+        });
+
+        console.log(`✅ Updated user ${user.email} with hasPaid: ${isActive}, limit: ${generationLimit}`);
+        break;
+      }
+
       case "customer.subscription.deleted": {
         const subscription = event.data.object as Stripe.Subscription;
         const customerId = subscription.customer as string;
@@ -62,19 +96,17 @@ export async function POST(req: NextRequest) {
         });
 
         if (user) {
-          const isActive = subscription.status === "active";
-
           await prisma.user.update({
             where: { id: user.id },
             data: {
+              hasPaid: false,
               subscriptionStatus: subscription.status,
-              hasPaid: isActive,
+              generationLimit: 0,
+              generationCount: 0,
             },
           });
 
-          console.log(`✅ Updated user ${user.email} with hasPaid: ${isActive}`);
-        } else {
-          console.warn(`⚠️ No user found for Stripe customer ID: ${customerId}`);
+          console.log(`❌ Subscription cancelled for ${user.email}`);
         }
 
         break;

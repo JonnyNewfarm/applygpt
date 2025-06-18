@@ -14,7 +14,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  // Fetch user by email to get user.id
   const user = await prisma.user.findUnique({
     where: { email: session.user.email },
   });
@@ -29,6 +28,17 @@ export async function POST(req: Request) {
     return NextResponse.json(
       { error: "Missing resume or job description" },
       { status: 400 }
+    );
+  }
+
+  // Check limit
+  if (
+    user.generationLimit !== null && 
+    user.generationCount >= user.generationLimit
+  ) {
+    return NextResponse.json(
+      { error: "Generation limit reached" },
+      { status: 403 }
     );
   }
 
@@ -59,7 +69,6 @@ Cover Letter:
 
     const coverLetter = completion.choices[0].message?.content ?? "";
 
-    // Upsert resume with correct user id
     await prisma.resume.upsert({
       where: { userId: user.id },
       update: { content: resume },
@@ -69,13 +78,20 @@ Cover Letter:
       },
     });
 
-    // Save generated cover letter linked to user id
     await prisma.coverLetter.create({
       data: {
         content: coverLetter,
         tone,
         jobAd,
         user: { connect: { id: user.id } },
+      },
+    });
+
+    // Increment generation count
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        generationCount: { increment: 1 },
       },
     });
 

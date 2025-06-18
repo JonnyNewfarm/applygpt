@@ -9,8 +9,9 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2025-05-28.basil",
 });
 
-export async function POST() {
+export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
+  const { plan } = await req.json(); // Get selected plan
 
   if (!session || !session.user.email) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
@@ -24,20 +25,23 @@ export async function POST() {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
 
-  // Create Stripe customer if not existing
   let customerId = user.stripeCustomerId;
   if (!customerId) {
     const customer = await stripe.customers.create({
       email: session.user.email,
     });
-
     await prisma.user.update({
       where: { id: user.id },
       data: { stripeCustomerId: customer.id },
     });
-
     customerId = customer.id;
   }
+
+const priceMap: Record<string, string> = {
+  "basic": process.env.STRIPE_BASIC_PRICE_ID!,
+  "pro": process.env.STRIPE_PRO_PRICE_ID!,
+  "unlimited": process.env.STRIPE_UNLIMITED_PRICE_ID!,
+};
 
   const stripeSession = await stripe.checkout.sessions.create({
     customer: customerId,
@@ -45,7 +49,7 @@ export async function POST() {
     mode: "subscription",
     line_items: [
       {
-        price: process.env.STRIPE_PRICE_ID!, // Your subscription price ID
+        price: priceMap[plan],
         quantity: 1,
       },
     ],
@@ -55,3 +59,4 @@ export async function POST() {
 
   return NextResponse.json({ url: stripeSession.url });
 }
+

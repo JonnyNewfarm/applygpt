@@ -22,8 +22,11 @@ model User {
   sessions Session[]
 
   // New relations
-  resume       Resume?
-  coverLetters CoverLetter[]
+  resume          Resume?
+  coverLetters    CoverLetter[]
+  usages          Usage[]
+  generationLimit Int? // null means unlimited
+  generationCount Int           @default(0)
 }
 
 model Account {
@@ -79,4 +82,14 @@ model CoverLetter {
   user      User     @relation(fields: [userId], references: [id])
   userId    String
   createdAt DateTime @default(now())
+}
+
+model Usage {
+  id     String @id @default(cuid())
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+  month  String // format "YYYY-MM", e.g. "2025-06"
+  count  Int    @default(0)
+
+  @@unique([userId, month])
 }
