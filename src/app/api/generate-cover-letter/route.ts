@@ -87,7 +87,6 @@ Cover Letter:
       },
     });
 
-    // Increment generation count
     await prisma.user.update({
       where: { id: user.id },
       data: {
