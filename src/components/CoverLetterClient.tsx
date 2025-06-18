@@ -1,34 +1,45 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function CoverLetterClient() {
   const [resume, setResume] = useState("");
   const [jobAd, setJobAd] = useState("");
+  const [tone, setTone] = useState("professional");
   const [loading, setLoading] = useState(false);
   const [coverLetter, setCoverLetter] = useState("");
 
+  // Fetch saved resume when logged in
+  useEffect(() => {
+    async function fetchResume() {
+      const res = await fetch("/api/resume");
+      if (res.ok) {
+        const data = await res.json();
+        setResume(data.content || "");
+      }
+    }
+    fetchResume();
+  }, []);
+
   async function onGenerate() {
     setLoading(true);
+    setCoverLetter("");
 
     try {
       const res = await fetch("/api/generate-cover-letter", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ resume, jobAd }),
+        body: JSON.stringify({ resume, jobAd, tone }),
       });
 
       const data = await res.json();
-
       if (!res.ok) {
-        setCoverLetter("");
-        alert(data.error || "Error generating cover letter");
+        alert(data.error || "Error generating");
       } else {
         setCoverLetter(data.coverLetter);
       }
     } catch {
-      setCoverLetter("");
-      alert("Failed to generate cover letter");
+      alert("Something went wrong");
     }
 
     setLoading(false);
@@ -58,6 +69,20 @@ export default function CoverLetterClient() {
           onChange={(e) => setJobAd(e.target.value)}
           placeholder="Paste job description here..."
         />
+      </label>
+
+      <label style={{ marginTop: 20, display: "block" }}>
+        Tone:
+        <select
+          value={tone}
+          onChange={(e) => setTone(e.target.value)}
+          style={{ marginTop: 4 }}
+        >
+          <option value="professional">Professional</option>
+          <option value="casual">Casual</option>
+          <option value="friendly">Friendly</option>
+          <option value="confident">Confident</option>
+        </select>
       </label>
 
       <button
