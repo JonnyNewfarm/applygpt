@@ -10,5 +10,12 @@ export default function ManageSubscriptionButton() {
     }
   };
 
-  return <button onClick={handleClick}>Manage Subscription</button>;
+  return (
+    <button
+      className="border-1 cursor-pointer text-sm py-2 px-4"
+      onClick={handleClick}
+    >
+      Manage Subscription
+    </button>
+  );
 }

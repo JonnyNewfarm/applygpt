@@ -23,17 +23,26 @@ export default function ResumeForm({ resume }: { resume: string }) {
   }
 
   return (
-    <div>
+    <div className="">
       <textarea
+        style={{ scrollbarWidth: "thin" }}
+        className="border-1 p-5 w-full"
         rows={8}
-        style={{ width: "100%" }}
         value={content}
         onChange={(e) => setContent(e.target.value)}
       />
-      <button onClick={handleSave} style={{ marginTop: 10 }}>
+      <button
+        className="border-1 border-black cursor-pointer px-3 py-1"
+        onClick={handleSave}
+        style={{ marginTop: 10 }}
+      >
         Save Resume
       </button>
-      <button onClick={handleDelete} style={{ marginLeft: 10 }}>
+      <button
+        className="border-1 border-[#810505] cursor-pointer text-[#810505] px-3 py-1"
+        onClick={handleDelete}
+        style={{ marginLeft: 10 }}
+      >
         Delete Resume
       </button>
       {status && <p>{status}</p>}

@@ -2,7 +2,7 @@
   "crons": [
     {
       "path": "/api/reset-generation-count",
-      "schedule": "*/5 * * * *"
+      "schedule": "0 0 1 * *"
     }
   ]
 }

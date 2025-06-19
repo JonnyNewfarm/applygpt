@@ -1,10 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import ManageSubscriptionButton from "../components/ManageSubscriptionButton"; // Adjust path if needed
 
 export default function CoverLetterClient() {
   const router = useRouter();
+  const editableRef = useRef<HTMLDivElement>(null);
 
   const [resume, setResume] = useState("");
   const [jobAd, setJobAd] = useState("");
@@ -30,6 +32,7 @@ export default function CoverLetterClient() {
         if (data.content) setResumeSaved(true);
       }
     }
+
     async function fetchUsage() {
       const res = await fetch("/api/usage");
       if (res.ok) {
@@ -40,6 +43,7 @@ export default function CoverLetterClient() {
         });
       }
     }
+
     fetchResume();
     fetchUsage();
   }, []);
@@ -61,7 +65,7 @@ export default function CoverLetterClient() {
         alert(data.error || "Error generating");
       } else {
         setCoverLetter(data.coverLetter);
-        // Refresh usage count after generation
+
         const usageRes = await fetch("/api/usage-info");
         if (usageRes.ok) {
           const usageData = await usageRes.json();
@@ -100,97 +104,178 @@ export default function CoverLetterClient() {
     router.push("/profile");
   }
 
+  function onCopy() {
+    if (!editableRef.current) return;
+    const text = editableRef.current.innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      alert("Copied to clipboard!");
+    });
+  }
+
+  async function onDownload() {
+    if (!editableRef.current) return;
+
+    // Dynamically import html2pdf only on client side
+    const html2pdf = (await import("html2pdf.js")).default;
+
+    const element = editableRef.current;
+    const opt = {
+      margin: 0.5,
+      filename: "cover_letter.pdf",
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+    };
+    html2pdf().set(opt).from(element).save();
+  }
+
   const isAtLimit =
     usage.generationLimit !== null &&
     usage.generationCount >= usage.generationLimit;
 
   return (
-    <main style={{ padding: 20 }}>
-      <h1>Generate Cover Letter</h1>
+    <div className="w-full min-h-screen bg-light">
+      <main className="max-w-7xl bg-light mx-auto p-4 md:p-8">
+        <h1 className="text-2xl font-bold mb-6 text-center md:text-left">
+          Cover Letter Generator
+        </h1>
 
-      <label>
-        Paste your Resume:
-        <textarea
-          rows={8}
-          style={{ width: "100%", marginTop: 4 }}
-          value={resume}
-          onChange={(e) => setResume(e.target.value)}
-          placeholder="Paste your resume here..."
-        />
-      </label>
+        <div className="flex flex-col md:flex-row gap-8">
+          {/* Left Column: Generator */}
+          <div className="w-full md:w-1/2 space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">Resume</label>
+              <textarea
+                style={{ scrollbarWidth: "thin" }}
+                rows={6}
+                className="w-full p-3 border bg-white/80"
+                value={resume}
+                onChange={(e) => setResume(e.target.value)}
+                placeholder="Paste your resume here..."
+              />
+              {!resumeSaved ? (
+                <button
+                  onClick={onSaveResume}
+                  className="mt-2 px-3 py-1.5 text-white cursor-pointer rounded-[3px] bg-dark text-sm disabled:opacity-50"
+                  disabled={!resume.trim()}
+                >
+                  Save Resume
+                </button>
+              ) : (
+                <button
+                  onClick={onEditResume}
+                  className="mt-2 px-3 py-1.5 rounded-[3px] bg-dark text-sm  cursor-pointer text-white"
+                >
+                  Edit Resume
+                </button>
+              )}
+            </div>
 
-      {!resumeSaved ? (
-        <button
-          onClick={onSaveResume}
-          style={{ marginTop: 10, padding: "8px 16px" }}
-          disabled={!resume.trim()}
-        >
-          Save Resume
-        </button>
-      ) : (
-        <button
-          onClick={onEditResume}
-          style={{ marginTop: 10, padding: "8px 16px" }}
-        >
-          Edit Resume
-        </button>
-      )}
+            <div>
+              <label className="block text-sm font-medium mb-1">
+                Job Description
+              </label>
+              <textarea
+                style={{ scrollbarWidth: "thin" }}
+                rows={6}
+                className="w-full p-3 border rounded-[3px] bg-white/80"
+                value={jobAd}
+                onChange={(e) => setJobAd(e.target.value)}
+                placeholder="Paste job description here..."
+              />
+            </div>
 
-      <label style={{ marginTop: 20, display: "block" }}>
-        Paste Job Description:
-        <textarea
-          rows={8}
-          style={{ width: "100%", marginTop: 4 }}
-          value={jobAd}
-          onChange={(e) => setJobAd(e.target.value)}
-          placeholder="Paste job description here..."
-        />
-      </label>
+            <div>
+              <label className="block text-sm font-medium mb-1">Tone</label>
+              <select
+                className="w-full p-2 border rounded-[3px] bg-white/80"
+                value={tone}
+                onChange={(e) => setTone(e.target.value)}
+              >
+                <option value="professional">Professional</option>
+                <option value="casual">Casual</option>
+                <option value="friendly">Friendly</option>
+                <option value="confident">Confident</option>
+              </select>
+            </div>
 
-      <label style={{ marginTop: 20, display: "block" }}>
-        Tone:
-        <select
-          value={tone}
-          onChange={(e) => setTone(e.target.value)}
-          style={{ marginTop: 4 }}
-        >
-          <option value="professional">Professional</option>
-          <option value="casual">Casual</option>
-          <option value="friendly">Friendly</option>
-          <option value="confident">Confident</option>
-        </select>
-      </label>
+            <div>
+              <p className="text-sm text-gray-600 mb-2">
+                {usage.generationLimit === null
+                  ? `Used ${usage.generationCount} generations (Unlimited plan)`
+                  : `Usage: ${usage.generationCount} / ${usage.generationLimit} generations`}
+              </p>
 
-      <p style={{ marginTop: 15 }}>
-        {usage.generationLimit === null
-          ? `You have used ${usage.generationCount} generations. (Unlimited plan)`
-          : `Usage: ${usage.generationCount} / ${usage.generationLimit} generations`}
-      </p>
+              {isAtLimit ? (
+                <div className="p-4 border border-red-500 rounded bg-red-100 text-red-700">
+                  <p className="mb-3 font-semibold">
+                    You have used up all your cover letter generations.
+                  </p>
+                  <ManageSubscriptionButton />
+                </div>
+              ) : (
+                <button
+                  onClick={onGenerate}
+                  disabled={loading || !resume || !jobAd}
+                  className={`mt-4 w-full py-3 rounded-[3px] text-white font-semibold ${
+                    loading
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-dark hover:opacity-80 cursor-pointer"
+                  }`}
+                >
+                  {coverLetter
+                    ? loading
+                      ? "Regenerating..."
+                      : "Regenerate"
+                    : loading
+                    ? "Generating..."
+                    : "Generate Cover Letter"}
+                </button>
+              )}
+            </div>
+          </div>
 
-      <button
-        onClick={onGenerate}
-        disabled={loading || !resume || !jobAd || isAtLimit}
-        style={{ marginTop: 20, padding: "10px 20px" }}
-        title={
-          isAtLimit ? "You have reached your generation limit." : undefined
-        }
-      >
-        {loading ? "Generating..." : "Generate Cover Letter"}
-      </button>
+          {/* Right Column: Output */}
+          <div className="w-full md:w-1/2 mb-10">
+            <h2 className="text-xl font-semibold mb-2">
+              Generated Cover Letter
+            </h2>
 
-      {coverLetter && (
-        <pre
-          style={{
-            whiteSpace: "pre-wrap",
-            background: "#f5f5f5",
-            padding: 15,
-            marginTop: 20,
-            borderRadius: 5,
-          }}
-        >
-          {coverLetter}
-        </pre>
-      )}
-    </main>
+            {coverLetter ? (
+              <>
+                <div className="flex flex-wrap gap-3 mt-4">
+                  <button
+                    onClick={onCopy}
+                    className="px-4 py-2 cursor-pointer bg-transparent dark border rounded-[3px] hover:opacity-50"
+                    disabled={!coverLetter}
+                  >
+                    Copy to Clipboard
+                  </button>
+                  <button
+                    onClick={onDownload}
+                    className="px-4 py-2 cursor-pointer bg-dark hover:opacity-80 text-white rounded-[3px]"
+                    disabled={!coverLetter}
+                  >
+                    Download as PDF
+                  </button>
+                </div>
+                <div
+                  ref={editableRef}
+                  className="p-4 bg-white mt-5 border-[1px] border-gray-300 rounded-[3px] whitespace-pre-wrap text-sm min-h-[300px]"
+                  contentEditable
+                  suppressContentEditableWarning
+                >
+                  {coverLetter}
+                </div>
+              </>
+            ) : (
+              <p className="text-gray-900text-sm">
+                Your cover letter will appear here once generated.
+              </p>
+            )}
+          </div>
+        </div>
+      </main>
+    </div>
   );
 }
