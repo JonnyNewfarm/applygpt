@@ -5,6 +5,17 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 const JSEARCH_API_KEY = process.env.JSEARCH_API_KEY;
 const JSEARCH_API_HOST = "jsearch.p.rapidapi.com";
 
+// Define type for individual job results from the API
+interface JobResult {
+  job_id: string;
+  job_title: string;
+  employer_name: string;
+  job_city?: string;
+  job_country?: string;
+  job_description?: string;
+  job_apply_link: string;
+}
+
 async function fetchJobs(query: string, city: string, country: string, page = 1) {
   const fullQuery = encodeURIComponent(`${query} jobs in ${city}`);
   const url = `https://${JSEARCH_API_HOST}/search?query=${fullQuery}&page=${page}&num_pages=1&country=${country}&date_posted=all`;
@@ -33,21 +44,23 @@ export async function POST(req: NextRequest) {
     const { resume, query, city, country, page = 1 } = await req.json();
 
     if (!resume || !query || !city || !country) {
-      return NextResponse.json({ error: "Missing resume, query, city or country" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Missing resume, query, city or country" },
+        { status: 400 }
+      );
     }
 
-    let results = await fetchJobs(query, city, country, page);
+    const results = await fetchJobs(query, city, country, page);
 
     if (!results || results.length === 0) {
-      // No fallback — just return a message
-      return NextResponse.json({ 
-        jobs: [], 
-        message: `No jobs found in ${city}, ${country.toUpperCase()}` 
+      return NextResponse.json({
+        jobs: [],
+        message: `No jobs found in ${city}, ${country.toUpperCase()}`,
       });
     }
 
     const jobs = await Promise.all(
-      results.slice(0, 10).map(async (job: any) => {
+      results.slice(0, 10).map(async (job: JobResult) => {
         let parsed = { score: 1, explanation: "Could not evaluate" };
 
         try {
