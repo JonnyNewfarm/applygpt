@@ -1,4 +1,3 @@
-// src/app/api/create-checkout-session/route.ts
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { getServerSession } from "next-auth";
@@ -30,18 +29,31 @@ export async function POST(req: Request) {
     const customer = await stripe.customers.create({
       email: session.user.email,
     });
+
     await prisma.user.update({
       where: { id: user.id },
       data: { stripeCustomerId: customer.id },
     });
+
     customerId = customer.id;
   }
 
-const priceMap: Record<string, string> = {
-  "basic": process.env.STRIPE_BASIC_PRICE_ID!,
-  "pro": process.env.STRIPE_PRO_PRICE_ID!,
-  "unlimited": process.env.STRIPE_UNLIMITED_PRICE_ID!,
-};
+  // ✅ Cancel existing active subscription (if any)
+  const existingSubscriptions = await stripe.subscriptions.list({
+    customer: customerId,
+    status: "active",
+  });
+
+  if (existingSubscriptions.data.length > 0) {
+    const existingSubscription = existingSubscriptions.data[0];
+    await stripe.subscriptions.cancel(existingSubscription.id);
+  }
+
+  const priceMap: Record<string, string> = {
+    basic: process.env.STRIPE_BASIC_PRICE_ID!,
+    pro: process.env.STRIPE_PRO_PRICE_ID!,
+    unlimited: process.env.STRIPE_UNLIMITED_PRICE_ID!,
+  };
 
   const stripeSession = await stripe.checkout.sessions.create({
     customer: customerId,
@@ -59,4 +71,3 @@ const priceMap: Record<string, string> = {
 
   return NextResponse.json({ url: stripeSession.url });
 }
-

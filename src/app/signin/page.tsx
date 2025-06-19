@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function SignInPage() {
   const router = useRouter();
@@ -28,41 +29,50 @@ export default function SignInPage() {
   }
 
   return (
-    <main style={{ padding: 20 }}>
-      <h1>Sign In</h1>
+    <main className="min-h-screen flex items-center justify-center bg-light">
+      <div className="w-full max-w-sm bg-white p-6 rounded-[3px] border-gray-300 shadow">
+        <h1 className="text-2xl font-bold mb-6 text-center">Sign In</h1>
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          required
-          onChange={(e) => setEmail(e.target.value)}
-          style={{ display: "block", marginBottom: 10, width: "100%" }}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          required
-          onChange={(e) => setPassword(e.target.value)}
-          style={{ display: "block", marginBottom: 10, width: "100%" }}
-        />
-        <button type="submit" style={{ padding: "10px 20px" }}>
-          Sign In
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            required
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full border px-4 py-2 rounded"
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            required
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full border px-4 py-2 rounded"
+          />
+          <Link className="" href={"/forgot-password"}>
+            Forgot your password?
+          </Link>
+
+          <button
+            type="submit"
+            className="w-full mt-2 bg-dark cursor-pointer text-white py-2 rounded hover:bg-gray-800 transition"
+          >
+            Sign In
+          </button>
+        </form>
+
+        <div className="my-6 border-t"></div>
+
+        <button
+          onClick={() => signIn("google")}
+          className="w-full bg-gray-600 cursor-pointer text-white py-2 rounded hover:bg-gray-500 transition"
+        >
+          Sign in with Google
         </button>
-      </form>
 
-      <hr style={{ margin: "20px 0" }} />
-
-      <button
-        onClick={() => signIn("google")}
-        style={{ padding: "10px 20px", cursor: "pointer" }}
-      >
-        Sign in with Google
-      </button>
-
-      {error && <p style={{ color: "red", marginTop: 10 }}>{error}</p>}
+        {error && <p className="text-red-500 mt-4 text-center">{error}</p>}
+      </div>
     </main>
   );
 }

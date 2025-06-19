@@ -28,33 +28,45 @@ export default function RegisterPage() {
   };
 
   return (
-    <main style={{ padding: 20 }}>
-      <h1>Sign Up</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Name"
-          value={name}
-          required
-          onChange={(e) => setName(e.target.value)}
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          required
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          required
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button type="submit">Register</button>
-      </form>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+    <main className="min-h-screen flex items-center justify-center bg-light">
+      <div className="w-full max-w-sm bg-white p-6 rounded-[3px] border shadow">
+        <h1 className="text-2xl font-bold mb-6 text-center">Sign Up</h1>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="text"
+            placeholder="Name"
+            value={name}
+            required
+            onChange={(e) => setName(e.target.value)}
+            className="w-full border px-4 py-2 rounded"
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            required
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full border px-4 py-2 rounded"
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            required
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full border px-4 py-2 rounded"
+          />
+          <button
+            type="submit"
+            className="w-full bg-black text-white py-2 rounded hover:bg-gray-800 transition"
+          >
+            Register
+          </button>
+        </form>
+
+        {error && <p className="text-red-500 mt-4 text-center">{error}</p>}
+      </div>
     </main>
   );
 }

@@ -1,10 +1,11 @@
 @import "tailwindcss";
 
-body {
+body, html{
   background: #fdfbf7;
+  scrollbar-width: none;
 }
 .bg-light {
-  background: #fdfbf7;
+   background: linear-gradient(180deg, #fdfbf7 0%, #e0ded9 100%)
 }
 
 .bg-dark {

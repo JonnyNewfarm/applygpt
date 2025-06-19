@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import ManageSubscriptionButton from "../components/ManageSubscriptionButton"; // Adjust path if needed
+import ManageSubscriptionButton from "../components/ManageSubscriptionButton";
+import BuyAccessButton from "../components/BuyAccessButton";
 
 export default function CoverLetterClient() {
   const router = useRouter();
@@ -115,7 +116,6 @@ export default function CoverLetterClient() {
   async function onDownload() {
     if (!editableRef.current) return;
 
-    // Dynamically import html2pdf only on client side
     const html2pdf = (await import("html2pdf.js")).default;
 
     const element = editableRef.current;
@@ -211,7 +211,15 @@ export default function CoverLetterClient() {
                   <p className="mb-3 font-semibold">
                     You have used up all your cover letter generations.
                   </p>
-                  <ManageSubscriptionButton />
+
+                  {usage.generationLimit !== null ? (
+                    <>
+                      <p className="mb-3">Upgrade to continue generating:</p>
+                      <BuyAccessButton />
+                    </>
+                  ) : (
+                    <ManageSubscriptionButton />
+                  )}
                 </div>
               ) : (
                 <button

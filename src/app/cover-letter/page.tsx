@@ -1,12 +1,11 @@
 import { getServerSession } from "next-auth";
 import prisma from "../../../lib/prisma";
 import BuyAccessButton from "@/components/BuyAccessButton";
-import CoverLetterClient from "@/components/CoverLetterClient"; // your existing client component with form
+import CoverLetterClient from "@/components/CoverLetterClient";
 
 export default async function CoverLetterPage() {
   const session = await getServerSession();
   if (!session) {
-    // Not logged in
     return (
       <div style={{ padding: 20 }}>
         <p>Please sign in to access the cover letter generator.</p>
@@ -18,15 +17,30 @@ export default async function CoverLetterPage() {
     where: { email: session.user.email! },
   });
 
-  if (!user?.hasPaid) {
+  if (!user) {
     return (
       <div style={{ padding: 20 }}>
-        <p>You need to purchase access to use this tool.</p>
+        <p>User not found.</p>
+      </div>
+    );
+  }
+
+  const canGenerate =
+    user.hasPaid ||
+    (user.generationLimit !== null &&
+      user.generationCount < user.generationLimit);
+
+  if (!canGenerate) {
+    return (
+      <div style={{ padding: 20 }}>
+        <p>
+          You&apos;ve reached your monthly generation limit on the free plan.
+          Upgrade to continue.
+        </p>
         <BuyAccessButton />
       </div>
     );
   }
 
-  // User is logged in and has paid: render the client component with form
   return <CoverLetterClient />;
 }

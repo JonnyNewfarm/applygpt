@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../../../lib/auth";  // Adjust path as needed
+import prisma from "../../../../lib/prisma";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 const JSEARCH_API_KEY = process.env.JSEARCH_API_KEY;
 const JSEARCH_API_HOST = "jsearch.p.rapidapi.com";
 
-// Define type for individual job results from the API
 interface JobResult {
   job_id: string;
   job_title: string;
@@ -35,11 +37,34 @@ async function fetchJobs(query: string, city: string, country: string, page = 1)
   }
 
   const data = await response.json();
-  console.log("Raw JSearch data:", data);
   return data.data || [];
 }
 
 export async function POST(req: NextRequest) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.email) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { email: session.user.email },
+  });
+
+  if (!user) {
+    return NextResponse.json({ error: "User not found" }, { status: 404 });
+  }
+
+  // Check limit
+  if (
+    user.generationLimit !== null && 
+    user.generationCount >= user.generationLimit
+  ) {
+    return NextResponse.json(
+      { error: "Generation limit reached" },
+      { status: 403 }
+    );
+  }
+
   try {
     const { resume, query, city, country, page = 1 } = await req.json();
 
@@ -95,6 +120,13 @@ export async function POST(req: NextRequest) {
         };
       })
     );
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        generationCount: { increment: 1 },
+      },
+    });
 
     return NextResponse.json({ jobs });
   } catch (err) {

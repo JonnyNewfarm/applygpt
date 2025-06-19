@@ -93,3 +93,11 @@ model Usage {
 
   @@unique([userId, month])
 }
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  email     String
+  expires   DateTime
+  createdAt DateTime @default(now())
+}

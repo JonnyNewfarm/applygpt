@@ -23,7 +23,7 @@ export default function BuyAccessButton() {
   }
 
   return (
-    <div>
+    <div className="flex flex-col items-start">
       <label>
         Choose a plan:
         <select value={plan} onChange={(e) => setPlan(e.target.value)}>
@@ -32,7 +32,11 @@ export default function BuyAccessButton() {
           <option value="unlimited">$20/month – Unlimited</option>
         </select>
       </label>
-      <button onClick={handleClick} style={{ marginTop: 10 }}>
+      <button
+        className="border px-3"
+        onClick={handleClick}
+        style={{ marginTop: 10 }}
+      >
         Subscribe for Access
       </button>
     </div>
