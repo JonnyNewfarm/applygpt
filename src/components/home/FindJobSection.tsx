@@ -8,6 +8,7 @@ const FindJobSection = () => {
     <div className="w-full uppercase flex flex-col justify-center items-center min-h-screen text-5xl ">
       <motion.div
         initial={{ scale: 0.5, opacity: 0.8 }}
+        viewport={{ once: true }}
         whileInView={{ scale: 1, opacity: 1 }}
         transition={{
           delay: 0,
