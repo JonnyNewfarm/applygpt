@@ -24,7 +24,7 @@ export default function ForgotPassword() {
           placeholder="Email"
           required
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full p-2 border"
+          className="w-full p-2 border bg-white"
         />
         <button type="submit" className="w-full bg-black text-white py-2">
           Send reset link

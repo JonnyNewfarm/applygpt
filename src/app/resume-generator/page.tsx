@@ -1,14 +1,14 @@
 import { getServerSession } from "next-auth";
 import prisma from "../../../lib/prisma";
 import BuyAccessButton from "@/components/BuyAccessButton";
-import FindJobsClient from "@/components/FindJobsClient";
+import ResumeClient from "@/components/ResumeClient";
 
-export default async function FindJobsPage() {
+export default async function CoverLetterPage() {
   const session = await getServerSession();
   if (!session) {
     return (
       <div style={{ padding: 20 }}>
-        <p>Please sign in to access the job finder ai.</p>
+        <p>Please sign in to access the resume generator.</p>
       </div>
     );
   }
@@ -42,5 +42,5 @@ export default async function FindJobsPage() {
     );
   }
 
-  return <FindJobsClient />;
+  return <ResumeClient />;
 }

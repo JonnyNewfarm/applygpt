@@ -1,6 +1,8 @@
 "use client";
 
 import { useRef, useState } from "react";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 interface ResumeFormProps {
   resume: string;
@@ -52,17 +54,19 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
   const handleDownload = async () => {
     if (!resumeRef.current) return;
 
-    const html2pdf = (await import("html2pdf.js")).default;
+    const canvas = await html2canvas(resumeRef.current, {
+      scale: 2,
+      backgroundColor: "#ffffff",
+    });
 
-    const opt = {
-      margin: 0.5,
-      filename: "resume.pdf",
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
-    };
+    const imgData = canvas.toDataURL("image/jpeg", 1.0);
+    const pdf = new jsPDF("p", "mm", "a4");
 
-    html2pdf().set(opt).from(resumeRef.current).save();
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+    pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight);
+    pdf.save("resume.pdf");
   };
 
   return (
@@ -100,11 +104,27 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
         </button>
       </div>
 
-      {/* Hidden render of content for PDF */}
+      {/* Hidden render for PDF */}
       <div
         ref={resumeRef}
-        className="prose max-w-none absolute top-[-9999px] left-[-9999px] p-6 bg-white text-black w-[800px]"
-        dangerouslySetInnerHTML={{ __html: content.replace(/\n/g, "<br />") }}
+        style={{
+          width: "800px",
+          padding: "24px",
+          backgroundColor: "white",
+          color: "black",
+          fontSize: "14px",
+          lineHeight: "1.6",
+          whiteSpace: "pre-wrap",
+          position: "absolute",
+          top: "-9999px",
+          left: "-9999px",
+        }}
+        dangerouslySetInnerHTML={{
+          __html: content
+            .split("\n")
+            .map((line) => `<p>${line}</p>`)
+            .join(""),
+        }}
       />
     </div>
   );

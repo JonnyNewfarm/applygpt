@@ -10,8 +10,8 @@ const FindJobSection = () => {
         initial={{ scale: 0.5, opacity: 0.8 }}
         whileInView={{ scale: 1, opacity: 1 }}
         transition={{
-          delay: 0.2,
-          duration: 0.6,
+          delay: 0,
+          duration: 0.5,
           times: [0, 0.4, 1],
           ease: "easeInOut",
         }}

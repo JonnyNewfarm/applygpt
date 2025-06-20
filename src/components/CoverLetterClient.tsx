@@ -8,6 +8,7 @@ import BuyAccessButton from "../components/BuyAccessButton";
 export default function CoverLetterClient() {
   const router = useRouter();
   const editableRef = useRef<HTMLDivElement>(null);
+  const printRef = useRef<HTMLDivElement>(null);
 
   const [resume, setResume] = useState("");
   const [jobAd, setJobAd] = useState("");
@@ -114,19 +115,24 @@ export default function CoverLetterClient() {
   }
 
   async function onDownload() {
-    if (!editableRef.current) return;
+    if (!printRef.current) return;
 
-    const html2pdf = (await import("html2pdf.js")).default;
+    const html2canvas = (await import("html2canvas")).default;
+    const jsPDF = (await import("jspdf")).default;
 
-    const element = editableRef.current;
-    const opt = {
-      margin: 0.5,
-      filename: "cover_letter.pdf",
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
-    };
-    html2pdf().set(opt).from(element).save();
+    const canvas = await html2canvas(printRef.current, {
+      scale: 2,
+      backgroundColor: "#ffffff",
+    });
+
+    const imgData = canvas.toDataURL("image/jpeg", 1.0);
+    const pdf = new jsPDF("p", "mm", "a4");
+
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+    pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight);
+    pdf.save("cover_letter.pdf");
   }
 
   const isAtLimit =
@@ -141,12 +147,11 @@ export default function CoverLetterClient() {
         </h1>
 
         <div className="flex flex-col md:flex-row gap-8">
-          {/* Left Column: Generator */}
+          {/* Left Column */}
           <div className="w-full md:w-1/2 space-y-4">
             <div>
               <label className="block text-sm font-medium mb-1">Resume</label>
               <textarea
-                style={{ scrollbarWidth: "thin" }}
                 rows={6}
                 className="w-full p-3 border bg-white/80"
                 value={resume}
@@ -156,7 +161,7 @@ export default function CoverLetterClient() {
               {!resumeSaved ? (
                 <button
                   onClick={onSaveResume}
-                  className="mt-2 px-3 py-1.5 text-white cursor-pointer rounded-[3px] bg-dark text-sm disabled:opacity-50"
+                  className="mt-2 px-3 py-1.5 text-white rounded-[3px] bg-dark text-sm"
                   disabled={!resume.trim()}
                 >
                   Save Resume
@@ -164,7 +169,7 @@ export default function CoverLetterClient() {
               ) : (
                 <button
                   onClick={onEditResume}
-                  className="mt-2 px-3 py-1.5 rounded-[3px] bg-dark text-sm  cursor-pointer text-white"
+                  className="mt-2 px-3 py-1.5 rounded-[3px] bg-dark text-sm text-white"
                 >
                   Edit Resume
                 </button>
@@ -176,7 +181,6 @@ export default function CoverLetterClient() {
                 Job Description
               </label>
               <textarea
-                style={{ scrollbarWidth: "thin" }}
                 rows={6}
                 className="w-full p-3 border rounded-[3px] bg-white/80"
                 value={jobAd}
@@ -211,7 +215,6 @@ export default function CoverLetterClient() {
                   <p className="mb-3 font-semibold">
                     You have used up all your cover letter generations.
                   </p>
-
                   {usage.generationLimit !== null ? (
                     <>
                       <p className="mb-3">Upgrade to continue generating:</p>
@@ -243,7 +246,7 @@ export default function CoverLetterClient() {
             </div>
           </div>
 
-          {/* Right Column: Output */}
+          {/* Right Column */}
           <div className="w-full md:w-1/2 mb-10">
             <h2 className="text-xl font-semibold mb-2">
               Generated Cover Letter
@@ -255,29 +258,50 @@ export default function CoverLetterClient() {
                   <button
                     onClick={onCopy}
                     className="px-4 py-2 cursor-pointer bg-transparent dark border rounded-[3px] hover:opacity-50"
-                    disabled={!coverLetter}
                   >
                     Copy to Clipboard
                   </button>
                   <button
                     onClick={onDownload}
                     className="px-4 py-2 cursor-pointer bg-dark hover:opacity-80 text-white rounded-[3px]"
-                    disabled={!coverLetter}
                   >
                     Download as PDF
                   </button>
                 </div>
                 <div
                   ref={editableRef}
-                  className="p-4 bg-white mt-5 border-[1px] border-gray-300 rounded-[3px] whitespace-pre-wrap text-sm min-h-[300px]"
+                  className="p-4 bg-white mt-5 border border-gray-300 rounded-[3px] whitespace-pre-wrap text-sm min-h-[300px]"
                   contentEditable
                   suppressContentEditableWarning
                 >
                   {coverLetter}
                 </div>
+
+                {/* Hidden printable version */}
+                <div
+                  ref={printRef}
+                  style={{
+                    width: "800px",
+                    padding: "24px",
+                    backgroundColor: "white",
+                    color: "black",
+                    fontSize: "14px",
+                    lineHeight: "1.6",
+                    whiteSpace: "pre-wrap",
+                    position: "absolute",
+                    top: "-9999px",
+                    left: "-9999px",
+                  }}
+                  dangerouslySetInnerHTML={{
+                    __html: coverLetter
+                      .split("\n")
+                      .map((line) => `<p>${line}</p>`)
+                      .join(""),
+                  }}
+                />
               </>
             ) : (
-              <p className="text-gray-900text-sm">
+              <p className="text-gray-900 text-sm">
                 Your cover letter will appear here once generated.
               </p>
             )}

@@ -31,6 +31,12 @@ export default function Navbar() {
 
           <div className="hidden md:flex text-lg items-center space-x-6">
             <Link
+              href="/resume-generator"
+              className="cursor-pointer hover:text-gray-700"
+            >
+              Generate Resume
+            </Link>
+            <Link
               href="/cover-letter"
               className="cursor-pointer hover:text-gray-700"
             >
@@ -101,7 +107,13 @@ export default function Navbar() {
           </button>
         </div>
 
-        <nav className="flex flex-col p-4 space-y-4">
+        <nav className="flex flex-col p-4 space-y-6">
+          <Link
+            href="/resume-generator"
+            className="cursor-pointer hover:text-gray-700"
+          >
+            Generate Resume
+          </Link>
           <Link
             href="/cover-letter"
             className="cursor-pointer hover:text-gray-700"
