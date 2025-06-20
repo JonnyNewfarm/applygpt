@@ -17,7 +17,7 @@ export default function Navbar() {
     }
   }, [menuOpen]);
 
-  if (status === "loading") return <p>Loading...</p>;
+  if (status === "loading") return <p className="ml-5 mt-5">Loading...</p>;
 
   return (
     <>

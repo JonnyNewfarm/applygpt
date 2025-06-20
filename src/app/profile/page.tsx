@@ -29,7 +29,7 @@ export default async function ProfilePage() {
     );
 
   return (
-    <main className="max-w-4xl bg-white  shadow  mx-auto p-6 md:p-12  rounded-[3px] mb-10  mt-12">
+    <main className="max-w-4xl bg-white/90 border-stone-400 border  mx-auto p-6 md:p-12  rounded-[3px] mb-10  mt-12">
       <h1 className="text-3xl font-semibold mb-6 border-b-[1px] border-b-black/30 pb-2">
         Profile
       </h1>

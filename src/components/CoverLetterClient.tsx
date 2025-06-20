@@ -67,7 +67,7 @@ export default function CoverLetterClient() {
       } else {
         setCoverLetter(data.coverLetter);
 
-        const usageRes = await fetch("/api/usage-info");
+        const usageRes = await fetch("/api/usage");
         if (usageRes.ok) {
           const usageData = await usageRes.json();
           setUsage({

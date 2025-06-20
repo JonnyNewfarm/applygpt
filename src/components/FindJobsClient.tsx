@@ -1,26 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
+import Link from "next/link";
+import { Country, City } from "country-state-city";
 import ManageSubscriptionButton from "./ManageSubscriptionButton";
 import BuyAccessButton from "./BuyAccessButton"; // Make sure this is imported
-
-const CITIES = [
-  "Oslo",
-  "Bergen",
-  "Stockholm",
-  "Berlin",
-  "Chicago",
-  "New York",
-  "London",
-];
-const COUNTRIES = [
-  { name: "Norway", code: "no" },
-  { name: "Sweden", code: "se" },
-  { name: "Germany", code: "de" },
-  { name: "USA", code: "us" },
-  { name: "UK", code: "gb" },
-];
 
 interface Job {
   id: string;
@@ -41,8 +25,13 @@ export default function FindJobsPage() {
   const [country, setCountry] = useState("");
   const [citySuggestions, setCitySuggestions] = useState<string[]>([]);
   const [countrySuggestions, setCountrySuggestions] = useState<
-    typeof COUNTRIES
+    { name: string; isoCode: string }[]
   >([]);
+  const [selectedCountryCode, setSelectedCountryCode] = useState<string | null>(
+    null
+  );
+  const [allCities, setAllCities] = useState<string[]>([]);
+
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -107,7 +96,7 @@ export default function FindJobsPage() {
   }
 
   const onFindJobs = async (newPage = 1, append = false) => {
-    if (!resume || !query || !city || !country) {
+    if (!resume || !query || !city || !selectedCountryCode) {
       alert("Please fill in all fields.");
       return;
     }
@@ -124,7 +113,7 @@ export default function FindJobsPage() {
           resume,
           query,
           city,
-          country,
+          country: selectedCountryCode.toLowerCase(),
           page: newPage,
         }),
       });
@@ -151,20 +140,37 @@ export default function FindJobsPage() {
     }
   };
 
-  const handleCityInput = (val: string) => {
-    setCity(val);
-    setCitySuggestions(
-      CITIES.filter((c) => c.toLowerCase().startsWith(val.toLowerCase()))
-    );
-  };
-
   const handleCountryInput = (val: string) => {
     setCountry(val);
-    setCountrySuggestions(
-      COUNTRIES.filter((c) =>
-        c.name.toLowerCase().startsWith(val.toLowerCase())
-      )
+    const filtered = Country.getAllCountries().filter((c) =>
+      c.name.toLowerCase().startsWith(val.toLowerCase())
     );
+    setCountrySuggestions(filtered);
+  };
+
+  const handleCityInput = (val: string) => {
+    setCity(val);
+    if (allCities.length > 0) {
+      setCitySuggestions(
+        allCities.filter((c) => c.toLowerCase().startsWith(val.toLowerCase()))
+      );
+    }
+  };
+
+  const handleSelectCountry = (countryObj: {
+    name: string;
+    isoCode: string;
+  }) => {
+    setCountry(countryObj.name);
+    setSelectedCountryCode(countryObj.isoCode);
+    setCountrySuggestions([]);
+
+    // Fetch cities for the selected country
+    const cities = City.getCitiesOfCountry(countryObj.isoCode) || [];
+    const cityNames = Array.from(new Set(cities.map((c) => c.name))).sort();
+    setAllCities(cityNames);
+    setCity("");
+    setCitySuggestions([]);
   };
 
   const truncateText = (text: string, maxLength: number) => {
@@ -205,13 +211,13 @@ export default function FindJobsPage() {
         }}
         placeholder="Paste your resume here..."
         rows={8}
-        className="w-full border bg-white border-gray-500 rounded p-2 mb-2"
+        className="w-full border bg-[#ffffff] border-gray-500 rounded p-2 mb-2"
       />
       {!resumeSaved ? (
         <button
           onClick={onSaveResume}
           disabled={!resume.trim()}
-          className="mb-4 px-3 py-1.5 bg-black text-white rounded"
+          className="mb-4 px-3 py-1.5 bg-dark text-white rounded-[3px]"
         >
           Save Resume
         </button>
@@ -234,6 +240,31 @@ export default function FindJobsPage() {
         className="w-full border border-gray-500 bg-white rounded p-2 mb-4"
       />
 
+      {/* Country input */}
+      <div className="mb-4 relative">
+        <input
+          type="text"
+          value={country}
+          onChange={(e) => handleCountryInput(e.target.value)}
+          placeholder="Country (e.g. United States)"
+          className="w-full border border-gray-500 bg-white rounded p-2"
+        />
+        {countrySuggestions.length > 0 && (
+          <ul className="absolute bg-white border w-full mt-1 rounded z-10">
+            {countrySuggestions.map((c) => (
+              <li
+                key={c.isoCode}
+                onClick={() => handleSelectCountry(c)}
+                className="p-2 hover:bg-gray-100 cursor-pointer"
+              >
+                {c.name} ({c.isoCode.toLowerCase()})
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      {/* City input */}
       <div className="mb-4 relative">
         <input
           type="text"
@@ -260,33 +291,7 @@ export default function FindJobsPage() {
         )}
       </div>
 
-      <div className="mb-4 relative">
-        <input
-          type="text"
-          value={country}
-          onChange={(e) => handleCountryInput(e.target.value)}
-          placeholder="Country (e.g. us)"
-          className="w-full border border-gray-500 bg-white rounded p-2"
-        />
-        {countrySuggestions.length > 0 && (
-          <ul className="absolute bg-white border w-full mt-1 rounded z-10">
-            {countrySuggestions.map((c) => (
-              <li
-                key={c.code}
-                onClick={() => {
-                  setCountry(c.code);
-                  setCountrySuggestions([]);
-                }}
-                className="p-2 hover:bg-gray-100 cursor-pointer"
-              >
-                {c.name} ({c.code})
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-
-      {/* ✅ UPDATED USAGE SECTION ONLY */}
+      {/* Usage and search */}
       <div>
         <p className="text-sm text-gray-600 mb-2">
           {usage.generationLimit === null
@@ -299,7 +304,6 @@ export default function FindJobsPage() {
             <p className="mb-3 font-semibold">
               You have used up all your cover letter generations.
             </p>
-
             {usage.generationLimit !== null ? (
               <>
                 <p className="mb-3">Upgrade to continue generating:</p>
@@ -320,8 +324,8 @@ export default function FindJobsPage() {
         )}
       </div>
 
+      {/* Job list */}
       {error && <p className="text-red-500 mt-4">{error}</p>}
-
       <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
         {jobs.map((job) => {
           const isDescriptionExpanded = expandedDescriptions[job.id];
@@ -336,7 +340,7 @@ export default function FindJobsPage() {
           return (
             <div
               key={job.id}
-              className="border flex flex-col justify-start items-start border-gray-300 rounded p-4"
+              className="border bg-white flex flex-col justify-start items-start border-gray-300 rounded p-4"
             >
               <h2 className="text-xl font-semibold">{job.title}</h2>
               <p className="text-gray-700">
@@ -355,7 +359,7 @@ export default function FindJobsPage() {
                 </button>
               )}
 
-              <p className="mt-2 text-green-600 font-medium">
+              <p className="mt-2 text-green-700 font-medium">
                 Match score: {job.score}/10
               </p>
 
