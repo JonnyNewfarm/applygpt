@@ -32,17 +32,17 @@ export default function Navbar() {
           <div className="hidden md:flex text-lg items-center space-x-6">
             <Link
               href="/resume-generator"
-              className="cursor-pointer hover:text-gray-700"
+              className="cursor-pointer hover:text-stone-700"
             >
               Generate Resume
             </Link>
             <Link
               href="/cover-letter"
-              className="cursor-pointer hover:text-gray-700"
+              className="cursor-pointer hover:text-stone-700"
             >
               Generate Cover Letter
             </Link>
-            <Link href="/jobs" className="cursor-pointer hover:text-gray-700">
+            <Link href="/jobs" className="cursor-pointer hover:text-stone-700">
               Find Jobs
             </Link>
 
@@ -50,13 +50,13 @@ export default function Navbar() {
               <>
                 <Link
                   href="/signin"
-                  className="cursor-pointer hover:text-gray-700"
+                  className="cursor-pointer hover:text-stone-700"
                 >
                   Sign In
                 </Link>
                 <Link
                   href="/register"
-                  className="cursor-pointer hover:text-gray-700"
+                  className="cursor-pointer hover:text-stone-700"
                 >
                   Register
                 </Link>
@@ -65,13 +65,13 @@ export default function Navbar() {
               <>
                 <Link
                   href="/profile"
-                  className="cursor-pointer hover:text-gray-700"
+                  className="cursor-pointer hover:text-stone-700"
                 >
                   Profile
                 </Link>
                 <button
                   onClick={() => signOut()}
-                  className="cursor-pointer hover:text-gray-700"
+                  className="cursor-pointer hover:text-stone-700"
                 >
                   Sign Out
                 </button>

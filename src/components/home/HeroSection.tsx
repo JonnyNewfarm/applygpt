@@ -71,9 +71,9 @@ const HeroSection = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex justify-center p-20">
-      <div className="mb-8 w-full h-full sm:mt-32 flex flex-col gap-y-6 text-start">
-        <h1 className="sm:text-3xl mt-32 uppercase text-xl whitespace-nowrap font-bold">
+    <div className="min-h-screen items-center w-full flex justify-center p-20">
+      <div className="mb-8 w-full  h-full sm:mt-32 flex flex-col gap-y-6 text-start">
+        <h1 className="sm:text-3xl sm:mt-32 uppercase text-2xl  font-bold">
           Simplify Job Searching
         </h1>
         <div className="w-full h-[1px] mb-[20px] hidden sm:block relative">
@@ -93,7 +93,7 @@ const HeroSection = () => {
         </div>
 
         <div className="flex flex-col gap-y-2">
-          <div className="md:text-xl text-lg lg:text-2xl sm:text-lg">
+          <div className="md:text-xl text-[16px] lg:text-2xl sm:text-lg">
             <p>
               AI tools to generate resumes, cover letters, and find jobs —
               faster.
