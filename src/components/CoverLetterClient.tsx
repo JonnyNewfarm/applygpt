@@ -10,6 +10,9 @@ export default function CoverLetterClient() {
   const editableRef = useRef<HTMLDivElement>(null);
   const printRef = useRef<HTMLDivElement>(null);
 
+  const description = localStorage.getItem("jobDescription") as string;
+  const company = localStorage.getItem("company") as string;
+
   const [resume, setResume] = useState("");
   const [jobAd, setJobAd] = useState("");
   const [tone, setTone] = useState("professional");
@@ -24,6 +27,22 @@ export default function CoverLetterClient() {
     generationLimit: null,
     generationCount: 0,
   });
+
+  const handleClearStorage = async () => {
+    localStorage.removeItem("company");
+    localStorage.removeItem("jobDescription");
+    window.location.reload();
+  };
+
+  useEffect(() => {
+    if (!description) {
+      setJobAd("");
+    } else {
+      setJobAd(`${company} 
+        ${description}
+        `);
+    }
+  }, [description, company]);
 
   useEffect(() => {
     async function fetchResume() {
@@ -187,6 +206,13 @@ export default function CoverLetterClient() {
                 onChange={(e) => setJobAd(e.target.value)}
                 placeholder="Paste job description here..."
               />
+              <button
+                onClick={handleClearStorage}
+                className="bg-[#852411] text-sm cursor-pointer text-white px-3 py-2 rounded-[3px]"
+                disabled={loading}
+              >
+                {loading ? "Deleting..." : "Clear description"}
+              </button>{" "}
             </div>
 
             <div>
@@ -268,6 +294,7 @@ export default function CoverLetterClient() {
                     Download as PDF
                   </button>
                 </div>
+                <h1 className="font-bold -mb-2">Edit if necessary</h1>
                 <div
                   ref={editableRef}
                   className="p-4 bg-white mt-5 border border-gray-300 rounded-[3px] whitespace-pre-wrap text-sm min-h-[300px]"

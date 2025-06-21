@@ -75,7 +75,7 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
         value={content}
         onChange={(e) => setContent(e.target.value)}
         rows={12}
-        className="w-full border border-gray-400 p-4 text-sm leading-relaxed"
+        className="w-full border bg-white border-gray-400 p-4 text-sm leading-relaxed"
         placeholder="Paste or write your resume here..."
       />
 

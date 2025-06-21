@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Country, City } from "country-state-city";
 import ManageSubscriptionButton from "./ManageSubscriptionButton";
-import BuyAccessButton from "./BuyAccessButton"; // Make sure this is imported
+import BuyAccessButton from "./BuyAccessButton";
 
 interface Job {
   id: string;
@@ -165,7 +165,6 @@ export default function FindJobsPage() {
     setSelectedCountryCode(countryObj.isoCode);
     setCountrySuggestions([]);
 
-    // Fetch cities for the selected country
     const cities = City.getCitiesOfCountry(countryObj.isoCode) || [];
     const cityNames = Array.from(new Set(cities.map((c) => c.name))).sort();
     setAllCities(cityNames);
@@ -180,17 +179,18 @@ export default function FindJobsPage() {
   };
 
   const toggleExpandDescription = (jobId: string) => {
-    setExpandedDescriptions((prev) => ({
-      ...prev,
-      [jobId]: !prev[jobId],
-    }));
+    setExpandedDescriptions((prev) => ({ ...prev, [jobId]: !prev[jobId] }));
   };
 
   const toggleExpandExplanation = (jobId: string) => {
-    setExpandedExplanations((prev) => ({
-      ...prev,
-      [jobId]: !prev[jobId],
-    }));
+    setExpandedExplanations((prev) => ({ ...prev, [jobId]: !prev[jobId] }));
+  };
+
+  const handleCreateCoverLetter = (job: Job) => {
+    localStorage.setItem("jobDescription", job.description);
+    localStorage.setItem("company", job.company);
+
+    window.open("/cover-letter", "_blank");
   };
 
   const isAtLimit =
@@ -224,7 +224,7 @@ export default function FindJobsPage() {
       ) : (
         <div className="mb-4">
           <Link
-            className="bg-dark text-sm rounded-[3px] hover:opacity-90 text-white py-1.5 px-3"
+            className="bg-[#48413f] border border-stone-400 text-sm rounded-[3px] hover:opacity-90 text-white py-1.5 px-3"
             href={"/profile"}
           >
             Edit Resume
@@ -291,7 +291,6 @@ export default function FindJobsPage() {
         )}
       </div>
 
-      {/* Usage and search */}
       <div>
         <p className="text-sm text-gray-600 mb-2">
           {usage.generationLimit === null
@@ -324,7 +323,6 @@ export default function FindJobsPage() {
         )}
       </div>
 
-      {/* Job list */}
       {error && <p className="text-red-500 mt-4">{error}</p>}
       <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
         {jobs.map((job) => {
@@ -340,49 +338,60 @@ export default function FindJobsPage() {
           return (
             <div
               key={job.id}
-              className="border bg-white flex flex-col justify-start items-start border-gray-300 rounded p-4"
+              className="border relative h-full bg-white flex flex-col justify-start items-start border-gray-300 rounded-[3px] p-4"
             >
-              <h2 className="text-xl font-semibold">{job.title}</h2>
-              <p className="text-gray-700">
-                {job.company} — {job.location}
-              </p>
+              <div className="h-full w-full">
+                <h2 className="text-xl font-semibold">{job.title}</h2>
+                <p className="text-gray-700">
+                  {job.company} — {job.location}
+                </p>
 
-              <p className="mt-2 text-sm text-gray-600 whitespace-pre-line">
-                {description || "No description"}
-              </p>
-              {job.description.length > 200 && (
-                <button
-                  onClick={() => toggleExpandDescription(job.id)}
-                  className="dark underline text-sm cursor-pointer hover:opacity-90 mt-1"
+                <p className="mt-2 text-sm text-gray-600 whitespace-pre-line">
+                  {description || "No description"}
+                </p>
+                {job.description.length > 200 && (
+                  <button
+                    onClick={() => toggleExpandDescription(job.id)}
+                    className="dark underline text-sm cursor-pointer hover:opacity-90 mt-1"
+                  >
+                    {isDescriptionExpanded ? "Show less" : "Read more"}
+                  </button>
+                )}
+
+                <p className="mt-2 text-green-700 font-medium">
+                  Match score: {job.score}/10
+                </p>
+
+                <p className="mt-1 text-sm text-gray-500 italic whitespace-pre-line">
+                  GPT: {explanation || "No explanation"}
+                </p>
+                {job.explanation.length > 160 && (
+                  <button
+                    onClick={() => toggleExpandExplanation(job.id)}
+                    className="dark underline cursor-pointer hover:opacity-90 text-sm mt-1"
+                  >
+                    {isExplanationExpanded ? "Show less" : "Read more"}
+                  </button>
+                )}
+              </div>
+              <div className="flex flex-row-reverse items-center justify-between w-full relative  left-auto right-auto bottom-6 mt-10">
+                <a
+                  href={job.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-dark text-white py-1 px-3 rounded-[3px] hover:opacity-90 mt-2 inline-block"
                 >
-                  {isDescriptionExpanded ? "Show less" : "Read more"}
-                </button>
-              )}
+                  Apply
+                </a>
 
-              <p className="mt-2 text-green-700 font-medium">
-                Match score: {job.score}/10
-              </p>
-
-              <p className="mt-1 text-sm text-gray-500 italic whitespace-pre-line">
-                GPT: {explanation || "No explanation"}
-              </p>
-              {job.explanation.length > 160 && (
                 <button
-                  onClick={() => toggleExpandExplanation(job.id)}
-                  className="dark underline cursor-pointer hover:opacity-90 text-sm mt-1"
+                  rel="noopener noreferrer"
+                  onClick={() => handleCreateCoverLetter(job)}
+                  className="bg-[#403938] cursor-pointer text-white mt-2 py-1 px-3 rounded-[3px] hover:opacity-90"
                 >
-                  {isExplanationExpanded ? "Show less" : "Read more"}
+                  Create Cover Letter
                 </button>
-              )}
-
-              <a
-                href={job.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-dark text-white py-1 px-3 rounded-[3px] hover:opacity-90 mt-2 inline-block"
-              >
-                Apply
-              </a>
+              </div>
             </div>
           );
         })}
