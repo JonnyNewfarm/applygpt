@@ -73,7 +73,7 @@ const HeroSection = () => {
     <div
       className={`min-h-screen   bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4ed] dark:text-[#2b2a27] items-center w-full flex justify-center px-6 sm:px-20`}
     >
-      <div className="mb-8 w-full text-left  h-full  flex flex-col sm:gap-y-6 gap-y-2 ">
+      <div className="mb-16 w-full text-left  h-full  flex flex-col sm:gap-y-6 gap-y-2 ">
         <h1 className="sm:text-3xl   uppercase text-2xl  font-bold">
           Simplify Job Searching
         </h1>
@@ -114,7 +114,7 @@ const HeroSection = () => {
           </div>
         </div>
 
-        <div className="w-full flex uppercase justify-between font-bold text-lg sm:text-2xl md:text-3xl text-nowrap px-6 sm:px-20 absolute bottom-12  left-0">
+        <div className="w-full flex uppercase justify-between font-bold text-lg sm:text-2xl md:text-3xl text-nowrap px-6 sm:px-20 absolute bottom-6  left-0">
           <MagneticComp>
             <Link href={"/cover-letter"} className="flex gap-x-2">
               Generate <p className="hidden sm:block">Cover Letter</p>
