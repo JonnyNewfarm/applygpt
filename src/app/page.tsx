@@ -1,7 +1,7 @@
+import LiveCoverLetterDemo from "@/components/home/CoverletterDemo";
 import FindJobSection from "@/components/home/FindJobSection";
-import GenerateClSection from "@/components/home/GenerateClSection";
-import GenerateResumeSection from "@/components/home/GenerateResumeSection";
 import HeroSection from "@/components/home/HeroSection";
+import GenerateResumeDemo from "@/components/home/ResumeDemo";
 import SmoothScroll from "@/components/SmoothScroll";
 import React from "react";
 
@@ -10,9 +10,9 @@ const Homepage = () => {
     <SmoothScroll>
       <div className="h-full  flex flex-col justify-center items-center  w-full">
         <HeroSection />
-        <GenerateResumeSection />
+        <GenerateResumeDemo />
         <FindJobSection />
-        <GenerateClSection />
+        <LiveCoverLetterDemo />
       </div>
     </SmoothScroll>
   );
