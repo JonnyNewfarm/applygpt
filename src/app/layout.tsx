@@ -4,6 +4,7 @@ import "./globals.css";
 import { Providers } from "@/components/Provider";
 import Navbar from "@/components/Navbar";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import Footer from "@/components/Footer";
 
 // Import both fonts
 const montserrat = Montserrat({
@@ -37,6 +38,7 @@ export default function RootLayout({
           <ThemeProvider>
             <Navbar />
             {children}
+            <Footer />
           </ThemeProvider>
         </Providers>
       </body>
