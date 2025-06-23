@@ -15,7 +15,7 @@ const jobTitles = Object.keys(resumeExamples);
 
 const LiveGenerateResumeDemo = () => {
   const [jobTitle, setJobTitle] = useState("");
-  const [name, setName] = useState("Jonas Nygaard");
+  const [name, setName] = useState("Samantha Lee");
   const [age, setAge] = useState(28);
   const [showResume, setShowResume] = useState(false);
   const [typedText, setTypedText] = useState("");
