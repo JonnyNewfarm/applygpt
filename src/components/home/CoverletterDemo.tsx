@@ -57,8 +57,10 @@ const LiveCoverLetterDemo = () => {
         </h2>
 
         <p className="text-lg max-w-xl">
-          Below is a demo using a fixed resume and job description to generate a
-          personalized cover letter with a live typing effect.
+          You provide your resume and a job description, then select the tone
+          you want for your letter. The AI uses this information to generate a
+          customized cover letter tailored to the job. You can edit, save, copy,
+          or download the final letter as a PDF.
         </p>
 
         {!showLetter && (
@@ -116,7 +118,7 @@ const LiveCoverLetterDemo = () => {
               setShowLetter(false);
               setTypedText("");
             }}
-            className="mt-4 border border-red-500 text-red-500 px-4 py-2 rounded hover:bg-red-500 hover:text-white transition"
+            className="mt-4 ml-3 border border-red-500 text-red-500 px-4 py-2 rounded hover:bg-red-500 hover:text-white transition"
           >
             Start Over
           </button>

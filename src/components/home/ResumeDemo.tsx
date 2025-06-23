@@ -51,9 +51,8 @@ const LiveGenerateResumeDemo = () => {
         </h2>
 
         <p className="text-lg max-w-xl">
-          Generate professional resumes quickly by entering your name, age, and
-          selecting a job title. Watch as your resume content is generated
-          dynamically with sample data to inspire your own resume creation.
+          Provide your personal details, work experience, skills, and education
+          to generate a professional resume tailored to your career goals.
         </p>
 
         {!showResume && (

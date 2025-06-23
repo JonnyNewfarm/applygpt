@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
 
 const demoJob = {
   title: "Frontend Developer",
@@ -22,7 +21,8 @@ const FindJobsDemo = () => {
         <p className="max-w-xl  text-lg">
           Explore real job listings with detailed information including job
           title, company, location, salary, relevant tags, and how well each job
-          matches your profile.
+          matches your profile. Then you can generate a cover letter for the job
+          and apply.
         </p>
       </div>
 
@@ -49,12 +49,14 @@ const FindJobsDemo = () => {
           ))}
         </div>
 
-        <Link
-          href="/jobs"
-          className="inline-block mt-4 text-sm font-medium underline hover:text-[#cfcbbc]"
-        >
-          See more jobs →
-        </Link>
+        <div className="flex py-4 w-full justify-between">
+          <h1 className="mt-2 border dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]">
+            Generate Cover Letter
+          </h1>
+          <h1 className="mt-2 border dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]">
+            Apply
+          </h1>
+        </div>
       </div>
     </div>
   );
