@@ -75,32 +75,31 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
         value={content}
         onChange={(e) => setContent(e.target.value)}
         rows={12}
-        className="w-full border bg-white border-gray-400 p-4 text-sm leading-relaxed"
+        className="w-full border bg-white text-black border-gray-400 p-4 text-sm leading-relaxed"
         placeholder="Paste or write your resume here..."
       />
 
       <div className="mt-4 flex flex-wrap gap-4">
         <button
           onClick={handleSave}
-          className="bg-dark cursor-pointer text-white px-4 py-2 rounded-[3px]"
+          className="cursor-pointer mt-2 border dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]"
           disabled={loading}
         >
           {loading ? "Saving..." : "Save"}
         </button>
-
         <button
-          onClick={handleDelete}
-          className="bg-[#852411] cursor-pointer text-white px-4 py-2 rounded-[3px]"
-          disabled={loading}
+          onClick={handleDownload}
+          className="cursor-pointer mt-2 border dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]"
         >
-          {loading ? "Deleting..." : "Delete"}
+          Download as PDF
         </button>
 
         <button
-          onClick={handleDownload}
-          className="bg-[#524644] cursor-pointer text-white px-4 py-2 rounded-[3px]"
+          onClick={handleDelete}
+          className="cursor-pointer mt-2 border  px-3 py-1.5 rounded-[3px] border-red-600  text-sm text-red-600  "
+          disabled={loading}
         >
-          Download as PDF
+          {loading ? "Deleting..." : "Delete"}
         </button>
       </div>
 

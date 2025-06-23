@@ -159,7 +159,7 @@ export default function CoverLetterClient() {
     usage.generationCount >= usage.generationLimit;
 
   return (
-    <div className="w-full min-h-screen bg-light">
+    <div className="w-full min-h-screen  bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4ed] dark:text-[#2b2a27]">
       <main className="max-w-7xl bg-light mx-auto p-4 md:p-8">
         <h1 className="text-2xl font-bold mb-6 text-center md:text-left">
           Cover Letter Generator
@@ -171,8 +171,9 @@ export default function CoverLetterClient() {
             <div>
               <label className="block text-sm font-medium mb-1">Resume</label>
               <textarea
+                style={{ scrollbarWidth: "thin" }}
                 rows={6}
-                className="w-full p-3 border bg-white/80"
+                className="w-full p-3 border bg-white text-black"
                 value={resume}
                 onChange={(e) => setResume(e.target.value)}
                 placeholder="Paste your resume here..."
@@ -180,7 +181,7 @@ export default function CoverLetterClient() {
               {!resumeSaved ? (
                 <button
                   onClick={onSaveResume}
-                  className="mt-2 px-3 py-1.5 text-white rounded-[3px] bg-dark text-sm"
+                  className="mt-2 px-3 py-1.5 border  rounded-[3px] bg-dark text-sm  dark:border-[#2b2a27]   border-[#f6f4ed]   text-[#f6f4ed]   dark:text-[#2b2a27]"
                   disabled={!resume.trim()}
                 >
                   Save Resume
@@ -188,7 +189,7 @@ export default function CoverLetterClient() {
               ) : (
                 <button
                   onClick={onEditResume}
-                  className="mt-2 px-3 py-1.5 rounded-[3px] bg-dark text-sm text-white"
+                  className="mt-2 border dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]"
                 >
                   Edit Resume
                 </button>
@@ -200,15 +201,16 @@ export default function CoverLetterClient() {
                 Job Description
               </label>
               <textarea
+                style={{ scrollbarWidth: "thin" }}
                 rows={6}
-                className="w-full p-3 border rounded-[3px] bg-white/80"
+                className="w-full p-3 border rounded-[3px] bg-white text-black"
                 value={jobAd}
                 onChange={(e) => setJobAd(e.target.value)}
                 placeholder="Paste job description here..."
               />
               <button
                 onClick={handleClearStorage}
-                className="bg-[#852411] text-sm cursor-pointer text-white px-3 py-2 rounded-[3px]"
+                className="mt-2 border dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]"
                 disabled={loading}
               >
                 {loading ? "Deleting..." : "Clear description"}
@@ -218,7 +220,7 @@ export default function CoverLetterClient() {
             <div>
               <label className="block text-sm font-medium mb-1">Tone</label>
               <select
-                className="w-full p-2 border rounded-[3px] bg-white/80"
+                className="w-full p-2 border-[#f6f4ed] dark:border-black border rounded-[3px]  bg-white text-black"
                 value={tone}
                 onChange={(e) => setTone(e.target.value)}
               >
@@ -230,7 +232,7 @@ export default function CoverLetterClient() {
             </div>
 
             <div>
-              <p className="text-sm text-gray-600 mb-2">
+              <p className="text-sm  text-[#f6f4ed]   dark:text-[#2b2a27] mb-2">
                 {usage.generationLimit === null
                   ? `Used ${usage.generationCount} generations (Unlimited plan)`
                   : `Usage: ${usage.generationCount} / ${usage.generationLimit} generations`}
@@ -254,10 +256,10 @@ export default function CoverLetterClient() {
                 <button
                   onClick={onGenerate}
                   disabled={loading || !resume || !jobAd}
-                  className={`mt-4 w-full py-3 rounded-[3px] text-white font-semibold ${
+                  className={`mt-4 w-full py-3 rounded-[3px] border dark:border-[#2b2a27]  px-3  border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]  font-semibold ${
                     loading
-                      ? "bg-gray-400 cursor-not-allowed"
-                      : "bg-dark hover:opacity-80 cursor-pointer"
+                      ? " cursor-not-allowed"
+                      : " hover:opacity-80 cursor-pointer"
                   }`}
                 >
                   {coverLetter
@@ -297,7 +299,7 @@ export default function CoverLetterClient() {
                 <h1 className="font-bold -mb-2">Edit if necessary</h1>
                 <div
                   ref={editableRef}
-                  className="p-4 bg-white mt-5 border border-gray-300 rounded-[3px] whitespace-pre-wrap text-sm min-h-[300px]"
+                  className="p-4 bg-white mt-5 border text-black border-gray-300 rounded-[3px] whitespace-pre-wrap text-sm min-h-[300px]"
                   contentEditable
                   suppressContentEditableWarning
                 >
@@ -328,7 +330,7 @@ export default function CoverLetterClient() {
                 />
               </>
             ) : (
-              <p className="text-gray-900 text-sm">
+              <p className="text-[#f6f4ed]   dark:text-[#2b2a27] text-sm">
                 Your cover letter will appear here once generated.
               </p>
             )}

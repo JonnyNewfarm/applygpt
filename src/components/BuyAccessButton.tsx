@@ -8,8 +8,9 @@ export default function BuyAccessButton() {
   const router = useRouter();
   const { data: session } = useSession();
   const [plan, setPlan] = useState("basic");
+  const [showConfirm, setShowConfirm] = useState(false);
 
-  async function handleClick() {
+  async function handleSubscribe() {
     if (!session?.user?.email) return;
 
     const res = await fetch("/api/create-checkout-session", {
@@ -30,20 +31,47 @@ export default function BuyAccessButton() {
           value={plan}
           onChange={(e) => setPlan(e.target.value)}
         >
-          <option className="hover:bg-dark hover:text-white" value="basic">
+          <option className="bg-white text-black" value="basic">
             $5/month – 100 generations
           </option>
-          <option value="pro">$10/month – 200 generations</option>
-          <option value="unlimited">$20/month – Unlimited</option>
+          <option className="bg-white text-black" value="pro">
+            $10/month – 200 generations
+          </option>
+          <option className="bg-white text-black" value="unlimited">
+            $20/month – Unlimited
+          </option>
         </select>
       </label>
+
       <button
-        className="cursor-pointer bg-dark text-white rounded-[3px] px-3 py-2"
-        onClick={handleClick}
-        style={{ marginTop: 10 }}
+        className="mt-4 border cursor-pointer dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]"
+        onClick={() => setShowConfirm(true)}
       >
         Subscribe for Access
       </button>
+
+      {showConfirm && (
+        <div className="mt-3 border border-gray-300 bg-white text-black p-4 max-w-sm">
+          <p className="mb-3">
+            ⚠️ By continuing, your current subscription will be automatically
+            canceled and replaced with the new one.
+          </p>
+          <div className="flex gap-3">
+            <button
+              className="bg-dark cursor-pointer text-white px-3 py-2 rounded-[3px]"
+              onClick={handleSubscribe}
+            >
+              Continue
+            </button>
+            <button
+              className="bg-gray-200 cursor-pointer px-3 py-2 rounded-[3px]"
+              onClick={() => setShowConfirm(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

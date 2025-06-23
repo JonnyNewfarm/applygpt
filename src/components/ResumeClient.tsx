@@ -161,7 +161,7 @@ export default function ResumeClient() {
   }
 
   return (
-    <div className="w-full min-h-screen bg-light">
+    <div className="w-full bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4ed] dark:text-[#2b2a27] min-h-screen bg-light">
       <main className="max-w-4xl mx-auto p-4 md:p-8">
         <h1 className="text-2xl font-bold mb-6 text-center md:text-left">
           Resume Generator
@@ -180,16 +180,17 @@ export default function ResumeClient() {
             <div key={field}>
               <label className="block text-sm font-medium mb-1">{label}</label>
               <textarea
+                placeholder={label}
                 rows={field === "experience" || field === "skills" ? 3 : 1}
                 value={form[field as keyof typeof form]}
                 onChange={(e) => handleChange(field, e.target.value)}
-                className="w-full p-2 border rounded-[3px] bg-white/80"
+                className="w-full p-2 border rounded-[3px] bg-white text-black"
               />
             </div>
           ))}
         </div>
 
-        <div className="mb-4 text-sm text-gray-700">
+        <div className="mb-4 text-sm mt-4    text-[#f6f4ed]   dark:text-[#2b2a27]">
           {usage.generationLimit === null
             ? `Used ${usage.generationCount} generations (Unlimited plan)`
             : `Usage: ${usage.generationCount} / ${usage.generationLimit} generations`}
@@ -215,10 +216,8 @@ export default function ResumeClient() {
             disabled={
               loading || !form.name || !form.jobTitle || !form.experience
             }
-            className={`w-full cursor-pointer py-3 rounded-[3px] text-white font-semibold ${
-              loading
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-dark hover:opacity-80"
+            className={`mt-4 w-full py-3 cursor-pointer rounded-[3px] border dark:border-[#2b2a27]  px-3  border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]  font-semibold ${
+              loading ? "bg-gray-400 cursor-not-allowed" : " hover:opacity-80"
             }`}
           >
             {generatedResume

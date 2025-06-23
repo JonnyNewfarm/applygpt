@@ -29,9 +29,9 @@ export default function SignInPage() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-light">
-      <div className="w-full max-w-sm bg-white p-6 rounded-[3px] border-gray-300 shadow">
-        <h1 className="text-2xl font-bold mb-6 text-center">Sign In</h1>
+    <main className="min-h-screen flex items-center justify-center bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4ed] dark:text-[#2b2a27]">
+      <div className="w-full max-w-sm  p-6 rounded-[3px] border-[#f6f4ed] dark:border-[#2b2a27] border shadow">
+        <h1 className="text-2xl font-bold  mb-6 text-center">Sign In</h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
@@ -40,7 +40,7 @@ export default function SignInPage() {
             value={email}
             required
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full border px-4 py-2 rounded"
+            className="w-full border px-4 py-2 rounded bg-white text-black"
           />
           <input
             type="password"
@@ -48,15 +48,15 @@ export default function SignInPage() {
             value={password}
             required
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full border px-4 py-2 rounded"
+            className="w-full border px-4 py-2 rounded bg-white text-black"
           />
           <Link className="" href={"/forgot-password"}>
-            Forgot your password?
+            Forgot your password? <p className="underline">Reset password</p>
           </Link>
 
           <button
             type="submit"
-            className="w-full mt-2 bg-dark cursor-pointer text-white py-2 rounded hover:bg-gray-800 transition"
+            className="w-full mt-4 cursor-pointer py-2 rounded transition border-[#f6f4ed] dark:border-[#2b2a27] border"
           >
             Sign In
           </button>
@@ -66,7 +66,7 @@ export default function SignInPage() {
 
         <button
           onClick={() => signIn("google")}
-          className="w-full bg-gray-600 cursor-pointer text-white py-2 rounded hover:bg-gray-500 transition"
+          className="w-full cursor-pointer py-2 rounded transition border-[#f6f4ed] dark:border-[#2b2a27] border"
         >
           Sign in with Google
         </button>

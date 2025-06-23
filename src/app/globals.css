@@ -1,17 +1,36 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --font-m: 'Montserrat', sans-serif;
+  --font-lato: 'Lato', sans-serif;
+  --border-light:#aba9a1;
+  --border-dark: #e3e2e1;
+  --btn-light: #c9baaf;
+  --btn-dark:#f0eae6;
+
+
+}
 
 body, html{
-  background: #fdfbf7;
   scrollbar-width: none;
+  font-family: var(--font-m);
 }
-.bg-light {
-   background: linear-gradient(180deg, #fdfbf7 0%, #ecebea 100%)
+
+.font-lato {
+    font-family: var(--font-lato);
+
+
 }
+.font-m {
+    font-family: var(--font-m);
+
+}
+
+.light {
+background: #f6f4ed;}
+
 
 .bg-dark {
-  background: #262423;
-}
-
-.dark {
-  color: #262423;
+  background: #2b2a27;
 }

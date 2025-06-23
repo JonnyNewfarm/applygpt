@@ -9,7 +9,6 @@ const HeroSection = () => {
   const progress = useRef<number>(0);
   const time = useRef<number>(Math.PI / 2);
   const reqId = useRef<number | null>(null);
-
   useEffect(() => {
     setPath(progress.current);
 
@@ -71,12 +70,14 @@ const HeroSection = () => {
   };
 
   return (
-    <div className="min-h-screen items-center w-full flex justify-center p-20">
-      <div className="mb-8 w-full  h-full sm:mt-32 flex flex-col gap-y-6 text-start">
-        <h1 className="sm:text-3xl sm:mt-32 uppercase text-2xl  font-bold">
+    <div
+      className={`min-h-screen   bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4ed] dark:text-[#2b2a27] items-center w-full flex justify-center p-20`}
+    >
+      <div className="mb-8 w-full text-left  h-full  flex flex-col sm:gap-y-6 gap-y-2 ">
+        <h1 className="sm:text-3xl   uppercase text-2xl  font-bold">
           Simplify Job Searching
         </h1>
-        <div className="w-full h-[1px] mb-[20px] hidden sm:block relative">
+        <div className="w-full h-[1px] mb-[5px] hidden sm:block relative">
           <div
             onMouseEnter={manageMouseEnter}
             onMouseMove={manageMouseMove}
@@ -86,14 +87,14 @@ const HeroSection = () => {
 
           <svg className="h-[100px] w-full relative top-[-60px]">
             <path
-              className="stroke-black fill-none stroke-[1px]"
+              className="dark:stroke-[#2b2a27] stroke-[#f6f4ed]  fill-none stroke-[1px]"
               ref={path}
             ></path>
           </svg>
         </div>
 
         <div className="flex flex-col gap-y-2">
-          <div className="md:text-xl text-[16px] lg:text-2xl sm:text-lg">
+          <div className="md:text-xl text-[15px] lg:text-2xl sm:text-lg">
             <p>
               AI tools to generate resumes, cover letters, and find jobs —
               faster.
@@ -101,10 +102,10 @@ const HeroSection = () => {
             <p>Sign up and get started in seconds.</p>
           </div>
 
-          <div>
+          <div className="mt-2">
             <MagneticComp>
               <Link
-                className="font-bold text-xl whitespace-nowrap"
+                className=" border-[#f6f4ed] py-2 px-3 mt-3 dark:border-[#2b2a27] border text-xl whitespace-nowrap"
                 href={"/register"}
               >
                 Get Started
@@ -113,7 +114,7 @@ const HeroSection = () => {
           </div>
         </div>
 
-        <div className="w-full flex uppercase justify-between font-bold text-lg sm:text-2xl md:text-3xl text-nowrap px-6 sm:px-20 absolute bottom-10 left-0">
+        <div className="w-full flex uppercase justify-between font-bold text-lg sm:text-2xl md:text-3xl text-nowrap px-6 sm:px-20 absolute bottom-12  left-0">
           <MagneticComp>
             <Link href={"/cover-letter"} className="flex gap-x-2">
               Generate <p className="hidden sm:block">Cover Letter</p>

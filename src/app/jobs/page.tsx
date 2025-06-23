@@ -2,13 +2,29 @@ import { getServerSession } from "next-auth";
 import prisma from "../../../lib/prisma";
 import BuyAccessButton from "@/components/BuyAccessButton";
 import FindJobsClient from "@/components/FindJobsClient";
+import Link from "next/link";
 
 export default async function FindJobsPage() {
   const session = await getServerSession();
   if (!session) {
     return (
-      <div style={{ padding: 20 }}>
+      <div className="p-20 bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4ed] dark:text-[#2b2a27] min-h-screen">
         <p>Please sign in to access the job finder ai.</p>
+        <div className="mt-4 flex items-center gap-x-4">
+          <Link
+            className="mt-2 border dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]"
+            href={"/signin"}
+          >
+            Sign in
+          </Link>
+          <h1 className="text-sm">OR</h1>
+          <Link
+            className="mt-2 border dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]"
+            href={"/register"}
+          >
+            Register
+          </Link>
+        </div>
       </div>
     );
   }
@@ -32,12 +48,14 @@ export default async function FindJobsPage() {
 
   if (!canGenerate) {
     return (
-      <div style={{ padding: 20 }}>
-        <p>
-          You&apos;ve reached your monthly generation limit on the free plan.
-          Upgrade to continue.
-        </p>
-        <BuyAccessButton />
+      <div className="bg-[#2b2a27] font-semibold min-h-screen p-10 flex justify-center items-center  text-[#f6f4ed]  dark:bg-[#f6f4ed] dark:text-[#2b2a27]">
+        <div>
+          <p className="text-xl mb-4">
+            You&apos;ve reached your monthly generation limit on the free plan.
+            Upgrade to continue.
+          </p>
+          <BuyAccessButton />
+        </div>
       </div>
     );
   }

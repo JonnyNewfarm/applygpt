@@ -1,12 +1,21 @@
 import type { Metadata } from "next";
-import { Montserrat } from "next/font/google";
+import { Montserrat, Lato } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/Provider";
 import Navbar from "@/components/Navbar";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
+// Import both fonts
 const montserrat = Montserrat({
   subsets: ["latin"],
   variable: "--font-m",
+  weight: ["400", "700"],
+  display: "swap",
+});
+
+const lato = Lato({
+  subsets: ["latin"],
+  variable: "--font-lato",
   weight: ["400", "700"],
   display: "swap",
 });
@@ -23,10 +32,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={montserrat.variable}>
+      <body className={`${montserrat.variable} ${lato.variable}`}>
         <Providers>
-          <Navbar />
-          {children}
+          <ThemeProvider>
+            <Navbar />
+            {children}
+          </ThemeProvider>
         </Providers>
       </body>
     </html>

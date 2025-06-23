@@ -2,16 +2,23 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function RegisterPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
 
     const res = await fetch("/api/register", {
       method: "POST",
@@ -20,7 +27,7 @@ export default function RegisterPage() {
     });
 
     if (res.ok) {
-      router.push("/"); // go to homepage or login
+      router.push("/"); // Go to homepage or login page
     } else {
       const data = await res.json();
       setError(data.message || "Something went wrong");
@@ -28,8 +35,8 @@ export default function RegisterPage() {
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-light">
-      <div className="w-full max-w-sm bg-white p-6 rounded-[3px] border shadow">
+    <main className="min-h-screen flex items-center justify-center bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4ed] dark:text-[#2b2a27]">
+      <div className="w-full max-w-sm p-6 rounded-[3px] border shadow">
         <h1 className="text-2xl font-bold mb-6 text-center">Sign Up</h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -39,7 +46,7 @@ export default function RegisterPage() {
             value={name}
             required
             onChange={(e) => setName(e.target.value)}
-            className="w-full border px-4 py-2 rounded"
+            className="w-full border bg-white text-black px-4 py-2 rounded"
           />
           <input
             type="email"
@@ -47,7 +54,7 @@ export default function RegisterPage() {
             value={email}
             required
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full border px-4 py-2 rounded"
+            className="w-full bg-white text-black border px-4 py-2 rounded"
           />
           <input
             type="password"
@@ -55,11 +62,26 @@ export default function RegisterPage() {
             value={password}
             required
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full border px-4 py-2 rounded"
+            className="w-full bg-white text-black border px-4 py-2 rounded"
           />
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            required
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            className="w-full bg-white text-black border px-4 py-2 rounded"
+          />
+
+          <p>
+            Already have an account?{" "}
+            <Link className="underline" href={"signin"}>
+              Sign in
+            </Link>
+          </p>
           <button
             type="submit"
-            className="w-full bg-black text-white py-2 rounded hover:bg-gray-800 transition"
+            className="w-full cursor-pointer py-2 rounded transition border-[#f6f4ed] dark:border-[#2b2a27] border"
           >
             Register
           </button>

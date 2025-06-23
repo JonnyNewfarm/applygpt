@@ -5,7 +5,9 @@ import Link from "next/link";
 
 const GenerateClSection = () => {
   return (
-    <div className="w-full uppercase flex flex-col justify-center items-center min-h-screen text-5xl ">
+    <div
+      className={`w-full  bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4ed] dark:text-[#2b2a27] uppercase flex flex-col justify-center items-center min-h-screen text-5xl `}
+    >
       <motion.div
         initial={{ scale: 0.5, opacity: 0.8 }}
         viewport={{ once: true }}
@@ -18,14 +20,14 @@ const GenerateClSection = () => {
         }}
         className=" flex flex-col justify-center items-center font-semibold"
       >
-        <h1 className="font-normal text-2xl md:text-3xl lg:text-4xl">
+        <h1 className="font-normal text-xl md:text-3xl lg:text-4xl">
           Generate coverletter
         </h1>
-        <h1 className="flex gap-x-3 text-3xl md:text-4xl items-center whitespace-nowrap lg:text-5xl">
+        <h1 className="flex gap-x-3 text-2xl md:text-4xl items-center whitespace-nowrap lg:text-5xl">
           based on your resume{" "}
         </h1>
 
-        <h1 className="flex items-center gap-x-3 text-3xl md:text-4xl lg:text-5xl">
+        <h1 className="flex items-center gap-x-3 text-2xl md:text-4xl lg:text-5xl">
           and job description
         </h1>
         <Link
