@@ -195,6 +195,7 @@ export default function FindJobsPage() {
   const handleCreateCoverLetter = (job: Job) => {
     localStorage.setItem("jobDescription", job.description);
     localStorage.setItem("company", job.company);
+    localStorage.setItem("url", job.url);
     window.open("/cover-letter", "_blank");
   };
 

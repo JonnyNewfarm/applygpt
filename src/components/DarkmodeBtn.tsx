@@ -16,7 +16,7 @@ const DarkModeToggle = () => {
         }`}
         aria-label="Light mode"
       >
-        <Moon size={14} />
+        <Moon size={12} />
       </button>
       <button
         onClick={() => theme === "light" && toggleTheme()}
@@ -25,7 +25,7 @@ const DarkModeToggle = () => {
         }`}
         aria-label="Dark mode"
       >
-        <Sun size={14} />
+        <Sun size={12} />
       </button>
     </div>
   );

@@ -12,11 +12,13 @@ export default function CoverLetterClient() {
 
   const description = localStorage.getItem("jobDescription") as string;
   const company = localStorage.getItem("company") as string;
+  const url = localStorage.getItem("url") as string;
 
   const [resume, setResume] = useState("");
   const [jobAd, setJobAd] = useState("");
   const [tone, setTone] = useState("professional");
   const [loading, setLoading] = useState(false);
+  const [loadingDelete, setLoadingDelete] = useState(false);
   const [coverLetter, setCoverLetter] = useState("");
   const [resumeSaved, setResumeSaved] = useState(false);
 
@@ -29,9 +31,17 @@ export default function CoverLetterClient() {
   });
 
   const handleClearStorage = async () => {
-    localStorage.removeItem("company");
-    localStorage.removeItem("jobDescription");
-    window.location.reload();
+    setLoadingDelete(true);
+    try {
+      localStorage.removeItem("company");
+      localStorage.removeItem("jobDescription");
+      localStorage.removeItem("url");
+      window.location.reload();
+    } catch {
+      alert("Something went wrong. Please try again.");
+    }
+
+    setLoadingDelete(false);
   };
 
   useEffect(() => {
@@ -211,9 +221,9 @@ export default function CoverLetterClient() {
               <button
                 onClick={handleClearStorage}
                 className="mt-2 border dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]"
-                disabled={loading}
+                disabled={loadingDelete}
               >
-                {loading ? "Deleting..." : "Clear description"}
+                {loadingDelete ? "Deleting..." : "Clear description"}
               </button>{" "}
             </div>
 
@@ -283,20 +293,30 @@ export default function CoverLetterClient() {
             {coverLetter ? (
               <>
                 <div className="flex flex-wrap gap-3 mt-4">
+                  {url ? (
+                    <a
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-[#f6f4ed] text-[#2b2a27]  dark:bg-[#2b2a27] dark:text-[#f6f4ed] py-1 px-3 rounded-[3px] hover:opacity-90 mt-2 inline-block"
+                    >
+                      Apply
+                    </a>
+                  ) : null}
                   <button
                     onClick={onCopy}
-                    className="px-4 py-2 cursor-pointer bg-transparent dark border rounded-[3px] hover:opacity-50"
+                    className="mt-2 border cursor-pointer dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]"
                   >
                     Copy to Clipboard
                   </button>
                   <button
                     onClick={onDownload}
-                    className="px-4 py-2 cursor-pointer bg-dark hover:opacity-80 text-white rounded-[3px]"
+                    className="mt-2 border cursor-pointer dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]"
                   >
                     Download as PDF
                   </button>
                 </div>
-                <h1 className="font-bold -mb-2">Edit if necessary</h1>
+                <h1 className="font-bold mt-2">Edit if necessary</h1>
                 <div
                   ref={editableRef}
                   className="p-4 bg-white mt-5 border text-black border-gray-300 rounded-[3px] whitespace-pre-wrap text-sm min-h-[300px]"

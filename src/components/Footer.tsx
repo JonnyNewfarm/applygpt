@@ -14,7 +14,7 @@ const Footer = () => {
               <div className="">
                 <div className="flex gap-x-10">
                   <div className="">
-                    <div className="flex flex-col gap-y-1 justify-start mt-5 text-xl font-light">
+                    <div className="flex flex-col gap-y-1 justify-start mt-5 text-lg font-light">
                       <h1 className="opacity-70">Navigation</h1>
                       <Link href={"/resume-generator"}>Generate Resume</Link>
                       <Link href={"/jobs"}>Find Jobs</Link>

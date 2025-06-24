@@ -29,8 +29,8 @@ const FindJobsDemo = () => {
       {/* Demo Job Card */}
       <div className="w-full max-w-xl border border-[#f6f4ed] dark:border-[#2b2a27] rounded p-6 cursor-pointer hover:bg-[#3a3834] dark:hover:bg-[#dcdad6] transition relative">
         {/* MATCH % badge top-right */}
-        <div className="absolute top-4 right-2 bg-green-600 dark:bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-md uppercase select-none">
-          Match {demoJob.match}%
+        <div className="absolute top-4 right-2 text-green-600 text-sm  sm:text-lg font-bold px-2 py-1 rounded-md uppercase select-none">
+          Match 7/10
         </div>
 
         <h3 className="text-lg font-semibold">{demoJob.title}</h3>

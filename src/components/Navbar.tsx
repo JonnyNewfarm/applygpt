@@ -18,7 +18,12 @@ export default function Navbar() {
     }
   }, [menuOpen]);
 
-  if (status === "loading") return <p className="ml-5 mt-5">Loading...</p>;
+  if (status === "loading")
+    return (
+      <div className="ml-5 mt-5 bg-[#2b2a27] w-full text-[#f6f4ed] absolute top-0 left-0  dark:bg-[#f6f4ed] dark:text-[#2b2a27]">
+        <p className="">Loading...</p>
+      </div>
+    );
 
   return (
     <>
@@ -37,14 +42,14 @@ export default function Navbar() {
             >
               Generate Resume
             </Link>
+            <Link href="/jobs" className="cursor-pointer hover:text-stone-700">
+              Find Jobs
+            </Link>
             <Link
               href="/cover-letter"
               className="cursor-pointer hover:text-stone-700"
             >
               Generate Cover Letter
-            </Link>
-            <Link href="/jobs" className="cursor-pointer hover:text-stone-700">
-              Find Jobs
             </Link>
 
             {!session ? (
