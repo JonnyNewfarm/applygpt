@@ -173,7 +173,7 @@ export default function ResumeClient() {
         </p>
         <div className="mb-5">
           <Link
-            className="bg-white/80 rounded-[3px] text-black px-4 py-2"
+            className="bg-white/80 dark:bg-black/80 dark:text-white rounded-[3px] text-black px-4 py-2"
             href={"/profile"}
           >
             Profile
