@@ -25,7 +25,7 @@ export async function POST(req: Request) {
       email,
       name,
       password: hashedPassword,
-      generationLimit: 15,
+      generationLimit: 6,
       subscriptionStatus: "free",
     },
   });

@@ -3,9 +3,16 @@ import prisma from "../../../lib/prisma";
 import BuyAccessButton from "@/components/BuyAccessButton";
 import ResumeClient from "@/components/ResumeClient";
 import Link from "next/link";
+import FreeTierNotice from "../free-tier-notice/page";
 
 export default async function CoverLetterPage() {
   const session = await getServerSession();
+  const findUser = await prisma.user.findUnique({
+    where: { email: session?.user?.email || "" },
+  });
+
+  const isFreeTier =
+    !findUser?.subscriptionStatus || findUser.subscriptionStatus === "free";
   if (!session) {
     return (
       <div className="p-20 min-h-screen bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4ed] dark:text-[#2b2a27]">
@@ -60,5 +67,10 @@ export default async function CoverLetterPage() {
     );
   }
 
-  return <ResumeClient />;
+  return (
+    <div className="w-full min-h-screen bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4ed] dark:text-[#2b2a27] border-b border-b-white/20 dark:border-b-black/20">
+      {isFreeTier && <FreeTierNotice />}
+      <ResumeClient />
+    </div>
+  );
 }

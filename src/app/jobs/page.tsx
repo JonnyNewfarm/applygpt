@@ -60,5 +60,9 @@ export default async function FindJobsPage() {
     );
   }
 
-  return <FindJobsClient />;
+  return (
+    <div className="w-full min-h-screen bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4ed] dark:text-[#2b2a27] border-b border-b-white/20 dark:border-b-black/20">
+      <FindJobsClient />
+    </div>
+  );
 }

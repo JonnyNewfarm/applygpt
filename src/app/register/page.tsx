@@ -27,7 +27,7 @@ export default function RegisterPage() {
     });
 
     if (res.ok) {
-      router.push("/"); // Go to homepage or login page
+      router.push("/signin");
     } else {
       const data = await res.json();
       setError(data.message || "Something went wrong");

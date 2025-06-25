@@ -8,7 +8,7 @@ import React from "react";
 const Homepage = () => {
   return (
     <SmoothScroll>
-      <div className="h-full  flex flex-col justify-center items-center  w-full">
+      <div className="h-full   flex flex-col justify-center items-center  w-full">
         <HeroSection />
         <GenerateResumeDemo />
         <FindJobSection />

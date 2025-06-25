@@ -169,7 +169,7 @@ export default function CoverLetterClient() {
     usage.generationCount >= usage.generationLimit;
 
   return (
-    <div className="w-full min-h-screen  bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4ed] dark:text-[#2b2a27]">
+    <div className="w-full min-h-screen border-b-white/20 dark:border-b-black/20  bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4ed] dark:text-[#2b2a27]">
       <main className="max-w-7xl bg-light mx-auto p-4 md:p-8">
         <h1 className="text-2xl font-bold mb-6 text-center md:text-left">
           Cover Letter Generator
@@ -191,7 +191,7 @@ export default function CoverLetterClient() {
               {!resumeSaved ? (
                 <button
                   onClick={onSaveResume}
-                  className="mt-2 px-3 py-1.5 border  rounded-[3px] bg-dark text-sm  dark:border-[#2b2a27]   border-[#f6f4ed]   text-[#f6f4ed]   dark:text-[#2b2a27]"
+                  className="mt-2 px-3 py-1.5 border cursor-pointer  rounded-[3px] bg-dark text-sm  dark:border-[#2b2a27]   border-[#f6f4ed]   text-[#f6f4ed]   dark:text-[#2b2a27]"
                   disabled={!resume.trim()}
                 >
                   Save Resume
@@ -199,7 +199,7 @@ export default function CoverLetterClient() {
               ) : (
                 <button
                   onClick={onEditResume}
-                  className="mt-2 border dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]"
+                  className="mt-2 border dark:border-[#2b2a27] cursor-pointer  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]"
                 >
                   Edit Resume
                 </button>
@@ -220,7 +220,7 @@ export default function CoverLetterClient() {
               />
               <button
                 onClick={handleClearStorage}
-                className="mt-2 border dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]"
+                className="mt-2 border dark:border-[#2b2a27] cursor-pointer  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]"
                 disabled={loadingDelete}
               >
                 {loadingDelete ? "Deleting..." : "Clear description"}
@@ -298,7 +298,7 @@ export default function CoverLetterClient() {
                       href={url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="bg-[#f6f4ed] text-[#2b2a27]  dark:bg-[#2b2a27] dark:text-[#f6f4ed] py-1 px-3 rounded-[3px] hover:opacity-90 mt-2 inline-block"
+                      className="bg-[#f6f4ed] text-[#2b2a27]   dark:bg-[#2b2a27] dark:text-[#f6f4ed] py-1 px-3 rounded-[3px] hover:opacity-90 mt-2 inline-block"
                     >
                       Apply
                     </a>

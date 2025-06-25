@@ -32,13 +32,13 @@ export default function BuyAccessButton() {
           onChange={(e) => setPlan(e.target.value)}
         >
           <option className="bg-white text-black" value="basic">
-            $5/month – 100 generations
+            $15/month – 100 generations
           </option>
           <option className="bg-white text-black" value="pro">
-            $10/month – 200 generations
+            $25/month – 250 generations
           </option>
           <option className="bg-white text-black" value="unlimited">
-            $20/month – Unlimited
+            $40/month – Unlimited
           </option>
         </select>
       </label>

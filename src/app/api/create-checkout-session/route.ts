@@ -50,9 +50,9 @@ export async function POST(req: Request) {
   }
 
   const priceMap: Record<string, string> = {
-    basic: process.env.STRIPE_BASIC_PRICE_ID!,
-    pro: process.env.STRIPE_PRO_PRICE_ID!,
-    unlimited: process.env.STRIPE_UNLIMITED_PRICE_ID!,
+    basic: process.env.STRIPE_BASIC_PRICE_ID_NEW!,
+    pro: process.env.STRIPE_PRO_PRICE_ID_NEW!,
+    unlimited: process.env.STRIPE_UNLIMITED_PRICE_ID_NEW!,
   };
 
   const stripeSession = await stripe.checkout.sessions.create({

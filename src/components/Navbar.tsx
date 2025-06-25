@@ -9,7 +9,6 @@ export default function Navbar() {
   const { data: session, status } = useSession();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // Prevent body scroll when menu is open (overlay)
   useEffect(() => {
     if (menuOpen) {
       document.body.style.overflow = "hidden";
@@ -38,16 +37,19 @@ export default function Navbar() {
           <div className="hidden lg:flex text-lg items-center space-x-6">
             <Link
               href="/resume-generator"
-              className="cursor-pointer hover:text-stone-700"
+              className="cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
             >
               Generate Resume
             </Link>
-            <Link href="/jobs" className="cursor-pointer hover:text-stone-700">
+            <Link
+              href="/jobs"
+              className="cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
+            >
               Find Jobs
             </Link>
             <Link
               href="/cover-letter"
-              className="cursor-pointer hover:text-stone-700"
+              className="cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
             >
               Generate Cover Letter
             </Link>
@@ -56,13 +58,13 @@ export default function Navbar() {
               <>
                 <Link
                   href="/signin"
-                  className="cursor-pointer hover:text-stone-700"
+                  className="cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
                 >
                   Sign In
                 </Link>
                 <Link
                   href="/register"
-                  className="cursor-pointer hover:text-stone-700"
+                  className="cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
                 >
                   Register
                 </Link>
@@ -71,13 +73,13 @@ export default function Navbar() {
               <>
                 <Link
                   href="/profile"
-                  className="cursor-pointer hover:text-stone-700"
+                  className="cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
                 >
                   Profile
                 </Link>
                 <button
                   onClick={() => signOut()}
-                  className="cursor-pointer hover:text-stone-700"
+                  className="cursor-pointer hover:scale-105 transform transition-transform duration-300 ease-in-out "
                 >
                   Sign Out
                 </button>

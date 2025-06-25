@@ -50,10 +50,10 @@ const LiveCoverLetterDemo = () => {
   }, [showLetter, generatedLetter]);
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-[#2b2a27] text-[#f6f4ed] px-4 py-12 dark:bg-[#f6f4ed] dark:text-[#2b2a27]">
+    <div className="min-h-screen w-full flex items-center justify-center border-b-white/20 dark:border-b-black/20 bg-[#2b2a27] text-[#f6f4ed] px-4 py-12 dark:bg-[#f6f4ed] dark:text-[#2b2a27]">
       <div className="w-full max-w-3xl text-left space-y-6">
         <h2 className="text-2xl sm:text-3xl font-bold uppercase">
-          Live Cover Letter Generator
+          Cover Letter Generator
         </h2>
 
         <p className="text-lg max-w-xl">

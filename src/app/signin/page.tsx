@@ -24,7 +24,7 @@ export default function SignInPage() {
     if (res?.error) {
       setError(res.error);
     } else {
-      router.push("/");
+      router.push("/resume-generator");
     }
   }
 

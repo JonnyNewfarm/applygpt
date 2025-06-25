@@ -67,9 +67,9 @@ export async function POST(req: NextRequest) {
         const priceId = subscription.items.data[0].price.id;
 
         let generationLimit: number | null = null;
-        if (priceId === process.env.STRIPE_BASIC_PRICE_ID) generationLimit = 100;
-        if (priceId === process.env.STRIPE_PRO_PRICE_ID) generationLimit = 200;
-        if (priceId === process.env.STRIPE_UNLIMITED_PRICE_ID) generationLimit = null;
+        if (priceId === process.env.STRIPE_BASIC_PRICE_ID_NEW) generationLimit = 100;
+        if (priceId === process.env.STRIPE_PRO_PRICE_ID_NEW) generationLimit = 200;
+        if (priceId === process.env.STRIPE_UNLIMITED_PRICE_ID_NEW) generationLimit = null;
 
         const isActive = subscription.status === "active";
 

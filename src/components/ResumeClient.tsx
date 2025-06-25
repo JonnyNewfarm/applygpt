@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import BuyAccessButton from "../components/BuyAccessButton";
 import ManageSubscriptionButton from "../components/ManageSubscriptionButton";
+import Link from "next/link";
 
 export default function ResumeClient() {
   const [form, setForm] = useState({
@@ -166,6 +167,18 @@ export default function ResumeClient() {
         <h1 className="text-2xl font-bold mb-6 text-center md:text-left">
           Resume Generator
         </h1>
+
+        <p className="mb-2">
+          Already have a resume? Save it in your profile page.
+        </p>
+        <div className="mb-5">
+          <Link
+            className="bg-white/80 rounded-[3px] text-black px-4 py-2"
+            href={"/profile"}
+          >
+            Profile
+          </Link>
+        </div>
 
         <div className="space-y-4 mb-6">
           {[
