@@ -165,9 +165,7 @@ export default function ResumeClient() {
   return (
     <div className="w-full bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4ed] dark:text-[#2b2a27] min-h-screen bg-light">
       <main className="max-w-4xl mx-auto p-4 md:p-8">
-        <h1 className="text-2xl font-bold mb-2 text-center md:text-left">
-          Resume Generator
-        </h1>
+        <h1 className="text-2xl font-bold mb-2">Resume Generator</h1>
 
         <p className="mb-2 ">
           Already have a resume? Save it in your profile page.
