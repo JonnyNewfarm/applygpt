@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import BuyAccessButton from "../components/BuyAccessButton";
 import ManageSubscriptionButton from "../components/ManageSubscriptionButton";
 import Link from "next/link";
+import toast from "react-hot-toast";
 
 export default function ResumeClient() {
   const [form, setForm] = useState({
@@ -67,7 +68,7 @@ export default function ResumeClient() {
       const data = await res.json();
 
       if (!res.ok) {
-        alert(data.error || "Error generating resume");
+        toast(data.error || "Error generating resume");
       } else {
         setGeneratedResume(data.resume);
 
@@ -81,7 +82,7 @@ export default function ResumeClient() {
         }
       }
     } catch {
-      alert("Something went wrong");
+      toast("Something went wrong");
     }
 
     setLoading(false);
@@ -90,7 +91,7 @@ export default function ResumeClient() {
   function onCopy() {
     if (!editableRef.current) return;
     navigator.clipboard.writeText(editableRef.current.innerText).then(() => {
-      alert("Copied to clipboard!");
+      toast("Copied to clipboard!");
     });
   }
 
@@ -100,7 +101,7 @@ export default function ResumeClient() {
     const content = editableRef.current.innerText.trim();
 
     if (!content) {
-      alert("Resume is empty");
+      toast("Resume is empty");
       return;
     }
 
@@ -113,10 +114,10 @@ export default function ResumeClient() {
         },
         body: JSON.stringify({ content }),
       });
-      alert("Resume saved!");
+      toast("Resume saved!");
     } catch {
       console.error("Failed to save resume");
-      alert("Failed to save resume.");
+      toast("Failed to save resume.");
     } finally {
       setLoading(false);
     }
@@ -158,26 +159,27 @@ export default function ResumeClient() {
     pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight);
     pdf.save("resume.pdf");
 
-    document.body.removeChild(tempDiv); // Clean up
+    document.body.removeChild(tempDiv);
   }
 
   return (
     <div className="w-full bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4ed] dark:text-[#2b2a27] min-h-screen bg-light">
       <main className="max-w-4xl mx-auto p-4 md:p-8">
-        <h1 className="text-2xl font-bold mb-6 text-center md:text-left">
+        <h1 className="text-2xl font-bold mb-2 text-center md:text-left">
           Resume Generator
         </h1>
 
-        <p className="mb-2">
+        <p className="mb-2 ">
           Already have a resume? Save it in your profile page.
         </p>
-        <div className="mb-5">
+        <div className="mb-7">
           <Link
-            className="bg-white/80 dark:bg-black/80 dark:text-white rounded-[3px] text-black px-4 py-2"
+            className="bg-white/80 dark:bg-black/80 dark:text-white text-sm rounded-[3px] text-black px-4 py-2"
             href={"/profile"}
           >
-            Profile
+            Upload
           </Link>
+          <h1 className="-mb-3 mt-10 ">Or generate a resume:</h1>
         </div>
 
         <div className="space-y-4 mb-6">

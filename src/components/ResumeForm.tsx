@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import toast from "react-hot-toast";
 
 interface ResumeFormProps {
   resume: string;
@@ -23,10 +24,10 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
         },
         body: JSON.stringify({ content }),
       });
-      alert("Resume saved!");
+      toast("Resume saved!");
     } catch (err) {
       console.error(err);
-      alert("Failed to save resume.");
+      toast("Failed to save resume.");
     } finally {
       setLoading(false);
     }

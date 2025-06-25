@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import ManageSubscriptionButton from "../components/ManageSubscriptionButton";
 import BuyAccessButton from "../components/BuyAccessButton";
+import toast from "react-hot-toast";
 
 export default function CoverLetterClient() {
   const router = useRouter();
@@ -38,7 +39,7 @@ export default function CoverLetterClient() {
       localStorage.removeItem("url");
       window.location.reload();
     } catch {
-      alert("Something went wrong. Please try again.");
+      toast("Something went wrong. Please try again.");
     }
 
     setLoadingDelete(false);
@@ -93,7 +94,7 @@ export default function CoverLetterClient() {
       const data = await res.json();
 
       if (!res.ok) {
-        alert(data.error || "Error generating");
+        toast(data.error || "Error generating");
       } else {
         setCoverLetter(data.coverLetter);
 
@@ -107,7 +108,7 @@ export default function CoverLetterClient() {
         }
       }
     } catch {
-      alert("Something went wrong");
+      toast("Something went wrong");
     }
 
     setLoading(false);
@@ -122,12 +123,12 @@ export default function CoverLetterClient() {
       });
       const data = await res.json();
       if (!res.ok) {
-        alert(data.error || "Error saving resume");
+        toast(data.error || "Error saving resume");
       } else {
         setResumeSaved(true);
       }
     } catch {
-      alert("Failed to save resume");
+      toast("Failed to save resume");
     }
   }
 

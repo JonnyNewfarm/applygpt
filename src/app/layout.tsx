@@ -5,6 +5,7 @@ import { Providers } from "@/components/Provider";
 import Navbar from "@/components/Navbar";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import Footer from "@/components/Footer";
+import { Toaster } from "react-hot-toast";
 
 // Import both fonts
 const montserrat = Montserrat({
@@ -37,6 +38,8 @@ export default function RootLayout({
         <Providers>
           <ThemeProvider>
             <Navbar />
+            <Toaster />
+
             {children}
             <Footer />
           </ThemeProvider>
