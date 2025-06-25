@@ -30,7 +30,7 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto flex items-center justify-between py-4 px-6 md:px-14">
           <h2>
             <Link href="/" className="font-bold text-2xl cursor-pointer">
-              ApplyGPT
+              JobScriptor
             </Link>
           </h2>
 
