@@ -172,7 +172,7 @@ export default function ResumeClient() {
         </p>
         <div className="mb-7">
           <Link
-            className="bg-white/80 dark:bg-black/80 dark:text-white text-sm rounded-[3px] text-black px-4 py-2"
+            className="mt-2 border cursor-pointer dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]"
             href={"/profile"}
           >
             Upload
