@@ -32,7 +32,6 @@ export default async function ProfilePage() {
       </div>
     );
 
-  // Serialize dates to string for React props
   const serializedCoverLetters = user.coverLetters.map((cl) => ({
     ...cl,
     createdAt: cl.createdAt.toISOString(),
@@ -45,7 +44,6 @@ export default async function ProfilePage() {
           Profile
         </h1>
 
-        {/* User Info */}
         <section className="mb-8">
           <p className="text-lg mb-1">
             <span className="font-semibold">Name:</span> {user.name || "N/A"}
@@ -55,19 +53,16 @@ export default async function ProfilePage() {
           </p>
         </section>
 
-        {/* Subscription */}
         <section className="mb-12">
           <h2 className="text-xl font-semibold mb-4">Subscription</h2>
           <ManageSubscriptionButton />
         </section>
 
-        {/* Resume */}
         <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-4">Your Resume</h2>
           <ResumeForm resume={user.resume?.content || ""} />
         </section>
 
-        {/* Cover Letters */}
         {user.coverLetters.length > 0 && (
           <CoverLetterList initialCoverLetters={serializedCoverLetters} />
         )}

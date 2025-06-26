@@ -12,12 +12,34 @@ export default function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
 
+  const validateEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
+  const isStrongPassword = (password: string) => {
+    return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(password);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
+
+    if (name.trim().length < 2) {
+      return setError("Name must be at least 2 characters long");
+    }
+
+    if (!validateEmail(email)) {
+      return setError("Please enter a valid email address");
+    }
+
+    if (!isStrongPassword(password)) {
+      return setError(
+        "Password must be at least 8 characters, include uppercase, lowercase, number, and special character"
+      );
+    }
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
+      return setError("Passwords do not match");
     }
 
     const res = await fetch("/api/register", {

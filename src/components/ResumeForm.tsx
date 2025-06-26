@@ -11,11 +11,12 @@ interface ResumeFormProps {
 
 export default function ResumeForm({ resume }: ResumeFormProps) {
   const [content, setContent] = useState(resume);
-  const [loading, setLoading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const resumeRef = useRef<HTMLDivElement>(null);
 
   const handleSave = async () => {
-    setLoading(true);
+    setIsSaving(true);
     try {
       await fetch("/api/resume", {
         method: "POST",
@@ -29,7 +30,7 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
       console.error(err);
       toast("Failed to save resume.");
     } finally {
-      setLoading(false);
+      setIsSaving(false);
     }
   };
 
@@ -37,7 +38,7 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
     const confirmed = confirm("Are you sure you want to delete your resume?");
     if (!confirmed) return;
 
-    setLoading(true);
+    setIsDeleting(true);
     try {
       await fetch("/api/resume", {
         method: "DELETE",
@@ -48,7 +49,7 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
       console.error(err);
       alert("Failed to delete resume.");
     } finally {
-      setLoading(false);
+      setIsDeleting(false);
     }
   };
 
@@ -84,9 +85,9 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
         <button
           onClick={handleSave}
           className="cursor-pointer mt-2 border dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]"
-          disabled={loading}
+          disabled={isSaving}
         >
-          {loading ? "Saving..." : "Save"}
+          {isSaving ? "Saving..." : "Save"}
         </button>
         <button
           onClick={handleDownload}
@@ -98,9 +99,9 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
         <button
           onClick={handleDelete}
           className="cursor-pointer mt-2 border  px-3 py-1.5 rounded-[3px] border-red-600  text-sm text-red-600  "
-          disabled={loading}
+          disabled={isDeleting}
         >
-          {loading ? "Deleting..." : "Delete"}
+          {isDeleting ? "Deleting..." : "Delete"}
         </button>
       </div>
 

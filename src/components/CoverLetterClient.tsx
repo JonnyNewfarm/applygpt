@@ -41,7 +41,6 @@ export default function CoverLetterClient() {
     } catch {
       toast("Something went wrong. Please try again.");
     }
-
     setLoadingDelete(false);
   };
 
@@ -49,9 +48,7 @@ export default function CoverLetterClient() {
     if (!description) {
       setJobAd("");
     } else {
-      setJobAd(`${company} 
-        ${description}
-        `);
+      setJobAd(`${company} \n${description}`);
     }
   }, [description, company]);
 
@@ -140,7 +137,7 @@ export default function CoverLetterClient() {
     if (!editableRef.current) return;
     const text = editableRef.current.innerText;
     navigator.clipboard.writeText(text).then(() => {
-      alert("Copied to clipboard!");
+      toast("Copied to clipboard!");
     });
   }
 
@@ -177,12 +174,10 @@ export default function CoverLetterClient() {
         </h1>
 
         <div className="flex flex-col md:flex-row gap-8">
-          {/* Left Column */}
           <div className="w-full md:w-1/2 space-y-4">
             <div>
               <label className="block text-sm font-medium mb-1">Resume</label>
               <textarea
-                style={{ scrollbarWidth: "thin" }}
                 rows={6}
                 className="w-full p-3 border bg-white text-black"
                 value={resume}
@@ -192,7 +187,7 @@ export default function CoverLetterClient() {
               {!resumeSaved ? (
                 <button
                   onClick={onSaveResume}
-                  className="mt-2 px-3 py-1.5 border cursor-pointer  rounded-[3px] bg-dark text-sm  dark:border-[#2b2a27]   border-[#f6f4ed]   text-[#f6f4ed]   dark:text-[#2b2a27]"
+                  className="mt-2 px-3 py-1.5 cursor-pointer border rounded-[3px] bg-dark text-sm border-[#f6f4ed] text-[#f6f4ed] dark:text-[#2b2a27]"
                   disabled={!resume.trim()}
                 >
                   Save Resume
@@ -200,7 +195,7 @@ export default function CoverLetterClient() {
               ) : (
                 <button
                   onClick={onEditResume}
-                  className="mt-2 border dark:border-[#2b2a27] cursor-pointer  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]"
+                  className="mt-2 border px-3 cursor-pointer py-1.5 rounded-[3px] text-sm border-[#f6f4ed] text-[#f6f4ed] dark:text-[#2b2a27]"
                 >
                   Edit Resume
                 </button>
@@ -212,7 +207,6 @@ export default function CoverLetterClient() {
                 Job Description
               </label>
               <textarea
-                style={{ scrollbarWidth: "thin" }}
                 rows={6}
                 className="w-full p-3 border rounded-[3px] bg-white text-black"
                 value={jobAd}
@@ -221,17 +215,17 @@ export default function CoverLetterClient() {
               />
               <button
                 onClick={handleClearStorage}
-                className="mt-2 border dark:border-[#2b2a27] cursor-pointer  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]"
+                className="mt-2 border px-3 py-1.5 cursor-pointer rounded-[3px] text-sm border-[#f6f4ed] text-[#f6f4ed] dark:text-[#2b2a27]"
                 disabled={loadingDelete}
               >
                 {loadingDelete ? "Deleting..." : "Clear description"}
-              </button>{" "}
+              </button>
             </div>
 
             <div>
               <label className="block text-sm font-medium mb-1">Tone</label>
               <select
-                className="w-full p-2 border-[#f6f4ed] dark:border-black border rounded-[3px]  bg-white text-black"
+                className="w-full p-2 border rounded-[3px] bg-white text-black"
                 value={tone}
                 onChange={(e) => setTone(e.target.value)}
               >
@@ -243,7 +237,7 @@ export default function CoverLetterClient() {
             </div>
 
             <div>
-              <p className="text-sm  text-[#f6f4ed]   dark:text-[#2b2a27] mb-2">
+              <p className="text-sm mb-2">
                 {usage.generationLimit === null
                   ? `Used ${usage.generationCount} generations (Unlimited plan)`
                   : `Usage: ${usage.generationCount} / ${usage.generationLimit} generations`}
@@ -267,7 +261,7 @@ export default function CoverLetterClient() {
                 <button
                   onClick={onGenerate}
                   disabled={loading || !resume || !jobAd}
-                  className={`mt-4 w-full py-3 rounded-[3px] border dark:border-[#2b2a27]  px-3  border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]  font-semibold ${
+                  className={`mt-4 w-full py-3 rounded-[3px] border px-3 text-sm border-[#f6f4ed] text-[#f6f4ed] dark:text-[#2b2a27] font-semibold ${
                     loading
                       ? " cursor-not-allowed"
                       : " hover:opacity-80 cursor-pointer"
@@ -285,34 +279,39 @@ export default function CoverLetterClient() {
             </div>
           </div>
 
-          {/* Right Column */}
           <div className="w-full md:w-1/2 mb-10">
             <h2 className="text-xl font-semibold mb-2">
               Generated Cover Letter
             </h2>
 
-            {coverLetter ? (
+            {loading ? (
+              <div className="mt-8 animate-pulse flex gap-x-4 items-center ">
+                <div className="h-2 w-2 bg-white/80 dark:bg-black/80 rounded-full"></div>
+                <div className="h-2 w-2 bg-white/80 dark:bg-black/80 rounded-full"></div>
+                <div className="h-2 w-2 bg-white/80 dark:bg-black/80 rounded-full"></div>
+              </div>
+            ) : coverLetter ? (
               <>
                 <div className="flex flex-wrap gap-3 mt-4">
-                  {url ? (
+                  {url && (
                     <a
                       href={url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="bg-[#f6f4ed] text-[#2b2a27]   dark:bg-[#2b2a27] dark:text-[#f6f4ed] py-1 px-3 rounded-[3px] hover:opacity-90 mt-2 inline-block"
+                      className="bg-[#f6f4ed] text-[#2b2a27] dark:bg-[#2b2a27] dark:text-[#f6f4ed] py-1 px-3 rounded-[3px] hover:opacity-90 mt-2 inline-block"
                     >
                       Apply
                     </a>
-                  ) : null}
+                  )}
                   <button
                     onClick={onCopy}
-                    className="mt-2 border cursor-pointer dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]"
+                    className="mt-2 border cursor-pointer px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27]"
                   >
                     Copy to Clipboard
                   </button>
                   <button
                     onClick={onDownload}
-                    className="mt-2 border cursor-pointer dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]"
+                    className="mt-2 border cursor-pointer px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27]"
                   >
                     Download as PDF
                   </button>
@@ -320,14 +319,13 @@ export default function CoverLetterClient() {
                 <h1 className="font-bold mt-2">Edit if necessary</h1>
                 <div
                   ref={editableRef}
-                  className="p-4 bg-white mt-5 border text-black border-gray-300 rounded-[3px] whitespace-pre-wrap text-sm min-h-[300px]"
+                  className="p-4 bg-white mt-2 border text-black border-gray-300 rounded-[3px] whitespace-pre-wrap text-sm min-h-[300px]"
                   contentEditable
                   suppressContentEditableWarning
                 >
                   {coverLetter}
                 </div>
 
-                {/* Hidden printable version */}
                 <div
                   ref={printRef}
                   style={{
@@ -351,7 +349,7 @@ export default function CoverLetterClient() {
                 />
               </>
             ) : (
-              <p className="text-[#f6f4ed]   dark:text-[#2b2a27] text-sm">
+              <p className="text-[#f6f4ed] dark:text-[#2b2a27] text-sm">
                 Your cover letter will appear here once generated.
               </p>
             )}

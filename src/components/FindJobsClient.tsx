@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Country, City } from "country-state-city";
 import ManageSubscriptionButton from "./ManageSubscriptionButton";
 import BuyAccessButton from "./BuyAccessButton";
+import toast from "react-hot-toast";
 
 interface Job {
   id: string;
@@ -85,19 +86,19 @@ export default function FindJobsPage() {
       });
       const data = await res.json();
       if (!res.ok) {
-        alert(data.error || "Error saving resume");
+        toast(data.error || "Error saving resume");
       } else {
         setResumeSaved(true);
-        alert("Resume saved!");
+        toast("Resume saved!");
       }
     } catch {
-      alert("Failed to save resume");
+      toast("Failed to save resume");
     }
   }
 
   const onFindJobs = async (newPage = 1, append = false) => {
     if (!resume || !query || !city || !selectedCountryCode) {
-      alert("Please fill in all fields.");
+      toast("Please fill in all fields.");
       return;
     }
 
@@ -133,7 +134,6 @@ export default function FindJobsPage() {
       setJobs((prev) => (append ? [...prev, ...data.jobs] : data.jobs));
       setPage(newPage);
 
-      // ✅ Increment generation count on successful job fetch
       setUsage((prev) => ({
         ...prev,
         generationCount: prev.generationCount + 1,
@@ -203,6 +203,14 @@ export default function FindJobsPage() {
     usage.generationLimit !== null &&
     usage.generationCount >= usage.generationLimit;
 
+  const SkeletonCard = () => (
+    <div className="mt-8 animate-pulse flex gap-x-4 items-center ">
+      <div className="h-2 w-2 bg-white/80 dark:bg-black/80 rounded-full"></div>
+      <div className="h-2 w-2 bg-white/80 dark:bg-black/80 rounded-full"></div>
+      <div className="h-2 w-2 bg-white/80 dark:bg-black/80 rounded-full"></div>
+    </div>
+  );
+
   return (
     <div className="w-full min-h-screen flex flex-col justify-center bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4ed] dark:text-[#2b2a27]">
       <div className="max-w-4xl mx-auto px-4 py-10">
@@ -245,59 +253,55 @@ export default function FindJobsPage() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Job title (e.g. frontend developer)"
-          className="w-full border border-gray-500 bg-white text-black rounded p-2 mb-4"
+          className="w-full border border-gray-500 bg-white text-black rounded p-2 mb-2"
         />
 
         {/* Country input */}
-        <div className="mb-4 relative">
-          <input
-            type="text"
-            value={country}
-            onChange={(e) => handleCountryInput(e.target.value)}
-            placeholder="Country (e.g. United States)"
-            className="w-full border bg-white text-black rounded p-2"
-          />
-          {countrySuggestions.length > 0 && (
-            <ul className="absolute bg-white text-black border w-full mt-1 rounded z-10">
-              {countrySuggestions.map((c) => (
-                <li
-                  key={c.isoCode}
-                  onClick={() => handleSelectCountry(c)}
-                  className="p-2 hover:bg-gray-100 cursor-pointer"
-                >
-                  {c.name} ({c.isoCode.toLowerCase()})
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+        <input
+          type="text"
+          value={country}
+          onChange={(e) => handleCountryInput(e.target.value)}
+          placeholder="Country"
+          className="w-full border border-gray-500 bg-white text-black rounded p-2 mb-2"
+        />
+        {countrySuggestions.length > 0 && (
+          <ul className="bg-white text-black border border-gray-500 rounded mb-2 max-h-40 overflow-y-auto">
+            {countrySuggestions.map((c) => (
+              <li
+                key={c.isoCode}
+                onClick={() => handleSelectCountry(c)}
+                className="p-2 cursor-pointer hover:bg-gray-100"
+              >
+                {c.name}
+              </li>
+            ))}
+          </ul>
+        )}
 
         {/* City input */}
-        <div className="mb-4 relative">
-          <input
-            type="text"
-            value={city}
-            onChange={(e) => handleCityInput(e.target.value)}
-            placeholder="City (e.g. Chicago)"
-            className="w-full border border-gray-500 bg-white text-black rounded p-2"
-          />
-          {citySuggestions.length > 0 && (
-            <ul className="absolute bg-white text-black border w-full mt-1 rounded z-10">
-              {citySuggestions.map((c) => (
-                <li
-                  key={c}
-                  onClick={() => {
-                    setCity(c);
-                    setCitySuggestions([]);
-                  }}
-                  className="p-2 hover:bg-gray-100 cursor-pointer"
-                >
-                  {c}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+        <input
+          type="text"
+          value={city}
+          onChange={(e) => handleCityInput(e.target.value)}
+          placeholder="City"
+          className="w-full border border-gray-500 bg-white text-black rounded p-2 mb-4"
+        />
+        {citySuggestions.length > 0 && (
+          <ul className="bg-white text-black border border-gray-500 rounded mb-4 max-h-40 overflow-y-auto">
+            {citySuggestions.map((c, i) => (
+              <li
+                key={i}
+                onClick={() => {
+                  setCity(c);
+                  setCitySuggestions([]);
+                }}
+                className="p-2 cursor-pointer hover:bg-gray-100"
+              >
+                {c}
+              </li>
+            ))}
+          </ul>
+        )}
 
         <div>
           <p className="text-sm mb-2">
@@ -332,85 +336,91 @@ export default function FindJobsPage() {
         </div>
 
         {error && <p className="text-red-500 mt-4">{error}</p>}
+
+        {/* Skeleton or job cards */}
         <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-          {jobs.map((job) => {
-            const isDescriptionExpanded = expandedDescriptions[job.id];
-            const isExplanationExpanded = expandedExplanations[job.id];
-            const description = isDescriptionExpanded
-              ? job.description
-              : truncateText(job.description, 200);
-            const explanation = isExplanationExpanded
-              ? job.explanation
-              : truncateText(job.explanation, 160);
+          {loading && jobs.length === 0 ? (
+            <SkeletonCard />
+          ) : (
+            jobs.map((job) => {
+              const isDescriptionExpanded = expandedDescriptions[job.id];
+              const isExplanationExpanded = expandedExplanations[job.id];
+              const description = isDescriptionExpanded
+                ? job.description
+                : truncateText(job.description, 200);
+              const explanation = isExplanationExpanded
+                ? job.explanation
+                : truncateText(job.explanation, 160);
 
-            return (
-              <div
-                key={job.id}
-                className="border relative h-full bg-white text-black flex flex-col justify-start items-start border-gray-300 rounded-[3px] p-4"
-              >
-                <div className="h-full w-full">
-                  <h2 className="text-xl font-semibold">{job.title}</h2>
-                  <p className="text-gray-700">
-                    {job.company} — {job.location}
-                  </p>
+              return (
+                <div
+                  key={job.id}
+                  className="border relative h-full bg-white text-black flex flex-col justify-start items-start border-gray-300 rounded-[3px] p-4"
+                >
+                  <div className="h-full w-full">
+                    <h2 className="text-xl font-semibold">{job.title}</h2>
+                    <p className="text-gray-700">
+                      {job.company} — {job.location}
+                    </p>
 
-                  <p className="mt-2 text-sm text-gray-600 whitespace-pre-line">
-                    {description || "No description"}
-                  </p>
-                  {job.description.length > 200 && (
-                    <button
-                      onClick={() => toggleExpandDescription(job.id)}
-                      className="dark underline text-sm cursor-pointer hover:opacity-90 mt-1"
+                    <p className="mt-2 text-sm text-gray-600 whitespace-pre-line">
+                      {description || "No description"}
+                    </p>
+                    {job.description.length > 200 && (
+                      <button
+                        onClick={() => toggleExpandDescription(job.id)}
+                        className="dark underline text-sm cursor-pointer hover:opacity-90 mt-1"
+                      >
+                        {isDescriptionExpanded ? "Show less" : "Read more"}
+                      </button>
+                    )}
+
+                    <p className="mt-2 text-green-700 font-bold">
+                      Match score: {job.score}/10
+                    </p>
+
+                    <p className="mt-1 text-sm text-gray-500 italic whitespace-pre-line">
+                      GPT: {explanation || "No explanation"}
+                    </p>
+                    {job.explanation.length > 160 && (
+                      <button
+                        onClick={() => toggleExpandExplanation(job.id)}
+                        className="dark underline cursor-pointer hover:opacity-90 text-sm mt-1"
+                      >
+                        {isExplanationExpanded ? "Show less" : "Read more"}
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="flex flex-row-reverse items-center justify-between w-full relative left-auto right-auto bottom-6 mt-10">
+                    <a
+                      href={job.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-dark text-white py-1 px-3 rounded-[3px] hover:opacity-90 mt-2 inline-block"
                     >
-                      {isDescriptionExpanded ? "Show less" : "Read more"}
-                    </button>
-                  )}
-
-                  <p className="mt-2 text-green-700 font-bold">
-                    Match score: {job.score}/10
-                  </p>
-
-                  <p className="mt-1 text-sm text-gray-500 italic whitespace-pre-line">
-                    GPT: {explanation || "No explanation"}
-                  </p>
-                  {job.explanation.length > 160 && (
+                      Apply
+                    </a>
                     <button
-                      onClick={() => toggleExpandExplanation(job.id)}
-                      className="dark underline cursor-pointer hover:opacity-90 text-sm mt-1"
+                      onClick={() => handleCreateCoverLetter(job)}
+                      className="bg-[#403938] cursor-pointer text-white mt-2 py-1 px-3 rounded-[3px] hover:opacity-90"
                     >
-                      {isExplanationExpanded ? "Show less" : "Read more"}
+                      Create Cover Letter
                     </button>
-                  )}
+                  </div>
                 </div>
-                <div className="flex flex-row-reverse items-center justify-between w-full relative left-auto right-auto bottom-6 mt-10">
-                  <a
-                    href={job.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-dark text-white py-1 px-3 rounded-[3px] hover:opacity-90 mt-2 inline-block"
-                  >
-                    Apply
-                  </a>
-
-                  <button
-                    onClick={() => handleCreateCoverLetter(job)}
-                    className="bg-[#403938] cursor-pointer text-white mt-2 py-1 px-3 rounded-[3px] hover:opacity-90"
-                  >
-                    Create Cover Letter
-                  </button>
-                </div>
-              </div>
-            );
-          })}
+              );
+            })
+          )}
         </div>
 
-        {jobs.length > 0 && (
+        {jobs.length > 0 && !loading && (
           <button
             onClick={() => onFindJobs(page + 1, true)}
             disabled={loading}
             className="mt-5 border dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27]"
           >
-            {loading ? "Loading more..." : "Load More"}
+            Load More
           </button>
         )}
       </div>

@@ -18,7 +18,8 @@ export default function ResumeClient() {
   });
 
   const [generatedResume, setGeneratedResume] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   const [usage, setUsage] = useState<{
     generationLimit: number | null;
@@ -55,7 +56,7 @@ export default function ResumeClient() {
   }
 
   async function onGenerate() {
-    setLoading(true);
+    setIsGenerating(true);
     setGeneratedResume("");
 
     try {
@@ -85,7 +86,7 @@ export default function ResumeClient() {
       toast("Something went wrong");
     }
 
-    setLoading(false);
+    setIsGenerating(false);
   }
 
   function onCopy() {
@@ -105,7 +106,7 @@ export default function ResumeClient() {
       return;
     }
 
-    setLoading(true);
+    setIsSaving(true);
     try {
       await fetch("/api/resume", {
         method: "POST",
@@ -119,7 +120,7 @@ export default function ResumeClient() {
       console.error("Failed to save resume");
       toast("Failed to save resume.");
     } finally {
-      setLoading(false);
+      setIsSaving(false);
     }
   };
 
@@ -129,7 +130,6 @@ export default function ResumeClient() {
     const html2canvas = (await import("html2canvas")).default;
     const jsPDF = (await import("jspdf")).default;
 
-    // Create a temporary hidden div with the current edited content
     const tempDiv = document.createElement("div");
     tempDiv.style.width = "800px";
     tempDiv.style.padding = "24px";
@@ -163,21 +163,21 @@ export default function ResumeClient() {
   }
 
   return (
-    <div className="w-full bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4ed] dark:text-[#2b2a27] min-h-screen bg-light">
+    <div className="w-full bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4ed] dark:text-[#2b2a27] min-h-screen">
       <main className="max-w-4xl mx-auto p-4 md:p-8">
         <h1 className="text-2xl font-bold mb-2">Resume Generator</h1>
 
-        <p className="mb-2 ">
+        <p className="mb-2">
           Already have a resume? Save it in your profile page.
         </p>
         <div className="mb-7">
           <Link
-            className="mt-2 border cursor-pointer dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]"
+            className="mt-2 border cursor-pointer dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27]"
             href={"/profile"}
           >
             Upload
           </Link>
-          <h1 className="-mb-3 mt-10 ">Or generate a resume:</h1>
+          <h1 className="-mb-3 mt-10">Or generate a resume:</h1>
         </div>
 
         <div className="space-y-4 mb-6">
@@ -203,7 +203,7 @@ export default function ResumeClient() {
           ))}
         </div>
 
-        <div className="mb-4 text-sm mt-4    text-[#f6f4ed]   dark:text-[#2b2a27]">
+        <div className="mb-4 text-sm mt-4 text-[#f6f4ed] dark:text-[#2b2a27]">
           {usage.generationLimit === null
             ? `Used ${usage.generationCount} generations (Unlimited plan)`
             : `Usage: ${usage.generationCount} / ${usage.generationLimit} generations`}
@@ -227,20 +227,28 @@ export default function ResumeClient() {
           <button
             onClick={onGenerate}
             disabled={
-              loading || !form.name || !form.jobTitle || !form.experience
+              isGenerating || !form.name || !form.jobTitle || !form.experience
             }
-            className={`mt-4 w-full py-3 cursor-pointer rounded-[3px] border dark:border-[#2b2a27]  px-3  border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]  font-semibold ${
-              loading ? "bg-gray-400 cursor-not-allowed" : " hover:opacity-80"
+            className={`mt-4 w-full py-3 cursor-pointer rounded-[3px] border dark:border-[#2b2a27] px-3 border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] font-semibold ${
+              isGenerating ? "cursor-not-allowed" : "hover:opacity-80"
             }`}
           >
             {generatedResume
-              ? loading
+              ? isGenerating
                 ? "Regenerating..."
                 : "Regenerate"
-              : loading
+              : isGenerating
               ? "Generating..."
               : "Generate Resume"}
           </button>
+        )}
+
+        {isGenerating && !generatedResume && (
+          <div className="mt-8 animate-pulse flex gap-x-4 items-center ">
+            <div className="h-2 w-2 bg-white/80 dark:bg-black/80 rounded-full"></div>
+            <div className="h-2 w-2 bg-white/80 dark:bg-black/80 rounded-full"></div>
+            <div className="h-2 w-2 bg-white/80 dark:bg-black/80 rounded-full"></div>
+          </div>
         )}
 
         {generatedResume && (
@@ -250,22 +258,22 @@ export default function ResumeClient() {
             <div className="flex flex-wrap gap-3 mb-4">
               <button
                 onClick={onCopy}
-                className="px-4 py-2 border rounded-[3px] hover:opacity-50"
+                className="px-4 py-2 border rounded-[3px] cursor-pointer hover:opacity-50"
               >
                 Copy to Clipboard
               </button>
               <button
                 onClick={onDownload}
-                className="px-4 py-2 bg-dark text-white rounded-[3px] hover:opacity-80"
+                className="px-4 py-2 border cursor-pointer rounded-[3px] hover:opacity-50"
               >
                 Download as PDF
               </button>
               <button
                 onClick={handleSave}
-                className="bg-dark cursor-pointer text-white px-4 py-2 rounded-[3px]"
-                disabled={loading}
+                className="px-4 py-2 border rounded-[3px] cursor-pointer bg-white/90 dark:bg-black/80 text-black dark:text-white hover:opacity-50"
+                disabled={isSaving}
               >
-                {loading ? "Saving..." : "Save resume"}
+                {isSaving ? "Saving..." : "Save resume"}
               </button>
             </div>
 
@@ -273,7 +281,7 @@ export default function ResumeClient() {
 
             <div
               ref={editableRef}
-              className="p-4 bg-white border rounded-[3px] whitespace-pre-wrap text-sm min-h-[300px]"
+              className="p-4 bg-white text-black border rounded-[3px] whitespace-pre-wrap text-sm min-h-[300px]"
               contentEditable
               suppressContentEditableWarning
             >
