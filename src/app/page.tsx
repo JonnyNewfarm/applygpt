@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   openGraph: {
     images: [
       {
-        url: "https://www.jobscriptor.com/og-image.jpg",
+        url: "https://www.jobscriptor.com/og-image.png",
         width: 1200,
         height: 630,
         alt: "AI Cover Letter Tool by Jobscriptor",
