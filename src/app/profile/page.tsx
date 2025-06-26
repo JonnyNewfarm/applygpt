@@ -4,6 +4,12 @@ import prisma from "../../../lib/prisma";
 import ResumeForm from "../../components/ResumeForm";
 import ManageSubscriptionButton from "@/components/ManageSubscriptionButton";
 import CoverLetterList from "../../components/CoverLetterList";
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Your Profile – Manage Resumes and Cover Letters",
+  description:
+    "View, update, and delete your saved resumes and cover letters. Easily manage your career documents in one place.",
+};
 
 export default async function ProfilePage() {
   const session = await getServerSession(authOptions);

@@ -4,11 +4,16 @@ import ResumeClient from "@/components/ResumeClient";
 import prisma from "../../../lib/prisma";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "AI Resume Generator – Build Your Resume in Seconds",
+  description:
+    "Create a professional resume with AI. Just enter your experience, and get a downloadable, customizable CV optimized for your next job.",
+};
 
 export default async function CoverLetterPage() {
   const session = await getServerSession();
 
-  // First check if the user is logged in
   if (!session) {
     return (
       <div className="p-20 min-h-screen bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4ed] dark:text-[#2b2a27]">

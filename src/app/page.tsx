@@ -3,7 +3,14 @@ import FindJobSection from "@/components/home/FindJobSection";
 import HeroSection from "@/components/home/HeroSection";
 import GenerateResumeDemo from "@/components/home/ResumeDemo";
 import SmoothScroll from "@/components/SmoothScroll";
+import { Metadata } from "next";
 import React from "react";
+export const metadata: Metadata = {
+  title:
+    "AI Career Tools – Create Resumes, Cover Letters & Find Jobs Instantly",
+  description:
+    "Boost your job hunt with our AI-powered tools. Instantly generate tailored resumes and cover letters, and search for jobs worldwide in one place.",
+};
 
 const Homepage = () => {
   return (

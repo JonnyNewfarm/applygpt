@@ -3,6 +3,12 @@ import prisma from "../../../lib/prisma";
 import BuyAccessButton from "@/components/BuyAccessButton";
 import CoverLetterClient from "@/components/CoverLetterClient";
 import Link from "next/link";
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "AI Cover Letter Generator – Personalized Letters Instantly",
+  description:
+    "Generate personalized, job-specific cover letters in seconds using AI. Save, edit, and download your letters with ease.",
+};
 
 export default async function CoverLetterPage() {
   const session = await getServerSession();

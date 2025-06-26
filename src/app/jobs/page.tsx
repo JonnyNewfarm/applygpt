@@ -3,6 +3,12 @@ import prisma from "../../../lib/prisma";
 import BuyAccessButton from "@/components/BuyAccessButton";
 import FindJobsClient from "@/components/FindJobsClient";
 import Link from "next/link";
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Job Search – Discover Jobs Near You or Remote Worldwide",
+  description:
+    "Find your next opportunity using our smart job search engine. Browse remote and local jobs filtered by city, country, or job title.",
+};
 
 export default async function FindJobsPage() {
   const session = await getServerSession();
