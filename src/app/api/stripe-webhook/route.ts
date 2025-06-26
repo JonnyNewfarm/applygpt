@@ -6,6 +6,12 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2025-05-28.basil",
 });
 
+const validPriceIds = {
+  [process.env.STRIPE_BASIC_PRICE_ID_NEW!]: 100,
+  [process.env.STRIPE_PRO_PRICE_ID_NEW!]: 200,
+  [process.env.STRIPE_UNLIMITED_PRICE_ID_NEW!]: null,
+};
+
 export async function POST(req: NextRequest) {
   const rawBody = await req.arrayBuffer();
   const bodyBuffer = Buffer.from(rawBody);
@@ -29,24 +35,18 @@ export async function POST(req: NextRequest) {
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
-
         if (session.customer && session.customer_email) {
           const user = await prisma.user.findUnique({
             where: { email: session.customer_email },
           });
-
           if (user) {
             await prisma.user.update({
               where: { id: user.id },
-              data: {
-                stripeCustomerId: session.customer.toString(),
-              },
+              data: { stripeCustomerId: session.customer.toString() },
             });
-
-            console.log("✅ Saved Stripe customer ID for:", user.email);
+            console.log("✅ Linked Stripe customer ID to user:", user.email);
           }
         }
-
         break;
       }
 
@@ -65,11 +65,12 @@ export async function POST(req: NextRequest) {
         }
 
         const priceId = subscription.items.data[0].price.id;
+        const generationLimit = validPriceIds[priceId];
 
-        let generationLimit: number | null = null;
-        if (priceId === process.env.STRIPE_BASIC_PRICE_ID_NEW) generationLimit = 100;
-        if (priceId === process.env.STRIPE_PRO_PRICE_ID_NEW) generationLimit = 200;
-        if (priceId === process.env.STRIPE_UNLIMITED_PRICE_ID_NEW) generationLimit = null;
+        if (generationLimit === undefined) {
+          console.warn(`⚠️ Unknown Stripe price ID: ${priceId}`);
+          return new Response("Unknown price ID", { status: 400 });
+        }
 
         const isActive = subscription.status === "active";
 
@@ -83,7 +84,7 @@ export async function POST(req: NextRequest) {
           },
         });
 
-        console.log(`✅ Updated user ${user.email} with hasPaid: ${isActive}, limit: ${generationLimit}`);
+        console.log(`✅ Updated user ${user.email}: hasPaid=${isActive}, limit=${generationLimit}`);
         break;
       }
 

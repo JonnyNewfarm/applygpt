@@ -8,12 +8,23 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2025-05-28.basil",
 });
 
+const validPlans = ["basic", "pro", "unlimited"];
+const priceMap: Record<string, string> = {
+  basic: process.env.STRIPE_BASIC_PRICE_ID_NEW!,
+  pro: process.env.STRIPE_PRO_PRICE_ID_NEW!,
+  unlimited: process.env.STRIPE_UNLIMITED_PRICE_ID_NEW!,
+};
+
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
-  const { plan } = await req.json(); 
+  const { plan } = await req.json();
 
-  if (!session || !session.user.email) {
+  if (!session?.user?.email) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+  }
+
+  if (!validPlans.includes(plan)) {
+    return NextResponse.json({ error: "Invalid plan" }, { status: 400 });
   }
 
   const user = await prisma.user.findUnique({
@@ -25,6 +36,7 @@ export async function POST(req: Request) {
   }
 
   let customerId = user.stripeCustomerId;
+
   if (!customerId) {
     const customer = await stripe.customers.create({
       email: session.user.email,
@@ -38,22 +50,14 @@ export async function POST(req: Request) {
     customerId = customer.id;
   }
 
-  // ✅ Cancel existing active subscription (if any)
   const existingSubscriptions = await stripe.subscriptions.list({
     customer: customerId,
     status: "active",
   });
 
   if (existingSubscriptions.data.length > 0) {
-    const existingSubscription = existingSubscriptions.data[0];
-    await stripe.subscriptions.cancel(existingSubscription.id);
+    await stripe.subscriptions.cancel(existingSubscriptions.data[0].id);
   }
-
-  const priceMap: Record<string, string> = {
-    basic: process.env.STRIPE_BASIC_PRICE_ID_NEW!,
-    pro: process.env.STRIPE_PRO_PRICE_ID_NEW!,
-    unlimited: process.env.STRIPE_UNLIMITED_PRICE_ID_NEW!,
-  };
 
   const stripeSession = await stripe.checkout.sessions.create({
     customer: customerId,
