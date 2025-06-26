@@ -27,7 +27,7 @@ export default function BuyAccessButton() {
     <div className="flex flex-col items-start">
       <label>
         <select
-          className="border px-2 py-2"
+          className="border px-2 py-2 cursor-pointer"
           value={plan}
           onChange={(e) => setPlan(e.target.value)}
         >
@@ -44,7 +44,7 @@ export default function BuyAccessButton() {
       </label>
 
       <button
-        className="mt-4 border cursor-pointer border-[#f6f4ed] dark:border-[#2b2a27] bg-white/80 text-black px-3 py-1.5 rounded-[3px] dark:bg-black/80  text-sm dark:text-white"
+        className="mt-4 border-2 font-semibold text-black px-3 py-1.5 rounded-[3px] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
         onClick={() => setShowConfirm(true)}
       >
         Subscribe for Access

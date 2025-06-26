@@ -65,7 +65,7 @@ export default function CoverLetterList({ initialCoverLetters }: Props) {
             <div className="flex gap-3">
               <button
                 onClick={() => downloadPDF(cl)}
-                className="mt-2 border cursor-pointer dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]"
+                className="mt-2 border-2 font-semibold cursor-pointer dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27] transform transition-transform duration-300 ease-in-out hover:scale-105"
               >
                 Download PDF
               </button>

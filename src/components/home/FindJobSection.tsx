@@ -50,10 +50,10 @@ const FindJobsDemo = () => {
         </div>
 
         <div className="flex py-4 w-full justify-between">
-          <h1 className="mt-2 border dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]">
+          <h1 className="mt-2 border-2 font-semibold dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]">
             Generate Cover Letter
           </h1>
-          <h1 className="mt-2 border dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]">
+          <h1 className="mt-2 border-2 font-semibold dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]">
             Apply
           </h1>
         </div>

@@ -85,7 +85,7 @@ const LiveCoverLetterDemo = () => {
 
             <button
               onClick={() => setShowLetter(true)}
-              className="mt-4 border border-[#f6f4ed] dark:border-[#2b2a27] px-6 py-2 rounded hover:opacity-80 transition"
+              className="mt-4 border-2 font-bold border-[#f6f4ed] dark:border-[#2b2a27] px-6 py-2 rounded hover:opacity-80 transition"
             >
               Generate
             </button>
@@ -106,7 +106,7 @@ const LiveCoverLetterDemo = () => {
         {showLetter && typedText === generatedLetter && (
           <Link
             href="/cover-letter"
-            className="inline-block mt-6 border px-4 py-2 rounded border-[#f6f4ed] dark:border-[#2b2a27] hover:opacity-80 transition"
+            className="inline-block mt-6 border-2 px-4 py-2 rounded border-[#f6f4ed] dark:border-[#2b2a27] hover:opacity-80 transition"
           >
             Try It Yourself →
           </Link>
@@ -118,7 +118,7 @@ const LiveCoverLetterDemo = () => {
               setShowLetter(false);
               setTypedText("");
             }}
-            className="mt-4 ml-3 border border-red-500 text-red-500 px-4 py-2 rounded hover:bg-red-500 hover:text-white transition"
+            className="mt-4 ml-3 border-2  border-red-500 text-red-500 px-4 py-2 rounded hover:bg-red-500 hover:text-white transition"
           >
             Start Over
           </button>

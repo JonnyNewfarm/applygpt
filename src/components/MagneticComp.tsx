@@ -11,8 +11,8 @@ const MagneticComp = ({ children }: MagneticCompProps) => {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  const springX = useSpring(mouseX, { stiffness: 200, damping: 30 });
-  const springY = useSpring(mouseY, { stiffness: 200, damping: 30 });
+  const springX = useSpring(mouseX, { stiffness: 250, damping: 70 });
+  const springY = useSpring(mouseY, { stiffness: 250, damping: 70 });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (!ref.current) return;
@@ -35,7 +35,7 @@ const MagneticComp = ({ children }: MagneticCompProps) => {
       onMouseLeave={handleMouseLeave}
       style={{
         display: "inline-block",
-        transform: "translateZ(0)", // prevent blur on some browsers
+        transform: "translateZ(0)",
         x: springX,
         y: springY,
       }}

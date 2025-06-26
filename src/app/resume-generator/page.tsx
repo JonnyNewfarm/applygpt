@@ -1,10 +1,10 @@
 import BuyAccessButton from "@/components/BuyAccessButton";
 import FreeTierNotice from "@/components/FreeTierNotice";
-import ResumeClient from "@/components/ResumeClient";
 import prisma from "../../../lib/prisma";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { Metadata } from "next";
+import ResumeClientWrapper from "@/components/ClientWrapper";
 export const metadata: Metadata = {
   title: "AI Resume Generator – Build Your Resume in Seconds",
   description:
@@ -87,7 +87,7 @@ export default async function CoverLetterPage() {
   return (
     <div className="w-full min-h-screen bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4ed] dark:text-[#2b2a27] border-b border-b-white/20 dark:border-b-black/20">
       {isFreeTier && <FreeTierNotice />}
-      <ResumeClient />
+      <ResumeClientWrapper />
     </div>
   );
 }

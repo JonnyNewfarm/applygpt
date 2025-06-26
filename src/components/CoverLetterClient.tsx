@@ -176,7 +176,7 @@ export default function CoverLetterClient() {
         <div className="flex flex-col md:flex-row gap-8">
           <div className="w-full md:w-1/2 space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-1">Resume</label>
+              <label className="block text-sm font-semibold mb-1">Resume</label>
               <textarea
                 rows={6}
                 className="w-full p-3 border bg-white text-black"
@@ -187,7 +187,7 @@ export default function CoverLetterClient() {
               {!resumeSaved ? (
                 <button
                   onClick={onSaveResume}
-                  className="mt-2 px-3 py-1.5 cursor-pointer border rounded-[3px] bg-dark text-sm border-[#f6f4ed] text-[#f6f4ed] dark:text-[#2b2a27]"
+                  className="mt-2 border-2 px-3 cursor-pointer font-semibold py-1.5 rounded-[3px] text-sm border-[#f6f4ed] text-[#f6f4ed] dark:text-[#2b2a27] dark:border-[#2b2a27]  transform transition-transform duration-300 ease-in-out hover:scale-105"
                   disabled={!resume.trim()}
                 >
                   Save Resume
@@ -195,7 +195,7 @@ export default function CoverLetterClient() {
               ) : (
                 <button
                   onClick={onEditResume}
-                  className="mt-2 border px-3 cursor-pointer py-1.5 rounded-[3px] text-sm border-[#f6f4ed] text-[#f6f4ed] dark:text-[#2b2a27]"
+                  className="mt-2 border-2 px-3 cursor-pointer font-semibold py-1.5 rounded-[3px] text-sm border-[#f6f4ed] text-[#f6f4ed] dark:text-[#2b2a27] dark:border-[#2b2a27]  transform transition-transform duration-300 ease-in-out hover:scale-105"
                 >
                   Edit Resume
                 </button>
@@ -203,7 +203,7 @@ export default function CoverLetterClient() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1">
+              <label className="block text-sm font-semibold mb-1">
                 Job Description
               </label>
               <textarea
@@ -215,7 +215,7 @@ export default function CoverLetterClient() {
               />
               <button
                 onClick={handleClearStorage}
-                className="mt-2 border px-3 py-1.5 cursor-pointer rounded-[3px] text-sm border-[#f6f4ed] text-[#f6f4ed] dark:text-[#2b2a27]"
+                className="mt-2 border-2 font-semibold px-3 py-1.5 cursor-pointer rounded-[3px] text-sm border-[#f6f4ed] dark:border-[#2b2a27]  text-[#f6f4ed] dark:text-[#2b2a27] transform transition-transform duration-300 ease-in-out hover:scale-105"
                 disabled={loadingDelete}
               >
                 {loadingDelete ? "Deleting..." : "Clear description"}
@@ -261,7 +261,7 @@ export default function CoverLetterClient() {
                 <button
                   onClick={onGenerate}
                   disabled={loading || !resume || !jobAd}
-                  className={`mt-4 w-full py-3 rounded-[3px] border px-3 text-sm border-[#f6f4ed] text-[#f6f4ed] dark:text-[#2b2a27] font-semibold ${
+                  className={`mt-4 w-full py-3 rounded-[3px] border-2 px-3 text-sm border-[#f6f4ed]  dark:text-[#2b2a27]  text-[#f6f4ed] dark:border-[#2b2a27] font-semibold transform transition-transform duration-300 ease-in-out hover:scale-105 ${
                     loading
                       ? " cursor-not-allowed"
                       : " hover:opacity-80 cursor-pointer"

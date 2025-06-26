@@ -86,7 +86,7 @@ const LiveGenerateResumeDemo = () => {
             </datalist>
             <button
               onClick={() => setShowResume(true)}
-              className="border border-[#f6f4ed] dark:border-[#2b2a27] px-6 py-2 rounded hover:opacity-80 transition"
+              className="border-2 font-bold border-[#f6f4ed] dark:border-[#2b2a27] px-6 py-2 rounded hover:opacity-80 transition"
             >
               Generate
             </button>

@@ -164,7 +164,7 @@ export default function ResumeClient() {
 
   return (
     <div className="w-full bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4ed] dark:text-[#2b2a27] min-h-screen">
-      <main className="max-w-4xl mx-auto p-4 md:p-8">
+      <main className="max-w-4xl  mx-auto p-4 md:p-8">
         <h1 className="text-2xl font-bold mb-2">Resume Generator</h1>
 
         <p className="mb-2">
@@ -172,7 +172,7 @@ export default function ResumeClient() {
         </p>
         <div className="mb-7">
           <Link
-            className="mt-2 border cursor-pointer dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27]"
+            className="mt-2 border cursor-pointer dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] transform transition-transform duration-300 ease-in-out hover:scale-105"
             href={"/profile"}
           >
             Upload
@@ -191,7 +191,9 @@ export default function ResumeClient() {
             { label: "Skills", field: "skills" },
           ].map(({ label, field }) => (
             <div key={field}>
-              <label className="block text-sm font-medium mb-1">{label}</label>
+              <label className="block text-sm font-semibold mb-1">
+                {label}
+              </label>
               <textarea
                 placeholder={label}
                 rows={field === "experience" || field === "skills" ? 3 : 1}
@@ -229,7 +231,7 @@ export default function ResumeClient() {
             disabled={
               isGenerating || !form.name || !form.jobTitle || !form.experience
             }
-            className={`mt-4 w-full py-3 cursor-pointer rounded-[3px] border dark:border-[#2b2a27] px-3 border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] font-semibold ${
+            className={`mt-4 w-full py-3 cursor-pointer rounded-[3px] border-2 dark:border-[#2b2a27] px-3 border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] font-semibold transform transition-transform duration-300 ease-in-out hover:scale-105  ${
               isGenerating ? "cursor-not-allowed" : "hover:opacity-80"
             }`}
           >

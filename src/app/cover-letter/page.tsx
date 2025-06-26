@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth";
 import prisma from "../../../lib/prisma";
 import BuyAccessButton from "@/components/BuyAccessButton";
-import CoverLetterClient from "@/components/CoverLetterClient";
+import CoverLetterClientWrapper from "@/components/CoverLetterClientWrapper";
 import Link from "next/link";
 import { Metadata } from "next";
 export const metadata: Metadata = {
@@ -81,7 +81,7 @@ export default async function CoverLetterPage() {
 
   return (
     <div className="w-full min-h-screen bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4ed] dark:text-[#2b2a27] border-b border-b-white/20 dark:border-b-black/20">
-      <CoverLetterClient />
+      <CoverLetterClientWrapper />
     </div>
   );
 }

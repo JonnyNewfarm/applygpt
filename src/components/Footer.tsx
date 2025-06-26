@@ -15,7 +15,7 @@ const Footer = () => {
                 <div className="flex gap-x-10">
                   <div className="">
                     <div className="flex flex-col gap-y-1 justify-start mt-5 text-lg font-light">
-                      <h1 className="opacity-70">Navigation</h1>
+                      <h1 className="font-semibold">Navigation</h1>
                       <Link href={"/resume-generator"}>Generate Resume</Link>
                       <Link href={"/jobs"}>Find Jobs</Link>
                       <Link href={"/cover-letter"}>Generate cover letter</Link>
@@ -29,7 +29,7 @@ const Footer = () => {
 
             <div className="flex flex-col gap-y-2 md:flex-row  gap-x-10">
               <div className="">
-                <h1 className="opacity-65">Created by:</h1>
+                <h1 className="font-semibold">Created by:</h1>
                 <a
                   target="_blank"
                   rel="noopener noreferrer"
@@ -41,7 +41,7 @@ const Footer = () => {
               </div>
 
               <div className="">
-                <h1 className="opacity-65">Contact:</h1>
+                <h1 className="font-semibold">Contact:</h1>
                 <h1>Applygpt@contact.com</h1>
               </div>
             </div>

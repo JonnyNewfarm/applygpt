@@ -233,14 +233,14 @@ export default function FindJobsPage() {
           <button
             onClick={onSaveResume}
             disabled={!resume.trim()}
-            className="mt-1 mb-2 border dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27]"
+            className="mt-1 mb-2 border-2 dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
           >
             Save Resume
           </button>
         ) : (
-          <div className="mb-4">
+          <div className="mb-4 p-2">
             <Link
-              className="mt-2 border dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27]"
+              className="mt-2 border-2 font-semibold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
               href={"/profile"}
             >
               Edit Resume
@@ -309,7 +309,7 @@ export default function FindJobsPage() {
           </p>
 
           {isAtLimit ? (
-            <div className="p-4 border border-red-500 rounded bg-red-100 text-red-700">
+            <div className="p-4 border border-[#692626] rounded bg-[#e9bebe] text-[#692626]">
               <p className="mb-3 font-semibold">
                 You have used up all your cover letter generations.
               </p>
@@ -326,7 +326,7 @@ export default function FindJobsPage() {
             <button
               onClick={() => onFindJobs(1, false)}
               disabled={loading}
-              className="mt-4 w-full cursor-pointer py-3 rounded-[3px] border dark:border-[#2b2a27] px-3 border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] font-semibold"
+              className="mt-4 w-full cursor-pointer py-3 rounded-[3px] border-2 dark:border-[#2b2a27] px-3 border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] font-semibold transform transition-transform duration-300 ease-in-out hover:scale-105"
             >
               {loading ? "Searching..." : "Find Jobs"}
             </button>
@@ -394,13 +394,13 @@ export default function FindJobsPage() {
                       href={job.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="bg-dark text-white py-1 px-3 rounded-[3px] hover:opacity-90 mt-2 inline-block"
+                      className="mt-2 border-2 px-3 opacity-80 cursor-pointer font-semibold py-1.5 rounded-[3px] text-sm text-[#2b2a27]border-[#2b2a27]  transform transition-transform duration-300 ease-in-out hover:scale-105"
                     >
                       Apply
                     </a>
                     <button
                       onClick={() => handleCreateCoverLetter(job)}
-                      className="bg-[#403938] cursor-pointer text-white mt-2 py-1 px-3 rounded-[3px] hover:opacity-90"
+                      className="mt-2 border-2 px-3 cursor-pointer font-semibold py-1.5 rounded-[3px] text-sm text-[#2b2a27]border-[#2b2a27]  transform transition-transform duration-300 ease-in-out hover:scale-105"
                     >
                       Create Cover Letter
                     </button>
@@ -415,9 +415,9 @@ export default function FindJobsPage() {
           <button
             onClick={() => onFindJobs(page + 1, true)}
             disabled={loading}
-            className="mt-5 border dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27]"
+            className="mt-5 border-2 dark:border-[#2b2a27] font-bold px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27]"
           >
-            Load More
+            Generate More
           </button>
         )}
       </div>
