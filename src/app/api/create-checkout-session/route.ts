@@ -10,7 +10,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
-  const { plan } = await req.json(); // Get selected plan
+  const { plan } = await req.json(); 
 
   if (!session || !session.user.email) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });

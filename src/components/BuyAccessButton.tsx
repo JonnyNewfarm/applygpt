@@ -35,7 +35,7 @@ export default function BuyAccessButton() {
             $15/month – 100 generations
           </option>
           <option className="bg-white text-black" value="pro">
-            $25/month – 250 generations
+            $25/month – 200 generations
           </option>
           <option className="bg-white text-black" value="unlimited">
             $40/month – Unlimited
