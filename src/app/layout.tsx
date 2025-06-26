@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { Montserrat, Lato } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/Provider";
