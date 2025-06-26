@@ -44,7 +44,7 @@ export default function BuyAccessButton() {
       </label>
 
       <button
-        className="mt-4 border cursor-pointer border-[#2b2a27]  px-3 py-1.5 rounded-[3px]   text-sm text-[#2b2a27]"
+        className="mt-4 border cursor-pointer border-[#f6f4ed] dark:border-[#2b2a27] bg-white/80 text-black px-3 py-1.5 rounded-[3px] dark:bg-black/80  text-sm dark:text-white"
         onClick={() => setShowConfirm(true)}
       >
         Subscribe for Access
