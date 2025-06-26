@@ -3,7 +3,7 @@ import prisma from "../../../lib/prisma";
 import BuyAccessButton from "@/components/BuyAccessButton";
 import ResumeClient from "@/components/ResumeClient";
 import Link from "next/link";
-import FreeTierNotice from "../free-tier-notice/page";
+import FreeTierNotice from "@/components/FreeTierNotice";
 
 export default async function CoverLetterPage() {
   const session = await getServerSession();
