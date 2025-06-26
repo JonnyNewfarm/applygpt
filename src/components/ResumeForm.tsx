@@ -105,7 +105,6 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
         </button>
       </div>
 
-      {/* Hidden render for PDF */}
       <div
         ref={resumeRef}
         style={{

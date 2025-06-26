@@ -9,6 +9,19 @@ export const metadata: Metadata = {
   title: "AI Resume Generator – Build Your Resume in Seconds",
   description:
     "Create a professional resume with AI. Just enter your experience, and get a downloadable, customizable CV optimized for your next job.",
+  icons: {
+    icon: "/og-image.png",
+  },
+  openGraph: {
+    images: [
+      {
+        url: "https://www.jobscriptor.com/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "AI Cover Letter Tool by Jobscriptor",
+      },
+    ],
+  },
 };
 
 export default async function CoverLetterPage() {
@@ -37,7 +50,6 @@ export default async function CoverLetterPage() {
     );
   }
 
-  // Now fetch the user
   const user = await prisma.user.findUnique({
     where: { email: session.user.email! },
   });

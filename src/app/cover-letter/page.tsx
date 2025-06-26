@@ -8,6 +8,19 @@ export const metadata: Metadata = {
   title: "AI Cover Letter Generator – Personalized Letters Instantly",
   description:
     "Generate personalized, job-specific cover letters in seconds using AI. Save, edit, and download your letters with ease.",
+  icons: {
+    icon: "/og-image.png",
+  },
+  openGraph: {
+    images: [
+      {
+        url: "https://www.jobscriptor.com/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "AI Cover Letter Tool by Jobscriptor",
+      },
+    ],
+  },
 };
 
 export default async function CoverLetterPage() {

@@ -33,7 +33,6 @@ export async function POST(req: Request) {
     );
   }
 
-  // Check generation limit
   if (
     user.generationLimit !== null &&
     user.generationCount >= user.generationLimit

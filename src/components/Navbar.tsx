@@ -178,7 +178,6 @@ export default function Navbar() {
         </nav>
       </div>
 
-      {/* Overlay background */}
       {menuOpen && (
         <div
           className="fixed inset-0 bg-white/40   bg-opacity-40 z-50"

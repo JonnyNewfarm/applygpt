@@ -256,7 +256,6 @@ export default function FindJobsPage() {
           className="w-full border border-gray-500 bg-white text-black rounded p-2 mb-2"
         />
 
-        {/* Country input */}
         <input
           type="text"
           value={country}
@@ -278,7 +277,6 @@ export default function FindJobsPage() {
           </ul>
         )}
 
-        {/* City input */}
         <input
           type="text"
           value={city}
@@ -337,7 +335,6 @@ export default function FindJobsPage() {
 
         {error && <p className="text-red-500 mt-4">{error}</p>}
 
-        {/* Skeleton or job cards */}
         <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
           {loading && jobs.length === 0 ? (
             <SkeletonCard />

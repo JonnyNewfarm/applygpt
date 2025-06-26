@@ -54,7 +54,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
 
-  // Check limit
   if (
     user.generationLimit !== null && 
     user.generationCount >= user.generationLimit
