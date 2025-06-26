@@ -10,6 +10,16 @@ export const metadata: Metadata = {
     "AI Career Tools – Create Resumes, Cover Letters & Find Jobs Instantly",
   description:
     "Boost your job hunt with our AI-powered tools. Instantly generate tailored resumes and cover letters, and search for jobs worldwide in one place.",
+  openGraph: {
+    images: [
+      {
+        url: "https://www.jobscriptor.com/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "AI Cover Letter Tool by Jobscriptor",
+      },
+    ],
+  },
 };
 
 const Homepage = () => {
