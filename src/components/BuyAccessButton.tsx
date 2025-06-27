@@ -32,10 +32,10 @@ export default function BuyAccessButton() {
           onChange={(e) => setPlan(e.target.value)}
         >
           <option className="bg-white text-black" value="basic">
-            $15/month – 100 generations
+            $15/month – basic | 100 generations
           </option>
           <option className="bg-white text-black" value="pro">
-            $25/month – 200 generations
+            $25/month | pro | 200 generations
           </option>
           <option className="bg-white text-black" value="unlimited">
             $40/month – Unlimited
@@ -44,7 +44,7 @@ export default function BuyAccessButton() {
       </label>
 
       <button
-        className="mt-4 border-2 font-semibold text-black px-3 py-1.5 rounded-[3px] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
+        className="mt-4 border-2 font-semibold  px-3 py-1.5 rounded-[3px] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
         onClick={() => setShowConfirm(true)}
       >
         Subscribe for Access
