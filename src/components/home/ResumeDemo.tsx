@@ -111,7 +111,7 @@ const LiveGenerateResumeDemo = () => {
               age
             ) || "") && (
             <Link
-              href="/resume"
+              href="/resume-generator"
               className="inline-block mt-6 border px-4 py-2 rounded border-[#f6f4ed] dark:border-[#2b2a27] hover:opacity-80 transition"
             >
               Try It Yourself →
