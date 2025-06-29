@@ -7,6 +7,7 @@ import CoverLetterList from "../../components/CoverLetterList";
 import { Metadata } from "next";
 import BuyAccessButton from "@/components/BuyAccessButton";
 import UsageClient from "@/components/UsageClient";
+import SubscriptionSection from "@/components/SubscriptionSection";
 export const metadata: Metadata = {
   title: "Your Profile – Manage Resumes and Cover Letters",
   description:
@@ -76,35 +77,7 @@ export default async function ProfilePage() {
           </p>
         </section>
 
-        <section className="mb-12">
-          <h2 className="text-xl font-semibold mb-2">Subscription</h2>
-          <UsageClient />
-          <p className="">
-            <span className="font-semibold flex flex-col">Your Plan:</span>{" "}
-            {user.generationLimit === 6
-              ? "Free"
-              : user.generationLimit === 100
-              ? "Basic"
-              : user.generationLimit === 200
-              ? "Pro"
-              : user.generationLimit === null
-              ? "Unlimited"
-              : "Unknown"}
-          </p>
-
-          <div className="relative mb-6 mt-2">
-            {user.subscriptionStatus === "free" ? (
-              <h1>Upgrade Plan:</h1>
-            ) : (
-              <>
-                <h1 className="font-semibold">Change Plan:</h1>
-              </>
-            )}
-            <BuyAccessButton />
-          </div>
-          <h1 className="font-semibold">Manage subscription:</h1>
-          <ManageSubscriptionButton />
-        </section>
+        <SubscriptionSection user={user} />
 
         <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-4">Your Resume</h2>

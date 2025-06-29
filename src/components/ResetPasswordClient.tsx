@@ -38,7 +38,10 @@ export default function ResetPasswordClient() {
             onChange={(e) => setPassword(e.target.value)}
             className="w-full p-2 border bg-white text-black"
           />
-          <button type="submit" className="w-full bg-black text-white py-2">
+          <button
+            type="submit"
+            className="mt-4 border-2 font-semibold  px-3 py-1.5 rounded-[3px] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
+          >
             Reset Password
           </button>
         </form>

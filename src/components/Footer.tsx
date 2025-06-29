@@ -42,7 +42,7 @@ const Footer = () => {
 
               <div className="">
                 <h1 className="font-semibold">Contact:</h1>
-                <h1>Applygpt@contact.com</h1>
+                <h1>support@jobscriptor.com</h1>
               </div>
             </div>
           </div>
