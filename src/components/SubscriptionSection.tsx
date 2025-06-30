@@ -28,13 +28,17 @@ export default function SubscriptionSection({ user }: { user: User }) {
       <h2 className="text-xl font-semibold mb-4">Subscription</h2>
 
       {/* Subscription Details */}
-      <div className="mb-4 border rounded md:w-[60%]">
+      <div className="mb-4 border rounded md:w-[60%] lg:w-[50%] xl:w-[40%]">
         <button
           onClick={() => setOpenDetails(!openDetails)}
           className={buttonClasses}
         >
           <span>Subscription Details</span>
-          {openDetails ? <BsChevronCompactUp /> : <BsChevronCompactDown />}
+          {openDetails ? (
+            <BsChevronCompactUp size={30} />
+          ) : (
+            <BsChevronCompactDown size={30} />
+          )}
         </button>
         {openDetails && (
           <div className="p-4">
@@ -47,7 +51,7 @@ export default function SubscriptionSection({ user }: { user: User }) {
       </div>
 
       {/* Upgrade Plan */}
-      <div className="mb-4 border rounded md:w-[60%]">
+      <div className="mb-4 border rounded md:w-[60%] lg:w-[50%] xl:w-[40%]">
         <button
           onClick={() => setOpenUpgrade(!openUpgrade)}
           className={buttonClasses}
@@ -57,7 +61,11 @@ export default function SubscriptionSection({ user }: { user: User }) {
               ? "Upgrade Plan"
               : "Change Plan"}
           </span>
-          {openUpgrade ? <BsChevronCompactUp /> : <BsChevronCompactDown />}
+          {openUpgrade ? (
+            <BsChevronCompactUp size={30} />
+          ) : (
+            <BsChevronCompactDown size={30} />
+          )}
         </button>
         {openUpgrade && (
           <div className="p-4">
@@ -67,13 +75,17 @@ export default function SubscriptionSection({ user }: { user: User }) {
       </div>
 
       {/* Manage Subscription */}
-      <div className="border rounded md:w-[60%]">
+      <div className="border rounded md:w-[60%] lg:w-[50%] xl:w-[40%]">
         <button
           onClick={() => setOpenManage(!openManage)}
           className={buttonClasses}
         >
           <span>Manage Subscription</span>
-          {openManage ? <BsChevronCompactUp /> : <BsChevronCompactDown />}
+          {openManage ? (
+            <BsChevronCompactUp size={30} />
+          ) : (
+            <BsChevronCompactDown size={30} />
+          )}
         </button>
         {openManage && (
           <div className="p-4">

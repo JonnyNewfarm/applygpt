@@ -45,15 +45,17 @@ export default function CoverLetterList({ initialCoverLetters }: Props) {
   return (
     <section>
       <h2 className="text-2xl font-semibold mb-4">Recent Cover Letters</h2>
-      <ul className="space-y-6">
+      <ul className="space-y-16">
         {coverLetters.map((cl) => (
           <li
             key={cl.id}
-            className="border dark:border-[#2b2a27] border-[#f6f4ed] p-4 rounded-[3px] text-sm whitespace-pre-wrap"
+            className=" dark:border-[#2b2a27]   border-l-2 border-[#f6f4ed] p-4 rounded-[3px] text-sm whitespace-pre-wrap"
           >
             <p className="mb-2 text-xs text-white/90 dark:text-black/90">
               {new Date(cl.createdAt).toLocaleString()}
             </p>
+
+            <p className="mb-1 font-semibold">Edit if necessary</p>
 
             <textarea
               rows={8}

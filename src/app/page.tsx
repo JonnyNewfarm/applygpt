@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 const Homepage = () => {
   return (
     <SmoothScroll>
-      <div className="h-full   flex flex-col justify-center items-center  w-full">
+      <div className="h-full border-b-white/50 border-b dark:border-b-black/80  flex flex-col justify-center items-center  w-full">
         <HeroSection />
         <GenerateResumeDemo />
         <FindJobSection />

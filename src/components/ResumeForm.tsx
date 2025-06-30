@@ -84,21 +84,21 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
       <div className="mt-4 flex flex-wrap gap-4">
         <button
           onClick={handleSave}
-          className="cursor-pointer mt-2 border dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27] transform transition-transform duration-300 ease-in-out hover:scale-105"
+          className="cursor-pointer mt-2 border-2 font-bold dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27] transform transition-transform duration-300 ease-in-out hover:scale-105"
           disabled={isSaving}
         >
           {isSaving ? "Saving..." : "Save"}
         </button>
         <button
           onClick={handleDownload}
-          className="cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105 mt-2 border dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]"
+          className="cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105 mt-2 border-2 font-bold dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]"
         >
           Download as PDF
         </button>
 
         <button
           onClick={handleDelete}
-          className="cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105 mt-2 border  px-3 py-1.5 rounded-[3px] border-red-600  text-sm text-red-600  "
+          className="cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105 mt-2 border-2 font-bold  px-3 py-1.5 rounded-[3px] border-red-600  text-sm text-red-600  "
           disabled={isDeleting}
         >
           {isDeleting ? "Deleting..." : "Delete"}
