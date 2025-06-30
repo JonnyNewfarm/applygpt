@@ -5,8 +5,9 @@ import UsageClient from "./UsageClient";
 import BuyAccessButton from "./BuyAccessButton";
 import ManageSubscriptionButton from "./ManageSubscriptionButton";
 import { BsChevronCompactDown, BsChevronCompactUp } from "react-icons/bs";
+import { User } from "@prisma/client";
 
-export default function SubscriptionSection({ user }: { user: any }) {
+export default function SubscriptionSection({ user }: { user: User }) {
   const [openDetails, setOpenDetails] = useState(false);
   const [openUpgrade, setOpenUpgrade] = useState(false);
   const [openManage, setOpenManage] = useState(false);
