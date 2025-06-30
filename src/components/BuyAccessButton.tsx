@@ -27,7 +27,7 @@ export default function BuyAccessButton() {
     <div className="flex flex-col items-start">
       <label>
         <select
-          className="border px-2 py-2 cursor-pointer"
+          className="border px-2 py-2 cursor-pointer w-full"
           value={plan}
           onChange={(e) => setPlan(e.target.value)}
         >

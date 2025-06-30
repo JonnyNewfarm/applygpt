@@ -102,7 +102,7 @@ export default function RegisterPage() {
           </p>
           <button
             type="submit"
-            className="w-full cursor-pointer py-2 rounded transition border-[#f6f4ed] dark:border-[#2b2a27] border"
+            className="w-full cursor-pointer py-2 rounded transition border-[#f6f4ed] dark:border-[#2b2a27] border-2 font-bold"
           >
             Register
           </button>

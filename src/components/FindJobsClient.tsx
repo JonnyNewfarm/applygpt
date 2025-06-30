@@ -233,7 +233,7 @@ export default function FindJobsPage() {
           <button
             onClick={onSaveResume}
             disabled={!resume.trim()}
-            className="mt-1 mb-2 border-2 dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
+            className="mt-1 mb-2 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
           >
             Save Resume
           </button>
@@ -326,7 +326,7 @@ export default function FindJobsPage() {
             <button
               onClick={() => onFindJobs(1, false)}
               disabled={loading}
-              className="mt-4 w-full cursor-pointer py-3 rounded-[3px] border-2 dark:border-[#2b2a27] px-3 border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] font-semibold transform transition-transform duration-300 ease-in-out hover:scale-105"
+              className="mt-4 w-full cursor-pointer py-3 rounded-[3px] border-2 dark:border-[#2b2a27] px-3 border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] font-bold transform transition-transform duration-300 ease-in-out hover:scale-105"
             >
               {loading ? "Searching..." : "Find Jobs"}
             </button>

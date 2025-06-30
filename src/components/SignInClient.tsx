@@ -55,7 +55,7 @@ export default function SignInPage() {
 
           <button
             type="submit"
-            className="w-full mt-4 cursor-pointer py-2 rounded transition border-[#f6f4ed] dark:border-[#2b2a27] border"
+            className="w-full mt-4 cursor-pointer py-2 rounded transition border-[#f6f4ed] dark:border-[#2b2a27] border-2 font-bold"
           >
             Sign In
           </button>
@@ -65,7 +65,7 @@ export default function SignInPage() {
 
         <button
           onClick={() => signIn("google")}
-          className="w-full cursor-pointer py-2 rounded transition border-[#f6f4ed] dark:border-[#2b2a27] border"
+          className="w-full cursor-pointer py-2 rounded transition border-[#f6f4ed] dark:border-[#2b2a27] border-2 font-bold"
         >
           Sign in with Google
         </button>

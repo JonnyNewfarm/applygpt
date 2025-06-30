@@ -51,7 +51,7 @@ export default function SubscriptionSection({ user }: { user: User }) {
       </div>
 
       {/* Upgrade Plan */}
-      <div className="mb-4 border rounded md:w-[60%] lg:w-[50%] xl:w-[40%]">
+      <div className="mb-4 border rounded overflow-hidden md:w-[60%] lg:w-[50%] xl:w-[40%]">
         <button
           onClick={() => setOpenUpgrade(!openUpgrade)}
           className={buttonClasses}
