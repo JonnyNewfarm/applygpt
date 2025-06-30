@@ -172,12 +172,12 @@ export default function ResumeClient() {
         </p>
         <div className="mb-7">
           <Link
-            className="mt-2 border cursor-pointer dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] transform transition-transform duration-300 ease-in-out hover:scale-105"
+            className="mt-2 border-2 font-bold cursor-pointer dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] transform transition-transform duration-300 ease-in-out hover:scale-105"
             href={"/profile"}
           >
             Upload
           </Link>
-          <h1 className="-mb-3 mt-10">Or generate a resume:</h1>
+          <h1 className="-mb-2.5 mt-10 font-semibold">Or generate a resume:</h1>
         </div>
 
         <div className="space-y-4 mb-6">

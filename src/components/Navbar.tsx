@@ -93,9 +93,11 @@ export default function Navbar() {
             className="lg:hidden flex flex-col justify-center items-center space-y-1 cursor-pointer"
             aria-label="Open menu"
           >
-            <span className="block w-6 h-0.5 bg-[#f6f4ed] dark:bg-[#2b2a27] " />
-            <span className="block w-6 h-0.5 bg-[#f6f4ed] dark:bg-[#2b2a27]" />
-            <span className="block w-6 h-0.5 bg-[#f6f4ed] dark:bg-[#2b2a27]" />
+            <h1 className="text-xl flex items-center gap-x-2">
+              {" "}
+              <span className="h-1 w-1 bg-white block rounded-full" />
+              Menu
+            </h1>
           </button>
         </div>
       </nav>
@@ -107,6 +109,7 @@ export default function Navbar() {
       >
         <div className="flex justify-between items-center p-4 border-b border-gray-200 bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4ed] dark:text-[#2b2a27]">
           <h2 className="font-bold text-2xl">Menu</h2>
+          <DarkmodeBtn />
           <button
             onClick={() => setMenuOpen(false)}
             aria-label="Close menu"

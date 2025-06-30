@@ -117,7 +117,7 @@ const HeroSection = () => {
         <div className="w-full flex uppercase justify-between font-bold text-lg sm:text-2xl md:text-3xl text-nowrap px-6 sm:px-20 absolute bottom-6  left-0">
           <MagneticComp>
             <Link href={"/cover-letter"} className="flex gap-x-2">
-              Generate <p className="hidden sm:block">Cover Letter</p>
+              Generate <p className="hidden sm:block">Resume</p>
             </Link>
           </MagneticComp>
           <MagneticComp>
