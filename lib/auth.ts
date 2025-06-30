@@ -1,4 +1,3 @@
-// lib/auth.ts
 import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -36,5 +35,19 @@ export const authOptions: NextAuthOptions = {
   ],
   pages: {
     signIn: "/signin",
+  },
+
+  // Add this events block:
+  events: {
+    async createUser({ user }) {
+      // Update the user after creation (Google sign-in or others)
+      await prisma.user.update({
+        where: { id: user.id },
+        data: {
+          generationLimit: 6,
+          subscriptionStatus: "free",
+        },
+      });
+    },
   },
 };
