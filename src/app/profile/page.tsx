@@ -2,11 +2,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../../../lib/auth";
 import prisma from "../../../lib/prisma";
 import ResumeForm from "../../components/ResumeForm";
-import ManageSubscriptionButton from "@/components/ManageSubscriptionButton";
 import CoverLetterList from "../../components/CoverLetterList";
 import { Metadata } from "next";
-import BuyAccessButton from "@/components/BuyAccessButton";
-import UsageClient from "@/components/UsageClient";
 import SubscriptionSection from "@/components/SubscriptionSection";
 export const metadata: Metadata = {
   title: "Your Profile – Manage Resumes and Cover Letters",

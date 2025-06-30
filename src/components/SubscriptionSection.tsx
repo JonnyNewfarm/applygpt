@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import UsageClient from "./UsageClient";
 import BuyAccessButton from "./BuyAccessButton";
 import ManageSubscriptionButton from "./ManageSubscriptionButton";
