@@ -96,8 +96,8 @@ const HeroSection = () => {
         <div className="flex flex-col gap-y-2">
           <div className="md:text-xl text-[15px] lg:text-2xl sm:text-lg">
             <p>
-              AI tools to generate resumes, cover letters, and find jobs —
-              faster.
+              All-in-one AI tools to create resumes, write cover letters, and
+              find jobs — fast
             </p>
             <p>Sign up and get started in seconds.</p>
           </div>

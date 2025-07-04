@@ -14,15 +14,26 @@ const demoJob = {
 const FindJobsDemo = () => {
   return (
     <div className="min-h-screen w-full px-6 py-12 bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4ed] dark:text-[#2b2a27] flex flex-col items-center justify-center gap-6">
-      <div>
-        <h2 className="text-3xl font-bold uppercase">Find Jobs</h2>
+      <div className="space-y-3">
+        <h2 className="text-3xl font-bold uppercase">
+          Find Jobs That Truly Match You
+        </h2>
 
         {/* Explanation text */}
         <p className="max-w-xl  text-lg">
-          Explore real job listings with detailed information including job
-          title, company, location, salary, relevant tags, and how well each job
-          matches your profile. Then you can generate a cover letter for the job
-          and apply.
+          Explore real job listings from platforms like LinkedIn, Indeed, and
+          more.
+        </p>
+
+        <p className="max-w-xl  text-lg">
+          Each job includes detailed information—title, company, location,
+          estimated salary, relevant tags, and a personalized match score based
+          on your profile.
+        </p>
+        <p className="max-w-xl  text-lg">
+          {" "}
+          Once you find the right job, generate a tailored AI-powered cover
+          letter in one click and apply instantly.
         </p>
       </div>
 

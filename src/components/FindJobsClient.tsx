@@ -33,6 +33,7 @@ export default function FindJobsPage() {
   );
   const [allCities, setAllCities] = useState<string[]>([]);
 
+  const [jobsCache, setJobsCache] = useState<Record<number, Job[]>>({});
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -43,7 +44,6 @@ export default function FindJobsPage() {
   const [expandedExplanations, setExpandedExplanations] = useState<
     Record<string, boolean>
   >({});
-
   const [usage, setUsage] = useState<{
     generationLimit: number | null;
     generationCount: number;
@@ -96,7 +96,7 @@ export default function FindJobsPage() {
     }
   }
 
-  const onFindJobs = async (newPage = 1, append = false) => {
+  const fetchJobs = async (pageToLoad: number) => {
     if (!resume || !query || !city || !selectedCountryCode) {
       toast("Please fill in all fields.");
       return;
@@ -104,7 +104,6 @@ export default function FindJobsPage() {
 
     setLoading(true);
     setError("");
-    if (!append) setJobs([]);
 
     try {
       const res = await fetch("/api/find-jobs", {
@@ -115,7 +114,7 @@ export default function FindJobsPage() {
           query,
           city,
           country: selectedCountryCode.toLowerCase(),
-          page: newPage,
+          page: pageToLoad,
         }),
       });
 
@@ -127,12 +126,16 @@ export default function FindJobsPage() {
 
       if (data.message) {
         setError(data.message);
-        setJobs([]);
         return;
       }
 
-      setJobs((prev) => (append ? [...prev, ...data.jobs] : data.jobs));
-      setPage(newPage);
+      setJobsCache((prev) => ({
+        ...prev,
+        [pageToLoad]: data.jobs,
+      }));
+
+      setJobs(data.jobs);
+      setPage(pageToLoad);
 
       setUsage((prev) => ({
         ...prev,
@@ -143,6 +146,24 @@ export default function FindJobsPage() {
       setError("Something went wrong");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleFindJobs = async () => {
+    if (jobsCache[1]) {
+      setJobs(jobsCache[1]);
+      setPage(1);
+    } else {
+      await fetchJobs(1);
+    }
+  };
+
+  const handlePageChange = async (newPage: number) => {
+    if (jobsCache[newPage]) {
+      setJobs(jobsCache[newPage]);
+      setPage(newPage);
+    } else {
+      await fetchJobs(newPage);
     }
   };
 
@@ -198,6 +219,8 @@ export default function FindJobsPage() {
     localStorage.setItem("url", job.url);
     window.open("/cover-letter", "_blank");
   };
+
+  const isCachedPage = !!jobsCache[page + 1];
 
   const isAtLimit =
     usage.generationLimit !== null &&
@@ -324,7 +347,7 @@ export default function FindJobsPage() {
             </div>
           ) : (
             <button
-              onClick={() => onFindJobs(1, false)}
+              onClick={handleFindJobs}
               disabled={loading}
               className="mt-4 w-full cursor-pointer py-3 rounded-[3px] border-2 dark:border-[#2b2a27] px-3 border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] font-bold transform transition-transform duration-300 ease-in-out hover:scale-105"
             >
@@ -336,89 +359,93 @@ export default function FindJobsPage() {
         {error && <p className="text-red-500 mt-4">{error}</p>}
 
         <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-          {loading && jobs.length === 0 ? (
-            <SkeletonCard />
-          ) : (
-            jobs.map((job) => {
-              const isDescriptionExpanded = expandedDescriptions[job.id];
-              const isExplanationExpanded = expandedExplanations[job.id];
-              const description = isDescriptionExpanded
-                ? job.description
-                : truncateText(job.description, 200);
-              const explanation = isExplanationExpanded
-                ? job.explanation
-                : truncateText(job.explanation, 160);
+          {loading && jobs.length === 0 ? <SkeletonCard /> : null}
 
-              return (
-                <div
-                  key={job.id}
-                  className="border relative h-full bg-white text-black flex flex-col justify-start items-start border-gray-300 rounded-[3px] p-4"
+          {jobs.map((job) => (
+            <div
+              key={job.id}
+              className="border relative h-full bg-white text-black flex flex-col justify-start items-start border-gray-300 rounded-[3px] p-4"
+            >
+              <div className="h-full w-full">
+                <h2 className="text-xl font-semibold">{job.title}</h2>
+                <p className="text-gray-700">
+                  {job.company} — {job.location}
+                </p>
+
+                <p className="mt-2 text-sm text-gray-600 whitespace-pre-line">
+                  {expandedDescriptions[job.id]
+                    ? job.description
+                    : truncateText(job.description, 200)}
+                </p>
+                {job.description.length > 200 && (
+                  <button
+                    onClick={() => toggleExpandDescription(job.id)}
+                    className="dark underline text-sm cursor-pointer hover:opacity-90 mt-1"
+                  >
+                    {expandedDescriptions[job.id] ? "Show less" : "Read more"}
+                  </button>
+                )}
+
+                <p className="mt-2 text-green-700 font-bold">
+                  Match score: {job.score}/10
+                </p>
+
+                <p className="mt-1 text-sm text-gray-500 italic whitespace-pre-line">
+                  GPT:{" "}
+                  {expandedExplanations[job.id]
+                    ? job.explanation
+                    : truncateText(job.explanation, 160)}
+                </p>
+                {job.explanation.length > 160 && (
+                  <button
+                    onClick={() => toggleExpandExplanation(job.id)}
+                    className="dark underline cursor-pointer hover:opacity-90 text-sm mt-1"
+                  >
+                    {expandedExplanations[job.id] ? "Show less" : "Read more"}
+                  </button>
+                )}
+              </div>
+              <div className="flex flex-row-reverse items-center justify-between w-full relative left-auto right-auto bottom-6 mt-10">
+                <a
+                  href={job.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-2 border-2 px-3 opacity-80 cursor-pointer font-semibold py-1.5 rounded-[3px] text-sm text-[#2b2a27]border-[#2b2a27]  transform transition-transform duration-300 ease-in-out hover:scale-105"
                 >
-                  <div className="h-full w-full">
-                    <h2 className="text-xl font-semibold">{job.title}</h2>
-                    <p className="text-gray-700">
-                      {job.company} — {job.location}
-                    </p>
-
-                    <p className="mt-2 text-sm text-gray-600 whitespace-pre-line">
-                      {description || "No description"}
-                    </p>
-                    {job.description.length > 200 && (
-                      <button
-                        onClick={() => toggleExpandDescription(job.id)}
-                        className="dark underline text-sm cursor-pointer hover:opacity-90 mt-1"
-                      >
-                        {isDescriptionExpanded ? "Show less" : "Read more"}
-                      </button>
-                    )}
-
-                    <p className="mt-2 text-green-700 font-bold">
-                      Match score: {job.score}/10
-                    </p>
-
-                    <p className="mt-1 text-sm text-gray-500 italic whitespace-pre-line">
-                      GPT: {explanation || "No explanation"}
-                    </p>
-                    {job.explanation.length > 160 && (
-                      <button
-                        onClick={() => toggleExpandExplanation(job.id)}
-                        className="dark underline cursor-pointer hover:opacity-90 text-sm mt-1"
-                      >
-                        {isExplanationExpanded ? "Show less" : "Read more"}
-                      </button>
-                    )}
-                  </div>
-
-                  <div className="flex flex-row-reverse items-center justify-between w-full relative left-auto right-auto bottom-6 mt-10">
-                    <a
-                      href={job.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mt-2 border-2 px-3 opacity-80 cursor-pointer font-semibold py-1.5 rounded-[3px] text-sm text-[#2b2a27]border-[#2b2a27]  transform transition-transform duration-300 ease-in-out hover:scale-105"
-                    >
-                      Apply
-                    </a>
-                    <button
-                      onClick={() => handleCreateCoverLetter(job)}
-                      className="mt-2 border-2 px-3 cursor-pointer font-semibold py-1.5 rounded-[3px] text-sm text-[#2b2a27]border-[#2b2a27]  transform transition-transform duration-300 ease-in-out hover:scale-105"
-                    >
-                      Create Cover Letter
-                    </button>
-                  </div>
-                </div>
-              );
-            })
-          )}
+                  Apply
+                </a>
+                <button
+                  onClick={() => handleCreateCoverLetter(job)}
+                  className="mt-2   bg-[#38302c] border-2 px-3 cursor-pointer font-semibold py-1.5 rounded-[3px] text-sm text-white/95 border-[#2b2a27]  transform transition-transform duration-300 ease-in-out hover:scale-105"
+                >
+                  Create Cover Letter
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
 
-        {jobs.length > 0 && !loading && (
-          <button
-            onClick={() => onFindJobs(page + 1, true)}
-            disabled={loading}
-            className="mt-5 border-2 dark:border-[#2b2a27] font-bold px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27]"
-          >
-            Generate More
-          </button>
+        {jobs.length > 0 && (
+          <div className="mt-8 flex justify-between">
+            <button
+              onClick={() => handlePageChange(page - 1)}
+              disabled={page === 1}
+              className="px-4 py-2 cursor-pointer border-[#f6f4ed] text-[#f6f4ed] dark:border-[#2b2a27] dark:text-[#2b2a27] rounded border-2 font-semibold border-[] text-sm disabled:opacity-50"
+            >
+              Previous
+            </button>
+            <span className="self-center text-sm">Page {page}</span>
+            <button
+              onClick={() => handlePageChange(page + 1)}
+              className="px-4 py-2 cursor-pointer rounded border-2 font-semibold border-[#f6f4ed] text-[#f6f4ed] dark:border-[#2b2a27] dark:text-[#2b2a27] text-sm"
+            >
+              {loading
+                ? "Loading..."
+                : isCachedPage
+                ? "Next"
+                : "Find more jobs"}
+            </button>
+          </div>
         )}
       </div>
     </div>
