@@ -3,8 +3,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Country, City } from "country-state-city";
-import ManageSubscriptionButton from "./ManageSubscriptionButton";
-import BuyAccessButton from "./BuyAccessButton";
 import toast from "react-hot-toast";
 
 interface Job {
@@ -138,11 +136,6 @@ export default function FindJobsPage() {
 
       setJobs(data.jobs);
       setPage(pageToLoad);
-
-      setUsage((prev) => ({
-        ...prev,
-        generationCount: prev.generationCount + 1,
-      }));
     } catch (err) {
       console.error(err);
       setError("Something went wrong");
@@ -223,10 +216,6 @@ export default function FindJobsPage() {
   };
 
   const isCachedPage = !!jobsCache[page + 1];
-
-  const isAtLimit =
-    usage.generationLimit !== null &&
-    usage.generationCount >= usage.generationLimit;
 
   const SkeletonCard = () => (
     <div className="mt-8 animate-pulse flex gap-x-4 items-center ">
@@ -371,29 +360,13 @@ export default function FindJobsPage() {
               : `Usage: ${usage.generationCount} / ${usage.generationLimit} generations`}
           </p>
 
-          {isAtLimit ? (
-            <div className="p-4 border border-[#692626] rounded bg-[#e9bebe] text-[#692626]">
-              <p className="mb-3 font-semibold">
-                You have used up all your cover letter generations.
-              </p>
-              {usage.generationLimit !== null ? (
-                <>
-                  <p className="mb-3">Upgrade to continue generating:</p>
-                  <BuyAccessButton />
-                </>
-              ) : (
-                <ManageSubscriptionButton />
-              )}
-            </div>
-          ) : (
-            <button
-              onClick={handleFindJobs}
-              disabled={loading}
-              className="mt-4 w-full cursor-pointer py-3 rounded-[3px] border-2 dark:border-[#2b2a27] px-3 border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] font-bold transform transition-transform duration-300 ease-in-out hover:scale-105"
-            >
-              {loading ? "Searching..." : "Find Jobs"}
-            </button>
-          )}
+          <button
+            onClick={handleFindJobs}
+            disabled={loading}
+            className="mt-4 w-full cursor-pointer py-3 rounded-[3px] border-2 dark:border-[#2b2a27] px-3 border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] font-bold transform transition-transform duration-300 ease-in-out hover:scale-105"
+          >
+            {loading ? "Searching..." : "Find Jobs"}
+          </button>
         </div>
 
         {error && <p className="text-red-500 mt-4">{error}</p>}

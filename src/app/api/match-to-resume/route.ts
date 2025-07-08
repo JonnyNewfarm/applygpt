@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
     user.generationCount >= user.generationLimit
   ) {
     return NextResponse.json(
-      { error: "Generation limit reached" },
+      { error: "Generation limit reached, update your plan or wait until it resets." },
       { status: 403 }
     );
   }
