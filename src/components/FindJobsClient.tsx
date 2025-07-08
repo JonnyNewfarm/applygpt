@@ -52,6 +52,8 @@ export default function FindJobsPage() {
     generationCount: 0,
   });
 
+  const [matchingJobId, setMatchingJobId] = useState<string | null>(null);
+
   useEffect(() => {
     async function fetchResume() {
       const res = await fetch("/api/resume");
@@ -234,6 +236,44 @@ export default function FindJobsPage() {
     </div>
   );
 
+  async function matchJobToResume(job: Job) {
+    if (!resumeSaved) {
+      toast.error("Please save your resume before matching.");
+      return;
+    }
+    setMatchingJobId(job.id);
+    try {
+      const res = await fetch("/api/match-to-resume", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          jobDescription: job.description,
+          resume,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        toast.error(data.error || "Failed to match");
+      } else {
+        setJobs((jobs) =>
+          jobs.map((j) =>
+            j.id === job.id
+              ? { ...j, score: data.score, explanation: data.explanation }
+              : j
+          )
+        );
+        setUsage((u) => ({
+          ...u,
+          generationCount: u.generationCount + 1,
+        }));
+      }
+    } catch {
+      toast.error("Error during matching");
+    } finally {
+      setMatchingJobId(null);
+    }
+  }
+
   return (
     <div className="w-full min-h-screen flex flex-col justify-center bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4ed] dark:text-[#2b2a27]">
       <div className="max-w-4xl mx-auto px-4 py-10">
@@ -385,27 +425,46 @@ export default function FindJobsPage() {
                     {expandedDescriptions[job.id] ? "Show less" : "Read more"}
                   </button>
                 )}
-
-                <p className="mt-2 text-green-700 font-bold">
-                  Match score: {job.score}/10
-                </p>
-
-                <p className="mt-1 text-sm text-gray-500 italic whitespace-pre-line">
-                  GPT:{" "}
-                  {expandedExplanations[job.id]
-                    ? job.explanation
-                    : truncateText(job.explanation, 160)}
-                </p>
-                {job.explanation.length > 160 && (
+              </div>
+              <div className="w-full relative  bottom-2 mt-5">
+                {job.score === undefined ? (
                   <button
-                    onClick={() => toggleExpandExplanation(job.id)}
-                    className="dark underline cursor-pointer hover:opacity-90 text-sm mt-1"
+                    disabled={matchingJobId === job.id}
+                    onClick={() => matchJobToResume(job)}
+                    className="mt-2 border-2 px-3 opacity-80 cursor-pointer font-semibold py-1.5 rounded-[3px] text-sm text-[#2b2a27]border-[#2b2a27]  transform transition-transform duration-300 ease-in-out hover:scale-105"
                   >
-                    {expandedExplanations[job.id] ? "Show less" : "Read more"}
+                    {matchingJobId === job.id
+                      ? "Matching..."
+                      : "Match to Resume"}
                   </button>
+                ) : (
+                  <div className="mt-2   p-2 rounded">
+                    {job.score !== undefined && (
+                      <div className="mt-3 text-sm">
+                        <p className="font-semibold">
+                          Match Score: {job.score} / 10
+                        </p>
+                        <p className="mt-2 text-gray-600 whitespace-pre-line">
+                          {expandedExplanations[job.id]
+                            ? job.explanation
+                            : truncateText(job.explanation, 200)}
+                        </p>
+                        {job.explanation.length > 200 && (
+                          <button
+                            onClick={() => toggleExpandExplanation(job.id)}
+                            className="underline text-sm cursor-pointer hover:opacity-90 mt-1"
+                          >
+                            {expandedExplanations[job.id]
+                              ? "Show less"
+                              : "Read more"}
+                          </button>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 )}
               </div>
-              <div className="flex flex-row-reverse items-center justify-between w-full relative left-auto right-auto bottom-6 mt-10">
+              <div className="flex flex-row-reverse items-center justify-between w-full relative left-auto right-auto bottom-6 mt-5">
                 <a
                   href={job.url}
                   target="_blank"
@@ -437,7 +496,7 @@ export default function FindJobsPage() {
             <span className="self-center text-sm">Page {page}</span>
             <button
               onClick={() => handlePageChange(page + 1)}
-              className="px-4 py-2 cursor-pointer rounded border-2 font-semibold border-[#f6f4ed] text-[#f6f4ed] dark:border-[#2b2a27] dark:text-[#2b2a27] text-sm"
+              className="px-4 py-2 cursor-pointer rounded border-2 font-semibold  text-sm"
             >
               {loading
                 ? "Loading..."

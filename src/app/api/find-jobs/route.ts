@@ -1,10 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import OpenAI from "openai";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../../../lib/auth";  // Adjust path as needed
-import prisma from "../../../../lib/prisma";
+import { authOptions } from "../../../../lib/auth";
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 const JSEARCH_API_KEY = process.env.JSEARCH_API_KEY;
 const JSEARCH_API_HOST = "jsearch.p.rapidapi.com";
 
@@ -46,34 +43,16 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
-  });
+  const { query, city, country, page = 1 } = await req.json();
 
-  if (!user) {
-    return NextResponse.json({ error: "User not found" }, { status: 404 });
-  }
-
-  if (
-    user.generationLimit !== null && 
-    user.generationCount >= user.generationLimit
-  ) {
+  if (!query || !city || !country) {
     return NextResponse.json(
-      { error: "Generation limit reached" },
-      { status: 403 }
+      { error: "Missing query, city or country" },
+      { status: 400 }
     );
   }
 
   try {
-    const { resume, query, city, country, page = 1 } = await req.json();
-
-    if (!resume || !query || !city || !country) {
-      return NextResponse.json(
-        { error: "Missing resume, query, city or country" },
-        { status: 400 }
-      );
-    }
-
     const results = await fetchJobs(query, city, country, page);
 
     if (!results || results.length === 0) {
@@ -83,49 +62,15 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    const jobs = await Promise.all(
-      results.slice(0, 10).map(async (job: JobResult) => {
-        let parsed = { score: 1, explanation: "Could not evaluate" };
-
-        try {
-          const gptResponse = await openai.chat.completions.create({
-            model: "gpt-4",
-            messages: [
-              {
-                role: "system",
-                content:
-                  "You are a helpful assistant that scores how well a job description matches a user's resume on a scale of 1 to 10. Respond only with a JSON object: { \"score\": number, \"explanation\": string }",
-              },
-              {
-                role: "user",
-                content: `Resume:\n${resume}\n\nJob Description:\n${job.job_description}`,
-              },
-            ],
-          });
-
-          parsed = JSON.parse(gptResponse.choices[0]?.message.content || "{}");
-        } catch (err) {
-          console.error("OpenAI scoring error:", err);
-        }
-
-        return {
-          id: job.job_id,
-          title: job.job_title,
-          company: job.employer_name,
-          location: job.job_city || job.job_country || "Unknown",
-          description: job.job_description || "No description",
-          url: job.job_apply_link,
-          ...parsed,
-        };
-      })
-    );
-
-    await prisma.user.update({
-      where: { id: user.id },
-      data: {
-        generationCount: { increment: 1 },
-      },
-    });
+    // Map to your job object without scoring
+    const jobs = results.slice(0, 10).map((job: JobResult) => ({
+      id: job.job_id,
+      title: job.job_title,
+      company: job.employer_name,
+      location: job.job_city || job.job_country || "Unknown",
+      description: job.job_description || "No description",
+      url: job.job_apply_link,
+    }));
 
     return NextResponse.json({ jobs });
   } catch (err) {
