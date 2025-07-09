@@ -21,19 +21,17 @@ const FindJobsDemo = () => {
 
         {/* Explanation text */}
         <p className="max-w-xl  text-lg">
-          Explore real job listings from platforms like LinkedIn, Indeed, and
-          more.
+          Discover real jobs from top platforms like LinkedIn and Indeed.
         </p>
 
         <p className="max-w-xl  text-lg">
-          Each job includes detailed information—title, company, location,
-          estimated salary, relevant tags, and a personalized match score based
-          on your profile.
+          See key details — title, company, location, salary, tags, and compare
+          it to your CV.
         </p>
         <p className="max-w-xl  text-lg">
           {" "}
-          Once you find the right job, generate a tailored AI-powered cover
-          letter in one click and apply instantly.
+          Found the perfect job? Instantly generate an AI-powered cover letter
+          and apply.
         </p>
       </div>
 

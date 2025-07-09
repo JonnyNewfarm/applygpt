@@ -43,7 +43,7 @@ export default function CoverLetterList({ initialCoverLetters }: Props) {
   }
 
   return (
-    <section>
+    <section className="w-full">
       <h2 className="text-2xl font-semibold mb-4">Recent Cover Letters</h2>
       <ul className="space-y-16">
         {coverLetters.map((cl) => (
