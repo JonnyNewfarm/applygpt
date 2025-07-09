@@ -142,7 +142,13 @@ export default function CoverLetterClient() {
   }
 
   async function onDownload() {
-    if (!printRef.current) return;
+    if (!printRef.current || !editableRef.current) return;
+
+    const editedText = editableRef.current.innerText;
+    printRef.current.innerHTML = editedText
+      .split("\n")
+      .map((line) => `<p>${line}</p>`)
+      .join("");
 
     const html2canvas = (await import("html2canvas")).default;
     const jsPDF = (await import("jspdf")).default;
