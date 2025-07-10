@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Country, City } from "country-state-city";
 import toast from "react-hot-toast";
+import { set } from "date-fns";
 
 interface Job {
   id: string;
@@ -51,6 +52,9 @@ export default function FindJobsPage() {
   });
 
   const [matchingJobId, setMatchingJobId] = useState<string | null>(null);
+  const [textAreaSize, setTextAreaSize] = useState("250px");
+  const [textAreaState, setTextAreaSizeState] = useState(false);
+  const [textAreaTitle, setTextAreaSizeTitle] = useState("Show More");
 
   useEffect(() => {
     async function fetchResume() {
@@ -263,15 +267,33 @@ export default function FindJobsPage() {
     }
   }
 
+  useEffect(() => {
+    if (textAreaState === false) {
+      setTextAreaSize("250px");
+      setTextAreaSizeTitle("show more");
+    } else {
+      setTextAreaSize("650px");
+      setTextAreaSizeTitle("Show Less");
+    }
+  }, [textAreaState]);
+
+  const handleTextAreaState = () => {
+    if (textAreaState === false) {
+      setTextAreaSizeState(true);
+    } else {
+      setTextAreaSizeState(false);
+    }
+  };
+
   return (
     <div className="w-full min-h-screen flex flex-col justify-center bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4ed] dark:text-[#2b2a27]">
-      <div className="max-w-4xl mx-auto px-4 py-10">
-        <h1 className="text-3xl font-bold mb-6">
+      <div className="max-w-4xl h-full mx-auto px-4 py-10">
+        <h1 className="text-3xl h-full font-bold mb-6">
           Find Jobs That Match Your Resume
         </h1>
 
         <textarea
-          style={{ scrollbarWidth: "thin" }}
+          style={{ scrollbarWidth: "thin", height: textAreaSize }}
           value={resume}
           onChange={(e) => {
             setResume(e.target.value);
@@ -279,27 +301,32 @@ export default function FindJobsPage() {
           }}
           placeholder="Paste your resume here..."
           rows={8}
-          className="w-full border bg-[#ffffff] text-black border-gray-500 rounded p-2 mb-2"
+          className={`w-full  border bg-[#ffffff] text-black border-gray-500 rounded p-2 mb-2`}
         />
-        {!resumeSaved ? (
-          <button
-            onClick={onSaveResume}
-            disabled={!resume.trim()}
-            className="mt-1 mb-2 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
-          >
-            Save Resume
-          </button>
-        ) : (
-          <div className="mb-4 p-2">
-            <Link
-              className="mt-2 border-2 font-semibold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
-              href={"/profile"}
+        <div className="w-full flex justify-between items-center">
+          {!resumeSaved ? (
+            <button
+              onClick={onSaveResume}
+              disabled={!resume.trim()}
+              className="mt-1 mb-5 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
             >
-              Edit Resume
-            </Link>
-          </div>
-        )}
+              Save Resume
+            </button>
+          ) : (
+            <div className="mb-5 p-2">
+              <Link
+                className="mt-2 border-2 font-semibold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
+                href={"/profile"}
+              >
+                Edit Resume
+              </Link>
+            </div>
+          )}
 
+          <button className="mb-5 cursor-pointer" onClick={handleTextAreaState}>
+            {textAreaTitle}
+          </button>
+        </div>
         <input
           type="text"
           value={query}

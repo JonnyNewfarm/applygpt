@@ -22,6 +22,16 @@ export default function CoverLetterClient() {
   const [loadingDelete, setLoadingDelete] = useState(false);
   const [coverLetter, setCoverLetter] = useState("");
   const [resumeSaved, setResumeSaved] = useState(false);
+  const [textAreaSize, setTextAreaSize] = useState("200px");
+  const [textAreaState, setTextAreaSizeState] = useState(false);
+  const [textAreaTitle, setTextAreaSizeTitle] = useState("Show More");
+
+  const [textAreaSizeDescription, setTextAreaSizeDescription] =
+    useState("200px");
+  const [textAreaStateDescription, setTextAreaSizeStateDescription] =
+    useState(false);
+  const [textAreaTitleDescription, setTextAreaSizeTitleDescription] =
+    useState("Show More");
 
   const [usage, setUsage] = useState<{
     generationLimit: number | null;
@@ -133,6 +143,41 @@ export default function CoverLetterClient() {
     router.push("/profile");
   }
 
+  useEffect(() => {
+    if (textAreaState === false) {
+      setTextAreaSize("200px");
+      setTextAreaSizeTitle("show more");
+    } else {
+      setTextAreaSize("650px");
+      setTextAreaSizeTitle("Show Less");
+    }
+  }, [textAreaState]);
+
+  const handleTextAreaState = () => {
+    if (textAreaState === false) {
+      setTextAreaSizeState(true);
+    } else {
+      setTextAreaSizeState(false);
+    }
+  };
+
+  useEffect(() => {
+    if (textAreaStateDescription === false) {
+      setTextAreaSizeDescription("200px");
+      setTextAreaSizeTitleDescription("show more");
+    } else {
+      setTextAreaSizeDescription("650px");
+      setTextAreaSizeTitleDescription("Show Less");
+    }
+  }, [textAreaStateDescription]);
+
+  const handleTextAreaStateDescription = () => {
+    if (textAreaStateDescription === false) {
+      setTextAreaSizeStateDescription(true);
+    } else {
+      setTextAreaSizeStateDescription(false);
+    }
+  };
   function onCopy() {
     if (!editableRef.current) return;
     const text = editableRef.current.innerText;
@@ -184,28 +229,39 @@ export default function CoverLetterClient() {
             <div>
               <label className="block text-sm font-semibold mb-1">Resume</label>
               <textarea
+                style={{ height: textAreaSize }}
                 rows={6}
                 className="w-full p-3 border bg-white text-black"
                 value={resume}
                 onChange={(e) => setResume(e.target.value)}
                 placeholder="Paste your resume here..."
               />
-              {!resumeSaved ? (
+
+              <div className="flex justify-between items-center">
+                {!resumeSaved ? (
+                  <button
+                    onClick={onSaveResume}
+                    className="mt-2 border-2 px-3 cursor-pointer font-semibold py-1.5 rounded-[3px] text-sm border-[#f6f4ed] text-[#f6f4ed] dark:text-[#2b2a27] dark:border-[#2b2a27]  transform transition-transform duration-300 ease-in-out hover:scale-105"
+                    disabled={!resume.trim()}
+                  >
+                    Save Resume
+                  </button>
+                ) : (
+                  <button
+                    onClick={onEditResume}
+                    className="mt-2 border-2 px-3 cursor-pointer font-semibold py-1.5 rounded-[3px] text-sm border-[#f6f4ed] text-[#f6f4ed] dark:text-[#2b2a27] dark:border-[#2b2a27]  transform transition-transform duration-300 ease-in-out hover:scale-105"
+                  >
+                    Edit Resume
+                  </button>
+                )}
+
                 <button
-                  onClick={onSaveResume}
-                  className="mt-2 border-2 px-3 cursor-pointer font-semibold py-1.5 rounded-[3px] text-sm border-[#f6f4ed] text-[#f6f4ed] dark:text-[#2b2a27] dark:border-[#2b2a27]  transform transition-transform duration-300 ease-in-out hover:scale-105"
-                  disabled={!resume.trim()}
+                  className="cursor-pointer"
+                  onClick={handleTextAreaState}
                 >
-                  Save Resume
+                  {textAreaTitle}
                 </button>
-              ) : (
-                <button
-                  onClick={onEditResume}
-                  className="mt-2 border-2 px-3 cursor-pointer font-semibold py-1.5 rounded-[3px] text-sm border-[#f6f4ed] text-[#f6f4ed] dark:text-[#2b2a27] dark:border-[#2b2a27]  transform transition-transform duration-300 ease-in-out hover:scale-105"
-                >
-                  Edit Resume
-                </button>
-              )}
+              </div>
             </div>
 
             <div>
@@ -213,19 +269,29 @@ export default function CoverLetterClient() {
                 Job Description
               </label>
               <textarea
+                style={{ height: textAreaSizeDescription }}
                 rows={6}
                 className="w-full p-3 border rounded-[3px] bg-white text-black"
                 value={jobAd}
                 onChange={(e) => setJobAd(e.target.value)}
                 placeholder="Paste job description here..."
               />
-              <button
-                onClick={handleClearStorage}
-                className="mt-2 border-2 font-semibold px-3 py-1.5 cursor-pointer rounded-[3px] text-sm border-[#f6f4ed] dark:border-[#2b2a27]  text-[#f6f4ed] dark:text-[#2b2a27] transform transition-transform duration-300 ease-in-out hover:scale-105"
-                disabled={loadingDelete}
-              >
-                {loadingDelete ? "Deleting..." : "Clear description"}
-              </button>
+              <div className="flex justify-between items-center">
+                <button
+                  onClick={handleClearStorage}
+                  className="mt-2 border-2 font-semibold px-3 py-1.5 cursor-pointer rounded-[3px] text-sm border-[#f6f4ed] dark:border-[#2b2a27]  text-[#f6f4ed] dark:text-[#2b2a27] transform transition-transform duration-300 ease-in-out hover:scale-105"
+                  disabled={loadingDelete}
+                >
+                  {loadingDelete ? "Deleting..." : "Clear description"}
+                </button>
+
+                <button
+                  className="cursor-pointer"
+                  onClick={handleTextAreaStateDescription}
+                >
+                  {textAreaTitle}
+                </button>
+              </div>
             </div>
 
             <div>
