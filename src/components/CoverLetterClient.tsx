@@ -289,7 +289,7 @@ export default function CoverLetterClient() {
                   className="cursor-pointer"
                   onClick={handleTextAreaStateDescription}
                 >
-                  {textAreaTitle}
+                  {textAreaTitleDescription}
                 </button>
               </div>
             </div>
