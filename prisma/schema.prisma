@@ -22,11 +22,28 @@ model User {
   sessions Session[]
 
   // New relations
-  resume          Resume?
-  coverLetters    CoverLetter[]
-  usages          Usage[]
+  resume       Resume?
+  coverLetters CoverLetter[]
+  usages       Usage[]
+  savedJobs    SavedJob[]
+
   generationLimit Int? // null means unlimited
-  generationCount Int           @default(0)
+  generationCount Int  @default(0)
+}
+
+model SavedJob {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  jobId       String
+  title       String
+  company     String
+  location    String
+  url         String
+  description String
+  savedAt     DateTime @default(now())
+
+  @@unique([userId, jobId]) // Prevent saving same job twice
 }
 
 model Account {

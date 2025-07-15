@@ -34,6 +34,8 @@ export default function FindJobsPage() {
   const [jobsCache, setJobsCache] = useState<Record<number, Job[]>>({});
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(false);
+  const [savingJobId, setSavingJobId] = useState<string | null>(null);
+
   const [error, setError] = useState("");
   const [page, setPage] = useState(1);
   const [expandedDescriptions, setExpandedDescriptions] = useState<
@@ -79,6 +81,28 @@ export default function FindJobsPage() {
     fetchResume();
     fetchUsage();
   }, []);
+
+  async function saveJob(job: Job) {
+    try {
+      setSavingJobId(job.id);
+      const res = await fetch("/api/saved-jobs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ job }),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.error || "Failed to save job.");
+      } else {
+        toast.success("Job saved!");
+      }
+    } catch {
+      toast.error("Failed to save job.");
+    } finally {
+      setSavingJobId(null);
+    }
+  }
 
   async function onSaveResume() {
     try {
@@ -416,6 +440,7 @@ export default function FindJobsPage() {
                     ? job.description
                     : truncateText(job.description, 200)}
                 </p>
+
                 {job.description.length > 200 && (
                   <button
                     onClick={() => toggleExpandDescription(job.id)}
@@ -427,15 +452,24 @@ export default function FindJobsPage() {
               </div>
               <div className="w-full relative  bottom-2 mt-5">
                 {job.score === undefined ? (
-                  <button
-                    disabled={matchingJobId === job.id}
-                    onClick={() => matchJobToResume(job)}
-                    className="mt-2 border-2 px-3 opacity-80 cursor-pointer font-semibold py-1.5 rounded-[3px] text-sm text-[#2b2a27]border-[#2b2a27]  transform transition-transform duration-300 ease-in-out hover:scale-105"
-                  >
-                    {matchingJobId === job.id
-                      ? "Matching..."
-                      : "Match to Resume"}
-                  </button>
+                  <div className="flex w-full justify-between flex-row-reverse">
+                    <button
+                      onClick={() => saveJob(job)}
+                      disabled={savingJobId === job.id}
+                      className="mt-2 cursor-pointer  text-sm px-3 py-1.5 rounded-[3px] border border-gray-400 text-black hover:bg-gray-100 transition"
+                    >
+                      {savingJobId === job.id ? "Saving..." : "Save"}
+                    </button>
+                    <button
+                      disabled={matchingJobId === job.id}
+                      onClick={() => matchJobToResume(job)}
+                      className="mt-2  border-2 px-3 opacity-80 cursor-pointer font-semibold py-1.5 rounded-[3px] text-sm text-[#2b2a27]border-[#2b2a27]  transform transition-transform duration-300 ease-in-out hover:scale-105"
+                    >
+                      {matchingJobId === job.id
+                        ? "Matching..."
+                        : "Match to Resume"}
+                    </button>
+                  </div>
                 ) : (
                   <div className="mt-2   p-2 rounded">
                     {job.score !== undefined && (

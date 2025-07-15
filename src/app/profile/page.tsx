@@ -2,9 +2,10 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../../../lib/auth";
 import prisma from "../../../lib/prisma";
 import ResumeForm from "../../components/ResumeForm";
-import CoverLetterList from "../../components/CoverLetterList";
-import { Metadata } from "next";
 import SubscriptionSection from "@/components/SubscriptionSection";
+import ProfileTabs from "../../components/ProfileTabs"; // ✅ Client component for toggle logic
+import { Metadata } from "next";
+
 export const metadata: Metadata = {
   title: "Your Profile – Manage Resumes and Cover Letters",
   description:
@@ -26,6 +27,7 @@ export const metadata: Metadata = {
 
 export default async function ProfilePage() {
   const session = await getServerSession(authOptions);
+
   if (!session?.user?.email)
     return (
       <div className="flex bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4ed] dark:text-[#2b2a27] items-center justify-center min-h-screen font-semibold">
@@ -58,15 +60,15 @@ export default async function ProfilePage() {
 
   return (
     <div className="w-full min-h-screen flex justify-center bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4ed] dark:text-[#2b2a27] border-b-white/80 border-b dark:border-b-black/80">
-      <main className="w-[90%]  mx-auto p-6 md:p-12 rounded-[3px] mb-10 mt-12">
+      <main className="w-[90%] mx-auto p-6 md:p-12 rounded-[3px] mb-10 mt-12">
         <h1 className="text-3xl font-semibold mb-6 border-b-[1px] border-[#f6f4ed] dark:border-[#2b2a27] pb-2">
           Profile
         </h1>
 
+        {/* ✅ Profile Details */}
         <section className="mb-8">
           <h2 className="text-xl font-semibold mb-2">Profile Details</h2>
-
-          <p className=" mb-1 flex flex-col">
+          <p className="mb-1 flex flex-col">
             <span className="font-semibold">Name:</span> {user.name || "N/A"}
           </p>
           <p className="flex flex-col">
@@ -81,9 +83,8 @@ export default async function ProfilePage() {
           <ResumeForm resume={user.resume?.content || ""} />
         </section>
 
-        {user.coverLetters.length > 0 && (
-          <CoverLetterList initialCoverLetters={serializedCoverLetters} />
-        )}
+        {/* ✅ Client component handles tab switching */}
+        <ProfileTabs serializedCoverLetters={serializedCoverLetters} />
       </main>
     </div>
   );

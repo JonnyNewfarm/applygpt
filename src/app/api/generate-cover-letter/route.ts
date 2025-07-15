@@ -32,7 +32,7 @@ export async function POST(req: Request) {
   }
 
   if (
-    user.generationLimit !== null && 
+    user.generationLimit !== null &&
     user.generationCount >= user.generationLimit
   ) {
     return NextResponse.json(
@@ -76,6 +76,23 @@ Cover Letter:
         user: { connect: { id: user.id } },
       },
     });
+
+    const coverLetterCount = await prisma.coverLetter.count({
+      where: { userId: user.id },
+    });
+
+    if (coverLetterCount >= 5) {
+      const oldest = await prisma.coverLetter.findFirst({
+        where: { userId: user.id },
+        orderBy: { createdAt: "asc" },
+      });
+
+      if (oldest) {
+        await prisma.coverLetter.delete({
+          where: { id: oldest.id },
+        });
+      }
+    }
 
     await prisma.coverLetter.create({
       data: {
