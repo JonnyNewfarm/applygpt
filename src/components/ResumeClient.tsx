@@ -15,6 +15,9 @@ export default function ResumeClient() {
     address: "",
     experience: "",
     skills: "",
+    phoneNumber: "", // ✅ NEW
+    email: "", // ✅ NEW
+    links: "", // ✅ NEW (e.g., LinkedIn, Portfolio, GitHub)
   });
 
   const [generatedResume, setGeneratedResume] = useState("");
@@ -164,7 +167,7 @@ export default function ResumeClient() {
 
   return (
     <div className="w-full bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4ed] dark:text-[#2b2a27] min-h-screen">
-      <main className="max-w-4xl  mx-auto p-4 md:p-8">
+      <main className="max-w-4xl mx-auto p-4 md:p-8">
         <h1 className="text-2xl font-bold mb-2">Resume Generator</h1>
 
         <p className="mb-2">
@@ -187,6 +190,9 @@ export default function ResumeClient() {
             { label: "Country", field: "country" },
             { label: "City", field: "city" },
             { label: "Address", field: "address" },
+            { label: "Phone Number (optional)", field: "phoneNumber" }, // ✅ NEW
+            { label: "Email (optional)", field: "email" }, // ✅ NEW
+            { label: "Links (optional, e.g., LinkedIn)", field: "links" }, // ✅ NEW
             { label: "Work Experience & Education", field: "experience" },
             { label: "Skills", field: "skills" },
           ].map(({ label, field }) => (

@@ -105,7 +105,7 @@ const HeroSection = () => {
           <div className="mt-2">
             <MagneticComp>
               <Link
-                className=" border-[#f6f4ed] py-2 px-3 mt-3 dark:border-[#2b2a27] border-2 text-lg font-semibold whitespace-nowrap"
+                className=" border-[#f6f4ed] py-2 px-3 mt-3 rounded-[3px] dark:border-[#2b2a27] border-2 text-lg font-semibold whitespace-nowrap"
                 href={"/register"}
               >
                 Get Started

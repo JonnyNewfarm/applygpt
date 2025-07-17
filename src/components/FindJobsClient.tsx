@@ -124,7 +124,7 @@ export default function FindJobsPage() {
   }
 
   const fetchJobs = async (pageToLoad: number) => {
-    if (!resume || !query || !city || !selectedCountryCode) {
+    if (!query || !city || !selectedCountryCode) {
       toast("Please fill in all fields.");
       return;
     }

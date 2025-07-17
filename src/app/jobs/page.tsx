@@ -28,17 +28,17 @@ export default async function FindJobsPage() {
   if (!session) {
     return (
       <div className="p-20 bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4ed] dark:text-[#2b2a27] min-h-screen">
-        <p>Please sign in to access the job finder ai.</p>
+        <p className="text-lg">Please sign in to access the job finder ai.</p>
         <div className="mt-4 flex items-center gap-x-4">
           <Link
-            className="mt-2 border dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]"
+            className="mt-2 border-2 font-bold dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]"
             href={"/signin"}
           >
             Sign in
           </Link>
           <h1 className="text-sm">OR</h1>
           <Link
-            className="mt-2 border dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]"
+            className="mt-2 border-2 font-bold dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]"
             href={"/register"}
           >
             Register
