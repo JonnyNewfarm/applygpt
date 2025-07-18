@@ -358,26 +358,29 @@ export default function FindJobsPage() {
           className="w-full border border-gray-500 bg-white text-black rounded p-2 mb-2"
         />
 
-        <input
-          type="text"
-          value={country}
-          onChange={(e) => handleCountryInput(e.target.value)}
-          placeholder="Country"
-          className="w-full border border-gray-500 bg-white text-black rounded p-2 mb-2"
-        />
-        {countrySuggestions.length > 0 && (
-          <ul className="bg-white text-black border border-gray-500 rounded mb-2 max-h-40 overflow-y-auto">
-            {countrySuggestions.map((c) => (
-              <li
-                key={c.isoCode}
-                onClick={() => handleSelectCountry(c)}
-                className="p-2 cursor-pointer hover:bg-gray-100"
-              >
-                {c.name}
-              </li>
-            ))}
-          </ul>
-        )}
+        <div className="relative">
+          <input
+            type="text"
+            value={country}
+            onChange={(e) => handleCountryInput(e.target.value)}
+            placeholder="Country"
+            className="w-full border border-gray-500 bg-white text-black rounded p-2 mb-2"
+            style={{ height: "40px" }}
+          />
+          {countrySuggestions.length > 0 && (
+            <ul className="absolute w-full bg-white text-black border border-gray-500 rounded mt-1 max-h-40 overflow-y-auto">
+              {countrySuggestions.map((c) => (
+                <li
+                  key={c.isoCode}
+                  onClick={() => handleSelectCountry(c)}
+                  className="p-2 cursor-pointer hover:bg-gray-100"
+                >
+                  {c.name}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
 
         <input
           type="text"

@@ -3,6 +3,14 @@
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function BuyAccessButton() {
   const router = useRouter();
@@ -23,27 +31,37 @@ export default function BuyAccessButton() {
   }
 
   return (
-    <div className="flex flex-col items-start">
-      <label>
-        <select
-          className="border px-2 py-2 cursor-pointer w-full"
-          value={plan}
-          onChange={(e) => setPlan(e.target.value)}
-        >
-          <option className="bg-white text-black" value="basic">
-            $15/month – basic | 100 generations
-          </option>
-          <option className="bg-white text-black" value="pro">
-            $25/month – pro | 200 generations
-          </option>
-          <option className="bg-white text-black" value="unlimited">
-            $40/month – Unlimited
-          </option>
-        </select>
-      </label>
+    <div className="flex flex-col items-start space-y-4 w-full max-w-sm">
+      <Select value={plan} onValueChange={setPlan}>
+        <SelectTrigger className="w-full">
+          <SelectValue placeholder="Select a plan" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectItem
+              value="basic"
+              className="bg-white text-black cursor-pointer hover:bg-black hover:text-white"
+            >
+              $15/month – basic | 100 generations
+            </SelectItem>
+            <SelectItem
+              value="pro"
+              className="bg-white w-full cursor-pointer text-black hover:bg-black hover:text-white"
+            >
+              $25/month – pro | 200 generations
+            </SelectItem>
+            <SelectItem
+              value="unlimited"
+              className="bg-white cursor-pointer text-black hover:bg-black hover:text-white"
+            >
+              $40/month – Unlimited
+            </SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
 
       <button
-        className="mt-4 border-2 font-semibold px-3 py-1.5 rounded-[3px] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
+        className="border-2 font-semibold px-3 py-1.5 rounded-[3px] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105 w-full"
         onClick={handleSubscribe}
       >
         Subscribe for Access
