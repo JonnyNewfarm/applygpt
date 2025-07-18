@@ -50,14 +50,8 @@ export async function POST(req: Request) {
     customerId = customer.id;
   }
 
-  const existingSubscriptions = await stripe.subscriptions.list({
-    customer: customerId,
-    status: "active",
-  });
-
-  if (existingSubscriptions.data.length > 0) {
-    await stripe.subscriptions.cancel(existingSubscriptions.data[0].id);
-  }
+  // ✅ DO NOT cancel old subscriptions here anymore.
+  // This is now handled in the webhook after payment confirmation.
 
   const stripeSession = await stripe.checkout.sessions.create({
     customer: customerId,

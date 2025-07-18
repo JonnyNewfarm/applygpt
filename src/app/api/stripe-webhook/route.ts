@@ -50,7 +50,58 @@ export async function POST(req: NextRequest) {
         break;
       }
 
-      case "customer.subscription.created":
+      case "customer.subscription.created": {
+        const subscription = event.data.object as Stripe.Subscription;
+        const customerId = subscription.customer as string;
+
+        const user = await prisma.user.findFirst({
+          where: { stripeCustomerId: customerId },
+        });
+
+        if (!user) {
+          console.warn(`⚠️ No user found for Stripe customer ID: ${customerId}`);
+          break;
+        }
+
+        // ✅ Cancel any previous active subscription except the new one
+        const existingSubscriptions = await stripe.subscriptions.list({
+          customer: customerId,
+          status: "active",
+        });
+
+        for (const sub of existingSubscriptions.data) {
+          if (sub.id !== subscription.id) {
+            await stripe.subscriptions.cancel(sub.id);
+            console.log(`✅ Cancelled old subscription ${sub.id} for ${user.email}`);
+          }
+        }
+
+        const priceId = subscription.items.data[0].price.id;
+        const generationLimit = validPriceIds[priceId];
+
+        if (generationLimit === undefined) {
+          console.warn(`⚠️ Unknown Stripe price ID: ${priceId}`);
+          return new Response("Unknown price ID", { status: 400 });
+        }
+
+        const isActive = subscription.status === "active";
+
+        await prisma.user.update({
+          where: { id: user.id },
+          data: {
+            subscriptionStatus: subscription.status,
+            hasPaid: isActive,
+            generationLimit,
+            generationCount: 0,
+          },
+        });
+
+        console.log(
+          `✅ Updated user ${user.email}: hasPaid=${isActive}, limit=${generationLimit}`
+        );
+        break;
+      }
+
       case "customer.subscription.updated": {
         const subscription = event.data.object as Stripe.Subscription;
         const customerId = subscription.customer as string;
@@ -84,7 +135,9 @@ export async function POST(req: NextRequest) {
           },
         });
 
-        console.log(`✅ Updated user ${user.email}: hasPaid=${isActive}, limit=${generationLimit}`);
+        console.log(
+          `✅ Updated user ${user.email}: hasPaid=${isActive}, limit=${generationLimit}`
+        );
         break;
       }
 

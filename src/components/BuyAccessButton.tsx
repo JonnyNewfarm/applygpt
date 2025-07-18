@@ -8,7 +8,6 @@ export default function BuyAccessButton() {
   const router = useRouter();
   const { data: session } = useSession();
   const [plan, setPlan] = useState("basic");
-  const [showConfirm, setShowConfirm] = useState(false);
 
   async function handleSubscribe() {
     if (!session?.user?.email) return;
@@ -44,34 +43,11 @@ export default function BuyAccessButton() {
       </label>
 
       <button
-        className="mt-4 border-2 font-semibold  px-3 py-1.5 rounded-[3px] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
-        onClick={() => setShowConfirm(true)}
+        className="mt-4 border-2 font-semibold px-3 py-1.5 rounded-[3px] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
+        onClick={handleSubscribe}
       >
         Subscribe for Access
       </button>
-
-      {showConfirm && (
-        <div className="mt-3 border border-gray-300 bg-white text-black p-4 max-w-sm">
-          <p className="mb-3">
-            ⚠️ By continuing, your current subscription will be automatically
-            canceled and replaced with the new one.
-          </p>
-          <div className="flex gap-3">
-            <button
-              className="bg-dark cursor-pointer text-white px-3 py-2 rounded-[3px]"
-              onClick={handleSubscribe}
-            >
-              Continue
-            </button>
-            <button
-              className="bg-gray-200 cursor-pointer px-3 py-2 rounded-[3px]"
-              onClick={() => setShowConfirm(false)}
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
