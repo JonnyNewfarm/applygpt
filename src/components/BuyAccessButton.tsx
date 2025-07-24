@@ -15,7 +15,7 @@ import {
 export default function BuyAccessButton() {
   const router = useRouter();
   const { data: session } = useSession();
-  const [plan, setPlan] = useState("basic");
+  const [plan, setPlan] = useState("sale");
 
   async function handleSubscribe() {
     if (!session?.user?.email) return;
@@ -39,11 +39,12 @@ export default function BuyAccessButton() {
         <SelectContent>
           <SelectGroup>
             <SelectItem
-              value="basic"
-              className="bg-white text-black cursor-pointer hover:bg-black hover:text-white"
+              value="sale"
+              className="bg-white  cursor-pointer text-black hover:bg-black hover:text-white"
             >
-              $15/month – basic | 100 generations
+              $9.99/month – SALE | 100 generations
             </SelectItem>
+
             <SelectItem
               value="pro"
               className="bg-white w-full cursor-pointer text-black hover:bg-black hover:text-white"

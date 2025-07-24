@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Country, City } from "country-state-city";
 import toast from "react-hot-toast";
@@ -19,6 +19,7 @@ interface Job {
 export default function FindJobsPage() {
   const [resume, setResume] = useState("");
   const [resumeSaved, setResumeSaved] = useState(false);
+  const [resumeLoading, setResumeLoading] = useState(true);
   const [query, setQuery] = useState("");
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
@@ -56,14 +57,21 @@ export default function FindJobsPage() {
   const [textAreaSize, setTextAreaSize] = useState("250px");
   const [textAreaState, setTextAreaSizeState] = useState(false);
   const [textAreaTitle, setTextAreaSizeTitle] = useState("Show More");
+  const [showNoResumePopup, setShowNoResumePopup] = useState(false);
+
+  const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
 
   useEffect(() => {
     async function fetchResume() {
-      const res = await fetch("/api/resume");
-      if (res.ok) {
-        const data = await res.json();
-        setResume(data.content || "");
-        if (data.content) setResumeSaved(true);
+      try {
+        const res = await fetch("/api/resume");
+        if (res.ok) {
+          const data = await res.json();
+          setResume(data.content || "");
+          if (data.content) setResumeSaved(true);
+        }
+      } finally {
+        setResumeLoading(false);
       }
     }
 
@@ -254,7 +262,7 @@ export default function FindJobsPage() {
 
   async function matchJobToResume(job: Job) {
     if (!resumeSaved) {
-      toast.error("Please save your resume before matching.");
+      setShowNoResumePopup(true);
       return;
     }
     setMatchingJobId(job.id);
@@ -315,35 +323,94 @@ export default function FindJobsPage() {
           Find Jobs That Match Your Resume
         </h1>
 
-        <textarea
-          style={{ scrollbarWidth: "thin", height: textAreaSize }}
-          value={resume}
-          onChange={(e) => {
-            setResume(e.target.value);
-            setResumeSaved(false);
-          }}
-          placeholder="Paste your resume here..."
-          rows={8}
-          className={`w-full  border bg-[#ffffff] text-black border-gray-500 rounded p-2 mb-2`}
-        />
-        <div className="w-full flex justify-between items-center">
+        {showNoResumePopup && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-white text-black p-6 rounded shadow-md max-w-sm w-full">
+              <p className="mb-4">
+                You need to create or upload a resume first.
+              </p>
+              <Link
+                href="/resume-generator"
+                className="inline-block bg-stone-900 text-white px-4 py-2 rounded mr-3"
+              >
+                Create Resume
+              </Link>
+              <button
+                onClick={() => setShowNoResumePopup(false)}
+                className="inline-block cursor-pointer bg-gray-400 text-white px-4 py-2 rounded"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
+
+        <div className="relative w-full">
+          <textarea
+            ref={textAreaRef}
+            style={{ scrollbarWidth: "thin", height: textAreaSize }}
+            value={resume}
+            onChange={(e) => {
+              setResume(e.target.value);
+              setResumeSaved(false);
+            }}
+            placeholder="Paste your resume here..."
+            rows={8}
+            className="w-full border bg-[#ffffff] text-black border-gray-500 rounded p-2 mb-2"
+          />
+
+          {!resume && !resumeLoading && (
+            <div className="absolute top-0 left-0 w-full h-full bg-stone-200 text-black/90   flex items-center justify-center z-10">
+              <div className="md:p-20 font-thin  p-5 text-[17px] text-lg flex flex-col gap-y-2">
+                <p>
+                  Create or upload your resume to get personalized job matches.
+                </p>
+
+                <p>
+                  {" "}
+                  Prefer to do it later? No problem – you can still browse and
+                  search for jobs anytime.
+                </p>
+
+                <div className="flex justify-between">
+                  <Link
+                    className="bg-stone-800 text-lg font-semibold border border-white text-white py-1 px-3 rounded-[4px]"
+                    href={"/resume-generator"}
+                  >
+                    Create Resume
+                  </Link>
+                  <button
+                    className="border-black cursor-pointer font-semibold text-lg border-2 py-1 px-3 rounded-[4px]"
+                    onClick={() => {
+                      setResume(" ");
+                      setTimeout(() => textAreaRef.current?.focus(), 50);
+                    }}
+                  >
+                    Paste
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="w-full mt-2 flex justify-between items-center">
           {!resumeSaved ? (
             <button
               onClick={onSaveResume}
               disabled={!resume.trim()}
-              className="mt-1 mb-5 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
+              className=" mb-5 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
             >
               Save Resume
             </button>
           ) : (
-            <div className="mb-5 p-2">
-              <Link
-                className="mt-2 border-2 font-semibold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
-                href={"/profile"}
-              >
-                Edit Resume
-              </Link>
-            </div>
+            <button
+              onClick={() => {
+                setTimeout(() => textAreaRef.current?.focus(), 50);
+              }}
+              className=" mb-5 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
+            >
+              Edit Resume
+            </button>
           )}
 
           <button className="mb-5 cursor-pointer" onClick={handleTextAreaState}>
@@ -454,19 +521,21 @@ export default function FindJobsPage() {
                 )}
               </div>
               <div className="w-full relative  bottom-2 mt-5">
+                <div className="flex w-full mx-0 p-0 my-0  justify-start items-center">
+                  <button
+                    onClick={() => saveJob(job)}
+                    disabled={savingJobId === job.id}
+                    className="mt-2 mb-2  bg-stone-500 text-white px-3  cursor-pointer font-semibold   py-1.5 rounded-[3px] text-sm    transform transition-transform duration-300 ease-in-out hover:scale-105"
+                  >
+                    {savingJobId === job.id ? "Saving..." : "Save"}
+                  </button>
+                </div>
                 {job.score === undefined ? (
-                  <div className="flex w-full justify-between flex-row-reverse">
-                    <button
-                      onClick={() => saveJob(job)}
-                      disabled={savingJobId === job.id}
-                      className="mt-2 cursor-pointer  text-sm px-3 py-1.5 rounded-[3px] border border-gray-400 text-black hover:bg-gray-100 transition"
-                    >
-                      {savingJobId === job.id ? "Saving..." : "Save"}
-                    </button>
+                  <div className="">
                     <button
                       disabled={matchingJobId === job.id}
                       onClick={() => matchJobToResume(job)}
-                      className="mt-2  border-2 px-3 opacity-80 cursor-pointer font-semibold py-1.5 rounded-[3px] text-sm text-[#2b2a27]border-[#2b2a27]  transform transition-transform duration-300 ease-in-out hover:scale-105"
+                      className="mt-2 mb-2 bg-stone-600 text-white px-3  cursor-pointer font-semibold py-1.5 rounded-[3px] text-sm    transform transition-transform duration-300 ease-in-out hover:scale-105"
                     >
                       {matchingJobId === job.id
                         ? "Matching..."
@@ -505,13 +574,13 @@ export default function FindJobsPage() {
                   href={job.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-2 border-2 px-3 opacity-80 cursor-pointer font-semibold py-1.5 rounded-[3px] text-sm text-[#2b2a27]border-[#2b2a27]  transform transition-transform duration-300 ease-in-out hover:scale-105"
+                  className="mt-2 border-2 px-3 opacity-80 cursor-pointer font-semibold py-1.5 rounded-[3px] text-md text-[#2b2a27]border-[#2b2a27]  transform transition-transform duration-300 ease-in-out hover:scale-105"
                 >
                   Apply
                 </a>
                 <button
                   onClick={() => handleCreateCoverLetter(job)}
-                  className="mt-2   bg-[#38302c] border-2 px-3 cursor-pointer font-semibold py-1.5 rounded-[3px] text-sm text-white/95 border-[#2b2a27]  transform transition-transform duration-300 ease-in-out hover:scale-105"
+                  className="mt-2   bg-[#38302c] border-2 px-3 cursor-pointer font-semibold py-1.5 rounded-[3px] text-md text-white/95 border-[#2b2a27]  transform transition-transform duration-300 ease-in-out hover:scale-105"
                 >
                   Create Cover Letter
                 </button>

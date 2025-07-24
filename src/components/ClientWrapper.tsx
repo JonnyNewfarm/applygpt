@@ -1,14 +1,20 @@
 "use client";
 import { useEffect, useState } from "react";
 import ResumeClient from "./ResumeClient";
+import ResumeUploadPopUp from "./ResumeUploadPopUp";
+import ResumeForm from "./ResumeForm";
 
-function ResumeClientWrapper() {
+interface Props {
+  resume: string;
+}
+
+function ResumeClientWrapper({ resume }: Props) {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
       setIsMounted(true);
-    }, 1000); // simulate delay, or set to 0 if not needed
+    }, 500); // reduce delay to make UX smoother
     return () => clearTimeout(timeout);
   }, []);
 
@@ -22,7 +28,14 @@ function ResumeClientWrapper() {
     );
   }
 
-  return <ResumeClient />;
+  return (
+    <>
+      <ResumeUploadPopUp>
+        <ResumeForm resume={resume} />
+      </ResumeUploadPopUp>
+      <ResumeClient />
+    </>
+  );
 }
 
 export default ResumeClientWrapper;

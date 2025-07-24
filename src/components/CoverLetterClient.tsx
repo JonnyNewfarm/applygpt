@@ -15,6 +15,8 @@ export default function CoverLetterClient() {
   const company = localStorage.getItem("company") as string;
   const url = localStorage.getItem("url") as string;
 
+  const resumeRef = useRef<HTMLTextAreaElement>(null);
+
   const [resume, setResume] = useState("");
   const [jobAd, setJobAd] = useState("");
   const [tone, setTone] = useState("professional");
@@ -25,6 +27,7 @@ export default function CoverLetterClient() {
   const [textAreaSize, setTextAreaSize] = useState("200px");
   const [textAreaState, setTextAreaSizeState] = useState(false);
   const [textAreaTitle, setTextAreaSizeTitle] = useState("Show More");
+  const [resumeLoading, setResumeLoading] = useState(true);
 
   const [textAreaSizeDescription, setTextAreaSizeDescription] =
     useState("200px");
@@ -40,6 +43,8 @@ export default function CoverLetterClient() {
     generationLimit: null,
     generationCount: 0,
   });
+
+  const [showOverlay, setShowOverlay] = useState(false);
 
   const handleClearStorage = async () => {
     setLoadingDelete(true);
@@ -64,11 +69,23 @@ export default function CoverLetterClient() {
 
   useEffect(() => {
     async function fetchResume() {
-      const res = await fetch("/api/resume");
-      if (res.ok) {
-        const data = await res.json();
-        setResume(data.content || "");
-        if (data.content) setResumeSaved(true);
+      setResumeLoading(true); // start loading
+      try {
+        const res = await fetch("/api/resume");
+        if (res.ok) {
+          const data = await res.json();
+          setResume(data.content || "");
+          if (data.content) {
+            setResumeSaved(true);
+            setShowOverlay(false);
+          } else {
+            setShowOverlay(true);
+          }
+        } else {
+          setShowOverlay(true);
+        }
+      } finally {
+        setResumeLoading(false); // finish loading
       }
     }
 
@@ -133,15 +150,19 @@ export default function CoverLetterClient() {
         toast(data.error || "Error saving resume");
       } else {
         setResumeSaved(true);
+        setShowOverlay(false);
+        toast("Resume Saved");
       }
     } catch {
       toast("Failed to save resume");
     }
   }
 
-  function onEditResume() {
-    router.push("/profile");
-  }
+  useEffect(() => {
+    if (!resume.trim()) {
+      setShowOverlay(true);
+    }
+  }, [resume]);
 
   useEffect(() => {
     if (textAreaState === false) {
@@ -154,11 +175,7 @@ export default function CoverLetterClient() {
   }, [textAreaState]);
 
   const handleTextAreaState = () => {
-    if (textAreaState === false) {
-      setTextAreaSizeState(true);
-    } else {
-      setTextAreaSizeState(false);
-    }
+    setTextAreaSizeState(!textAreaState);
   };
 
   useEffect(() => {
@@ -172,12 +189,9 @@ export default function CoverLetterClient() {
   }, [textAreaStateDescription]);
 
   const handleTextAreaStateDescription = () => {
-    if (textAreaStateDescription === false) {
-      setTextAreaSizeStateDescription(true);
-    } else {
-      setTextAreaSizeStateDescription(false);
-    }
+    setTextAreaSizeStateDescription(!textAreaStateDescription);
   };
+
   function onCopy() {
     if (!editableRef.current) return;
     const text = editableRef.current.innerText;
@@ -218,7 +232,7 @@ export default function CoverLetterClient() {
     usage.generationCount >= usage.generationLimit;
 
   return (
-    <div className="w-full min-h-screen border-b-white/20 dark:border-b-black/20  bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4ed] dark:text-[#2b2a27]">
+    <div className="w-full min-h-screen border-b-white/20 dark:border-b-black/20 bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4ed] dark:text-[#2b2a27]">
       <main className="max-w-7xl bg-light mx-auto p-4 md:p-8">
         <h1 className="text-2xl font-bold mb-6 text-center md:text-left">
           Cover Letter Generator
@@ -226,35 +240,71 @@ export default function CoverLetterClient() {
 
         <div className="flex flex-col md:flex-row gap-8">
           <div className="w-full md:w-1/2 space-y-4">
-            <div>
+            <div className="relative">
               <label className="block text-sm font-semibold mb-1">Resume</label>
               <textarea
+                ref={resumeRef}
                 style={{ height: textAreaSize }}
                 rows={6}
-                className="w-full p-3 border bg-white text-black"
+                className="w-full p-3 border bg-white text-black relative"
                 value={resume}
-                onChange={(e) => setResume(e.target.value)}
+                onChange={(e) => {
+                  setResume(e.target.value);
+                  setResumeSaved(false); // 👈 This will force the button to show "Save Resume" after typing
+                }}
                 placeholder="Paste your resume here..."
               />
+              {!resumeLoading && showOverlay && (
+                <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-stone-200 text-black/90   z-10">
+                  <div className="p-5 md:p-20 flex flex-col justify-center items-c">
+                    <p className=" font-semibold mb-4">
+                      Create or upload your resume to start generating a
+                      tailored cover letter.
+                    </p>
+                    <div className="flex gap-4">
+                      <button
+                        onClick={() => router.push("/resume-generator")}
+                        className="inline-block font-bold cursor-pointer bg-stone-900 text-white px-4 py-2 rounded mr-3"
+                      >
+                        Create Resume
+                      </button>
+                      <button
+                        onClick={() => {
+                          setShowOverlay(false);
+                          setTimeout(() => {
+                            resumeRef.current?.focus();
+                          }, 0);
+                        }}
+                        className=" cursor-pointer font-semibold text-lg border-2 py-1 px-3 rounded-[4px]"
+                      >
+                        Paste
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
 
-              <div className="flex justify-between items-center">
+              <div className="flex justify-between items-center mt-2">
                 {!resumeSaved ? (
                   <button
                     onClick={onSaveResume}
-                    className="mt-2 border-2 px-3 cursor-pointer font-semibold py-1.5 rounded-[3px] text-sm border-[#f6f4ed] text-[#f6f4ed] dark:text-[#2b2a27] dark:border-[#2b2a27]  transform transition-transform duration-300 ease-in-out hover:scale-105"
+                    className="mt-1 mb-5 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
                     disabled={!resume.trim()}
                   >
                     Save Resume
                   </button>
                 ) : (
                   <button
-                    onClick={onEditResume}
-                    className="mt-2 border-2 px-3 cursor-pointer font-semibold py-1.5 rounded-[3px] text-sm border-[#f6f4ed] text-[#f6f4ed] dark:text-[#2b2a27] dark:border-[#2b2a27]  transform transition-transform duration-300 ease-in-out hover:scale-105"
+                    onClick={() => {
+                      setTimeout(() => {
+                        resumeRef.current?.focus();
+                      }, 0);
+                    }}
+                    className="mt-1 mb-5 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
                   >
                     Edit Resume
                   </button>
                 )}
-
                 <button
                   className="cursor-pointer"
                   onClick={handleTextAreaState}
@@ -264,6 +314,7 @@ export default function CoverLetterClient() {
               </div>
             </div>
 
+            {/* Job Description */}
             <div>
               <label className="block text-sm font-semibold mb-1">
                 Job Description
@@ -279,12 +330,11 @@ export default function CoverLetterClient() {
               <div className="flex justify-between items-center">
                 <button
                   onClick={handleClearStorage}
-                  className="mt-2 border-2 font-semibold px-3 py-1.5 cursor-pointer rounded-[3px] text-sm border-[#f6f4ed] dark:border-[#2b2a27]  text-[#f6f4ed] dark:text-[#2b2a27] transform transition-transform duration-300 ease-in-out hover:scale-105"
+                  className="mt-2 border-2 font-semibold px-3 py-1.5 cursor-pointer rounded-[3px] text-sm border-[#f6f4ed] dark:border-[#2b2a27] text-[#f6f4ed] dark:text-[#2b2a27] transform transition-transform duration-300 ease-in-out hover:scale-105"
                   disabled={loadingDelete}
                 >
                   {loadingDelete ? "Deleting..." : "Clear description"}
                 </button>
-
                 <button
                   className="cursor-pointer"
                   onClick={handleTextAreaStateDescription}
@@ -294,6 +344,7 @@ export default function CoverLetterClient() {
               </div>
             </div>
 
+            {/* Tone */}
             <div>
               <label className="block text-sm font-medium mb-1">Tone</label>
               <select
@@ -308,6 +359,7 @@ export default function CoverLetterClient() {
               </select>
             </div>
 
+            {/* Usage and Generate */}
             <div>
               <p className="text-sm mb-2">
                 {usage.generationLimit === null
@@ -333,10 +385,10 @@ export default function CoverLetterClient() {
                 <button
                   onClick={onGenerate}
                   disabled={loading || !resume || !jobAd}
-                  className={`mt-4 w-full py-3 rounded-[3px] border-2 px-3 text-sm border-[#f6f4ed]  dark:text-[#2b2a27]  text-[#f6f4ed] dark:border-[#2b2a27] font-semibold transform transition-transform duration-300 ease-in-out hover:scale-105 ${
+                  className={`mt-4 w-full py-3 rounded-[3px] border-2 px-3 text-sm border-[#f6f4ed] dark:text-[#2b2a27] text-[#f6f4ed] dark:border-[#2b2a27] font-semibold transform transition-transform duration-300 ease-in-out hover:scale-105 ${
                     loading
-                      ? " cursor-not-allowed"
-                      : " hover:opacity-80 cursor-pointer"
+                      ? "cursor-not-allowed"
+                      : "hover:opacity-80 cursor-pointer"
                   }`}
                 >
                   {coverLetter
@@ -351,13 +403,15 @@ export default function CoverLetterClient() {
             </div>
           </div>
 
+          {/* Generated Cover Letter */}
           <div className="w-full md:w-1/2 mb-10">
             <h2 className="text-xl font-semibold mb-2">
               Generated Cover Letter
             </h2>
+            <p>Your coverletter will apper here after you click generate.</p>
 
             {loading ? (
-              <div className="mt-8 animate-pulse flex gap-x-4 items-center ">
+              <div className="mt-8 animate-pulse flex gap-x-4 items-center">
                 <div className="h-2 w-2 bg-white/80 dark:bg-black/80 rounded-full"></div>
                 <div className="h-2 w-2 bg-white/80 dark:bg-black/80 rounded-full"></div>
                 <div className="h-2 w-2 bg-white/80 dark:bg-black/80 rounded-full"></div>
@@ -412,19 +466,9 @@ export default function CoverLetterClient() {
                     top: "-9999px",
                     left: "-9999px",
                   }}
-                  dangerouslySetInnerHTML={{
-                    __html: coverLetter
-                      .split("\n")
-                      .map((line) => `<p>${line}</p>`)
-                      .join(""),
-                  }}
                 />
               </>
-            ) : (
-              <p className="text-[#f6f4ed] dark:text-[#2b2a27] text-sm">
-                Your cover letter will appear here once generated.
-              </p>
-            )}
+            ) : null}
           </div>
         </div>
       </main>

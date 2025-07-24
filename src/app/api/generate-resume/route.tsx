@@ -23,8 +23,18 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
 
-  const { name, jobTitle, country, city, address, experience, skills } =
-    await req.json();
+  const {
+    name,
+    jobTitle,
+    country,
+    city,
+    address,
+    experience,
+    skills,
+    phoneNumber,
+    email,
+    links,
+  } = await req.json();
 
   if (!name || !jobTitle || !experience) {
     return NextResponse.json(
@@ -44,15 +54,23 @@ export async function POST(req: Request) {
   }
 
   const prompt = `
-Create a professional resume for the following person:
-
 Name: ${name}
 Job Title: ${jobTitle}
 Location: ${address}, ${city}, ${country}
+Phone: ${phoneNumber}
+Email: ${email}
+Links: ${links}
+
 Work Experience: ${experience}
 Skills: ${skills}
 
-Format it clearly with sections like Summary, Experience, Skills, and Education. Use bullet points and keep it concise.
+Format the resume in plain text only.
+- Keep the name and job title in normal capitalization (do NOT convert to uppercase).
+- Write section titles in UPPERCASE (SUMMARY, EXPERIENCE, SKILLS, EDUCATION).
+- Do NOT use asterisks, stars, or Markdown.
+- Use bullet points with "-" for lists.
+- Keep it clean and professional.
+
 `;
 
   try {

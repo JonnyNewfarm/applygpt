@@ -8,11 +8,12 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2025-05-28.basil",
 });
 
-const validPlans = ["basic", "pro", "unlimited"];
+const validPlans = ["basic", "pro", "unlimited", "sale"];
 const priceMap: Record<string, string> = {
   basic: process.env.STRIPE_BASIC_PRICE_ID_NEW!,
   pro: process.env.STRIPE_PRO_PRICE_ID_NEW!,
   unlimited: process.env.STRIPE_UNLIMITED_PRICE_ID_NEW!,
+   sale: process.env.STRIPE_SALE_PRICE_ID!,
 };
 
 export async function POST(req: Request) {

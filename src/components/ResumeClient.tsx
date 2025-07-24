@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import BuyAccessButton from "../components/BuyAccessButton";
 import ManageSubscriptionButton from "../components/ManageSubscriptionButton";
-import Link from "next/link";
 import toast from "react-hot-toast";
 
 export default function ResumeClient() {
@@ -15,9 +14,9 @@ export default function ResumeClient() {
     address: "",
     experience: "",
     skills: "",
-    phoneNumber: "", // ✅ NEW
-    email: "", // ✅ NEW
-    links: "", // ✅ NEW (e.g., LinkedIn, Portfolio, GitHub)
+    phoneNumber: "",
+    email: "",
+    links: "",
   });
 
   const [generatedResume, setGeneratedResume] = useState("");
@@ -50,7 +49,6 @@ export default function ResumeClient() {
         });
       }
     }
-
     fetchUsage();
   }, []);
 
@@ -61,21 +59,18 @@ export default function ResumeClient() {
   async function onGenerate() {
     setIsGenerating(true);
     setGeneratedResume("");
-
     try {
       const res = await fetch("/api/generate-resume", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
-
       const data = await res.json();
 
       if (!res.ok) {
         toast(data.error || "Error generating resume");
       } else {
         setGeneratedResume(data.resume);
-
         const usageRes = await fetch("/api/usage");
         if (usageRes.ok) {
           const usageData = await usageRes.json();
@@ -88,7 +83,6 @@ export default function ResumeClient() {
     } catch {
       toast("Something went wrong");
     }
-
     setIsGenerating(false);
   }
 
@@ -101,14 +95,11 @@ export default function ResumeClient() {
 
   const handleSave = async () => {
     if (!editableRef.current) return;
-
     const content = editableRef.current.innerText.trim();
-
     if (!content) {
       toast("Resume is empty");
       return;
     }
-
     setIsSaving(true);
     try {
       await fetch("/api/resume", {
@@ -145,7 +136,6 @@ export default function ResumeClient() {
     tempDiv.style.top = "-9999px";
     tempDiv.style.left = "-9999px";
     tempDiv.innerText = editableRef.current.innerText;
-
     document.body.appendChild(tempDiv);
 
     const canvas = await html2canvas(tempDiv, {
@@ -155,7 +145,6 @@ export default function ResumeClient() {
 
     const imgData = canvas.toDataURL("image/jpeg", 1.0);
     const pdf = new jsPDF("p", "mm", "a4");
-
     const pdfWidth = pdf.internal.pageSize.getWidth();
     const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
@@ -167,21 +156,8 @@ export default function ResumeClient() {
 
   return (
     <div className="w-full bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4ed] dark:text-[#2b2a27] min-h-screen">
-      <main className="max-w-4xl mx-auto p-4 md:p-8">
-        <h1 className="text-2xl font-bold mb-2">Resume Generator</h1>
-
-        <p className="mb-2">
-          Already have a resume? Save it in your profile page.
-        </p>
-        <div className="mb-7">
-          <Link
-            className="mt-2 border-2 font-bold cursor-pointer dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] transform transition-transform duration-300 ease-in-out hover:scale-105"
-            href={"/profile"}
-          >
-            Upload
-          </Link>
-          <h1 className="-mb-2.5 mt-10 font-semibold">Or generate a resume:</h1>
-        </div>
+      <main className="max-w-4xl mx-auto p-4 md:px-8">
+        <h1 className="mb-2  font-semibold">Or generate a resume:</h1>
 
         <div className="space-y-4 mb-6">
           {[
@@ -190,9 +166,9 @@ export default function ResumeClient() {
             { label: "Country", field: "country" },
             { label: "City", field: "city" },
             { label: "Address", field: "address" },
-            { label: "Phone Number (optional)", field: "phoneNumber" }, // ✅ NEW
-            { label: "Email (optional)", field: "email" }, // ✅ NEW
-            { label: "Links (optional, e.g., LinkedIn)", field: "links" }, // ✅ NEW
+            { label: "Phone Number (optional)", field: "phoneNumber" },
+            { label: "Email (optional)", field: "email" },
+            { label: "Links (optional, e.g., LinkedIn)", field: "links" },
             { label: "Work Experience & Education", field: "experience" },
             { label: "Skills", field: "skills" },
           ].map(({ label, field }) => (

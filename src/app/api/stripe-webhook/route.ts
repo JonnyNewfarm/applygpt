@@ -10,6 +10,7 @@ const validPriceIds = {
   [process.env.STRIPE_BASIC_PRICE_ID_NEW!]: 100,
   [process.env.STRIPE_PRO_PRICE_ID_NEW!]: 200,
   [process.env.STRIPE_UNLIMITED_PRICE_ID_NEW!]: null,
+  [process.env.STRIPE_SALE_PRICE_ID!]: 100,
 };
 
 export async function POST(req: NextRequest) {

@@ -1,5 +1,4 @@
 import BuyAccessButton from "@/components/BuyAccessButton";
-import FreeTierNotice from "@/components/FreeTierNotice";
 import prisma from "../../../lib/prisma";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
@@ -56,6 +55,17 @@ export default async function CoverLetterPage() {
     where: { email: session.user.email! },
   });
 
+  const hasResume = await prisma.user.findUnique({
+    where: { email: session.user.email! },
+    include: {
+      resume: true,
+      coverLetters: {
+        orderBy: { createdAt: "desc" },
+        take: 10,
+      },
+    },
+  });
+
   if (!user) {
     return (
       <div className="bg-[#2b2a27] min-h-screen text-[#f6f4ed] dark:bg-[#f6f4ed] dark:text-[#2b2a27]">
@@ -63,9 +73,6 @@ export default async function CoverLetterPage() {
       </div>
     );
   }
-
-  const isFreeTier =
-    !user.subscriptionStatus || user.subscriptionStatus === "free";
 
   const canGenerate =
     user.hasPaid ||
@@ -87,9 +94,8 @@ export default async function CoverLetterPage() {
   }
 
   return (
-    <div className="w-full min-h-screen bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4ed] dark:text-[#2b2a27] border-b border-b-white/20 dark:border-b-black/20">
-      {isFreeTier && <FreeTierNotice />}
-      <ResumeClientWrapper />
+    <div className="w-full min-h-screen flex-col flex justify-center items-center bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4ed] dark:text-[#2b2a27] border-b border-b-white/20 dark:border-b-black/20">
+      <ResumeClientWrapper resume={hasResume?.resume?.content || ""} />
     </div>
   );
 }
