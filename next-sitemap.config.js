@@ -1,8 +1,13 @@
-/** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: 'https://jobscriptor.com',
+  siteUrl: 'https://www.jobscriptor.com',
   generateRobotsTxt: true,
-  sitemapSize: 7000,
-  changefreq: 'daily',
-  priority: 0.7,
+
+  additionalPaths: async () => {
+    return [
+      { loc: '/resume-generator', lastmod: new Date().toISOString() },
+      { loc: '/cover-letter', lastmod: new Date().toISOString() },
+      { loc: '/jobs', lastmod: new Date().toISOString() },
+      { loc: '/profile', lastmod: new Date().toISOString() },
+    ];
+  },
 };

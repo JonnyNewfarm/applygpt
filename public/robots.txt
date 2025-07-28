@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://jobscriptor.com
+Host: https://www.jobscriptor.com
 
 # Sitemaps
-Sitemap: https://jobscriptor.com/sitemap.xml
+Sitemap: https://www.jobscriptor.com/sitemap.xml
