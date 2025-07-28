@@ -54,7 +54,7 @@ export default function FindJobsPage() {
   });
 
   const [matchingJobId, setMatchingJobId] = useState<string | null>(null);
-  const [textAreaSize, setTextAreaSize] = useState("250px");
+  const [textAreaSize, setTextAreaSize] = useState("180px");
   const [textAreaState, setTextAreaSizeState] = useState(false);
   const [textAreaTitle, setTextAreaSizeTitle] = useState("Show More");
   const [showNoResumePopup, setShowNoResumePopup] = useState(false);
@@ -300,7 +300,7 @@ export default function FindJobsPage() {
 
   useEffect(() => {
     if (textAreaState === false) {
-      setTextAreaSize("250px");
+      setTextAreaSize("180px");
       setTextAreaSizeTitle("show more");
     } else {
       setTextAreaSize("650px");
@@ -393,7 +393,7 @@ export default function FindJobsPage() {
             </div>
           )}
         </div>
-        <div className="w-full mt-2 flex justify-between items-center">
+        <div className="w-full flex justify-between items-center">
           {!resumeSaved ? (
             <button
               onClick={onSaveResume}
@@ -413,7 +413,10 @@ export default function FindJobsPage() {
             </button>
           )}
 
-          <button className="mb-5 cursor-pointer" onClick={handleTextAreaState}>
+          <button
+            className="mb-5 cursor-pointer  dark:text-black"
+            onClick={handleTextAreaState}
+          >
             {textAreaTitle}
           </button>
         </div>
@@ -483,7 +486,7 @@ export default function FindJobsPage() {
           <button
             onClick={handleFindJobs}
             disabled={loading}
-            className="mt-4 w-full cursor-pointer py-3 rounded-[3px] border-2 dark:border-[#2b2a27] px-3 border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] font-bold transform transition-transform duration-300 ease-in-out hover:scale-105"
+            className="mt-3 w-full cursor-pointer py-3 rounded-[3px] border-[3px] uppercase dark:border-[#2b2a27] px-3 border-[#f6f4ed] text-lg text-[#f6f4ed] dark:text-[#2b2a27] font-bold transform transition-transform duration-300 ease-in-out hover:scale-105"
           >
             {loading ? "Searching..." : "Find Jobs"}
           </button>

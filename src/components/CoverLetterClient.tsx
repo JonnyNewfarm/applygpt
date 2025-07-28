@@ -24,13 +24,13 @@ export default function CoverLetterClient() {
   const [loadingDelete, setLoadingDelete] = useState(false);
   const [coverLetter, setCoverLetter] = useState("");
   const [resumeSaved, setResumeSaved] = useState(false);
-  const [textAreaSize, setTextAreaSize] = useState("200px");
+  const [textAreaSize, setTextAreaSize] = useState("150px");
   const [textAreaState, setTextAreaSizeState] = useState(false);
   const [textAreaTitle, setTextAreaSizeTitle] = useState("Show More");
   const [resumeLoading, setResumeLoading] = useState(true);
 
   const [textAreaSizeDescription, setTextAreaSizeDescription] =
-    useState("200px");
+    useState("150px");
   const [textAreaStateDescription, setTextAreaSizeStateDescription] =
     useState(false);
   const [textAreaTitleDescription, setTextAreaSizeTitleDescription] =
@@ -166,7 +166,7 @@ export default function CoverLetterClient() {
 
   useEffect(() => {
     if (textAreaState === false) {
-      setTextAreaSize("200px");
+      setTextAreaSize("150px");
       setTextAreaSizeTitle("show more");
     } else {
       setTextAreaSize("650px");
@@ -180,7 +180,7 @@ export default function CoverLetterClient() {
 
   useEffect(() => {
     if (textAreaStateDescription === false) {
-      setTextAreaSizeDescription("200px");
+      setTextAreaSizeDescription("150px");
       setTextAreaSizeTitleDescription("show more");
     } else {
       setTextAreaSizeDescription("650px");
@@ -250,7 +250,7 @@ export default function CoverLetterClient() {
                 value={resume}
                 onChange={(e) => {
                   setResume(e.target.value);
-                  setResumeSaved(false); // 👈 This will force the button to show "Save Resume" after typing
+                  setResumeSaved(false);
                 }}
                 placeholder="Paste your resume here..."
               />
@@ -314,7 +314,6 @@ export default function CoverLetterClient() {
               </div>
             </div>
 
-            {/* Job Description */}
             <div>
               <label className="block text-sm font-semibold mb-1">
                 Job Description
@@ -385,7 +384,7 @@ export default function CoverLetterClient() {
                 <button
                   onClick={onGenerate}
                   disabled={loading || !resume || !jobAd}
-                  className={`mt-4 w-full py-3 rounded-[3px] border-2 px-3 text-sm border-[#f6f4ed] dark:text-[#2b2a27] text-[#f6f4ed] dark:border-[#2b2a27] font-semibold transform transition-transform duration-300 ease-in-out hover:scale-105 ${
+                  className={`mt-3 w-full cursor-pointer py-3 rounded-[3px] border-[3px] uppercase dark:border-[#2b2a27] px-3 border-[#f6f4ed] text-lg text-[#f6f4ed] dark:text-[#2b2a27] font-bold  transform transition-transform duration-300 ease-in-out hover:scale-105 ${
                     loading
                       ? "cursor-not-allowed"
                       : "hover:opacity-80 cursor-pointer"

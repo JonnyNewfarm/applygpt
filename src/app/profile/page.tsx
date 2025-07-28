@@ -3,7 +3,7 @@ import { authOptions } from "../../../lib/auth";
 import prisma from "../../../lib/prisma";
 import ResumeForm from "../../components/ResumeForm";
 import SubscriptionSection from "@/components/SubscriptionSection";
-import ProfileTabs from "../../components/ProfileTabs"; // ✅ Client component for toggle logic
+import ProfileTabs from "../../components/ProfileTabs";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -65,7 +65,6 @@ export default async function ProfilePage() {
           Profile
         </h1>
 
-        {/* ✅ Profile Details */}
         <section className="mb-8">
           <h2 className="text-xl font-semibold mb-2">Profile Details</h2>
           <p className="mb-1 flex flex-col">
@@ -83,7 +82,6 @@ export default async function ProfilePage() {
           <ResumeForm resume={user.resume?.content || ""} />
         </section>
 
-        {/* ✅ Client component handles tab switching */}
         <ProfileTabs serializedCoverLetters={serializedCoverLetters} />
       </main>
     </div>

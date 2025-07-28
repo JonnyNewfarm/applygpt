@@ -213,7 +213,7 @@ export default function ResumeClient() {
             disabled={
               isGenerating || !form.name || !form.jobTitle || !form.experience
             }
-            className={`mt-4 w-full py-3 cursor-pointer rounded-[3px] border-2 dark:border-[#2b2a27] px-3 border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] font-semibold transform transition-transform duration-300 ease-in-out hover:scale-105  ${
+            className={`mt-3 w-full cursor-pointer py-3 rounded-[3px] border-[3px] uppercase dark:border-[#2b2a27] px-3 border-[#f6f4ed] text-lg text-[#f6f4ed] dark:text-[#2b2a27] font-bold transform transition-transform duration-300 ease-in-out hover:scale-105  ${
               isGenerating ? "cursor-not-allowed" : "hover:opacity-80"
             }`}
           >

@@ -29,8 +29,17 @@ export default function Navbar() {
       <nav className="w-full bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4ed] dark:text-[#2b2a27]  g-[#f6f4ed]  sticky top-0 left-0 z-50">
         <div className="max-w-7xl mx-auto flex items-center justify-between py-4 px-6 md:px-14">
           <h2>
-            <Link href="/" className="font-bold text-2xl cursor-pointer">
-              JobScriptor
+            <Link
+              href="/"
+              className="font-bold text-2xl items-center gap-x-1.5 flex  cursor-pointer"
+            >
+              <img
+                src="logo-dark.png"
+                className="w-6 h-6 hidden dark:block"
+                alt=""
+              />{" "}
+              <img src="logo.png" className="w-5 h-5  dark:hidden" alt="" />{" "}
+              <p>Job Scriptor</p>
             </Link>
           </h2>
 

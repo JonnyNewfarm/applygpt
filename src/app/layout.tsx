@@ -6,7 +6,6 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import Footer from "@/components/Footer";
 import { Toaster } from "react-hot-toast";
 
-// Import both fonts
 const montserrat = Montserrat({
   subsets: ["latin"],
   variable: "--font-m",

@@ -5,11 +5,11 @@ import GenerateResumeDemo from "@/components/home/ResumeDemo";
 import SmoothScroll from "@/components/SmoothScroll";
 import { Metadata } from "next";
 import React from "react";
+
 export const metadata: Metadata = {
-  title:
-    "AI Career Tools – Create Resumes, Cover Letters & Find Jobs Instantly",
+  title: "Create Resumes & Cover Letters, Find Jobs Instantly",
   description:
-    "Boost your job hunt with our AI-powered tools. Instantly generate tailored resumes and cover letters, and search for jobs worldwide in one place.",
+    "All-in-one AI tools to build resumes, write tailored cover letters, and discover job opportunities from top platforms like LinkedIn, Indeed, and more — fast.",
   icons: {
     icon: "/og-image.png",
   },

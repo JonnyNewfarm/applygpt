@@ -74,7 +74,7 @@ const HeroSection = () => {
       className={`min-h-screen   bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4ed] dark:text-[#2b2a27] items-center w-full flex justify-center px-6 sm:px-20`}
     >
       <div className="mb-16 w-full text-left  h-full  flex flex-col sm:gap-y-6 gap-y-2 ">
-        <h1 className="sm:text-3xl   uppercase text-2xl  font-bold">
+        <h1 className="sm:text-3xl md:text-4xl   uppercase text-2xl  font-bold">
           Simplify Job Searching
         </h1>
         <div className="w-full h-[1px] mb-[5px] hidden sm:block relative">
@@ -93,20 +93,20 @@ const HeroSection = () => {
           </svg>
         </div>
 
-        <div className="flex flex-col gap-y-2">
+        <div className="flex flex-col gap-y-3 md:gap-y-1">
           <div className="md:text-xl text-[15px] lg:text-2xl sm:text-lg">
             <p>
-              All-in-one AI tools to create resumes, write cover letters, and
-              find jobs — fast
+              All-in-one AI tools to build resumes, write tailored cover
+              letters, and discover job opportunities from top platforms like
+              LinkedIn, Indeed, and more — fast.
             </p>
-            <p>Sign up and get started in seconds.</p>
           </div>
 
-          <div className="mt-2">
+          <div className="mt-4">
             <MagneticComp>
               <Link
-                className=" border-[#f6f4ed] py-2 px-3 mt-3 rounded-[3px] dark:border-[#2b2a27] border-2 text-lg font-semibold whitespace-nowrap"
-                href={"/register"}
+                className=" py-2 px-3.5 mt-3  bg-[#f6f4ed] text-[black] rounded-[3px] dark:bg-[#2b2a27] dark:text-[#f6f4ed] text-lg  md:text-xl  font-semibold whitespace-nowrap"
+                href={"/jobs"}
               >
                 Get Started
               </Link>
