@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import CoverLetterClientModal from "./CoverLetterClientModal";
 import { IoMdClose } from "react-icons/io";
 import { jobTitleList } from "../../lib/jobTitleSuggestions";
+import { FaCheck } from "react-icons/fa6";
 
 interface Job {
   id: string;
@@ -23,6 +24,7 @@ export default function FindJobsPage() {
   const [showCoverLetterModal, setShowCoverLetterModal] = useState(false);
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
   const [jobTitleSuggestions, setJobTitleSuggestions] = useState<string[]>([]);
+  const [savedJobs, setSavedJobs] = useState<Set<string>>(new Set());
 
   const [resume, setResume] = useState("");
   const [resumeSaved, setResumeSaved] = useState(false);
@@ -86,6 +88,20 @@ export default function FindJobsPage() {
   }, []);
 
   useEffect(() => {
+    async function fetchSavedJobs() {
+      try {
+        const res = await fetch("/api/saved-jobs");
+        if (res.ok) {
+          const data = await res.json();
+          const savedJobIds = new Set(
+            (data.jobs as Job[]).map((job) => job.id)
+          );
+          setSavedJobs(savedJobIds);
+        }
+      } catch (error) {
+        console.error("Failed to fetch saved jobs:", error);
+      }
+    }
     async function fetchResume() {
       try {
         const res = await fetch("/api/resume");
@@ -111,6 +127,7 @@ export default function FindJobsPage() {
     }
 
     fetchResume();
+    fetchSavedJobs();
     fetchUsage();
   }, []);
 
@@ -128,6 +145,7 @@ export default function FindJobsPage() {
         toast.error(data.error || "Failed to save job.");
       } else {
         toast.success("Job saved!");
+        setSavedJobs((prev) => new Set(prev).add(job.id)); // ✅ Add job to saved
       }
     } catch {
       toast.error("Failed to save job.");
@@ -560,10 +578,18 @@ export default function FindJobsPage() {
                   <h2 className="text-xl font-semibold">{job.title}</h2>
                   <button
                     onClick={() => saveJob(job)}
-                    disabled={savingJobId === job.id}
-                    className="border-2 px-2 opacity-80 cursor-pointer font-semibold py-1.5 rounded-[3px] text-sm text-[#2b2a27]border-[#2b2a27]  transform transition-transform duration-300 ease-in-out hover:scale-105"
+                    disabled={savingJobId === job.id || savedJobs.has(job.id)}
+                    className="border-2 px-2 opacity-80 cursor-pointer font-semibold py-1.5 rounded-[3px] text-sm text-[#2b2a27] border-[#2b2a27] transform transition-transform duration-300 ease-in-out hover:scale-105"
                   >
-                    {savingJobId === job.id ? "Saving..." : "Save"}
+                    {savingJobId === job.id ? (
+                      <p>Saving..</p>
+                    ) : savedJobs.has(job.id) ? (
+                      <p className="flex items-center gap-x-2">
+                        Saved <FaCheck />{" "}
+                      </p>
+                    ) : (
+                      <p>Save</p>
+                    )}
                   </button>
                 </div>
                 <p className="text-gray-700">
