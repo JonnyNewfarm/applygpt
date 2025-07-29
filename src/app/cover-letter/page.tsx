@@ -21,6 +21,10 @@ export const metadata: Metadata = {
       },
     ],
   },
+  other: {
+    keywords:
+      "AI cover letter generator, create cover letter with AI, personalized job application, cover letter tool, jobscriptor AI",
+  },
 };
 
 export default async function CoverLetterPage() {

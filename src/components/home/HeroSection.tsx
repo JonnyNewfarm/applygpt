@@ -121,7 +121,9 @@ const HeroSection = () => {
             </Link>
           </MagneticComp>
           <MagneticComp>
-            <Link href={"/jobs"}>Find jobs</Link>
+            <Link href={"/jobs"}>
+              <h1>Find jobs</h1>
+            </Link>
           </MagneticComp>
         </div>
       </div>

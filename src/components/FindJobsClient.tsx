@@ -4,6 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Country, City } from "country-state-city";
 import toast from "react-hot-toast";
+import CoverLetterClientModal from "./CoverLetterClientModal";
+import { IoMdClose } from "react-icons/io";
+import { jobTitleList } from "../../lib/jobTitleSuggestions";
 
 interface Job {
   id: string;
@@ -17,6 +20,10 @@ interface Job {
 }
 
 export default function FindJobsPage() {
+  const [showCoverLetterModal, setShowCoverLetterModal] = useState(false);
+  const [selectedJob, setSelectedJob] = useState<Job | null>(null);
+  const [jobTitleSuggestions, setJobTitleSuggestions] = useState<string[]>([]);
+
   const [resume, setResume] = useState("");
   const [resumeSaved, setResumeSaved] = useState(false);
   const [resumeLoading, setResumeLoading] = useState(true);
@@ -60,6 +67,23 @@ export default function FindJobsPage() {
   const [showNoResumePopup, setShowNoResumePopup] = useState(false);
 
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
+  const jobTitleRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (
+        jobTitleRef.current &&
+        !jobTitleRef.current.contains(e.target as Node)
+      ) {
+        setJobTitleSuggestions([]);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
     async function fetchResume() {
@@ -244,10 +268,8 @@ export default function FindJobsPage() {
   };
 
   const handleCreateCoverLetter = (job: Job) => {
-    localStorage.setItem("jobDescription", job.description);
-    localStorage.setItem("company", job.company);
-    localStorage.setItem("url", job.url);
-    window.open("/cover-letter", "_blank");
+    setSelectedJob(job);
+    setShowCoverLetterModal(true);
   };
 
   const isCachedPage = !!jobsCache[page + 1];
@@ -339,7 +361,7 @@ export default function FindJobsPage() {
                 onClick={() => setShowNoResumePopup(false)}
                 className="inline-block cursor-pointer bg-gray-400 text-white px-4 py-2 rounded"
               >
-                Close
+                <IoMdClose />
               </button>
             </div>
           </div>
@@ -420,25 +442,54 @@ export default function FindJobsPage() {
             {textAreaTitle}
           </button>
         </div>
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Job title (e.g. frontend developer)"
-          className="w-full border border-gray-500 bg-white text-black rounded p-2 mb-2"
-        />
+        <div ref={jobTitleRef} className="relative">
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => {
+              const val = e.target.value;
+              setQuery(val);
 
-        <div className="relative">
+              if (val.length > 0) {
+                const filtered = jobTitleList.filter((title) =>
+                  title.toLowerCase().includes(val.toLowerCase())
+                );
+                setJobTitleSuggestions(filtered);
+              } else {
+                setJobTitleSuggestions([]);
+              }
+            }}
+            placeholder="Job title (e.g. frontend developer)"
+            className="w-full border relative border-gray-500 bg-white text-black rounded p-2 mb-4"
+          />
+          {jobTitleSuggestions.length > 0 && (
+            <ul className="bg-white absolute z-50 w-full text-black border border-gray-500 rounded mb-4 max-h-40 ">
+              {jobTitleSuggestions.map((title, idx) => (
+                <li
+                  key={idx}
+                  onClick={() => {
+                    setQuery(title);
+                    setJobTitleSuggestions([]);
+                  }}
+                  className="p-2 cursor-pointer hover:bg-gray-100"
+                >
+                  {title}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        <div className="relative m-0">
           <input
             type="text"
             value={country}
             onChange={(e) => handleCountryInput(e.target.value)}
             placeholder="Country"
-            className="w-full border border-gray-500 bg-white text-black rounded p-2 mb-2"
-            style={{ height: "40px" }}
+            className="w-full border relative border-gray-500 bg-white text-black rounded p-2 mb-4"
           />
           {countrySuggestions.length > 0 && (
-            <ul className="absolute w-full bg-white text-black border border-gray-500 rounded mt-1 max-h-40 overflow-y-auto">
+            <ul className="bg-white top-12 z-50 absolute w-full text-black border border-gray-500 rounded mb-4 max-h-40 overflow-y-auto">
               {countrySuggestions.map((c) => (
                 <li
                   key={c.isoCode}
@@ -452,29 +503,31 @@ export default function FindJobsPage() {
           )}
         </div>
 
-        <input
-          type="text"
-          value={city}
-          onChange={(e) => handleCityInput(e.target.value)}
-          placeholder="City"
-          className="w-full border border-gray-500 bg-white text-black rounded p-2 mb-4"
-        />
-        {citySuggestions.length > 0 && (
-          <ul className="bg-white text-black border border-gray-500 rounded mb-4 max-h-40 overflow-y-auto">
-            {citySuggestions.map((c, i) => (
-              <li
-                key={i}
-                onClick={() => {
-                  setCity(c);
-                  setCitySuggestions([]);
-                }}
-                className="p-2 cursor-pointer hover:bg-gray-100"
-              >
-                {c}
-              </li>
-            ))}
-          </ul>
-        )}
+        <div className="relative">
+          <input
+            type="text"
+            value={city}
+            onChange={(e) => handleCityInput(e.target.value)}
+            placeholder="City"
+            className="w-full border relative border-gray-500 bg-white text-black rounded p-2 mb-4"
+          />
+          {citySuggestions.length > 0 && (
+            <ul className="bg-white absolute w-full text-black border border-gray-500 rounded mb-4 max-h-40 overflow-y-auto">
+              {citySuggestions.map((c, i) => (
+                <li
+                  key={i}
+                  onClick={() => {
+                    setCity(c);
+                    setCitySuggestions([]);
+                  }}
+                  className="p-2 cursor-pointer hover:bg-gray-100"
+                >
+                  {c}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
 
         <div>
           <p className="text-sm mb-2">
@@ -500,10 +553,19 @@ export default function FindJobsPage() {
           {jobs.map((job) => (
             <div
               key={job.id}
-              className="border relative h-full bg-white text-black flex flex-col justify-start items-start border-gray-300 rounded-[3px] p-4"
+              className="border relative h-full w-full bg-white text-black flex flex-col justify-start items-start border-gray-300 rounded-[3px] p-4"
             >
               <div className="h-full w-full">
-                <h2 className="text-xl font-semibold">{job.title}</h2>
+                <div className="flex w-full justify-between gap-x-4 items-start">
+                  <h2 className="text-xl font-semibold">{job.title}</h2>
+                  <button
+                    onClick={() => saveJob(job)}
+                    disabled={savingJobId === job.id}
+                    className="border-2 px-2 opacity-80 cursor-pointer font-semibold py-1.5 rounded-[3px] text-sm text-[#2b2a27]border-[#2b2a27]  transform transition-transform duration-300 ease-in-out hover:scale-105"
+                  >
+                    {savingJobId === job.id ? "Saving..." : "Save"}
+                  </button>
+                </div>
                 <p className="text-gray-700">
                   {job.company} — {job.location}
                 </p>
@@ -517,22 +579,14 @@ export default function FindJobsPage() {
                 {job.description.length > 200 && (
                   <button
                     onClick={() => toggleExpandDescription(job.id)}
-                    className="dark underline text-sm cursor-pointer hover:opacity-90 mt-1"
+                    className="dark underline text-sm font-semibold cursor-pointer hover:opacity-90 mt-1"
                   >
                     {expandedDescriptions[job.id] ? "Show less" : "Read more"}
                   </button>
                 )}
               </div>
+
               <div className="w-full relative  bottom-2 mt-5">
-                <div className="flex w-full mx-0 p-0 my-0  justify-start items-center">
-                  <button
-                    onClick={() => saveJob(job)}
-                    disabled={savingJobId === job.id}
-                    className="mt-2 mb-2  bg-stone-500 text-white px-3  cursor-pointer font-semibold   py-1.5 rounded-[3px] text-sm    transform transition-transform duration-300 ease-in-out hover:scale-105"
-                  >
-                    {savingJobId === job.id ? "Saving..." : "Save"}
-                  </button>
-                </div>
                 {job.score === undefined ? (
                   <div className="">
                     <button
@@ -560,7 +614,7 @@ export default function FindJobsPage() {
                         {job.explanation.length > 200 && (
                           <button
                             onClick={() => toggleExpandExplanation(job.id)}
-                            className="underline text-sm cursor-pointer hover:opacity-90 mt-1"
+                            className="underline font-semibold text-sm cursor-pointer hover:opacity-90 mt-1"
                           >
                             {expandedExplanations[job.id]
                               ? "Show less"
@@ -572,6 +626,7 @@ export default function FindJobsPage() {
                   </div>
                 )}
               </div>
+
               <div className="flex flex-row-reverse items-center justify-between w-full relative left-auto right-auto bottom-6 mt-5">
                 <a
                   href={job.url}
@@ -615,6 +670,23 @@ export default function FindJobsPage() {
           </div>
         )}
       </div>
+
+      {showCoverLetterModal && selectedJob && (
+        <div className="fixed inset-0 p-5 md:p-10 bg-black/80 z-50 flex items-center justify-center">
+          <div
+            style={{ scrollbarWidth: "none" }}
+            className="w-full h-full rounded-[6px] bg-white overflow-auto relative"
+          >
+            <button
+              className="absolute  text-white  text-3xl md:text-5xl cursor-pointer dark:text-black top-4 right-4   z-50"
+              onClick={() => setShowCoverLetterModal(false)}
+            >
+              <IoMdClose strokeWidth={16} />
+            </button>
+            <CoverLetterClientModal job={selectedJob} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

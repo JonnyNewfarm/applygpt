@@ -6,21 +6,30 @@ import ManageSubscriptionButton from "../components/ManageSubscriptionButton";
 import BuyAccessButton from "../components/BuyAccessButton";
 import toast from "react-hot-toast";
 
-export default function CoverLetterClient() {
+interface Props {
+  job: {
+    description: string;
+    company: string;
+    url: string;
+  };
+}
+
+export default function CoverLetterClientModal({ job }: Props) {
   const router = useRouter();
   const editableRef = useRef<HTMLDivElement>(null);
   const printRef = useRef<HTMLDivElement>(null);
 
-  const [company, setCompany] = useState("");
-  const [description, setDescription] = useState("");
+  const description = job?.description;
+  const company = job?.company;
+  const url = job?.url;
 
   const resumeRef = useRef<HTMLTextAreaElement>(null);
-  const descriptionRef = useRef<HTMLTextAreaElement>(null);
 
   const [resume, setResume] = useState("");
   const [jobAd, setJobAd] = useState("");
   const [tone, setTone] = useState("professional");
   const [loading, setLoading] = useState(false);
+  const [loadingDelete, setLoadingDelete] = useState(false);
   const [coverLetter, setCoverLetter] = useState("");
   const [resumeSaved, setResumeSaved] = useState(false);
   const [textAreaSize, setTextAreaSize] = useState("150px");
@@ -44,6 +53,19 @@ export default function CoverLetterClient() {
   });
 
   const [showOverlay, setShowOverlay] = useState(false);
+
+  const handleClearStorage = async () => {
+    setLoadingDelete(true);
+    try {
+      localStorage.removeItem("company");
+      localStorage.removeItem("jobDescription");
+      localStorage.removeItem("url");
+      window.location.reload();
+    } catch {
+      toast("Something went wrong. Please try again.");
+    }
+    setLoadingDelete(false);
+  };
 
   useEffect(() => {
     if (!description) {
@@ -220,7 +242,7 @@ export default function CoverLetterClient() {
   return (
     <div className="w-full min-h-screen border-b-white/20 dark:border-b-black/20 bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4ed] dark:text-[#2b2a27]">
       <main className="max-w-7xl bg-light mx-auto p-4 md:p-8">
-        <h1 className="text-2xl font-bold mb-6 text-center md:text-left">
+        <h1 className="text-2xl  text-wrap w-[80%] sm:w-[100%] text-left font-xl md:mt-0 font-bold mb-6 ">
           Cover Letter Generator
         </h1>
 
@@ -300,64 +322,26 @@ export default function CoverLetterClient() {
               </div>
             </div>
 
-            <div className="flex flex-col gap-y-2">
-              <label className="block text-sm font-semibold mb-1">
-                Company
-              </label>
-
-              <input
-                className="w-full p-3 border rounded-[3px] bg-white text-black"
-                value={company}
-                onChange={(e) => setCompany(e.target.value)}
-                placeholder="Company name.."
-              />
+            <div>
               <label className="block text-sm font-semibold mb-1">
                 Job Description
               </label>
-              <div className="relative">
-                <textarea
-                  ref={descriptionRef}
-                  style={{ height: textAreaSizeDescription }}
-                  rows={6}
-                  className="w-full p-3 border rounded-[3px] bg-white text-black"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Paste job description here..."
-                />
-                {!description && (
-                  <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-stone-200 text-black/90 z-10">
-                    <div className="p-5 md:p-20 flex flex-col justify-center items-center text-center">
-                      <p className="font-semibold mb-4">
-                        Upload job description or find jobs with our job search
-                        tool
-                      </p>
-                      <div className="flex flex-col md:flex-row gap-4">
-                        <button
-                          onClick={() => router.push("/jobs")}
-                          className="inline-block font-bold cursor-pointer bg-stone-900 text-white px-4 py-2 rounded"
-                        >
-                          Find Jobs
-                        </button>
-                        <button
-                          onClick={() => {
-                            if (!description.trim()) {
-                              setDescription(" ");
-                            }
-                            setTimeout(() => {
-                              descriptionRef.current?.focus();
-                            }, 0);
-                          }}
-                          className="cursor-pointer font-semibold text-lg border-2 py-1 px-3 rounded-[4px]"
-                        >
-                          Paste
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <div className="flex justify-end items-center">
+              <textarea
+                style={{ height: textAreaSizeDescription }}
+                rows={6}
+                className="w-full p-3 border rounded-[3px] bg-white text-black"
+                value={jobAd}
+                onChange={(e) => setJobAd(e.target.value)}
+                placeholder="Paste job description here..."
+              />
+              <div className="flex justify-between items-center">
+                <button
+                  onClick={handleClearStorage}
+                  className="mt-2 border-2 font-semibold px-3 py-1.5 cursor-pointer rounded-[3px] text-sm border-[#f6f4ed] dark:border-[#2b2a27] text-[#f6f4ed] dark:text-[#2b2a27] transform transition-transform duration-300 ease-in-out hover:scale-105"
+                  disabled={loadingDelete}
+                >
+                  {loadingDelete ? "Deleting..." : "Clear description"}
+                </button>
                 <button
                   className="cursor-pointer"
                   onClick={handleTextAreaStateDescription}
@@ -442,6 +426,16 @@ export default function CoverLetterClient() {
             ) : coverLetter ? (
               <>
                 <div className="flex flex-wrap gap-3 mt-4">
+                  {url && (
+                    <a
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-[#f6f4ed] text-[#2b2a27] dark:bg-[#2b2a27] dark:text-[#f6f4ed] py-1 px-3 rounded-[3px] hover:opacity-90 mt-2 inline-block"
+                    >
+                      Apply
+                    </a>
+                  )}
                   <button
                     onClick={onCopy}
                     className="mt-2 border cursor-pointer px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27]"
@@ -450,7 +444,7 @@ export default function CoverLetterClient() {
                   </button>
                   <button
                     onClick={onDownload}
-                    className="mt-2 border cursor-pointer px-3 py-1.5 rounded-[3px] bg-[#f6f4ed] text-sm text-[#2b2a27] dark:text-[#f6f4ed] dark:bg-[#2b2a27]"
+                    className="mt-2 border cursor-pointer px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27]"
                   >
                     Download as PDF
                   </button>

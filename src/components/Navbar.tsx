@@ -38,7 +38,7 @@ export default function Navbar() {
                 className="w-6 h-6 hidden dark:block"
                 alt=""
               />{" "}
-              <img src="logo.png" className="w-5 h-5  dark:hidden" alt="" />{" "}
+              <img src="logo.png" className="w-6 h-6  dark:hidden" alt="" />{" "}
               <p>Job Scriptor</p>
             </Link>
           </h2>
