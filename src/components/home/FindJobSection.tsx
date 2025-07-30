@@ -13,7 +13,7 @@ const demoJob = {
 
 const FindJobsDemo = () => {
   return (
-    <div className="min-h-screen w-full px-6 py-12 bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4ed] dark:text-[#2b2a27] flex flex-col items-center justify-center gap-6">
+    <div className="min-h-screen w-full px-6 py-12 bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4f2] dark:text-[#2b2a27] flex flex-col items-center justify-center gap-6">
       <div className="space-y-3">
         <h2 className="text-3xl font-bold uppercase">
           Find Jobs That Truly Match You

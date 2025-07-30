@@ -23,13 +23,13 @@ export default function CoverLetterClient() {
   const [loading, setLoading] = useState(false);
   const [coverLetter, setCoverLetter] = useState("");
   const [resumeSaved, setResumeSaved] = useState(false);
-  const [textAreaSize, setTextAreaSize] = useState("150px");
+  const [textAreaSize, setTextAreaSize] = useState("100px");
   const [textAreaState, setTextAreaSizeState] = useState(false);
   const [textAreaTitle, setTextAreaSizeTitle] = useState("Show More");
   const [resumeLoading, setResumeLoading] = useState(true);
 
   const [textAreaSizeDescription, setTextAreaSizeDescription] =
-    useState("150px");
+    useState("100px");
   const [textAreaStateDescription, setTextAreaSizeStateDescription] =
     useState(false);
   const [textAreaTitleDescription, setTextAreaSizeTitleDescription] =
@@ -55,7 +55,7 @@ export default function CoverLetterClient() {
 
   useEffect(() => {
     async function fetchResume() {
-      setResumeLoading(true); // start loading
+      setResumeLoading(true);
       try {
         const res = await fetch("/api/resume");
         if (res.ok) {
@@ -71,7 +71,7 @@ export default function CoverLetterClient() {
           setShowOverlay(true);
         }
       } finally {
-        setResumeLoading(false); // finish loading
+        setResumeLoading(false);
       }
     }
 
@@ -152,10 +152,10 @@ export default function CoverLetterClient() {
 
   useEffect(() => {
     if (textAreaState === false) {
-      setTextAreaSize("150px");
+      setTextAreaSize("100px");
       setTextAreaSizeTitle("show more");
     } else {
-      setTextAreaSize("650px");
+      setTextAreaSize("500px");
       setTextAreaSizeTitle("Show Less");
     }
   }, [textAreaState]);
@@ -166,10 +166,10 @@ export default function CoverLetterClient() {
 
   useEffect(() => {
     if (textAreaStateDescription === false) {
-      setTextAreaSizeDescription("150px");
+      setTextAreaSizeDescription("100px");
       setTextAreaSizeTitleDescription("show more");
     } else {
-      setTextAreaSizeDescription("650px");
+      setTextAreaSizeDescription("500px");
       setTextAreaSizeTitleDescription("Show Less");
     }
   }, [textAreaStateDescription]);
@@ -218,63 +218,64 @@ export default function CoverLetterClient() {
     usage.generationCount >= usage.generationLimit;
 
   return (
-    <div className="w-full min-h-screen border-b-white/20 dark:border-b-black/20 bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4ed] dark:text-[#2b2a27]">
+    <div className="w-full -mt-4 min-h-screen border-b-white/20 dark:border-b-black/20 bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
       <main className="max-w-7xl bg-light mx-auto p-4 md:p-8">
-        <h1 className="text-2xl font-bold mb-6 text-center md:text-left">
+        <h1 className="text-2xl font-bold mb-2 text-center md:text-left">
           Cover Letter Generator
         </h1>
 
         <div className="flex flex-col md:flex-row gap-8">
-          <div className="w-full md:w-1/2 space-y-4">
+          <div className="w-full md:w-1/2 ">
             <div className="relative">
               <label className="block text-sm font-semibold mb-1">Resume</label>
-              <textarea
-                ref={resumeRef}
-                style={{ height: textAreaSize }}
-                rows={6}
-                className="w-full p-3 border bg-white text-black relative"
-                value={resume}
-                onChange={(e) => {
-                  setResume(e.target.value);
-                  setResumeSaved(false);
-                }}
-                placeholder="Paste your resume here..."
-              />
-              {!resumeLoading && showOverlay && (
-                <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-stone-200 text-black/90   z-10">
-                  <div className="p-5 md:p-20 flex flex-col justify-center items-c">
-                    <p className=" font-semibold mb-4">
-                      Create or upload your resume to start generating a
-                      tailored cover letter.
-                    </p>
-                    <div className="flex gap-4">
-                      <button
-                        onClick={() => router.push("/resume-generator")}
-                        className="inline-block font-bold cursor-pointer bg-stone-900 text-white px-4 py-2 rounded mr-3"
-                      >
-                        Create Resume
-                      </button>
-                      <button
-                        onClick={() => {
-                          setShowOverlay(false);
-                          setTimeout(() => {
-                            resumeRef.current?.focus();
-                          }, 0);
-                        }}
-                        className=" cursor-pointer font-semibold text-lg border-2 py-1 px-3 rounded-[4px]"
-                      >
-                        Paste
-                      </button>
+              <div style={{ height: textAreaSize }} className="relative">
+                <textarea
+                  ref={resumeRef}
+                  className="w-full h-full p-3 border bg-white text-black"
+                  value={resume}
+                  onChange={(e) => {
+                    setResume(e.target.value);
+                    setResumeSaved(false);
+                  }}
+                  placeholder="Paste your resume here..."
+                />
+
+                {!resumeLoading && showOverlay && (
+                  <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-stone-200 text-black/90 z-10">
+                    <div className="px-5 md:px-5 flex flex-col gap-y-2 justify-center items-center w-full">
+                      <p className="font-semibold w-full text-xs sm:text-sm ">
+                        Create or upload your resume to start generating a
+                        tailored cover letter.
+                      </p>
+                      <div className="flex gap-4">
+                        <button
+                          onClick={() => router.push("/resume-generator")}
+                          className="inline-block font-bold cursor-pointer bg-stone-900 text-white px-4 py-2 rounded mr-3 text-xs sm:text-sm"
+                        >
+                          Create Resume
+                        </button>
+                        <button
+                          onClick={() => {
+                            setShowOverlay(false);
+                            setTimeout(() => {
+                              resumeRef.current?.focus();
+                            }, 0);
+                          }}
+                          className="cursor-pointer text-xs sm:text-sm font-semibold  border-2 py-1 px-3 rounded-[4px]"
+                        >
+                          Paste
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
 
-              <div className="flex justify-between items-center mt-2">
+              <div className="flex mt-2 justify-between items-center">
                 {!resumeSaved ? (
                   <button
                     onClick={onSaveResume}
-                    className="mt-1 mb-5 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
+                    className="mb-5 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
                     disabled={!resume.trim()}
                   >
                     Save Resume
@@ -306,7 +307,7 @@ export default function CoverLetterClient() {
               </label>
 
               <input
-                className="w-full p-3 border rounded-[3px] bg-white text-black"
+                className="w-full p-1.5 border rounded-[3px] bg-white text-black"
                 value={company}
                 onChange={(e) => setCompany(e.target.value)}
                 placeholder="Company name.."
@@ -326,15 +327,14 @@ export default function CoverLetterClient() {
                 />
                 {!description && (
                   <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-stone-200 text-black/90 z-10">
-                    <div className="p-5 md:p-20 flex flex-col justify-center items-center text-center">
-                      <p className="font-semibold mb-4">
-                        Upload job description or find jobs with our job search
-                        tool
+                    <div className="px-5 md:px-5 flex flex-col justify-center items-center text-center">
+                      <p className="  text-left text-xs sm:text-sm mb-1  font-semibold">
+                        Upload job description or find jobs with our job search.
                       </p>
-                      <div className="flex flex-col md:flex-row gap-4">
+                      <div className="flex flex-row gap-x-4">
                         <button
                           onClick={() => router.push("/jobs")}
-                          className="inline-block font-bold cursor-pointer bg-stone-900 text-white px-4 py-2 rounded"
+                          className="inline-block text-xs sm:text-sm font-bold cursor-pointer bg-stone-800 text-white px-4 py-2 rounded"
                         >
                           Find Jobs
                         </button>
@@ -347,7 +347,7 @@ export default function CoverLetterClient() {
                               descriptionRef.current?.focus();
                             }, 0);
                           }}
-                          className="cursor-pointer font-semibold text-lg border-2 py-1 px-3 rounded-[4px]"
+                          className="cursor-pointer font-semibold text-xs sm:text-sm border-2 py-1 px-3 rounded-[4px]"
                         >
                           Paste
                         </button>
@@ -357,7 +357,13 @@ export default function CoverLetterClient() {
                 )}
               </div>
 
-              <div className="flex justify-end items-center">
+              <div className="flex justify-between items-center">
+                <button
+                  onClick={() => setDescription("")}
+                  className="mt-1 mb-4 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
+                >
+                  Delete Description
+                </button>
                 <button
                   className="cursor-pointer"
                   onClick={handleTextAreaStateDescription}
@@ -367,7 +373,6 @@ export default function CoverLetterClient() {
               </div>
             </div>
 
-            {/* Tone */}
             <div>
               <label className="block text-sm font-medium mb-1">Tone</label>
               <select
@@ -382,7 +387,6 @@ export default function CoverLetterClient() {
               </select>
             </div>
 
-            {/* Usage and Generate */}
             <div>
               <p className="text-sm mb-2">
                 {usage.generationLimit === null
@@ -405,28 +409,29 @@ export default function CoverLetterClient() {
                   )}
                 </div>
               ) : (
-                <button
-                  onClick={onGenerate}
-                  disabled={loading || !resume || !jobAd}
-                  className={`mt-3 w-full cursor-pointer py-3 rounded-[3px] border-[3px] uppercase dark:border-[#2b2a27] px-3 border-[#f6f4ed] text-lg text-[#f6f4ed] dark:text-[#2b2a27] font-bold  transform transition-transform duration-300 ease-in-out hover:scale-105 ${
-                    loading
-                      ? "cursor-not-allowed"
-                      : "hover:opacity-80 cursor-pointer"
-                  }`}
-                >
-                  {coverLetter
-                    ? loading
-                      ? "Regenerating..."
-                      : "Regenerate"
-                    : loading
-                    ? "Generating..."
-                    : "Generate Cover Letter"}
-                </button>
+                <div className="">
+                  <button
+                    onClick={onGenerate}
+                    disabled={loading || !resume || !jobAd}
+                    className={`mt-3  w-full cursor-pointer py-3 rounded-[3px] border-[3px] uppercase dark:border-[#2b2a27] px-3 border-[#f6f4ed] text-lg text-[#f6f4ed] dark:text-[#2b2a27] font-bold  transform transition-transform duration-300 ease-in-out hover:scale-105 ${
+                      loading
+                        ? "cursor-not-allowed"
+                        : "hover:opacity-80 cursor-pointer"
+                    }`}
+                  >
+                    {coverLetter
+                      ? loading
+                        ? "Regenerating..."
+                        : "Regenerate"
+                      : loading
+                      ? "Generating..."
+                      : "Generate Cover Letter"}
+                  </button>
+                </div>
               )}
             </div>
           </div>
 
-          {/* Generated Cover Letter */}
           <div className="w-full md:w-1/2 mb-10">
             <h2 className="text-xl font-semibold mb-2">
               Generated Cover Letter

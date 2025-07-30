@@ -12,9 +12,7 @@ const ResumeUploadPopUp = ({ children }: Props) => {
       <div className="max-w-4xl w-full sm:px-8 px-4 mt-10">
         <h1 className="text-3xl font-bold mb-2">Resume Generator</h1>
 
-        <p className="mb-2 text-xl">
-          Already have a resume? Save it in your profile page.
-        </p>
+        <p className="mb-0 text-xl">Already have a resume? </p>
 
         <div className="mb-7">
           <button
@@ -25,7 +23,6 @@ const ResumeUploadPopUp = ({ children }: Props) => {
           </button>
         </div>
 
-        {/* ✅ MODAL */}
         {showUploadModal && (
           <div className="fixed inset-0 flex items-center justify-center bg-black/80 z-50">
             <div className="bg-stone-800 text-white dark:bg-white   dark:text-black p-6 rounded-[3px] max-w-lg w-full relative">

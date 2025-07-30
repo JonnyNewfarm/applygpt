@@ -26,7 +26,7 @@ export default function ResetPasswordClient() {
   }
 
   return (
-    <div className="w-full min-h-screen flex justify-center items-center border-b-white/20 dark:border-b-black/20  bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4ed] dark:text-[#2b2a27]">
+    <div className="w-full min-h-screen flex justify-center items-center border-b-white/20 dark:border-b-black/20  bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
       <main className="max-w-md mx-auto mt-20">
         <h1 className="text-2xl font-bold mb-4">Reset Password</h1>
         <form onSubmit={handleSubmit} className="space-y-4">

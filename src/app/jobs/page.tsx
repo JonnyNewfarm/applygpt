@@ -27,7 +27,7 @@ export default async function FindJobsPage() {
   const session = await getServerSession();
   if (!session) {
     return (
-      <div className="p-20 bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4ed] dark:text-[#2b2a27] min-h-screen">
+      <div className="p-20 bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4f2] dark:text-[#2b2a27] min-h-screen">
         <p className="text-lg">Please sign in to access the job finder ai.</p>
         <div className="mt-4 flex items-center gap-x-4">
           <Link

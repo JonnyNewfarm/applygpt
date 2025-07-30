@@ -357,8 +357,8 @@ export default function FindJobsPage() {
   };
 
   return (
-    <div className="w-full min-h-screen flex flex-col justify-center bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4ed] dark:text-[#2b2a27]">
-      <div className="max-w-4xl h-full mx-auto px-4 py-10">
+    <div className="w-full px-2  min-h-screen flex flex-col justify-center bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
+      <div className="max-w-4xl h-full mx-auto  py-10">
         <h1 className="text-3xl h-full font-bold mb-6">
           Find Jobs That Match Your Resume
         </h1>
@@ -385,55 +385,59 @@ export default function FindJobsPage() {
           </div>
         )}
 
-        <div className="relative w-full">
-          <textarea
-            ref={textAreaRef}
-            style={{ scrollbarWidth: "thin", height: textAreaSize }}
-            value={resume}
-            onChange={(e) => {
-              setResume(e.target.value);
-              setResumeSaved(false);
-            }}
-            placeholder="Paste your resume here..."
-            rows={8}
-            className="w-full border bg-[#ffffff] text-black border-gray-500 rounded p-2 mb-2"
-          />
+        <div className="w-full">
+          <div className="relative w-full inline-block">
+            <textarea
+              ref={textAreaRef}
+              style={{ scrollbarWidth: "thin", height: textAreaSize }}
+              value={resume}
+              onChange={(e) => {
+                setResume(e.target.value);
+                setResumeSaved(false);
+              }}
+              placeholder="Paste your resume here..."
+              rows={8}
+              className="w-full border bg-white text-black border-gray-500 rounded p-2"
+            />
 
-          {!resume && !resumeLoading && (
-            <div className="absolute top-0 left-0 w-full h-full bg-stone-200 text-black/90   flex items-center justify-center z-10">
-              <div className="md:p-20 font-thin  p-5 text-[17px] text-lg flex flex-col gap-y-2">
-                <p>
-                  Create or upload your resume to get personalized job matches.
-                </p>
+            {!resume && !resumeLoading && (
+              <div className="absolute top-0 left-0 w-full h-full bg-stone-200 text-black/90 rounded p-4 z-10 flex items-center justify-center">
+                <div className="max-w-xl p-5 w-full text-center space-y-3">
+                  <div className="space-y-0 text-sm   sm:text-base font-light leading-relaxed">
+                    <p>
+                      Create or upload your resume to get personalized job
+                      matches.
+                    </p>
+                    <p>
+                      Prefer to do it later? No problem – you can still browse
+                      and search for jobs anytime.
+                    </p>
+                  </div>
 
-                <p>
-                  {" "}
-                  Prefer to do it later? No problem – you can still browse and
-                  search for jobs anytime.
-                </p>
-
-                <div className="flex justify-between">
-                  <Link
-                    className="bg-stone-800 text-lg font-semibold border border-white text-white py-1 px-3 rounded-[4px]"
-                    href={"/resume-generator"}
-                  >
-                    Create Resume
-                  </Link>
-                  <button
-                    className="border-black cursor-pointer font-semibold text-lg border-2 py-1 px-3 rounded-[4px]"
-                    onClick={() => {
-                      setResume(" ");
-                      setTimeout(() => textAreaRef.current?.focus(), 50);
-                    }}
-                  >
-                    Paste
-                  </button>
+                  <div className="flex items-center justify-center gap-4 flex-wrap">
+                    <Link
+                      href="/resume-generator"
+                      className="bg-stone-800 rounded-[4px] text-sm text-white border border-white px-5 py-2  font-medium hover:bg-stone-700 transition"
+                    >
+                      Create Resume
+                    </Link>
+                    <button
+                      onClick={() => {
+                        setResume(" ");
+                        setTimeout(() => textAreaRef.current?.focus(), 50);
+                      }}
+                      className="border-2 text-sm rounded-[4px] border-black text-black px-5 py-2  font-medium hover:bg-black hover:text-white transition"
+                    >
+                      Paste
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
-        <div className="w-full flex justify-between items-center">
+
+        <div className="w-full flex mt-2 justify-between items-center">
           {!resumeSaved ? (
             <button
               onClick={onSaveResume}
@@ -579,7 +583,7 @@ export default function FindJobsPage() {
                   <button
                     onClick={() => saveJob(job)}
                     disabled={savingJobId === job.id || savedJobs.has(job.id)}
-                    className="border-2 px-2 opacity-80 cursor-pointer font-semibold py-1.5 rounded-[3px] text-sm text-[#2b2a27] border-[#2b2a27] transform transition-transform duration-300 ease-in-out hover:scale-105"
+                    className=" px-2 opacity-80 cursor-pointer font-semibold py-1.5 rounded-[3px] text-sm text-[#2b2a27] border-[#2b2a27] transform transition-transform duration-300 ease-in-out hover:scale-105"
                   >
                     {savingJobId === job.id ? (
                       <p>Saving..</p>

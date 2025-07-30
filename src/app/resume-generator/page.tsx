@@ -28,7 +28,7 @@ export default async function CoverLetterPage() {
 
   if (!session) {
     return (
-      <div className="p-20 min-h-screen bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4ed] dark:text-[#2b2a27]">
+      <div className="p-20 min-h-screen bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
         <p className="text-lg">
           Please sign in to access the resume generator.
         </p>
@@ -94,7 +94,7 @@ export default async function CoverLetterPage() {
   }
 
   return (
-    <div className="w-full min-h-screen flex-col flex justify-center items-center bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4ed] dark:text-[#2b2a27] border-b border-b-white/20 dark:border-b-black/20">
+    <div className="w-full min-h-screen flex-col flex justify-center items-center bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4f2] dark:text-[#2b2a27] border-b border-b-white/20 dark:border-b-black/20">
       <ResumeClientWrapper resume={hasResume?.resume?.content || ""} />
     </div>
   );

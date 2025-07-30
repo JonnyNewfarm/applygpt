@@ -32,13 +32,13 @@ export default function CoverLetterClientModal({ job }: Props) {
   const [loadingDelete, setLoadingDelete] = useState(false);
   const [coverLetter, setCoverLetter] = useState("");
   const [resumeSaved, setResumeSaved] = useState(false);
-  const [textAreaSize, setTextAreaSize] = useState("150px");
+  const [textAreaSize, setTextAreaSize] = useState("100px");
   const [textAreaState, setTextAreaSizeState] = useState(false);
   const [textAreaTitle, setTextAreaSizeTitle] = useState("Show More");
   const [resumeLoading, setResumeLoading] = useState(true);
 
   const [textAreaSizeDescription, setTextAreaSizeDescription] =
-    useState("150px");
+    useState("100px");
   const [textAreaStateDescription, setTextAreaSizeStateDescription] =
     useState(false);
   const [textAreaTitleDescription, setTextAreaSizeTitleDescription] =
@@ -53,19 +53,6 @@ export default function CoverLetterClientModal({ job }: Props) {
   });
 
   const [showOverlay, setShowOverlay] = useState(false);
-
-  const handleClearStorage = async () => {
-    setLoadingDelete(true);
-    try {
-      localStorage.removeItem("company");
-      localStorage.removeItem("jobDescription");
-      localStorage.removeItem("url");
-      window.location.reload();
-    } catch {
-      toast("Something went wrong. Please try again.");
-    }
-    setLoadingDelete(false);
-  };
 
   useEffect(() => {
     if (!description) {
@@ -174,10 +161,10 @@ export default function CoverLetterClientModal({ job }: Props) {
 
   useEffect(() => {
     if (textAreaState === false) {
-      setTextAreaSize("150px");
+      setTextAreaSize("100px");
       setTextAreaSizeTitle("show more");
     } else {
-      setTextAreaSize("650px");
+      setTextAreaSize("500px");
       setTextAreaSizeTitle("Show Less");
     }
   }, [textAreaState]);
@@ -188,10 +175,10 @@ export default function CoverLetterClientModal({ job }: Props) {
 
   useEffect(() => {
     if (textAreaStateDescription === false) {
-      setTextAreaSizeDescription("150px");
+      setTextAreaSizeDescription("100px");
       setTextAreaSizeTitleDescription("show more");
     } else {
-      setTextAreaSizeDescription("650px");
+      setTextAreaSizeDescription("500px");
       setTextAreaSizeTitleDescription("Show Less");
     }
   }, [textAreaStateDescription]);
@@ -207,6 +194,13 @@ export default function CoverLetterClientModal({ job }: Props) {
       toast("Copied to clipboard!");
     });
   }
+
+  const onClearDescription = async () => {
+    setLoadingDelete(true);
+    await new Promise((res) => setTimeout(res, 500)); // Simulate delay
+    setJobAd("");
+    setLoadingDelete(false);
+  };
 
   async function onDownload() {
     if (!printRef.current || !editableRef.current) return;
@@ -240,7 +234,7 @@ export default function CoverLetterClientModal({ job }: Props) {
     usage.generationCount >= usage.generationLimit;
 
   return (
-    <div className="w-full min-h-screen border-b-white/20 dark:border-b-black/20 bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4ed] dark:text-[#2b2a27]">
+    <div className="w-full min-h-screen border-b-white/20 dark:border-b-black/20 bg-[#2b2a27]   text-[#f6f4ed]  dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
       <main className="max-w-7xl bg-light mx-auto p-4 md:p-8">
         <h1 className="text-2xl  text-wrap w-[80%] sm:w-[100%] text-left font-xl md:mt-0 font-bold mb-6 ">
           Cover Letter Generator
@@ -336,7 +330,7 @@ export default function CoverLetterClientModal({ job }: Props) {
               />
               <div className="flex justify-between items-center">
                 <button
-                  onClick={handleClearStorage}
+                  onClick={onClearDescription}
                   className="mt-2 border-2 font-semibold px-3 py-1.5 cursor-pointer rounded-[3px] text-sm border-[#f6f4ed] dark:border-[#2b2a27] text-[#f6f4ed] dark:text-[#2b2a27] transform transition-transform duration-300 ease-in-out hover:scale-105"
                   disabled={loadingDelete}
                 >
@@ -389,23 +383,25 @@ export default function CoverLetterClientModal({ job }: Props) {
                   )}
                 </div>
               ) : (
-                <button
-                  onClick={onGenerate}
-                  disabled={loading || !resume || !jobAd}
-                  className={`mt-3 w-full cursor-pointer py-3 rounded-[3px] border-[3px] uppercase dark:border-[#2b2a27] px-3 border-[#f6f4ed] text-lg text-[#f6f4ed] dark:text-[#2b2a27] font-bold  transform transition-transform duration-300 ease-in-out hover:scale-105 ${
-                    loading
-                      ? "cursor-not-allowed"
-                      : "hover:opacity-80 cursor-pointer"
-                  }`}
-                >
-                  {coverLetter
-                    ? loading
-                      ? "Regenerating..."
-                      : "Regenerate"
-                    : loading
-                    ? "Generating..."
-                    : "Generate Cover Letter"}
-                </button>
+                <div className="sticky bottom-4 z-20 bg-[#2b2a27] dark:bg-[#f6f4ed] p-2 rounded">
+                  <button
+                    onClick={onGenerate}
+                    disabled={loading || !resume || !jobAd}
+                    className={`w-full cursor-pointer py-3 rounded-[3px] border-[3px] uppercase dark:border-[#2b2a27] px-3 border-[#f6f4ed] text-lg text-[#f6f4ed] dark:text-[#2b2a27] font-bold transform transition-transform duration-300 ease-in-out ${
+                      loading
+                        ? "cursor-not-allowed opacity-50"
+                        : "hover:opacity-80"
+                    }`}
+                  >
+                    {coverLetter
+                      ? loading
+                        ? "Regenerating..."
+                        : "Regenerate"
+                      : loading
+                      ? "Generating..."
+                      : "Generate Cover Letter"}
+                  </button>
+                </div>
               )}
             </div>
           </div>

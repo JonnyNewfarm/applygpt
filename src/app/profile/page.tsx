@@ -30,7 +30,7 @@ export default async function ProfilePage() {
 
   if (!session?.user?.email)
     return (
-      <div className="flex bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4ed] dark:text-[#2b2a27] items-center justify-center min-h-screen font-semibold">
+      <div className="flex bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4f2] dark:text-[#2b2a27] items-center justify-center min-h-screen font-semibold">
         Unauthorized
       </div>
     );
@@ -48,7 +48,7 @@ export default async function ProfilePage() {
 
   if (!user)
     return (
-      <div className="flex items-center px-32 justify-center min-h-screen bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4ed] dark:text-[#2b2a27] font-semibold">
+      <div className="flex items-center px-32 justify-center min-h-screen bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4f2] dark:text-[#2b2a27] font-semibold">
         User not found
       </div>
     );
@@ -59,7 +59,7 @@ export default async function ProfilePage() {
   }));
 
   return (
-    <div className="w-full min-h-screen flex justify-center bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4ed] dark:text-[#2b2a27] border-b-white/80 border-b dark:border-b-black/80">
+    <div className="w-full min-h-screen flex justify-center bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4f2] dark:text-[#2b2a27] border-b-white/80 border-b dark:border-b-black/80">
       <main className="w-[90%] mx-auto p-6 md:p-12 rounded-[3px] mb-10 mt-12">
         <h1 className="text-3xl font-semibold mb-6 border-b-[1px] border-[#f6f4ed] dark:border-[#2b2a27] pb-2">
           Profile

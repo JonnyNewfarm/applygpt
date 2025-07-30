@@ -29,7 +29,7 @@ export default function ProfileTabs({
           onClick={() => setSelectedTab("jobs")}
           className={`px-4 py-2 cursor-pointer border-2 rounded-[3px] font-semibold transition-all ${
             selectedTab === "jobs"
-              ? "bg-[#f6f4ed] text-[#2b2a27] dark:bg-[#2b2a27] dark:text-[#f6f4ed]"
+              ? "bg-[#f6f4f2] text-[#2b2a27] dark:bg-[#2b2a27] dark:text-[#f6f4ed]"
               : "border-[#f6f4ed] text-[#f6f4ed] dark:border-[#2b2a27] dark:text-[#2b2a27]"
           }`}
         >
@@ -39,7 +39,7 @@ export default function ProfileTabs({
           onClick={() => setSelectedTab("coverletters")}
           className={`px-4 py-2 cursor-pointer border-2 rounded-[3px] font-semibold transition-all ${
             selectedTab === "coverletters"
-              ? "bg-[#f6f4ed] text-[#2b2a27] dark:bg-[#2b2a27] dark:text-[#f6f4ed]"
+              ? "bg-[] text-[#2b2a27] dark:bg-[#2b2a27] dark:text-[#f6f4ed]"
               : "border-[#f6f4ed] text-[#f6f4ed] dark:border-[#2b2a27] dark:text-[#2b2a27]"
           }`}
         >

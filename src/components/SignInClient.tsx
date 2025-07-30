@@ -28,7 +28,7 @@ export default function SignInPage() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4ed] dark:text-[#2b2a27]">
+    <main className="min-h-screen flex items-center justify-center bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
       <div className="w-full max-w-sm  p-6 rounded-[3px] border-[#f6f4ed] dark:border-[#2b2a27] border shadow">
         <h1 className="text-2xl font-bold  mb-6 text-center">Sign In</h1>
 
