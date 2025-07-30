@@ -113,11 +113,11 @@ export default function Navbar() {
       </nav>
 
       <div
-        className={`fixed top-0 left-0 h-full w-64 bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4ed] dark:text-[#2b2a27] shadow-lg z-60 transform transition-transform duration-300 ease-in-out
+        className={`fixed top-0 left-0 h-full w-64 bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4f2] dark:text-[#2b2a27] shadow-lg z-60 transform transition-transform duration-300 ease-in-out
           ${menuOpen ? "translate-x-0" : "-translate-x-full"}
         `}
       >
-        <div className="flex justify-between items-center p-4 border-b border-gray-200 bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4ed] dark:text-[#2b2a27]">
+        <div className="flex justify-between items-center p-4 border-b border-gray-200 bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
           <h2 className="font-bold text-2xl">Menu</h2>
           <DarkmodeBtn />
           <button

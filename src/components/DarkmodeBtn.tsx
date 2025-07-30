@@ -6,7 +6,7 @@ const DarkModeToggle = () => {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <div className="flex items-center gap-2 border p-2 rounded-full bg-[#2b2a27]   dark:bg-[#f6f4ed] ">
+    <div className="flex items-center gap-2 border p-2 rounded-full bg-[#2b2a27]   dark:bg-[#f6f4f2] ">
       <button
         onClick={() => theme === "dark" && toggleTheme()}
         className={`p-1.5 rounded-full transition-colors ${
