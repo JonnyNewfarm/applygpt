@@ -1,11 +1,13 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import MagneticComp from "../MagneticComp";
 import Link from "next/link";
+import { IoMdClose } from "react-icons/io";
 
 const HeroSection = () => {
   const path = useRef<SVGPathElement | null>(null);
+  const [isgenerateModalOpen, setIsgenerateModalOpen] = useState(false);
   const progress = useRef<number>(0);
   const time = useRef<number>(Math.PI / 2);
   const reqId = useRef<number | null>(null);
@@ -74,7 +76,7 @@ const HeroSection = () => {
       className={`min-h-screen   bg-[#2b2a27] text-[#f5f4ef]  dark:bg-[#f6f4f2] dark:text-[#2b2a27] items-center w-full flex justify-center px-6 sm:px-20`}
     >
       <div className="mb-16 w-full text-left  h-full  flex flex-col sm:gap-y-6 gap-y-2 ">
-        <h1 className="sm:text-3xl md:text-4xl   uppercase text-2xl  font-bold">
+        <h1 className="sm:text-3xl   uppercase text-xl  font-bold">
           Simplify Job Searching
         </h1>
         <div className="w-full h-[1px] mb-[5px] hidden sm:block relative">
@@ -93,14 +95,39 @@ const HeroSection = () => {
           </svg>
         </div>
 
-        <div className="flex flex-col gap-y-3 md:gap-y-1">
-          <div className="md:text-xl text-[15px] lg:text-2xl sm:text-lg">
-            <p>
+        <div className="flex sm:-mt-6 flex-col gap-y-3 md:gap-y-1">
+          <div className="md:text-xl text-base lg:text-2xl sm:text-lg">
+            <p className="mb-2.5">
               All-in-one AI tools to build resumes, write tailored cover
-              letters, and discover job opportunities from top platforms like
-              LinkedIn, Indeed, and more — fast.
+              letters, and discover
+            </p>
+            <p>
+              job opportunities from top platforms like LinkedIn, Indeed, and
+              more — fast.
             </p>
           </div>
+          {isgenerateModalOpen && (
+            <div className="bg-white/90 backdrop-blur-md z-50 absolute bottom-20  left-10  min-w-[300px] p-12 rounded shadow-lg flex flex-col gap-y-4">
+              <button
+                onClick={() => setIsgenerateModalOpen(false)}
+                className="absolute cursor-pointer top-2 text-3xl right-2 text-black"
+              >
+                <IoMdClose />
+              </button>
+              <Link
+                className="bg-stone-700 hover:scale-105 transition ease-in rounded-[4px] text-white py-2 px-4 text-center"
+                href="/cover-letter"
+              >
+                <h1>Cover Letter</h1>
+              </Link>
+              <Link
+                className="bg-stone-900 hover:scale-105 transition ease-in rounded-[4px] text-white py-2 px-4 text-center"
+                href="/resume-generator"
+              >
+                <h1>Resume</h1>
+              </Link>
+            </div>
+          )}
 
           <div className="mt-4">
             <MagneticComp>
@@ -114,11 +141,14 @@ const HeroSection = () => {
           </div>
         </div>
 
-        <div className="w-full flex uppercase justify-between font-bold text-lg sm:text-2xl md:text-3xl text-nowrap px-6 sm:px-20 absolute bottom-6  left-0">
+        <div className="w-full  flex uppercase justify-between font-bold text-lg sm:text-2xl md:text-3xl text-nowrap px-6 sm:px-20 absolute bottom-6  left-0">
           <MagneticComp>
-            <Link href={"/cover-letter"} className="flex gap-x-2">
-              Generate <p className="hidden sm:block">Resume</p>
-            </Link>
+            <button
+              onClick={() => setIsgenerateModalOpen((prev) => !prev)}
+              className="flex gap-x-2 uppercase cursor-pointer"
+            >
+              <h1>{isgenerateModalOpen ? "Close" : "Generate"}</h1>
+            </button>
           </MagneticComp>
           <MagneticComp>
             <Link href={"/jobs"}>

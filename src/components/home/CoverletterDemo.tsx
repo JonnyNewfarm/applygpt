@@ -52,19 +52,20 @@ const LiveCoverLetterDemo = () => {
   return (
     <div className="min-h-screen w-full flex items-center justify-center border-b-white z-50 dark:border-b-black/20 bg-[#2b2a27] text-[#f6f4ed] px-4 py-12 dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
       <div className="w-full max-w-2xl text-left space-y-6">
-        <h2 className="text-2xl sm:text-3xl font-bold uppercase">
+        <h2 className="text-xl sm:text-3xl font-bold uppercase">
           Cover Letter Generator
         </h2>
-
-        <p className="text-lg max-w-xl">
-          You provide your resume and a job description, then select the tone
-          you want for your letter.
-        </p>
-        <p className="text-lg max-w-xl">
-          The AI uses this information to generate a customized cover letter
-          tailored to the job. You can edit, save, copy, or download the final
-          letter as a PDF.
-        </p>
+        <div className="text-base space-y-3">
+          <p className="text-lg max-w-xl">
+            You provide your resume and a job description, then select the tone
+            you want for your letter.
+          </p>
+          <p className="text-lg max-w-xl">
+            The AI uses this information to generate a customized cover letter
+            tailored to the job. You can edit, save, copy, or download the final
+            letter as a PDF.
+          </p>
+        </div>
 
         {!showLetter && (
           <div className="space-y-4">

@@ -15,24 +15,25 @@ const FindJobsDemo = () => {
   return (
     <div className="min-h-screen w-full px-6 py-12 bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4f2] dark:text-[#2b2a27] flex flex-col items-center justify-center gap-6">
       <div className="space-y-3">
-        <h2 className="text-3xl font-bold uppercase">
+        <h2 className="text-2xl font-bold uppercase">
           Find Jobs That Truly Match You
         </h2>
 
-        {/* Explanation text */}
-        <p className="max-w-xl  text-lg">
-          Discover real jobs from top platforms like LinkedIn and Indeed.
-        </p>
+        <div className="text-base space-y-3">
+          <p className="max-w-xl ">
+            Discover real jobs from top platforms like LinkedIn and Indeed.
+          </p>
 
-        <p className="max-w-xl  text-lg">
-          See key details — title, company, location, salary, tags, and compare
-          it to your CV.
-        </p>
-        <p className="max-w-xl  text-lg">
-          {" "}
-          Found the perfect job? Instantly generate an AI-powered cover letter
-          and apply.
-        </p>
+          <p className="max-w-xl ">
+            See key details — title, company, location, salary, tags, and
+            compare it to your CV.
+          </p>
+          <p className="max-w-xl">
+            {" "}
+            Found the perfect job? Instantly generate an AI-powered cover letter
+            and apply.
+          </p>
+        </div>
       </div>
 
       {/* Demo Job Card */}
