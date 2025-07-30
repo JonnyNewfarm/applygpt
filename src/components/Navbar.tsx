@@ -34,11 +34,11 @@ export default function Navbar() {
               className="font-bold text-2xl items-center gap-x-1.5 flex  cursor-pointer"
             >
               <img
-                src="logo-dark.png"
+                src="/logo-dark.png"
                 className="w-6 h-6 hidden dark:block"
                 alt=""
               />{" "}
-              <img src="logo.png" className="w-6 h-6  dark:hidden" alt="" />{" "}
+              <img src="/logo.png" className="w-6 h-6  dark:hidden" alt="" />{" "}
               <p>Job Scriptor</p>
             </Link>
           </h2>

@@ -20,6 +20,7 @@ const Footer = () => {
                       <Link href={"/jobs"}>Find Jobs</Link>
                       <Link href={"/cover-letter"}>Generate cover letter</Link>
                       <Link href={"/profile"}>Profile</Link>
+                      <Link href={"/guides"}>Guides</Link>
                     </div>
                   </div>
                   <div></div>
