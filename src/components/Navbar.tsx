@@ -45,17 +45,18 @@ export default function Navbar() {
 
           <div className="hidden lg:flex text-lg items-center space-x-6">
             <Link
-              href="/resume-generator"
-              className="cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
-            >
-              Generate Resume
-            </Link>
-            <Link
               href="/jobs"
               className="cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
             >
               Find Jobs
             </Link>
+            <Link
+              href="/resume-generator"
+              className="cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
+            >
+              Generate Resume
+            </Link>
+
             <Link
               href="/cover-letter"
               className="cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
@@ -130,6 +131,13 @@ export default function Navbar() {
 
         <nav className="flex flex-col p-4 space-y-6">
           <Link
+            href="/jobs"
+            className="cursor-pointer hover:text-gray-700"
+            onClick={() => setMenuOpen(false)}
+          >
+            Find Jobs
+          </Link>
+          <Link
             href="/resume-generator"
             className="cursor-pointer hover:text-gray-700"
           >
@@ -141,13 +149,6 @@ export default function Navbar() {
             onClick={() => setMenuOpen(false)}
           >
             Generate Cover Letter
-          </Link>
-          <Link
-            href="/jobs"
-            className="cursor-pointer hover:text-gray-700"
-            onClick={() => setMenuOpen(false)}
-          >
-            Find Jobs
           </Link>
 
           {!session ? (
