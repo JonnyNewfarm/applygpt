@@ -357,7 +357,7 @@ export default function FindJobsPage() {
   };
 
   return (
-    <div className="w-full px-2  min-h-screen flex flex-col justify-center bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
+    <main className="w-full px-2  min-h-screen flex flex-col justify-center bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
       <div className="max-w-4xl h-full mx-auto  py-10">
         <h1 className="text-3xl h-full font-bold mb-6">
           Find Jobs That Match Your Resume
@@ -717,6 +717,6 @@ export default function FindJobsPage() {
           </div>
         </div>
       )}
-    </div>
+    </main>
   );
 }

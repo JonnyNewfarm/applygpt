@@ -98,12 +98,13 @@ const HeroSection = () => {
         <div className="flex sm:-mt-6 flex-col gap-y-3 md:gap-y-1">
           <div className="md:text-xl text-base lg:text-2xl sm:text-lg">
             <p className="mb-2.5">
-              All-in-one AI tools to build resumes, write tailored cover
-              letters, and discover
+              All-in-one <strong>AI tools</strong> to build resumes, write
+              tailored cover letters, and discover
             </p>
             <p>
-              job opportunities from top platforms like LinkedIn, Indeed, and
-              more — fast.
+              job opportunities from top platforms like{" "}
+              <strong>LinkedIn</strong>, <strong>Indeed</strong>, and more —
+              fast.
             </p>
           </div>
           {isgenerateModalOpen && (

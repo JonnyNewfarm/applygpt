@@ -3,7 +3,8 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <div
+    <footer
+      data-nosnippet
       style={{ clipPath: "polygon(0% 0, 100% 0%, 100% 100%, 0 100%)" }}
       className="relative h-[420px] bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4f2] dark:text-[#2b2a27]"
     >
@@ -49,7 +50,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
-    </div>
+    </footer>
   );
 };
 
