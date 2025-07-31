@@ -28,9 +28,16 @@ export default async function CoverLetterPage() {
 
   if (!session) {
     return (
-      <div className="p-20 min-h-screen bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
-        <p className="text-lg">
-          Please sign in to access the resume generator.
+      <div className="  p-10 md:p-20 mx-auto min-h-screen bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
+        <h1 className="text-2xl  font-bold leading-tight">
+          Create a Professional Resume in Seconds
+        </h1>
+        <p className="text-lg mt-1 sm:text-lg text-muted-foreground max-w-2xl">
+          Build a standout resume with AI. Customize it to your skills,
+          experience, and the job you&apos;re targeting.
+        </p>
+        <p className="text-md mt-3 sm:text-lg font-medium">
+          Please sign in to access the resume generator:
         </p>
         <div className="mt-4 flex items-center gap-x-4">
           <Link

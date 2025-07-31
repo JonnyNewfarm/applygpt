@@ -38,12 +38,18 @@ export default async function FindJobsPage() {
         <p className="text-lg">
           Please sign in to access full job search features.
         </p>
-        <div className="mt-4 flex items-center gap-x-4">
-          <Link className="..." href={"/signin"}>
+        <div className="mt-4  flex items-center gap-x-4">
+          <Link
+            className="border-2 rounded-[4px] font-semibold border-[#f6f4ed] px-3 py-1 dark:border-[#2b2a27]"
+            href={"/signin"}
+          >
             Sign in
           </Link>
           <h1 className="text-sm">OR</h1>
-          <Link className="..." href={"/register"}>
+          <Link
+            className="border-2 rounded-[4px] font-semibold border-[#f6f4ed] px-3 py-1 dark:border-[#2b2a27]"
+            href={"/register"}
+          >
             Register
           </Link>
         </div>

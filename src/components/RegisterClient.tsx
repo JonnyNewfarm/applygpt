@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { signIn } from "next-auth/react";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -102,10 +103,20 @@ export default function RegisterPage() {
           </p>
           <button
             type="submit"
-            className="w-full cursor-pointer py-2 rounded transition border-[#f6f4ed] dark:border-[#2b2a27] border-2 font-bold"
+            className="w-full cursor-pointer py-2 rounded transition bg-[#f6f4ed] text-black dark:text-white dark:bg-[#2b2a27] border-2 font-bold"
           >
             Register
           </button>
+          <div>
+            <p>Or sign in with Google:</p>
+            <button
+              type="button"
+              onClick={() => signIn("google")}
+              className="w-full cursor-pointer py-2 rounded transition border-[#f6f4ed] dark:border-[#2b2a27] border-2 font-bold mt-4"
+            >
+              Sign in with Google
+            </button>
+          </div>
         </form>
 
         {error && <p className="text-red-500 mt-4 text-center">{error}</p>}

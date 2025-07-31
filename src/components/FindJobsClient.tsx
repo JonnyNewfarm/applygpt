@@ -386,7 +386,7 @@ export default function FindJobsPage() {
         )}
 
         <div className="w-full">
-          <div className="relative w-full inline-block">
+          <div className="relative w-full inline-block px-2">
             <textarea
               ref={textAreaRef}
               style={{ scrollbarWidth: "thin", height: textAreaSize }}
@@ -403,7 +403,7 @@ export default function FindJobsPage() {
             {!resume && !resumeLoading && (
               <div className="absolute top-0 left-0 w-full h-full bg-stone-200 text-black/90 rounded p-4 z-10 flex items-center justify-center">
                 <div className="max-w-xl p-5 w-full text-center space-y-3">
-                  <div className="space-y-0 text-sm   sm:text-base font-light leading-relaxed">
+                  <div className="space-y-0 text-sm font-semibold   sm:text-base  leading-relaxed">
                     <p>
                       Create or upload your resume to get personalized job
                       matches.
@@ -417,7 +417,7 @@ export default function FindJobsPage() {
                   <div className="flex items-center justify-center gap-4 flex-wrap">
                     <Link
                       href="/resume-generator"
-                      className="bg-stone-800 rounded-[4px] text-sm text-white border border-white px-5 py-2  font-medium hover:bg-stone-700 transition"
+                      className="bg-stone-800 font-semibold rounded-[4px] text-sm text-white border border-white px-5 py-2   hover:bg-stone-700 transition"
                     >
                       Create Resume
                     </Link>
@@ -426,7 +426,7 @@ export default function FindJobsPage() {
                         setResume(" ");
                         setTimeout(() => textAreaRef.current?.focus(), 50);
                       }}
-                      className="border-2 text-sm rounded-[4px] border-black text-black px-5 py-2  font-medium hover:bg-black hover:text-white transition"
+                      className="border-2 text-sm rounded-[4px] border-black text-black px-5 py-2  font-semibold cursor-pointer hover:bg-black hover:text-white transition"
                     >
                       Paste
                     </button>
@@ -437,7 +437,7 @@ export default function FindJobsPage() {
           </div>
         </div>
 
-        <div className="w-full flex mt-2 justify-between items-center">
+        <div className="w-full flex mt-2 px-2 justify-between items-center">
           {!resumeSaved ? (
             <button
               onClick={onSaveResume}
@@ -464,7 +464,7 @@ export default function FindJobsPage() {
             {textAreaTitle}
           </button>
         </div>
-        <div ref={jobTitleRef} className="relative">
+        <div ref={jobTitleRef} className="relative px-2">
           <input
             type="text"
             value={query}
@@ -502,7 +502,7 @@ export default function FindJobsPage() {
           )}
         </div>
 
-        <div className="relative m-0">
+        <div className="relative m-0 px-2">
           <input
             type="text"
             value={country}
@@ -525,7 +525,7 @@ export default function FindJobsPage() {
           )}
         </div>
 
-        <div className="relative">
+        <div className="relative px-2">
           <input
             type="text"
             value={city}
@@ -551,7 +551,7 @@ export default function FindJobsPage() {
           )}
         </div>
 
-        <div>
+        <div className="px-3">
           <p className="text-sm mb-2">
             {usage.generationLimit === null
               ? `Used ${usage.generationCount} generations (Unlimited plan)`
@@ -561,7 +561,7 @@ export default function FindJobsPage() {
           <button
             onClick={handleFindJobs}
             disabled={loading}
-            className="mt-3 w-full cursor-pointer py-3 rounded-[3px] border-[3px] uppercase dark:border-[#2b2a27] px-3 border-[#f6f4ed] text-lg text-[#f6f4ed] dark:text-[#2b2a27] font-bold transform transition-transform duration-300 ease-in-out hover:scale-105"
+            className="mt-3 w-full  cursor-pointer py-3 rounded-[3px] border-[3px] uppercase dark:bg-[#2b2a27] px-3 bg-[#f6f4f2] text-lg text-black dark:text-[#f6f4ed] font-bold transform transition-transform duration-300 ease-in-out hover:scale-105"
           >
             {loading ? "Searching..." : "Find Jobs"}
           </button>

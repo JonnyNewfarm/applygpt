@@ -31,11 +31,18 @@ export default async function CoverLetterPage() {
   const session = await getServerSession();
   if (!session) {
     return (
-      <div className="bg-[#2b2a27] p-20 min-h-screen text-[#f6f4ed]  dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
-        <p className="text-lg">
-          Please sign in to access the cover letter generator.
+      <div className="bg-[#2b2a27] p-10 md:p-20 min-h-screen text-[#f6f4ed]  dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
+        <h1 className="text-2xl font-bold leading-tight">
+          Generate Tailored Cover Letters with AI
+        </h1>
+        <p className="text-lg  mt-1 text-muted-foreground max-w-2xl">
+          Create personalized, job-specific cover letters that align with your
+          resume and the job you&apos;re applying for.
         </p>
-        <div className="mt-4 flex items-center gap-x-4">
+        <p className="text-md mt-4 sm:text-lg font-medium">
+          Please sign in to access the cover letter generator:
+        </p>
+        <div className="mt-1 flex items-center gap-x-4">
           <Link
             className="mt-2 border-2 font-bold dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]"
             href={"/signin"}
