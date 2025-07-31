@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Find Jobs in New York (2025 Guide)",
+  title: "Find Jobs in New York",
   description:
     "Looking for jobs in New York? Discover how AI tools can help you find relevant jobs faster and easier in 2025.",
   icons: {

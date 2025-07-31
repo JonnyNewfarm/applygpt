@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "How to Find Jobs in the USA Using AI Tools (2025 Guide)",
+  title: "Find Jobs in the USA Using AI Tools (2025 Guide)",
   description:
     "Searching for jobs in the USA? Discover how AI-powered tools can help you apply faster with better resumes, cover letters, and job matches.",
   keywords: [
@@ -33,7 +33,7 @@ export default function FindJobsUSA() {
     <div className="px-6 py-12 bg-[#2b2a27] w-full flex justify-center text-[#f6f4ed] dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
       <div className="max-w-3xl">
         <h1 className="text-4xl font-bold mb-6">
-          How to Find Jobs in the USA Using AI Tools (2025 Guide)
+          Find Jobs in the USA Using AI Tools
         </h1>
 
         <p className="mb-4 text-lg">
