@@ -29,7 +29,7 @@ const Footer = () => {
               </div>
             </div>
 
-            <div className="flex flex-col gap-y-2 md:flex-row  gap-x-10">
+            <div className="flex flex-col gap-y-2 md:flex-row  gap-x-10 mt-3">
               <div className="">
                 <h1 className="font-semibold">Created by:</h1>
                 <a
