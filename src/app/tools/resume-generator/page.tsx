@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 const ResumeGeneratorLandingPage = () => {
   return (
     <main className="min-h-screen border-b-white/80 dark:border-b-black/80 border-b-1 bg-[#2b2a27] dark:bg-[#f5f4ef] text-[#f5f4ef] dark:text-[#2b2a27] px-6 sm:px-16 py-20 flex flex-col gap-y-14">
-      <section className="max-w-5xl mx-auto text-center flex flex-col items-center gap-y-6">
+      <section className="w-full max-w-6xl mx-auto flex flex-col items-start text-left">
         <h1 className="text-3xl sm:text-5xl font-bold leading-tight">
           AI Resume Generator
         </h1>
@@ -40,7 +40,7 @@ const ResumeGeneratorLandingPage = () => {
         </Link>
       </section>
 
-      <section className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+      <section className="w-full max-w-6xl mx-auto flex flex-col items-start text-left">
         <div className="flex flex-col gap-y-4">
           <h2 className="text-2xl font-semibold">Features</h2>
           <ul className="list-disc pl-5 text-lg space-y-2">
@@ -53,7 +53,7 @@ const ResumeGeneratorLandingPage = () => {
         </div>
       </section>
 
-      <section className="max-w-4xl mx-auto text-center mt-12">
+      <section className="w-full max-w-6xl mx-auto flex flex-col items-start text-left">
         <h3 className="text-2xl font-semibold mb-4">Why use Job Scriptor?</h3>
         <p className="text-lg">
           Job Scriptor lets you create, customize, and save resumes with AI.

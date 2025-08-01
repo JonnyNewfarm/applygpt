@@ -485,7 +485,7 @@ export default function FindJobsPage() {
             className="w-full border relative border-gray-500 bg-white text-black rounded p-2 mb-4"
           />
           {jobTitleSuggestions.length > 0 && (
-            <ul className="bg-white absolute z-50 w-full text-black border border-gray-500 rounded mb-4 max-h-40 ">
+            <ul className="bg-white absolute z-50 w-full text-black border border-gray-500 rounded overflow-hidden mb-4 max-h-40 ">
               {jobTitleSuggestions.map((title, idx) => (
                 <li
                   key={idx}
