@@ -45,6 +45,7 @@ export default function FindJobsPage() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(false);
   const [savingJobId, setSavingJobId] = useState<string | null>(null);
+  const [showResumeModal, setShowResumeModal] = useState(false);
 
   const [error, setError] = useState("");
   const [page, setPage] = useState(1);
@@ -358,218 +359,241 @@ export default function FindJobsPage() {
 
   return (
     <main className="w-full px-2  min-h-screen flex flex-col justify-center bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
-      <div className="max-w-4xl h-full mx-auto  py-10">
-        <h1 className="text-3xl h-full font-bold mb-6">
-          Find Jobs That Match Your Resume
-        </h1>
+      <div className="max-w-5xl relative h-full items-center mx-auto flex justify-center flex-col  py-10">
+        <div className="flex justify-center items-center flex-col w-full">
+          <div className="max-w-4xl">
+            <h1 className="text-3xl h-full px-3 font-bold mb-6">
+              Find Jobs That Match Your Resume
+            </h1>
 
-        {showNoResumePopup && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-white text-black p-6 rounded shadow-md max-w-sm w-full">
-              <p className="mb-4">
-                You need to create or upload a resume first.
-              </p>
-              <Link
-                href="/resume-generator"
-                className="inline-block bg-stone-900 text-white px-4 py-2 rounded mr-3"
-              >
-                Create Resume
-              </Link>
-              <button
-                onClick={() => setShowNoResumePopup(false)}
-                className="inline-block cursor-pointer bg-gray-400 text-white px-4 py-2 rounded"
-              >
-                <IoMdClose />
-              </button>
-            </div>
-          </div>
-        )}
+            <div ref={jobTitleRef} className="relative  px-2">
+              <input
+                type="text"
+                value={query}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setQuery(val);
 
-        <div className="w-full">
-          <div className="relative w-full inline-block px-2">
-            <textarea
-              ref={textAreaRef}
-              style={{ scrollbarWidth: "thin", height: textAreaSize }}
-              value={resume}
-              onChange={(e) => {
-                setResume(e.target.value);
-                setResumeSaved(false);
-              }}
-              placeholder="Paste your resume here..."
-              rows={8}
-              className="w-full border bg-white text-black border-gray-500 rounded p-2"
-            />
-
-            {!resume && !resumeLoading && (
-              <div className="absolute top-0 left-0 w-full h-full bg-stone-200 text-black/90 rounded p-4 z-10 flex items-center justify-center">
-                <div className="max-w-xl p-5 w-full text-center space-y-3">
-                  <div className="space-y-0 text-sm font-semibold   sm:text-base  leading-relaxed">
-                    <p>
-                      Create or upload your resume to get personalized job
-                      matches.
-                    </p>
-                    <p>
-                      Prefer to do it later? No problem – you can still browse
-                      and search for jobs anytime.
-                    </p>
-                  </div>
-
-                  <div className="flex items-center justify-center gap-4 flex-wrap">
-                    <Link
-                      href="/resume-generator"
-                      className="bg-stone-800 font-semibold rounded-[4px] text-sm text-white border border-white px-5 py-2   hover:bg-stone-700 transition"
-                    >
-                      Create Resume
-                    </Link>
-                    <button
+                  if (val.length > 0) {
+                    const filtered = jobTitleList.filter((title) =>
+                      title.toLowerCase().includes(val.toLowerCase())
+                    );
+                    setJobTitleSuggestions(filtered);
+                  } else {
+                    setJobTitleSuggestions([]);
+                  }
+                }}
+                placeholder="Job title (e.g. frontend developer)"
+                className="w-full border relative border-gray-500 bg-white text-black rounded p-2 mb-4"
+              />
+              {jobTitleSuggestions.length > 0 && (
+                <ul className="bg-white absolute z-50 w-full text-black border border-gray-500 rounded overflow-hidden mb-4 max-h-40 ">
+                  {jobTitleSuggestions.map((title, idx) => (
+                    <li
+                      key={idx}
                       onClick={() => {
-                        setResume(" ");
-                        setTimeout(() => textAreaRef.current?.focus(), 50);
+                        setQuery(title);
+                        setJobTitleSuggestions([]);
                       }}
-                      className="border-2 text-sm rounded-[4px] border-black text-black px-5 py-2  font-semibold cursor-pointer hover:bg-black hover:text-white transition"
+                      className="p-2 cursor-pointer hover:bg-gray-100"
                     >
-                      Paste
-                    </button>
+                      {title}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
+            <div className="relative m-0 px-2">
+              <input
+                type="text"
+                value={country}
+                onChange={(e) => handleCountryInput(e.target.value)}
+                placeholder="Country"
+                className="w-full border relative border-gray-500 bg-white text-black rounded p-2 mb-4"
+              />
+              {countrySuggestions.length > 0 && (
+                <ul className="bg-white top-12 z-50 absolute w-full text-black border border-gray-500 rounded mb-4 max-h-40 overflow-y-auto">
+                  {countrySuggestions.map((c) => (
+                    <li
+                      key={c.isoCode}
+                      onClick={() => handleSelectCountry(c)}
+                      className="p-2 cursor-pointer hover:bg-gray-100"
+                    >
+                      {c.name}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
+            <div className="relative px-2">
+              <input
+                type="text"
+                value={city}
+                onChange={(e) => handleCityInput(e.target.value)}
+                placeholder="City"
+                className="w-full border relative border-gray-500 bg-white text-black rounded p-2 mb-4"
+              />
+              {citySuggestions.length > 0 && (
+                <ul className="bg-white absolute w-full z-50 text-black border border-gray-500 rounded mb-4 max-h-40 overflow-y-auto">
+                  {citySuggestions.map((c, i) => (
+                    <li
+                      key={i}
+                      onClick={() => {
+                        setCity(c);
+                        setCitySuggestions([]);
+                      }}
+                      className="p-2 cursor-pointer hover:bg-gray-100"
+                    >
+                      {c}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            <div className="w-full relative">
+              <div className="flex justify-between  px-3">
+                <button
+                  onClick={() => setShowResumeModal((prev) => !prev)}
+                  className="border-2 sticky cursor-pointer px-4 py-2 mb-2  rounded-[3px] text-sm font-semibold dark:border-[#2b2a27] border-[#f6f4ed] text-[#f6f4ed] dark:text-[#2b2a27] hover:scale-105 transform transition-transform duration-200"
+                >
+                  {showResumeModal ? "Close" : "Your Resume"}
+                </button>
+                <p className="text-sm mb-2 mt-2">
+                  {usage.generationLimit === null
+                    ? `Used ${usage.generationCount} generations (Unlimited plan)`
+                    : `Usage: ${usage.generationCount} / ${usage.generationLimit} generations`}
+                </p>
+              </div>
+
+              {showResumeModal && (
+                <div className="w-full">
+                  {showNoResumePopup && (
+                    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                      <div className="bg-white transform scale-95 opacity-0 animate-fadeIn text-black p-6 rounded shadow-md max-w-sm w-full">
+                        <p className="mb-4">
+                          You need to create or upload a resume first.
+                        </p>
+                        <Link
+                          href="/resume-generator"
+                          className="inline-block bg-stone-900 text-white px-4 py-2 rounded mr-3"
+                        >
+                          Create Resume
+                        </Link>
+                        <button
+                          onClick={() => setShowNoResumePopup(false)}
+                          className="inline-block cursor-pointer bg-gray-400 text-white px-4 py-2 rounded"
+                        >
+                          <IoMdClose />
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="w-full">
+                    <div className="relative w-full inline-block px-2">
+                      <textarea
+                        ref={textAreaRef}
+                        style={{ scrollbarWidth: "thin", height: textAreaSize }}
+                        value={resume}
+                        onChange={(e) => {
+                          setResume(e.target.value);
+                          setResumeSaved(false);
+                        }}
+                        placeholder="Paste your resume here..."
+                        rows={8}
+                        className="w-full border bg-white text-black border-gray-500 rounded p-2"
+                      />
+                      <div className="w-full flex mt-2 px-2 justify-between items-center">
+                        {!resumeSaved ? (
+                          <button
+                            onClick={onSaveResume}
+                            disabled={!resume.trim()}
+                            className=" mb-5 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
+                          >
+                            Save Resume
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => {
+                              setTimeout(
+                                () => textAreaRef.current?.focus(),
+                                50
+                              );
+                            }}
+                            className=" mb-5 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
+                          >
+                            Edit Resume
+                          </button>
+                        )}
+
+                        <button
+                          className="mb-5 cursor-pointer  dark:text-black"
+                          onClick={handleTextAreaState}
+                        >
+                          {textAreaTitle}
+                        </button>
+                      </div>
+
+                      {!resume && !resumeLoading && (
+                        <div className="absolute top-0 left-0 w-full h-full bg-stone-200 text-black/90 rounded p-4 z-10 flex items-center justify-center">
+                          <div className="max-w-xl p-5 w-full text-center space-y-3">
+                            <div className="space-y-0 text-sm font-semibold   sm:text-base  leading-relaxed">
+                              <p>
+                                Create or upload your resume to get personalized
+                                job matches.
+                              </p>
+                              <p>
+                                Prefer to do it later? No problem – you can
+                                still browse and search for jobs anytime.
+                              </p>
+                            </div>
+
+                            <div className="flex items-center justify-center gap-4 flex-wrap">
+                              <Link
+                                href="/resume-generator"
+                                className="bg-stone-800 font-semibold rounded-[4px] text-sm text-white border border-white px-5 py-2   hover:bg-stone-700 transition"
+                              >
+                                Create Resume
+                              </Link>
+                              <button
+                                onClick={() => {
+                                  setResume(" ");
+                                  setTimeout(
+                                    () => textAreaRef.current?.focus(),
+                                    50
+                                  );
+                                }}
+                                className="border-2 text-sm rounded-[4px] border-black text-black px-5 py-2  font-semibold cursor-pointer hover:bg-black hover:text-white transition"
+                              >
+                                Paste
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
+
+            <div className="px-3">
+              <button
+                onClick={handleFindJobs}
+                disabled={loading}
+                className="mt-3 w-full  cursor-pointer py-3 rounded-[3px]  uppercase tracking-wide dark:bg-[#2b2a27] px-3 bg-[#fff7e9] text-lg text-black dark:text-[#f6f4ed] font-bold transform transition-transform duration-300 ease-in-out hover:scale-105"
+              >
+                {loading ? "Searching..." : "Find Jobs"}
+              </button>
+            </div>
+
+            {error && <p className="text-red-500 mt-4">{error}</p>}
           </div>
         </div>
 
-        <div className="w-full flex mt-2 px-2 justify-between items-center">
-          {!resumeSaved ? (
-            <button
-              onClick={onSaveResume}
-              disabled={!resume.trim()}
-              className=" mb-5 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
-            >
-              Save Resume
-            </button>
-          ) : (
-            <button
-              onClick={() => {
-                setTimeout(() => textAreaRef.current?.focus(), 50);
-              }}
-              className=" mb-5 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
-            >
-              Edit Resume
-            </button>
-          )}
-
-          <button
-            className="mb-5 cursor-pointer  dark:text-black"
-            onClick={handleTextAreaState}
-          >
-            {textAreaTitle}
-          </button>
-        </div>
-        <div ref={jobTitleRef} className="relative px-2">
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => {
-              const val = e.target.value;
-              setQuery(val);
-
-              if (val.length > 0) {
-                const filtered = jobTitleList.filter((title) =>
-                  title.toLowerCase().includes(val.toLowerCase())
-                );
-                setJobTitleSuggestions(filtered);
-              } else {
-                setJobTitleSuggestions([]);
-              }
-            }}
-            placeholder="Job title (e.g. frontend developer)"
-            className="w-full border relative border-gray-500 bg-white text-black rounded p-2 mb-4"
-          />
-          {jobTitleSuggestions.length > 0 && (
-            <ul className="bg-white absolute z-50 w-full text-black border border-gray-500 rounded overflow-hidden mb-4 max-h-40 ">
-              {jobTitleSuggestions.map((title, idx) => (
-                <li
-                  key={idx}
-                  onClick={() => {
-                    setQuery(title);
-                    setJobTitleSuggestions([]);
-                  }}
-                  className="p-2 cursor-pointer hover:bg-gray-100"
-                >
-                  {title}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-
-        <div className="relative m-0 px-2">
-          <input
-            type="text"
-            value={country}
-            onChange={(e) => handleCountryInput(e.target.value)}
-            placeholder="Country"
-            className="w-full border relative border-gray-500 bg-white text-black rounded p-2 mb-4"
-          />
-          {countrySuggestions.length > 0 && (
-            <ul className="bg-white top-12 z-50 absolute w-full text-black border border-gray-500 rounded mb-4 max-h-40 overflow-y-auto">
-              {countrySuggestions.map((c) => (
-                <li
-                  key={c.isoCode}
-                  onClick={() => handleSelectCountry(c)}
-                  className="p-2 cursor-pointer hover:bg-gray-100"
-                >
-                  {c.name}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-
-        <div className="relative px-2">
-          <input
-            type="text"
-            value={city}
-            onChange={(e) => handleCityInput(e.target.value)}
-            placeholder="City"
-            className="w-full border relative border-gray-500 bg-white text-black rounded p-2 mb-4"
-          />
-          {citySuggestions.length > 0 && (
-            <ul className="bg-white absolute w-full text-black border border-gray-500 rounded mb-4 max-h-40 overflow-y-auto">
-              {citySuggestions.map((c, i) => (
-                <li
-                  key={i}
-                  onClick={() => {
-                    setCity(c);
-                    setCitySuggestions([]);
-                  }}
-                  className="p-2 cursor-pointer hover:bg-gray-100"
-                >
-                  {c}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-
-        <div className="px-3">
-          <p className="text-sm mb-2">
-            {usage.generationLimit === null
-              ? `Used ${usage.generationCount} generations (Unlimited plan)`
-              : `Usage: ${usage.generationCount} / ${usage.generationLimit} generations`}
-          </p>
-
-          <button
-            onClick={handleFindJobs}
-            disabled={loading}
-            className="mt-3 w-full  cursor-pointer py-3 rounded-[3px] border-[3px] uppercase dark:bg-[#2b2a27] px-3 bg-[#f6f4f2] text-lg text-black dark:text-[#f6f4ed] font-bold transform transition-transform duration-300 ease-in-out hover:scale-105"
-          >
-            {loading ? "Searching..." : "Find Jobs"}
-          </button>
-        </div>
-
-        {error && <p className="text-red-500 mt-4">{error}</p>}
-
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="mt-16 gap-y-10 grid grid-cols-1 md:grid-cols-2 gap-6">
           {loading && jobs.length === 0 ? <SkeletonCard /> : null}
 
           {jobs.map((job) => (
@@ -678,7 +702,7 @@ export default function FindJobsPage() {
         </div>
 
         {jobs.length > 0 && (
-          <div className="mt-8 flex justify-between">
+          <div className="mt-8 w-full flex justify-between">
             <button
               onClick={() => handlePageChange(page - 1)}
               disabled={page === 1}
@@ -686,7 +710,7 @@ export default function FindJobsPage() {
             >
               Previous
             </button>
-            <span className="self-center text-sm">Page {page}</span>
+            <span className="self-center text-sm">{page}</span>
             <button
               onClick={() => handlePageChange(page + 1)}
               className="px-4 py-2 cursor-pointer rounded border-2 font-semibold  text-sm"
