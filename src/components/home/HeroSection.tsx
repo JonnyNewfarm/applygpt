@@ -133,7 +133,7 @@ const HeroSection = () => {
           <div className="mt-4">
             <MagneticComp>
               <Link
-                className=" py-2 px-3.5 mt-3  bg-[#f6f4ed] text-[black] rounded-[3px] dark:bg-[#2b2a27] dark:text-[#f6f4ed] text-lg  md:text-xl  font-semibold whitespace-nowrap"
+                className=" py-2 px-4 mt-3  bg-[#f6f4ed] text-[black] rounded-[3px] dark:bg-[#2b2a27] dark:text-[#f6f4ed] text-lg  md:text-xl  font-semibold whitespace-nowrap"
                 href={"/jobs"}
               >
                 Get Started

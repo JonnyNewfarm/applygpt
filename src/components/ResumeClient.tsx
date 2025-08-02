@@ -156,10 +156,10 @@ export default function ResumeClient() {
 
   return (
     <div className="w-full bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4f2] dark:text-[#2b2a27] min-h-screen">
-      <main className="max-w-4xl mx-auto p-4 md:px-8">
-        <h1 className="mb-2  font-semibold">Or generate a resume:</h1>
+      <main className="max-w-4xl mx-auto px-4 md:px-8">
+        <h1 className="mb-2 text-lg  font-semibold">Or generate a resume:</h1>
 
-        <div className="space-y-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           {[
             { label: "Name", field: "name" },
             { label: "Job Title", field: "jobTitle" },
@@ -169,22 +169,45 @@ export default function ResumeClient() {
             { label: "Phone Number (optional)", field: "phoneNumber" },
             { label: "Email (optional)", field: "email" },
             { label: "Links (optional, e.g., LinkedIn)", field: "links" },
-            { label: "Work Experience & Education", field: "experience" },
-            { label: "Skills", field: "skills" },
           ].map(({ label, field }) => (
             <div key={field}>
               <label className="block text-sm font-semibold mb-1">
                 {label}
               </label>
-              <textarea
+              <input
+                type="text"
                 placeholder={label}
-                rows={field === "experience" || field === "skills" ? 3 : 1}
                 value={form[field as keyof typeof form]}
                 onChange={(e) => handleChange(field, e.target.value)}
                 className="w-full p-2 border rounded-[3px] bg-white text-black"
               />
             </div>
           ))}
+
+          {/* Full width fields below */}
+          <div className="md:col-span-2">
+            <label className="block text-sm font-semibold mb-1">
+              Work Experience & Education
+            </label>
+            <textarea
+              placeholder="Work Experience & Education"
+              rows={3}
+              value={form.experience}
+              onChange={(e) => handleChange("experience", e.target.value)}
+              className="w-full p-2 border rounded-[3px] bg-white text-black"
+            />
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="block text-sm font-semibold mb-1">Skills</label>
+            <textarea
+              placeholder="Skills"
+              rows={3}
+              value={form.skills}
+              onChange={(e) => handleChange("skills", e.target.value)}
+              className="w-full p-2 border rounded-[3px] bg-white text-black"
+            />
+          </div>
         </div>
 
         <div className="mb-4 text-sm mt-4 text-[#f6f4ed] dark:text-[#2b2a27]">

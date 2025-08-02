@@ -14,7 +14,7 @@ const ResumeUploadPopUp = ({ children }: Props) => {
 
         <p className="mb-0 text-xl">Already have a resume? </p>
 
-        <div className="mb-7">
+        <div className="mb-5">
           <button
             onClick={() => setShowUploadModal(true)}
             className="mt-2 border-2 font-bold cursor-pointer dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-lg text-[#f6f4ed] dark:text-[#2b2a27] transform transition-transform duration-300 ease-in-out hover:scale-105"

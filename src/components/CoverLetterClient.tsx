@@ -13,6 +13,7 @@ export default function CoverLetterClient() {
 
   const [company, setCompany] = useState("");
   const [description, setDescription] = useState("");
+  const [showResumeModal, setShowResumeModal] = useState(false);
 
   const resumeRef = useRef<HTMLTextAreaElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
@@ -226,81 +227,6 @@ export default function CoverLetterClient() {
 
         <div className="flex flex-col md:flex-row gap-8">
           <div className="w-full md:w-1/2 ">
-            <div className="relative">
-              <label className="block text-sm font-semibold mb-1">Resume</label>
-              <div style={{ height: textAreaSize }} className="relative">
-                <textarea
-                  ref={resumeRef}
-                  className="w-full h-full p-3 border bg-white text-black"
-                  value={resume}
-                  onChange={(e) => {
-                    setResume(e.target.value);
-                    setResumeSaved(false);
-                  }}
-                  placeholder="Paste your resume here..."
-                />
-
-                {!resumeLoading && showOverlay && (
-                  <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-stone-200 text-black/90 z-10">
-                    <div className="px-5 md:px-5 flex flex-col gap-y-2 justify-center items-center w-full">
-                      <p className="font-semibold w-full text-xs sm:text-sm ">
-                        Create or upload your resume to start generating a
-                        tailored cover letter.
-                      </p>
-                      <div className="flex gap-4">
-                        <button
-                          onClick={() => router.push("/resume-generator")}
-                          className="inline-block font-bold cursor-pointer bg-stone-900 text-white px-4 py-2 rounded mr-3 text-xs sm:text-sm"
-                        >
-                          Create Resume
-                        </button>
-                        <button
-                          onClick={() => {
-                            setShowOverlay(false);
-                            setTimeout(() => {
-                              resumeRef.current?.focus();
-                            }, 0);
-                          }}
-                          className="cursor-pointer text-xs sm:text-sm font-semibold  border-2 py-1 px-3 rounded-[4px]"
-                        >
-                          Paste
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <div className="flex mt-2 justify-between items-center">
-                {!resumeSaved ? (
-                  <button
-                    onClick={onSaveResume}
-                    className="mb-5 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
-                    disabled={!resume.trim()}
-                  >
-                    Save Resume
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => {
-                      setTimeout(() => {
-                        resumeRef.current?.focus();
-                      }, 0);
-                    }}
-                    className="mt-1 mb-5 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
-                  >
-                    Edit Resume
-                  </button>
-                )}
-                <button
-                  className="cursor-pointer"
-                  onClick={handleTextAreaState}
-                >
-                  {textAreaTitle}
-                </button>
-              </div>
-            </div>
-
             <div className="flex flex-col gap-y-2">
               <label className="block text-sm font-semibold mb-1">
                 Company
@@ -387,12 +313,108 @@ export default function CoverLetterClient() {
               </select>
             </div>
 
-            <div>
-              <p className="text-sm mb-2">
-                {usage.generationLimit === null
-                  ? `Used ${usage.generationCount} generations (Unlimited plan)`
-                  : `Usage: ${usage.generationCount} / ${usage.generationLimit} generations`}
-              </p>
+            <div className="w-full">
+              <div className="">
+                <div className="flex flex-col w-full">
+                  {" "}
+                  <button
+                    onClick={() => setShowResumeModal((prev) => !prev)}
+                    className="border-2 sticky max-w-36 mt-4 cursor-pointer px-4 py-2 mb-2  rounded-[3px] text-sm font-semibold dark:border-[#2b2a27] border-[#f6f4ed] text-[#f6f4ed] dark:text-[#2b2a27] hover:scale-105 transform transition-transform duration-200"
+                  >
+                    {showResumeModal ? "Close" : "Your Resume"}
+                  </button>
+                  {showResumeModal && (
+                    <div className="relative w-full mt-3">
+                      <label className="block text-sm font-semibold mb-1">
+                        Resume
+                      </label>
+                      <div
+                        style={{ height: textAreaSize }}
+                        className="relative"
+                      >
+                        <textarea
+                          ref={resumeRef}
+                          className="w-full h-full p-3 border bg-white text-black"
+                          value={resume}
+                          onChange={(e) => {
+                            setResume(e.target.value);
+                            setResumeSaved(false);
+                          }}
+                          placeholder="Paste your resume here..."
+                        />
+
+                        {!resumeLoading && showOverlay && (
+                          <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-stone-200 text-black/90 z-10">
+                            <div className="px-5 md:px-5 flex flex-col gap-y-2 justify-center items-center w-full">
+                              <p className="font-semibold w-full text-xs sm:text-sm ">
+                                Create or upload your resume to start generating
+                                a tailored cover letter.
+                              </p>
+                              <div className="flex gap-4">
+                                <button
+                                  onClick={() =>
+                                    router.push("/resume-generator")
+                                  }
+                                  className="inline-block font-bold cursor-pointer bg-stone-900 text-white px-4 py-2 rounded mr-3 text-xs sm:text-sm"
+                                >
+                                  Create Resume
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    setShowOverlay(false);
+                                    setTimeout(() => {
+                                      resumeRef.current?.focus();
+                                    }, 0);
+                                  }}
+                                  className="cursor-pointer text-xs sm:text-sm font-semibold  border-2 py-1 px-3 rounded-[4px]"
+                                >
+                                  Paste
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="flex mt-2 justify-between items-center">
+                        {!resumeSaved ? (
+                          <button
+                            onClick={onSaveResume}
+                            className="mb-5 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
+                            disabled={!resume.trim()}
+                          >
+                            Save Resume
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => {
+                              setTimeout(() => {
+                                resumeRef.current?.focus();
+                              }, 0);
+                            }}
+                            className="mt-1 mb-5 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
+                          >
+                            Edit Resume
+                          </button>
+                        )}
+                        <button
+                          className="cursor-pointer"
+                          onClick={handleTextAreaState}
+                        >
+                          {textAreaTitle}
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <p className="text-sm mb-2 mt-2">
+                    {usage.generationLimit === null
+                      ? `Used ${usage.generationCount} generations (Unlimited plan)`
+                      : `Usage: ${usage.generationCount} / ${usage.generationLimit} generations`}
+                  </p>
+                </div>
+              </div>
 
               {isAtLimit ? (
                 <div className="p-4 border border-red-500 rounded bg-red-100 text-red-700">
