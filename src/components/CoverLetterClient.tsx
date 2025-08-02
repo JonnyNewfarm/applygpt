@@ -435,7 +435,7 @@ export default function CoverLetterClient() {
                   <button
                     onClick={onGenerate}
                     disabled={loading || !resume || !jobAd}
-                    className={`mt-3 w-full cursor-pointer py-3 rounded-[3px] border-[3px] uppercase dark:bg-[#2b2a27] px-3 bg-[#fff7e9] text-lg text-black dark:text-[#f6f4ed] font-bold transform transition-transform duration-300 ease-in-out hover:scale-105 ${
+                    className={`mt-3 w-full  cursor-pointer py-3 rounded-[3px]  uppercase tracking-wide  px-3 text-lg text-[#f6f4ed] dark:text-black border-[#f6f4ed] shadow-md shadow-white/35 dark:shadow-black/25 border-2 dark:border-black font-bold transform transition-transform duration-300 ease-in-out hover:scale-105 ${
                       loading
                         ? "cursor-not-allowed"
                         : "hover:opacity-80 cursor-pointer"

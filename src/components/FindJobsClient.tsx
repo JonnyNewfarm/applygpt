@@ -362,32 +362,35 @@ export default function FindJobsPage() {
       <div className="max-w-5xl relative h-full items-center mx-auto flex justify-center flex-col  py-10">
         <div className="flex justify-center items-center flex-col w-full">
           <div className="max-w-4xl">
-            <h1 className="text-3xl h-full px-3 font-bold mb-6">
+            <h1 className="text-3xl  h-full px-3 font-bold mb-6">
               Find Jobs That Match Your Resume
             </h1>
 
             <div ref={jobTitleRef} className="relative  px-2">
-              <input
-                type="text"
-                value={query}
-                onChange={(e) => {
-                  const val = e.target.value;
-                  setQuery(val);
+              <label>
+                <p className="mb-1 font-bold">Job Title</p>
+                <input
+                  type="text"
+                  value={query}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setQuery(val);
 
-                  if (val.length > 0) {
-                    const filtered = jobTitleList.filter((title) =>
-                      title.toLowerCase().includes(val.toLowerCase())
-                    );
-                    setJobTitleSuggestions(filtered);
-                  } else {
-                    setJobTitleSuggestions([]);
-                  }
-                }}
-                placeholder="Job title (e.g. frontend developer)"
-                className="w-full border relative border-gray-500 bg-white text-black rounded p-2 mb-4"
-              />
+                    if (val.length > 0) {
+                      const filtered = jobTitleList.filter((title) =>
+                        title.toLowerCase().includes(val.toLowerCase())
+                      );
+                      setJobTitleSuggestions(filtered);
+                    } else {
+                      setJobTitleSuggestions([]);
+                    }
+                  }}
+                  placeholder="Job title (e.g. frontend developer)"
+                  className="w-full   dark:shadow-stone-400/45 border-2 shadow-md relative   border-[#f6f4ed] dark:border-[#2b2a27] bg-white/95 text-black rounded p-2 mb-3"
+                />
+              </label>
               {jobTitleSuggestions.length > 0 && (
-                <ul className="bg-white absolute z-50 w-full text-black border border-gray-500 rounded overflow-hidden mb-4 max-h-40 ">
+                <ul className="bg-white absolute z-50 w-full  text-black border border-gray-500 rounded overflow-hidden mb-4 max-h-40 ">
                   {jobTitleSuggestions.map((title, idx) => (
                     <li
                       key={idx}
@@ -405,15 +408,19 @@ export default function FindJobsPage() {
             </div>
 
             <div className="relative m-0 px-2">
-              <input
-                type="text"
-                value={country}
-                onChange={(e) => handleCountryInput(e.target.value)}
-                placeholder="Country"
-                className="w-full border relative border-gray-500 bg-white text-black rounded p-2 mb-4"
-              />
+              <label>
+                {" "}
+                <p className="mb-1 font-bold">Country</p>
+                <input
+                  type="text"
+                  value={country}
+                  onChange={(e) => handleCountryInput(e.target.value)}
+                  placeholder="Country"
+                  className="w-full   dark:shadow-stone-400/45 border-2 shadow-md relative   border-[#f6f4ed] dark:border-[#2b2a27] bg-white/95 text-black rounded p-2 mb-3"
+                />
+              </label>
               {countrySuggestions.length > 0 && (
-                <ul className="bg-white top-12 z-50 absolute w-full text-black border border-gray-500 rounded mb-4 max-h-40 overflow-y-auto">
+                <ul className="bg-white top-19 z-50 absolute w-full text-black border border-gray-500 rounded mb-3 max-h-40 overflow-y-auto">
                   {countrySuggestions.map((c) => (
                     <li
                       key={c.isoCode}
@@ -428,13 +435,17 @@ export default function FindJobsPage() {
             </div>
 
             <div className="relative px-2">
-              <input
-                type="text"
-                value={city}
-                onChange={(e) => handleCityInput(e.target.value)}
-                placeholder="City"
-                className="w-full border relative border-gray-500 bg-white text-black rounded p-2 mb-4"
-              />
+              <label>
+                <p className="mb-1 font-bold">City</p>
+
+                <input
+                  type="text"
+                  value={city}
+                  onChange={(e) => handleCityInput(e.target.value)}
+                  placeholder="City"
+                  className="w-full   dark:shadow-stone-400/45 border-2 shadow-md relative   border-[#f6f4ed] dark:border-[#2b2a27] bg-white text-black rounded p-2 mb-3"
+                />
+              </label>
               {citySuggestions.length > 0 && (
                 <ul className="bg-white absolute w-full z-50 text-black border border-gray-500 rounded mb-4 max-h-40 overflow-y-auto">
                   {citySuggestions.map((c, i) => (
@@ -583,7 +594,7 @@ export default function FindJobsPage() {
               <button
                 onClick={handleFindJobs}
                 disabled={loading}
-                className="mt-3 w-full  cursor-pointer py-3 rounded-[3px]  uppercase tracking-wide dark:bg-[#2b2a27] px-3 bg-[#fff7e9] text-lg text-black dark:text-[#f6f4ed] font-bold transform transition-transform duration-300 ease-in-out hover:scale-105"
+                className="mt-3 w-full  cursor-pointer py-3 rounded-[3px]  uppercase tracking-wide  px-3 text-lg text-[#f6f4ed] dark:text-black border-[#f6f4ed] shadow-md shadow-white/35 dark:shadow-black/25 border-2 dark:border-black font-bold transform transition-transform duration-300 ease-in-out hover:scale-105"
               >
                 {loading ? "Searching..." : "Find Jobs"}
               </button>

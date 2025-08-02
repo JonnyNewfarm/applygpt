@@ -210,7 +210,7 @@ export default function ResumeClient() {
           </div>
         </div>
 
-        <div className="mb-4 text-sm mt-4 text-[#f6f4ed] dark:text-[#2b2a27]">
+        <div className="mb-3 text-sm mt-2 text-[#f6f4ed] dark:text-[#2b2a27]">
           {usage.generationLimit === null
             ? `Used ${usage.generationCount} generations (Unlimited plan)`
             : `Usage: ${usage.generationCount} / ${usage.generationLimit} generations`}
@@ -236,7 +236,7 @@ export default function ResumeClient() {
             disabled={
               isGenerating || !form.name || !form.jobTitle || !form.experience
             }
-            className={`mt-3 w-full cursor-pointer py-3 rounded-[3px] border-[3px] uppercase dark:bg-[#2b2a27] px-3 bg-[#fff7e9] text-lg text-black dark:text-[#f6f4ed] font-bold transform transition-transform duration-300 ease-in-out hover:scale-105  ${
+            className={` w-full  cursor-pointer py-3 rounded-[3px]  uppercase tracking-wide  px-3 text-lg text-[#f6f4ed] dark:text-black border-[#f6f4ed] shadow-md shadow-white/35 dark:shadow-black/25 border-2 dark:border-black font-bold transform transition-transform duration-300 ease-in-out hover:scale-105  ${
               isGenerating ? "cursor-not-allowed" : "hover:opacity-80"
             }`}
           >
