@@ -29,7 +29,7 @@ const Homepage = () => {
   return (
     <SmoothScroll>
       <main className="h-full border-b-white/50 border-b dark:border-b-black/80  flex flex-col justify-center items-center  w-full">
-        <div className="sr-only">
+        <div className="absolute top-[-9999px] left-[-9999px] opacity-0">
           <h1>AI Career Tools – Create Resumes, Cover Letters & Find Jobs</h1>
           <p>
             Use AI to build your resume, write personalized cover letters, and
