@@ -5,12 +5,12 @@ export const metadata: Metadata = {
   description:
     "You can search jobs in your location from top providers like LinkedIn and Indeed. Match them to your resume with AI, and generate AI-powered cover letters easily.",
   icons: {
-    icon: "/og-image.png",
+    icon: "/og-image-v2.png",
   },
   openGraph: {
     images: [
       {
-        url: "https://www.jobscriptor.com/og-image.png",
+        url: "https://www.jobscriptor.com/og-image-v2.png",
         width: 1200,
         height: 630,
         alt: "Find Jobs in New York with AI tools.",
@@ -43,7 +43,6 @@ const FindJobsLandingPage = () => {
         </div>
       </section>
 
-      {/* Features Section */}
       <section className="w-full max-w-6xl mx-auto flex flex-col items-start text-left">
         <div className="flex flex-col md:flex-row gap-x-12 gap-y-5 items-center">
           <div className="flex flex-col gap-y-4">
@@ -68,7 +67,6 @@ const FindJobsLandingPage = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="w-full max-w-6xl mx-auto flex flex-col items-start text-left">
         <h3 className="text-2xl font-semibold mb-4">
           Start Finding Better Jobs Today

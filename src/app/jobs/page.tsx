@@ -9,12 +9,12 @@ export const metadata: Metadata = {
   description:
     "Find your next opportunity using our smart job search engine. Browse remote and local jobs filtered by city, country, or job title.",
   icons: {
-    icon: "/og-image.png",
+    icon: "/og-image-v2.png",
   },
   openGraph: {
     images: [
       {
-        url: "https://www.jobscriptor.com/og-image.png",
+        url: "https://www.jobscriptor.com/og-image-v2.png",
         width: 1200,
         height: 630,
         alt: "AI Cover Letter Tool by Jobscriptor",
