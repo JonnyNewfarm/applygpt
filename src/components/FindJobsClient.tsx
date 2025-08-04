@@ -477,31 +477,38 @@ export default function FindJobsPage() {
                     : `Usage: ${usage.generationCount} / ${usage.generationLimit} generations`}
                 </p>
               </div>
+              {showNoResumePopup && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-40">
+                  <div className="bg-white z-50  relative transform  text-black p-6 rounded  max-w-md py-10">
+                    <div className="flex justify-between items-center">
+                      <p className="  max-w-[70%]">
+                        You need to create or upload a resume first.
+                      </p>
+                      <button
+                        onClick={() => setShowNoResumePopup(false)}
+                        className="cursor-pointer absolute right-2 top-2  text-black  text-3xl rounded"
+                      >
+                        <IoMdClose />
+                      </button>
+                    </div>
+                    <Link
+                      href="/resume-generator"
+                      className="inline-block z-50 mt-4 bg-stone-900 text-white px-4 py-2 rounded mr-3"
+                    >
+                      Create Resume
+                    </Link>
+                    <Link
+                      href="/profile"
+                      className="inline-block z-50 bg-stone-600 text-white px-4 py-2 rounded mr-3"
+                    >
+                      Upload
+                    </Link>
+                  </div>
+                </div>
+              )}
 
               {showResumeModal && (
                 <div className="w-full">
-                  {showNoResumePopup && (
-                    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-                      <div className="bg-white transform scale-95 opacity-0 animate-fadeIn text-black p-6 rounded shadow-md max-w-sm w-full">
-                        <p className="mb-4">
-                          You need to create or upload a resume first.
-                        </p>
-                        <Link
-                          href="/resume-generator"
-                          className="inline-block bg-stone-900 text-white px-4 py-2 rounded mr-3"
-                        >
-                          Create Resume
-                        </Link>
-                        <button
-                          onClick={() => setShowNoResumePopup(false)}
-                          className="inline-block cursor-pointer bg-gray-400 text-white px-4 py-2 rounded"
-                        >
-                          <IoMdClose />
-                        </button>
-                      </div>
-                    </div>
-                  )}
-
                   <div className="w-full">
                     <div className="relative w-full inline-block px-2">
                       <textarea

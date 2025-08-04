@@ -22,6 +22,10 @@ export default function ResumeClient() {
   const [generatedResume, setGeneratedResume] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [showExperienceModal, setShowExperienceModal] = useState(false);
+  const [showSkillsModal, setShowSkillsModal] = useState(false);
+  const [showAddressModal, setShowAddressModal] = useState(false);
+  const [showGeneralInfoModal, setShowGeneralInfoModal] = useState(false);
 
   const [usage, setUsage] = useState<{
     generationLimit: number | null;
@@ -155,60 +159,223 @@ export default function ResumeClient() {
   }
 
   return (
-    <div className="w-full bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4f2] dark:text-[#2b2a27] min-h-screen">
-      <main className="max-w-4xl mx-auto px-4 md:px-8">
+    <div className="w-full bg-[#2b2a27] text-[#f6f4ed] mb-10 dark:bg-[#f6f4f2] dark:text-[#2b2a27] min-h-screen">
+      <main className="max-w-6xl mx-auto px-4 md:px-8">
         <h1 className="mb-2 text-lg  font-semibold">Or generate a resume:</h1>
+        <div className="flex flex-col md:flex-row gap-4 mb-6">
+          <div className="flex-1">
+            <label className="block text-sm font-semibold mb-1">
+              General Info
+            </label>
+            <button
+              onClick={() => setShowGeneralInfoModal(true)}
+              className="w-full cursor-pointer py-3 rounded-[3px] uppercase tracking-wide px-3 text-sm text-[#f6f4ed] dark:text-black border-[#f6f4ed] border-2 dark:border-black font-bold transform transition-transform duration-300 ease-in-out hover:scale-105"
+            >
+              Edit General Info
+            </button>
+          </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          {[
-            { label: "Name", field: "name" },
-            { label: "Job Title", field: "jobTitle" },
-            { label: "Country", field: "country" },
-            { label: "City", field: "city" },
-            { label: "Address", field: "address" },
-            { label: "Phone Number (optional)", field: "phoneNumber" },
-            { label: "Email (optional)", field: "email" },
-            { label: "Links (optional, e.g., LinkedIn)", field: "links" },
-          ].map(({ label, field }) => (
-            <div key={field}>
-              <label className="block text-sm font-semibold mb-1">
-                {label}
-              </label>
-              <input
-                type="text"
-                placeholder={label}
-                value={form[field as keyof typeof form]}
-                onChange={(e) => handleChange(field, e.target.value)}
-                className="w-full p-2 border rounded-[3px] bg-white text-black"
-              />
-            </div>
-          ))}
+          <div className="flex-1">
+            <label className="block text-sm font-semibold mb-1">Address</label>
+            <button
+              onClick={() => setShowAddressModal(true)}
+              className="w-full cursor-pointer py-3 rounded-[3px] uppercase tracking-wide px-3 text-sm text-[#f6f4ed] dark:text-black border-[#f6f4ed] border-2 dark:border-black font-bold transform transition-transform duration-300 ease-in-out hover:scale-105"
+            >
+              Edit Address
+            </button>
+          </div>
+        </div>
 
-          {/* Full width fields below */}
-          <div className="md:col-span-2">
+        <div className="flex flex-col md:flex-row gap-4 mb-6">
+          <div className="flex-1">
             <label className="block text-sm font-semibold mb-1">
               Work Experience & Education
             </label>
-            <textarea
-              placeholder="Work Experience & Education"
-              rows={3}
-              value={form.experience}
-              onChange={(e) => handleChange("experience", e.target.value)}
-              className="w-full p-2 border rounded-[3px] bg-white text-black"
-            />
+            <button
+              onClick={() => setShowExperienceModal(true)}
+              className="w-full  cursor-pointer py-3 rounded-[3px]  uppercase tracking-wide  px-3 text-sm text-[#f6f4ed] dark:text-black border-[#f6f4ed] border-2 dark:border-black font-bold transform transition-transform duration-300 ease-in-out hover:scale-105"
+            >
+              {form.experience ? "Edit Experience" : "Add Experience"}
+            </button>
           </div>
 
-          <div className="md:col-span-2">
+          <div className="flex-1">
             <label className="block text-sm font-semibold mb-1">Skills</label>
-            <textarea
-              placeholder="Skills"
-              rows={3}
-              value={form.skills}
-              onChange={(e) => handleChange("skills", e.target.value)}
-              className="w-full p-2 border rounded-[3px] bg-white text-black"
-            />
+            <button
+              onClick={() => setShowSkillsModal(true)}
+              className="w-full  cursor-pointer py-3 rounded-[3px]  uppercase tracking-wide   px-3 text-sm text-[#f6f4ed] dark:text-black border-[#f6f4ed] border-2 dark:border-black font-bold transform transition-transform duration-300 ease-in-out hover:scale-105"
+            >
+              {form.skills ? "Edit Skills" : "Add Skills"}
+            </button>
           </div>
         </div>
+        {showAddressModal && (
+          <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
+            <div className="bg-white text-black p-6 rounded-md w-[90%] max-w-xl">
+              <h2 className="text-lg font-semibold mb-2">Address Details</h2>
+              <div className="space-y-2">
+                <input
+                  type="text"
+                  value={form.country}
+                  onChange={(e) => handleChange("country", e.target.value)}
+                  className="w-full p-2 border rounded-sm text-sm"
+                  placeholder="Country.."
+                />
+
+                <input
+                  type="text"
+                  value={form.city}
+                  onChange={(e) => handleChange("city", e.target.value)}
+                  className="w-full p-2 border rounded-sm text-sm"
+                  placeholder="City.."
+                />
+
+                <input
+                  type="text"
+                  value={form.address}
+                  onChange={(e) => handleChange("address", e.target.value)}
+                  className="w-full p-2 border rounded-sm text-sm"
+                  placeholder="Address.."
+                />
+              </div>
+
+              <div className="flex justify-end mt-4 gap-2">
+                <button
+                  onClick={() => setShowAddressModal(false)}
+                  className="px-4 py-2 cursor-pointer bg-gray-200 text-black rounded-sm hover:bg-gray-300"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => setShowAddressModal(false)}
+                  className="px-4 py-2 cursor-pointer bg-black text-white rounded-sm hover:bg-black/80"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {showGeneralInfoModal && (
+          <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
+            <div className="bg-white text-black p-6 rounded-md w-[90%] max-w-xl">
+              <h2 className="text-lg font-semibold mb-4">
+                General Information
+              </h2>
+              {[
+                { label: "Name", field: "name", placeholder: "Name.." },
+                {
+                  label: "Your Profession ",
+                  field: "jobTitle",
+                  placeholder: "Profession..",
+                },
+
+                {
+                  label: "Phone Number(Optional)",
+                  field: "phoneNumber",
+                  placeholder: "Phone Number..",
+                },
+                {
+                  label: "Email(Optional)",
+                  field: "email",
+                  placeholder: "Email..",
+                },
+                {
+                  label: "Links(Optional)",
+                  field: "links",
+                  placeholder: "Links..",
+                },
+              ].map(({ label, field, placeholder }) => (
+                <div key={field} className="mb-3">
+                  <label className="block text-sm font-medium">{label}</label>
+                  <input
+                    type="text"
+                    value={form[field as keyof typeof form]}
+                    onChange={(e) => handleChange(field, e.target.value)}
+                    className="w-full p-2 border rounded-sm text-sm"
+                    placeholder={placeholder}
+                  />
+                </div>
+              ))}
+              <div className="flex justify-end mt-4 gap-2">
+                <button
+                  onClick={() => setShowGeneralInfoModal(false)}
+                  className="px-4 py-2 cursor-pointer bg-gray-200 text-black rounded-sm hover:bg-gray-300"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => setShowGeneralInfoModal(false)}
+                  className="px-4 py-2 cursor-pointer bg-black text-white rounded-sm hover:bg-black/80"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {showExperienceModal && (
+          <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
+            <div className="bg-white text-black p-6 rounded-md w-[90%] max-w-xl">
+              <h2 className="text-lg font-semibold mb-2">
+                Work Experience & Education
+              </h2>
+              <textarea
+                rows={6}
+                value={form.experience}
+                onChange={(e) => handleChange("experience", e.target.value)}
+                className="w-full p-2 border rounded-sm text-sm"
+                placeholder="Add your experience and education"
+              />
+              <div className="flex justify-end mt-4 gap-2">
+                <button
+                  onClick={() => setShowExperienceModal(false)}
+                  className="px-4 py-2 cursor-pointer bg-gray-200 text-black rounded-sm hover:bg-gray-300"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => setShowExperienceModal(false)}
+                  className="px-4 py-2 cursor-pointer bg-black text-white rounded-sm hover:bg-black/80"
+                >
+                  Add
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Skills Modal */}
+        {showSkillsModal && (
+          <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
+            <div className="bg-white text-black p-6 rounded-md w-[90%] max-w-xl">
+              <h2 className="text-lg font-semibold mb-2">Skills</h2>
+              <textarea
+                rows={6}
+                value={form.skills}
+                onChange={(e) => handleChange("skills", e.target.value)}
+                className="w-full p-2 border rounded-sm text-sm"
+                placeholder="Add your skills"
+              />
+              <div className="flex justify-end mt-4 gap-2">
+                <button
+                  onClick={() => setShowSkillsModal(false)}
+                  className="px-4 py-2 cursor-pointer bg-gray-200 text-black rounded-sm hover:bg-gray-300"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => setShowSkillsModal(false)}
+                  className="px-4 py-2 cursor-pointer bg-black text-white rounded-sm hover:bg-black/80"
+                >
+                  Add
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="mb-3 text-sm mt-2 text-[#f6f4ed] dark:text-[#2b2a27]">
           {usage.generationLimit === null

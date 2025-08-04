@@ -14,7 +14,7 @@ function ResumeClientWrapper({ resume }: Props) {
   useEffect(() => {
     const timeout = setTimeout(() => {
       setIsMounted(true);
-    }, 500); // reduce delay to make UX smoother
+    }, 500);
     return () => clearTimeout(timeout);
   }, []);
 
@@ -30,10 +30,14 @@ function ResumeClientWrapper({ resume }: Props) {
 
   return (
     <>
-      <ResumeUploadPopUp>
-        <ResumeForm resume={resume} />
-      </ResumeUploadPopUp>
-      <ResumeClient />
+      <div className="flex w-full justify-center flex-col">
+        <div className="">
+          <ResumeUploadPopUp>
+            <ResumeForm resume={resume} />
+          </ResumeUploadPopUp>
+          <ResumeClient />
+        </div>
+      </div>
     </>
   );
 }

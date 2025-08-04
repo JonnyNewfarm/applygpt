@@ -6,18 +6,18 @@ interface Props {
 }
 
 const ResumeUploadPopUp = ({ children }: Props) => {
-  const [showUploadModal, setShowUploadModal] = useState(false); // ✅ Modal toggle
+  const [showUploadModal, setShowUploadModal] = useState(false);
   return (
-    <div className="w-full flex justify-center">
-      <div className="max-w-4xl w-full sm:px-8 px-4 mt-10">
-        <h1 className="text-3xl font-bold mb-2">Resume Generator</h1>
-
-        <p className="mb-0 text-xl">Already have a resume? </p>
-
-        <div className="mb-5">
+    <div className="w-full  relative ">
+      <div className="max-w-6xl rounded mx-auto px-4 md:px-8    text-white dark:text-black py-4 mt-5 sm:mt-0">
+        <div>
+          <h1 className="text-2xl font-bold">AI Resume Generator</h1>
+          <p className="mb-0 mt-2 text-xl ">Already have a resume? </p>
+        </div>
+        <div className="mb-3">
           <button
             onClick={() => setShowUploadModal(true)}
-            className="mt-2 border-2 font-bold cursor-pointer dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-lg text-[#f6f4ed] dark:text-[#2b2a27] transform transition-transform duration-300 ease-in-out hover:scale-105"
+            className="mt-2 border-2 font-bold cursor-pointer dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px]  text-lg   transform transition-transform duration-300 ease-in-out hover:scale-105"
           >
             Upload
           </button>

@@ -222,7 +222,7 @@ export default function CoverLetterClient() {
     <div className="w-full -mt-4 min-h-screen border-b-white/20 dark:border-b-black/20 bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
       <main className="max-w-7xl bg-light mx-auto p-4 md:p-8">
         <h1 className="text-2xl font-bold mb-2 text-center md:text-left">
-          Cover Letter Generator
+          AI Cover Letter Generator
         </h1>
 
         <div className="flex flex-col md:flex-row gap-8">
