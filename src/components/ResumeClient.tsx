@@ -160,7 +160,7 @@ export default function ResumeClient() {
 
   return (
     <div className="w-full bg-[#2b2a27] text-[#f6f4ed] mb-10 dark:bg-[#f6f4f2] dark:text-[#2b2a27] min-h-screen">
-      <main className="max-w-6xl mx-auto px-4 md:px-8">
+      <main className="max-w-5xl mx-auto px-4 md:px-8">
         <h1 className="mb-2 text-lg  font-semibold">Or generate a resume:</h1>
         <div className="flex flex-col md:flex-row gap-4 mb-6">
           <div className="flex-1">

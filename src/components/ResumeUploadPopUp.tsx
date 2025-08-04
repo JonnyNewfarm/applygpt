@@ -9,7 +9,7 @@ const ResumeUploadPopUp = ({ children }: Props) => {
   const [showUploadModal, setShowUploadModal] = useState(false);
   return (
     <div className="w-full  relative ">
-      <div className="max-w-6xl rounded mx-auto px-4 md:px-8    text-white dark:text-black py-4 mt-5 sm:mt-0">
+      <div className="max-w-5xl rounded mx-auto px-4 md:px-8    text-white dark:text-black py-4 mt-5 sm:mt-0">
         <div>
           <h1 className="text-2xl font-bold">AI Resume Generator</h1>
           <p className="mb-0 mt-2 text-xl ">Already have a resume? </p>

@@ -294,10 +294,12 @@ export default function FindJobsPage() {
   const isCachedPage = !!jobsCache[page + 1];
 
   const SkeletonCard = () => (
-    <div className="mt-8 animate-pulse flex gap-x-4 items-center ">
-      <div className="h-2 w-2 bg-white/80 dark:bg-black/80 rounded-full"></div>
-      <div className="h-2 w-2 bg-white/80 dark:bg-black/80 rounded-full"></div>
-      <div className="h-2 w-2 bg-white/80 dark:bg-black/80 rounded-full"></div>
+    <div className=" absolute left-4  -mt-8 w-full">
+      <div className="w-full flex gap-x-3 animate-pulse">
+        <div className="h-2 w-2 bg-white/80 dark:bg-black/80 rounded-full"></div>
+        <div className="h-2 w-2 bg-white/80 dark:bg-black/80 rounded-full"></div>
+        <div className="h-2 w-2 bg-white/80 dark:bg-black/80 rounded-full"></div>
+      </div>
     </div>
   );
 
