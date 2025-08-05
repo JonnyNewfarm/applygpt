@@ -64,7 +64,7 @@ const blogPosts = [
   {
     slug: "find-jobs-san-francisco",
     title: "Find Jobs in San Francisco Using AI Tools (2025 Guide)",
-    href: "/guides/find-jobs-san-francisco",
+    href: "/guides/jobs-san-francisco",
   },
   {
     slug: "find-jobs-chicago",
