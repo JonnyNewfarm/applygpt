@@ -46,6 +46,31 @@ const blogPosts = [
     title: "How to Find Jobs in the USA Using AI Tools (2025 Guide)",
     href: "/guides/find-jobs-usa-ai-tools",
   },
+  {
+    slug: "find-jobs-london",
+    title: "Find Jobs in London Using AI Tools (2025 Guide)",
+    href: "/guides/jobs-london",
+  },
+  {
+    slug: "find-jobs",
+    title: "How to Find Jobs with AI Tools (2025 Guide)",
+    href: "/guides/find-jobs",
+  },
+  {
+    slug: "optimize-resume",
+    title: "How to Optimize Your Resume with AI (2025 Guide)",
+    href: "/guides/optimize-resume",
+  },
+  {
+    slug: "find-jobs-san-francisco",
+    title: "Find Jobs in San Francisco Using AI Tools (2025 Guide)",
+    href: "/guides/find-jobs-san-francisco",
+  },
+  {
+    slug: "find-jobs-chicago",
+    title: "Find Jobs in Chicago Using AI Tools (2025 Guide)",
+    href: "/guides/jobs-chicago",
+  },
 ];
 
 const GuidesPage = () => {

@@ -169,9 +169,15 @@ export default function ResumeClient() {
             </label>
             <button
               onClick={() => setShowGeneralInfoModal(true)}
-              className="w-full cursor-pointer py-3 rounded-[3px] uppercase tracking-wide px-3 text-sm text-[#f6f4ed] dark:text-black border-[#f6f4ed] border-2 dark:border-black font-bold transform transition-transform duration-300 ease-in-out hover:scale-105"
+              className="w-full  cursor-pointer py-3 rounded-[3px]  uppercase tracking-wide   px-3 text-sm text-[#f6f4ed] dark:text-black border-[#f6f4ed] border-2 dark:border-black font-bold transform transition-transform duration-300 ease-in-out hover:scale-105"
             >
-              Edit General Info
+              {form.name ||
+              form.jobTitle ||
+              form.phoneNumber ||
+              form.email ||
+              form.links
+                ? "Edit General Info"
+                : "Add General Info"}
             </button>
           </div>
 
@@ -179,9 +185,11 @@ export default function ResumeClient() {
             <label className="block text-sm font-semibold mb-1">Address</label>
             <button
               onClick={() => setShowAddressModal(true)}
-              className="w-full cursor-pointer py-3 rounded-[3px] uppercase tracking-wide px-3 text-sm text-[#f6f4ed] dark:text-black border-[#f6f4ed] border-2 dark:border-black font-bold transform transition-transform duration-300 ease-in-out hover:scale-105"
+              className="w-full  cursor-pointer py-3 rounded-[3px]  uppercase tracking-wide   px-3 text-sm text-[#f6f4ed] dark:text-black border-[#f6f4ed] border-2 dark:border-black font-bold transform transition-transform duration-300 ease-in-out hover:scale-105"
             >
-              Edit Address
+              {form.country || form.city || form.address
+                ? "Edit Address"
+                : "Add Address"}
             </button>
           </div>
         </div>
@@ -214,29 +222,44 @@ export default function ResumeClient() {
             <div className="bg-white text-black p-6 rounded-md w-[90%] max-w-xl">
               <h2 className="text-lg font-semibold mb-2">Address Details</h2>
               <div className="space-y-2">
-                <input
-                  type="text"
-                  value={form.country}
-                  onChange={(e) => handleChange("country", e.target.value)}
-                  className="w-full p-2 border rounded-sm text-sm"
-                  placeholder="Country.."
-                />
+                <div>
+                  <label>
+                    <h1 className="font-semibold">Country</h1>
+                    <input
+                      type="text"
+                      value={form.country}
+                      onChange={(e) => handleChange("country", e.target.value)}
+                      className="w-full p-2 border rounded-sm text-sm"
+                      placeholder="Country.."
+                    />
+                  </label>
+                </div>
 
-                <input
-                  type="text"
-                  value={form.city}
-                  onChange={(e) => handleChange("city", e.target.value)}
-                  className="w-full p-2 border rounded-sm text-sm"
-                  placeholder="City.."
-                />
+                <div>
+                  <label>
+                    <h1 className="font-semibold">City</h1>
+                    <input
+                      type="text"
+                      value={form.city}
+                      onChange={(e) => handleChange("city", e.target.value)}
+                      className="w-full p-2 border rounded-sm text-sm"
+                      placeholder="City.."
+                    />
+                  </label>
+                </div>
 
-                <input
-                  type="text"
-                  value={form.address}
-                  onChange={(e) => handleChange("address", e.target.value)}
-                  className="w-full p-2 border rounded-sm text-sm"
-                  placeholder="Address.."
-                />
+                <div>
+                  <label>
+                    <h1 className="font-semibold">Address</h1>
+                    <input
+                      type="text"
+                      value={form.address}
+                      onChange={(e) => handleChange("address", e.target.value)}
+                      className="w-full p-2 border rounded-sm text-sm"
+                      placeholder="Address.."
+                    />
+                  </label>
+                </div>
               </div>
 
               <div className="flex justify-end mt-4 gap-2">
@@ -250,7 +273,7 @@ export default function ResumeClient() {
                   onClick={() => setShowAddressModal(false)}
                   className="px-4 py-2 cursor-pointer bg-black text-white rounded-sm hover:bg-black/80"
                 >
-                  Save
+                  Add
                 </button>
               </div>
             </div>
@@ -288,7 +311,7 @@ export default function ResumeClient() {
                 },
               ].map(({ label, field, placeholder }) => (
                 <div key={field} className="mb-3">
-                  <label className="block text-sm font-medium">{label}</label>
+                  <label className="block text-sm font-semibold">{label}</label>
                   <input
                     type="text"
                     value={form[field as keyof typeof form]}
@@ -309,7 +332,7 @@ export default function ResumeClient() {
                   onClick={() => setShowGeneralInfoModal(false)}
                   className="px-4 py-2 cursor-pointer bg-black text-white rounded-sm hover:bg-black/80"
                 >
-                  Save
+                  Add
                 </button>
               </div>
             </div>

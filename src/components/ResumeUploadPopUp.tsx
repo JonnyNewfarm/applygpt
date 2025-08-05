@@ -25,7 +25,7 @@ const ResumeUploadPopUp = ({ children }: Props) => {
 
         {showUploadModal && (
           <div className="fixed inset-0 flex items-center justify-center bg-black/80 z-50">
-            <div className="bg-stone-800 text-white dark:bg-white   dark:text-black p-6 rounded-[3px] max-w-lg w-full relative">
+            <div className="bg-stone-800 mr-3 ml-3 text-white dark:bg-white   dark:text-black p-6 rounded-[3px] max-w-4xl w-full relative">
               <button
                 onClick={() => setShowUploadModal(false)}
                 className="absolute top-3 right-3 text-xl cursor-pointer font-bold"

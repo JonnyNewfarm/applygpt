@@ -27,6 +27,12 @@ export const metadata: Metadata = {
 
 export default async function ProfilePage() {
   const session = await getServerSession(authOptions);
+  function capitalizeName(name: string): string {
+    return name
+      .split(" ")
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
+      .join(" ");
+  }
 
   if (!session?.user?.email)
     return (
@@ -68,7 +74,8 @@ export default async function ProfilePage() {
         <section className="mb-8">
           <h2 className="text-xl font-semibold mb-2">Profile Details</h2>
           <p className="mb-1 flex flex-col">
-            <span className="font-semibold">Name:</span> {user.name || "N/A"}
+            <span className="font-semibold">Name:</span>{" "}
+            {user.name ? capitalizeName(user.name) : "N/A"}
           </p>
           <p className="flex flex-col">
             <span className="font-semibold">Email:</span> {user.email}
