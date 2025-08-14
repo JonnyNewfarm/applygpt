@@ -4,8 +4,14 @@ import { useEffect, useRef, useState } from "react";
 import BuyAccessButton from "../components/BuyAccessButton";
 import ManageSubscriptionButton from "../components/ManageSubscriptionButton";
 import toast from "react-hot-toast";
+import ResumeUploadPopUp from "./ResumeUploadPopUp";
+import ResumeForm from "./ResumeForm";
 
-export default function ResumeClient() {
+interface ResumeClientProps {
+  resume: string;
+}
+
+export default function ResumeClient({ resume }: ResumeClientProps) {
   const [form, setForm] = useState({
     name: "",
     jobTitle: "",
@@ -19,6 +25,16 @@ export default function ResumeClient() {
     links: "",
   });
 
+  const [errors, setErrors] = useState<{
+    name?: string;
+    jobTitle?: string;
+    country?: string;
+    city?: string;
+    address?: string;
+    experience?: string;
+    skills?: string;
+  }>({});
+
   const [generatedResume, setGeneratedResume] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -26,6 +42,9 @@ export default function ResumeClient() {
   const [showSkillsModal, setShowSkillsModal] = useState(false);
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [showGeneralInfoModal, setShowGeneralInfoModal] = useState(false);
+  const [isResumeSaved, setIsResumeSaved] = useState(false);
+  const [showEditResumeModal, setShowEditResumeModal] = useState(false);
+  const [latestResume, setLatestResume] = useState(resume);
 
   const [usage, setUsage] = useState<{
     generationLimit: number | null;
@@ -60,7 +79,51 @@ export default function ResumeClient() {
     setForm((prev) => ({ ...prev, [field]: value }));
   }
 
+  const handleEditResume = async () => {
+    try {
+      const res = await fetch("/api/resume", { cache: "no-store" });
+      if (res.ok) {
+        const data = await res.json();
+        setShowEditResumeModal(true);
+        setLatestResume(data.content || "");
+      } else {
+        toast.error("Failed to fetch latest resume");
+      }
+    } catch {
+      toast.error("Error fetching latest resume");
+    }
+  };
+
+  function validateForm() {
+    const newErrors: typeof errors = {};
+
+    if (!form.name.trim()) newErrors.name = "Name is required.";
+    if (!form.jobTitle.trim()) newErrors.jobTitle = "Job title is required.";
+    if (!form.experience.trim())
+      newErrors.experience = "Work experience is required.";
+    if (!form.country.trim()) newErrors.country = "Country is required.";
+    if (!form.city.trim()) newErrors.city = "City is required.";
+    if (!form.address.trim()) newErrors.address = "Address is required.";
+    if (!form.skills.trim()) newErrors.skills = "Skills are required.";
+
+    return newErrors;
+  }
+
   async function onGenerate() {
+    if (isAtLimit) {
+      toast.error("You have reached your generation limit.");
+      return;
+    }
+
+    const validationErrors = validateForm();
+    setErrors(validationErrors);
+
+    if (Object.keys(validationErrors).length > 0) {
+      toast.error("Please fill out all required fields.");
+      return;
+    }
+
+    setErrors({});
     setIsGenerating(true);
     setGeneratedResume("");
     try {
@@ -114,6 +177,7 @@ export default function ResumeClient() {
         body: JSON.stringify({ content }),
       });
       toast("Resume saved!");
+      setIsResumeSaved(true);
     } catch {
       console.error("Failed to save resume");
       toast("Failed to save resume.");
@@ -160,16 +224,19 @@ export default function ResumeClient() {
 
   return (
     <div className="w-full bg-[#2b2a27] text-[#f6f4ed] mb-10 dark:bg-[#f6f4f2] dark:text-[#2b2a27] min-h-screen">
+      <ResumeUploadPopUp>
+        <ResumeForm resume={resume} />
+      </ResumeUploadPopUp>
       <main className="max-w-5xl mx-auto px-4 md:px-8">
         <h1 className="mb-2 text-lg  font-semibold">Or generate a resume:</h1>
-        <div className="flex flex-col md:flex-row gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <div className="flex-1">
             <label className="block text-sm font-semibold mb-1">
               General Info
             </label>
             <button
               onClick={() => setShowGeneralInfoModal(true)}
-              className="w-full  cursor-pointer py-3 rounded-[3px]  uppercase tracking-wide   px-3 text-sm text-[#f6f4ed] dark:text-black border-[#f6f4ed] border-2 dark:border-black font-bold transform transition-transform duration-300 ease-in-out hover:scale-105"
+              className="w-full cursor-pointer py-3 rounded-[3px] uppercase tracking-wide px-3 text-sm text-[#f6f4ed] dark:text-black border-[#f6f4ed] border-2 dark:border-black font-bold hover:scale-105"
             >
               {form.name ||
               form.jobTitle ||
@@ -179,47 +246,67 @@ export default function ResumeClient() {
                 ? "Edit General Info"
                 : "Add General Info"}
             </button>
+            {(errors.name || errors.jobTitle) && (
+              <p className="mt-1 text-sm text-red-500 dark:text-red-700">
+                Please fill in required fields.
+              </p>
+            )}
           </div>
 
+          {/* Address Section */}
           <div className="flex-1">
             <label className="block text-sm font-semibold mb-1">Address</label>
             <button
               onClick={() => setShowAddressModal(true)}
-              className="w-full  cursor-pointer py-3 rounded-[3px]  uppercase tracking-wide   px-3 text-sm text-[#f6f4ed] dark:text-black border-[#f6f4ed] border-2 dark:border-black font-bold transform transition-transform duration-300 ease-in-out hover:scale-105"
+              className="w-full cursor-pointer py-3 rounded-[3px] uppercase tracking-wide px-3 text-sm text-[#f6f4ed] dark:text-black border-[#f6f4ed] border-2 dark:border-black font-bold hover:scale-105"
             >
               {form.country || form.city || form.address
                 ? "Edit Address"
                 : "Add Address"}
             </button>
+            {(errors.address || errors.country || errors.city) && (
+              <p className="mt-2 text-sm text-red-500 dark:text-red-700">
+                Please fill in required fields.
+              </p>
+            )}
           </div>
-        </div>
 
-        <div className="flex flex-col md:flex-row gap-4 mb-6">
           <div className="flex-1">
             <label className="block text-sm font-semibold mb-1">
               Work Experience & Education
             </label>
             <button
               onClick={() => setShowExperienceModal(true)}
-              className="w-full  cursor-pointer py-3 rounded-[3px]  uppercase tracking-wide  px-3 text-sm text-[#f6f4ed] dark:text-black border-[#f6f4ed] border-2 dark:border-black font-bold transform transition-transform duration-300 ease-in-out hover:scale-105"
+              className="w-full cursor-pointer py-3 rounded-[3px] uppercase tracking-wide px-3 text-sm text-[#f6f4ed] dark:text-black border-[#f6f4ed] border-2 dark:border-black font-bold hover:scale-105"
             >
               {form.experience ? "Edit Experience" : "Add Experience"}
             </button>
+            {errors.experience && (
+              <p className="mt-1 text-sm text-red-500 dark:text-red-700">
+                {errors.experience}
+              </p>
+            )}
           </div>
 
+          {/* Skills Section */}
           <div className="flex-1">
             <label className="block text-sm font-semibold mb-1">Skills</label>
             <button
               onClick={() => setShowSkillsModal(true)}
-              className="w-full  cursor-pointer py-3 rounded-[3px]  uppercase tracking-wide   px-3 text-sm text-[#f6f4ed] dark:text-black border-[#f6f4ed] border-2 dark:border-black font-bold transform transition-transform duration-300 ease-in-out hover:scale-105"
+              className="w-full cursor-pointer py-3 rounded-[3px] uppercase tracking-wide px-3 text-sm text-[#f6f4ed] dark:text-black border-[#f6f4ed] border-2 dark:border-black font-bold hover:scale-105"
             >
               {form.skills ? "Edit Skills" : "Add Skills"}
             </button>
+            {errors.skills && (
+              <p className="mt-1 text-sm text-red-500 dark:text-red-700">
+                {errors.skills}
+              </p>
+            )}
           </div>
         </div>
         {showAddressModal && (
           <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
-            <div className="bg-white text-black p-6 rounded-md w-[90%] max-w-xl">
+            <div className="bg-white text-black p-6 rounded-[3px] w-[90%] max-w-xl">
               <h2 className="text-lg font-semibold mb-2">Address Details</h2>
               <div className="space-y-2">
                 <div>
@@ -229,7 +316,7 @@ export default function ResumeClient() {
                       type="text"
                       value={form.country}
                       onChange={(e) => handleChange("country", e.target.value)}
-                      className="w-full p-2 border rounded-sm text-sm"
+                      className="w-full p-2 border rounded-[3px] text-sm"
                       placeholder="Country.."
                     />
                   </label>
@@ -242,7 +329,7 @@ export default function ResumeClient() {
                       type="text"
                       value={form.city}
                       onChange={(e) => handleChange("city", e.target.value)}
-                      className="w-full p-2 border rounded-sm text-sm"
+                      className="w-full p-2 border rounded-[3px] text-sm"
                       placeholder="City.."
                     />
                   </label>
@@ -255,7 +342,7 @@ export default function ResumeClient() {
                       type="text"
                       value={form.address}
                       onChange={(e) => handleChange("address", e.target.value)}
-                      className="w-full p-2 border rounded-sm text-sm"
+                      className="w-full p-2 border rounded-[3px] text-sm"
                       placeholder="Address.."
                     />
                   </label>
@@ -265,13 +352,13 @@ export default function ResumeClient() {
               <div className="flex justify-end mt-4 gap-2">
                 <button
                   onClick={() => setShowAddressModal(false)}
-                  className="px-4 py-2 cursor-pointer bg-gray-200 text-black rounded-sm hover:bg-gray-300"
+                  className="px-4 py-2 cursor-pointer bg-gray-200 text-black rounded-[3px] hover:bg-gray-300"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={() => setShowAddressModal(false)}
-                  className="px-4 py-2 cursor-pointer bg-black text-white rounded-sm hover:bg-black/80"
+                  className="px-4 py-2 cursor-pointer bg-black text-white rounded-[3px] hover:bg-black/80"
                 >
                   Add
                 </button>
@@ -282,7 +369,7 @@ export default function ResumeClient() {
 
         {showGeneralInfoModal && (
           <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
-            <div className="bg-white text-black p-6 rounded-md w-[90%] max-w-xl">
+            <div className="bg-white text-black p-6 rounded-[3px] w-[90%] max-w-xl">
               <h2 className="text-lg font-semibold mb-4">
                 General Information
               </h2>
@@ -316,7 +403,7 @@ export default function ResumeClient() {
                     type="text"
                     value={form[field as keyof typeof form]}
                     onChange={(e) => handleChange(field, e.target.value)}
-                    className="w-full p-2 border rounded-sm text-sm"
+                    className="w-full p-2 border rounded-[3px] text-sm"
                     placeholder={placeholder}
                   />
                 </div>
@@ -324,13 +411,13 @@ export default function ResumeClient() {
               <div className="flex justify-end mt-4 gap-2">
                 <button
                   onClick={() => setShowGeneralInfoModal(false)}
-                  className="px-4 py-2 cursor-pointer bg-gray-200 text-black rounded-sm hover:bg-gray-300"
+                  className="px-4 py-2 cursor-pointer bg-gray-200 text-black rounded-[3px] hover:bg-gray-300"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={() => setShowGeneralInfoModal(false)}
-                  className="px-4 py-2 cursor-pointer bg-black text-white rounded-sm hover:bg-black/80"
+                  className="px-4 py-2 cursor-pointer bg-black text-white rounded-[3px] hover:bg-black/80"
                 >
                   Add
                 </button>
@@ -341,7 +428,7 @@ export default function ResumeClient() {
 
         {showExperienceModal && (
           <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
-            <div className="bg-white text-black p-6 rounded-md w-[90%] max-w-xl">
+            <div className="bg-white text-black p-6 rounded-[3px] w-[90%] max-w-xl">
               <h2 className="text-lg font-semibold mb-2">
                 Work Experience & Education
               </h2>
@@ -349,19 +436,19 @@ export default function ResumeClient() {
                 rows={6}
                 value={form.experience}
                 onChange={(e) => handleChange("experience", e.target.value)}
-                className="w-full p-2 border rounded-sm text-sm"
+                className="w-full p-2 border rounded-[3px] text-sm"
                 placeholder="Add your experience and education"
               />
               <div className="flex justify-end mt-4 gap-2">
                 <button
                   onClick={() => setShowExperienceModal(false)}
-                  className="px-4 py-2 cursor-pointer bg-gray-200 text-black rounded-sm hover:bg-gray-300"
+                  className="px-4 py-2 cursor-pointer bg-gray-200 text-black rounded-[3px] hover:bg-gray-300"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={() => setShowExperienceModal(false)}
-                  className="px-4 py-2 cursor-pointer bg-black text-white rounded-sm hover:bg-black/80"
+                  className="px-4 py-2 cursor-pointer bg-black text-white rounded-[3px] hover:bg-black/80"
                 >
                   Add
                 </button>
@@ -370,28 +457,27 @@ export default function ResumeClient() {
           </div>
         )}
 
-        {/* Skills Modal */}
         {showSkillsModal && (
           <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
-            <div className="bg-white text-black p-6 rounded-md w-[90%] max-w-xl">
+            <div className="bg-white text-black p-6 rounded-[3px] w-[90%] max-w-xl">
               <h2 className="text-lg font-semibold mb-2">Skills</h2>
               <textarea
                 rows={6}
                 value={form.skills}
                 onChange={(e) => handleChange("skills", e.target.value)}
-                className="w-full p-2 border rounded-sm text-sm"
+                className="w-full p-2 border rounded-[3px] text-sm"
                 placeholder="Add your skills"
               />
               <div className="flex justify-end mt-4 gap-2">
                 <button
                   onClick={() => setShowSkillsModal(false)}
-                  className="px-4 py-2 cursor-pointer bg-gray-200 text-black rounded-sm hover:bg-gray-300"
+                  className="px-4 py-2 cursor-pointer bg-gray-200 text-black rounded-[3px] hover:bg-gray-300"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={() => setShowSkillsModal(false)}
-                  className="px-4 py-2 cursor-pointer bg-black text-white rounded-sm hover:bg-black/80"
+                  className="px-4 py-2 cursor-pointer bg-black text-white rounded-[3px] hover:bg-black/80"
                 >
                   Add
                 </button>
@@ -423,10 +509,8 @@ export default function ResumeClient() {
         ) : (
           <button
             onClick={onGenerate}
-            disabled={
-              isGenerating || !form.name || !form.jobTitle || !form.experience
-            }
-            className={` w-full  cursor-pointer py-3 rounded-[3px]  uppercase tracking-wide  px-3 text-lg text-[#f6f4ed] dark:text-black border-[#f6f4ed] shadow-md shadow-white/35 dark:shadow-black/25 border-2 dark:border-black font-bold transform transition-transform duration-300 ease-in-out hover:scale-105  ${
+            disabled={isGenerating} // only disable during generating
+            className={`w-full cursor-pointer py-3 rounded-[3px] uppercase tracking-wide px-3 text-lg text-[#f6f4ed] dark:text-black border-[#f6f4ed] shadow-md shadow-white/35 dark:shadow-black/25 border-2 dark:border-black font-bold transform transition-transform duration-300 ease-in-out hover:scale-105 ${
               isGenerating ? "cursor-not-allowed" : "hover:opacity-80"
             }`}
           >
@@ -448,6 +532,23 @@ export default function ResumeClient() {
           </div>
         )}
 
+        {showEditResumeModal && (
+          <div className="fixed inset-0 z-50 bg-stone-800/60 flex items-center justify-center">
+            <div className="bg-[#2b2a27] border-white/20 dark:border-black/20 border dark:bg-white p-6 rounded-[3px] w-[90%] max-w-6xl">
+              <h1 className="text-xl font-semibold">Edit Resume</h1>
+              <ResumeForm resume={latestResume} />{" "}
+              <div className="flex justify-end mt-4 gap-2">
+                <button
+                  onClick={() => setShowEditResumeModal(false)}
+                  className="px-4 py-2 cursor-pointer bg-gray-200 text-black rounded-[3px] hover:bg-gray-300"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {generatedResume && (
           <div className="mt-8">
             <h2 className="text-xl font-semibold mb-2">Generated Resume</h2>
@@ -465,20 +566,30 @@ export default function ResumeClient() {
               >
                 Download as PDF
               </button>
-              <button
-                onClick={handleSave}
-                className="px-4 py-2 border rounded-[3px] cursor-pointer bg-white/90 dark:bg-black/80 text-black dark:text-white hover:opacity-50"
-                disabled={isSaving}
-              >
-                {isSaving ? "Saving..." : "Save resume"}
-              </button>
+              {isResumeSaved ? (
+                <button
+                  onClick={handleEditResume}
+                  className="px-4 py-2 border rounded-[3px] cursor-pointer bg-white/90 dark:bg-black/80 text-black dark:text-white hover:opacity-50"
+                >
+                  Edit Resume
+                </button>
+              ) : (
+                <button
+                  onClick={handleSave}
+                  className="px-4 py-2 border font-bold rounded-[3px] cursor-pointer bg-white/90 dark:bg-black/80 text-black dark:text-white hover:opacity-50"
+                  disabled={isSaving}
+                >
+                  {isSaving ? "Saving..." : "Save & Edit"}
+                </button>
+              )}
             </div>
 
             <h1 className="font-semibold mb-1">Customize if necessary:</h1>
 
             <div
+              style={{ scrollbarWidth: "thin" }}
               ref={editableRef}
-              className="p-4 bg-white text-black border rounded-[3px] whitespace-pre-wrap text-sm min-h-[300px]"
+              className="p-4 bg-white text-black border rounded-[3px] whitespace-pre-wrap  text-sm min-h-[300px]"
               contentEditable
               suppressContentEditableWarning
             >

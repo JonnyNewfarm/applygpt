@@ -103,13 +103,22 @@ export default function FindJobsPage() {
         console.error("Failed to fetch saved jobs:", error);
       }
     }
+
+    function stripHtml(html: string) {
+      const temp = document.createElement("div");
+      temp.innerHTML = html;
+      return temp.textContent || temp.innerText || "";
+    }
+
     async function fetchResume() {
       try {
         const res = await fetch("/api/resume");
         if (res.ok) {
           const data = await res.json();
-          setResume(data.content || "");
-          if (data.content) setResumeSaved(true);
+          const cleanResume = stripHtml(data.content || "");
+
+          setResume(cleanResume);
+          if (cleanResume) setResumeSaved(true);
         }
       } finally {
         setResumeLoading(false);
@@ -706,7 +715,7 @@ export default function FindJobsPage() {
                   href={job.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-2 border-2 px-3 opacity-80 cursor-pointer font-semibold py-1.5 rounded-[3px] text-md text-[#2b2a27]border-[#2b2a27]  transform transition-transform duration-300 ease-in-out hover:scale-105"
+                  className="mt-2 border-2 px-3 font-semibold opacity-80 cursor-pointer  py-1.5 rounded-[3px] text-md text-[#2b2a27]border-[#2b2a27]  transform transition-transform duration-300 ease-in-out hover:scale-105"
                 >
                   Apply
                 </a>

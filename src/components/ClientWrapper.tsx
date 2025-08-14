@@ -1,8 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import ResumeClient from "./ResumeClient";
-import ResumeUploadPopUp from "./ResumeUploadPopUp";
-import ResumeForm from "./ResumeForm";
 
 interface Props {
   resume: string;
@@ -31,11 +29,8 @@ function ResumeClientWrapper({ resume }: Props) {
   return (
     <>
       <div className="flex w-full justify-center flex-col">
-        <div className="">
-          <ResumeUploadPopUp>
-            <ResumeForm resume={resume} />
-          </ResumeUploadPopUp>
-          <ResumeClient />
+        <div className="w-full">
+          <ResumeClient resume={resume} />
         </div>
       </div>
     </>

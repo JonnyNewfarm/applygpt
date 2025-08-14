@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import ManageSubscriptionButton from "../components/ManageSubscriptionButton";
 import BuyAccessButton from "../components/BuyAccessButton";
 import toast from "react-hot-toast";
+import FontDropdown from "./FontDropdown";
+import FontSizeDropdown from "./FontSizeDropdown";
 
 interface Props {
   job: {
@@ -26,6 +28,8 @@ export default function CoverLetterClientModal({ job }: Props) {
   const resumeRef = useRef<HTMLTextAreaElement>(null);
 
   const [resume, setResume] = useState("");
+  const [isBoldActive, setIsBoldActive] = useState(false);
+
   const [jobAd, setJobAd] = useState("");
   const [tone, setTone] = useState("professional");
   const [loading, setLoading] = useState(false);
@@ -63,14 +67,21 @@ export default function CoverLetterClientModal({ job }: Props) {
   }, [description, company]);
 
   useEffect(() => {
+    function stripHtml(html: string) {
+      const temp = document.createElement("div");
+      temp.innerHTML = html;
+      return temp.textContent || temp.innerText || "";
+    }
+
     async function fetchResume() {
-      setResumeLoading(true); // start loading
+      setResumeLoading(true);
       try {
         const res = await fetch("/api/resume");
         if (res.ok) {
           const data = await res.json();
-          setResume(data.content || "");
-          if (data.content) {
+          const cleanResume = stripHtml(data.content || "");
+          setResume(cleanResume);
+          if (cleanResume.trim()) {
             setResumeSaved(true);
             setShowOverlay(false);
           } else {
@@ -80,7 +91,7 @@ export default function CoverLetterClientModal({ job }: Props) {
           setShowOverlay(true);
         }
       } finally {
-        setResumeLoading(false); // finish loading
+        setResumeLoading(false);
       }
     }
 
@@ -201,15 +212,11 @@ export default function CoverLetterClientModal({ job }: Props) {
     setJobAd("");
     setLoadingDelete(false);
   };
-
   async function onDownload() {
     if (!printRef.current || !editableRef.current) return;
 
-    const editedText = editableRef.current.innerText;
-    printRef.current.innerHTML = editedText
-      .split("\n")
-      .map((line) => `<p>${line}</p>`)
-      .join("");
+    const editedHTML = editableRef.current.innerHTML;
+    printRef.current.innerHTML = editedHTML;
 
     const html2canvas = (await import("html2canvas")).default;
     const jsPDF = (await import("jspdf")).default;
@@ -228,6 +235,57 @@ export default function CoverLetterClientModal({ job }: Props) {
     pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight);
     pdf.save("cover_letter.pdf");
   }
+  const onMarkAll = () => {
+    if (!editableRef.current) return;
+    const range = document.createRange();
+    range.selectNodeContents(editableRef.current);
+    const selection = window.getSelection();
+    selection?.removeAllRanges();
+    selection?.addRange(range);
+  };
+
+  const onBoldSelection = () => {
+    const selection = window.getSelection();
+    if (!selection?.rangeCount) return;
+
+    const range = selection.getRangeAt(0);
+    const selectedText = selection.toString();
+
+    if (!selectedText) return;
+
+    const commonAncestor = range.commonAncestorContainer;
+    let parentElement: HTMLElement | null = null;
+
+    if (commonAncestor.nodeType === Node.TEXT_NODE) {
+      parentElement = commonAncestor.parentElement;
+    } else if (commonAncestor.nodeType === Node.ELEMENT_NODE) {
+      parentElement = commonAncestor as HTMLElement;
+    }
+
+    if (
+      parentElement &&
+      (parentElement.tagName === "B" || parentElement.tagName === "STRONG")
+    ) {
+      const unwrapped = document.createTextNode(selectedText);
+      const parent = parentElement.parentNode;
+      if (parent) {
+        parent.replaceChild(unwrapped, parentElement);
+        selection.removeAllRanges();
+        const newRange = document.createRange();
+        newRange.selectNodeContents(unwrapped);
+        selection.addRange(newRange);
+      }
+      setIsBoldActive(false);
+      return;
+    }
+
+    // Otherwise, apply bold
+    const boldNode = document.createElement("b");
+    boldNode.appendChild(range.extractContents());
+    range.insertNode(boldNode);
+
+    setIsBoldActive(true);
+  };
 
   const isAtLimit =
     usage.generationLimit !== null &&
@@ -235,7 +293,7 @@ export default function CoverLetterClientModal({ job }: Props) {
 
   return (
     <div className="w-full min-h-screen border-b-white/20 dark:border-b-black/20 bg-[#2b2a27]   text-[#f6f4ed]  dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
-      <main className="max-w-7xl bg-light mx-auto p-4 md:p-8">
+      <main className="max-w-7xl bg-light mx-auto p-1 md:p-8">
         <h1 className="text-2xl  text-wrap w-[80%] sm:w-[100%] text-left font-xl md:mt-0 font-bold mb-6 ">
           Cover Letter Generator
         </h1>
@@ -345,7 +403,6 @@ export default function CoverLetterClientModal({ job }: Props) {
               </div>
             </div>
 
-            {/* Tone */}
             <div>
               <label className="block text-sm font-medium mb-1">Tone</label>
               <select
@@ -360,7 +417,6 @@ export default function CoverLetterClientModal({ job }: Props) {
               </select>
             </div>
 
-            {/* Usage and Generate */}
             <div>
               <p className="text-sm mb-2">
                 {usage.generationLimit === null
@@ -406,12 +462,14 @@ export default function CoverLetterClientModal({ job }: Props) {
             </div>
           </div>
 
-          {/* Generated Cover Letter */}
           <div className="w-full md:w-1/2 mb-10">
-            <h2 className="text-xl font-semibold mb-2">
+            <h2 className="text-xl font-semibold mb-1">
               Generated Cover Letter
             </h2>
-            <p>Your coverletter will apper here after you click generate.</p>
+
+            {!coverLetter && (
+              <p> Your coverletter will apper here after you click generate.</p>
+            )}
 
             {loading ? (
               <div className="mt-8 animate-pulse flex gap-x-4 items-center">
@@ -421,31 +479,50 @@ export default function CoverLetterClientModal({ job }: Props) {
               </div>
             ) : coverLetter ? (
               <>
-                <div className="flex flex-wrap gap-3 mt-4">
+                <div className="flex flex-wrap gap-3">
                   {url && (
                     <a
                       href={url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="bg-[#f6f4ed] text-[#2b2a27] dark:bg-[#2b2a27] dark:text-[#f6f4ed] py-1 px-3 rounded-[3px] hover:opacity-90 mt-2 inline-block"
+                      className="bg-[#f6f4ed] text-[#2b2a27] dark:bg-[#2b2a27] dark:text-[#f6f4ed] py-1 px-3 rounded-[3px] hover:opacity-90 mt-2 inline-block font-bold"
                     >
                       Apply
                     </a>
                   )}
                   <button
                     onClick={onCopy}
-                    className="mt-2 border cursor-pointer px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27]"
+                    className="mt-2 border font-semibold cursor-pointer px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27]"
                   >
                     Copy to Clipboard
                   </button>
                   <button
                     onClick={onDownload}
-                    className="mt-2 border cursor-pointer px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27]"
+                    className="mt-2 border font-semibold cursor-pointer px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27]"
                   >
                     Download as PDF
                   </button>
                 </div>
-                <h1 className="font-bold mt-2">Edit if necessary</h1>
+                <h1 className="font-bold mt-4">Edit:</h1>
+                <button
+                  onClick={onBoldSelection}
+                  className={`mt-2 mr-2 border font-bold cursor-pointer px-3 py-1.5 rounded-[3px] text-sm transition-all duration-200 ${
+                    isBoldActive
+                      ? "bg-[#f6f4ed] text-[#2b2a27] border-[#f6f4ed] dark:bg-[#2b2a27] dark:text-[#f6f4ed] dark:border-[#2b2a27]"
+                      : "bg-transparent text-[#f6f4ed] border-[#f6f4ed] dark:text-[#2b2a27] dark:border-[#2b2a27]"
+                  }`}
+                >
+                  B
+                </button>
+                <FontDropdown />
+                <FontSizeDropdown />
+                <button
+                  onClick={onMarkAll}
+                  className="mt-2 border ml-2 font-semibold cursor-pointer px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27]"
+                >
+                  Mark All
+                </button>
+
                 <div
                   ref={editableRef}
                   className="p-4 bg-white mt-2 border text-black border-gray-300 rounded-[3px] whitespace-pre-wrap text-sm min-h-[300px]"

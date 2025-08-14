@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import ManageSubscriptionButton from "../components/ManageSubscriptionButton";
 import BuyAccessButton from "../components/BuyAccessButton";
 import toast from "react-hot-toast";
+import FontDropdown from "./FontDropdown";
+import FontSizeDropdown from "./FontSizeDropdown";
 
 export default function CoverLetterClient() {
   const router = useRouter();
@@ -12,8 +14,15 @@ export default function CoverLetterClient() {
   const printRef = useRef<HTMLDivElement>(null);
 
   const [company, setCompany] = useState("");
+  const [isBoldActive, setIsBoldActive] = useState(false);
+
   const [description, setDescription] = useState("");
   const [showResumeModal, setShowResumeModal] = useState(false);
+  const [errors, setErrors] = useState<{
+    company?: string;
+    description?: string;
+    resume?: string;
+  }>({});
 
   const resumeRef = useRef<HTMLTextAreaElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
@@ -46,6 +55,58 @@ export default function CoverLetterClient() {
 
   const [showOverlay, setShowOverlay] = useState(false);
 
+  const onMarkAll = () => {
+    if (!editableRef.current) return;
+    const range = document.createRange();
+    range.selectNodeContents(editableRef.current);
+    const selection = window.getSelection();
+    selection?.removeAllRanges();
+    selection?.addRange(range);
+  };
+
+  const onBoldSelection = () => {
+    const selection = window.getSelection();
+    if (!selection?.rangeCount) return;
+
+    const range = selection.getRangeAt(0);
+    const selectedText = selection.toString();
+
+    if (!selectedText) return;
+
+    const commonAncestor = range.commonAncestorContainer;
+    let parentElement: HTMLElement | null = null;
+
+    if (commonAncestor.nodeType === Node.TEXT_NODE) {
+      parentElement = commonAncestor.parentElement;
+    } else if (commonAncestor.nodeType === Node.ELEMENT_NODE) {
+      parentElement = commonAncestor as HTMLElement;
+    }
+
+    if (
+      parentElement &&
+      (parentElement.tagName === "B" || parentElement.tagName === "STRONG")
+    ) {
+      const unwrapped = document.createTextNode(selectedText);
+      const parent = parentElement.parentNode;
+      if (parent) {
+        parent.replaceChild(unwrapped, parentElement);
+        selection.removeAllRanges();
+        const newRange = document.createRange();
+        newRange.selectNodeContents(unwrapped);
+        selection.addRange(newRange);
+      }
+      setIsBoldActive(false);
+      return;
+    }
+
+    // Otherwise, apply bold
+    const boldNode = document.createElement("b");
+    boldNode.appendChild(range.extractContents());
+    range.insertNode(boldNode);
+
+    setIsBoldActive(true);
+  };
+
   useEffect(() => {
     if (!description) {
       setJobAd("");
@@ -55,14 +116,21 @@ export default function CoverLetterClient() {
   }, [description, company]);
 
   useEffect(() => {
+    function stripHtml(html: string) {
+      const temp = document.createElement("div");
+      temp.innerHTML = html;
+      return temp.textContent || temp.innerText || "";
+    }
+
     async function fetchResume() {
       setResumeLoading(true);
       try {
         const res = await fetch("/api/resume");
         if (res.ok) {
           const data = await res.json();
-          setResume(data.content || "");
-          if (data.content) {
+          const cleanResume = stripHtml(data.content || "");
+          setResume(cleanResume);
+          if (cleanResume.trim()) {
             setResumeSaved(true);
             setShowOverlay(false);
           } else {
@@ -92,6 +160,28 @@ export default function CoverLetterClient() {
   }, []);
 
   async function onGenerate() {
+    const newErrors: {
+      company?: string;
+      description?: string;
+      resume?: string;
+    } = {};
+
+    if (!company.trim()) {
+      newErrors.company = "Company name is required.";
+    }
+    if (!description.trim()) {
+      newErrors.description = "Job description is required.";
+    }
+    if (!resume.trim()) {
+      newErrors.resume = "Resume is required.";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setErrors({});
     setLoading(true);
     setCoverLetter("");
 
@@ -105,7 +195,9 @@ export default function CoverLetterClient() {
       const data = await res.json();
 
       if (!res.ok) {
-        toast(data.error || "Error generating");
+        setErrors({
+          description: data.error || "Error generating cover letter",
+        });
       } else {
         setCoverLetter(data.coverLetter);
 
@@ -119,7 +211,7 @@ export default function CoverLetterClient() {
         }
       }
     } catch {
-      toast("Something went wrong");
+      setErrors({ description: "Something went wrong" });
     }
 
     setLoading(false);
@@ -190,11 +282,7 @@ export default function CoverLetterClient() {
   async function onDownload() {
     if (!printRef.current || !editableRef.current) return;
 
-    const editedText = editableRef.current.innerText;
-    printRef.current.innerHTML = editedText
-      .split("\n")
-      .map((line) => `<p>${line}</p>`)
-      .join("");
+    printRef.current.innerHTML = editableRef.current.innerHTML;
 
     const html2canvas = (await import("html2canvas")).default;
     const jsPDF = (await import("jspdf")).default;
@@ -238,6 +326,12 @@ export default function CoverLetterClient() {
                 onChange={(e) => setCompany(e.target.value)}
                 placeholder="Company name.."
               />
+              {errors.company && (
+                <p className="text-red-500 dark:text-red-700 text-sm">
+                  {errors.company}
+                </p>
+              )}
+
               <label className="block text-sm font-semibold mb-1">
                 Job Description
               </label>
@@ -251,6 +345,12 @@ export default function CoverLetterClient() {
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Paste job description here..."
                 />
+                {errors.description && (
+                  <p className="text-red-500 dark:text-red-700 text-sm mt-1">
+                    {errors.description}
+                  </p>
+                )}
+
                 {!description && (
                   <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-stone-200 text-black/90 z-10">
                     <div className="px-5 md:px-5 flex flex-col justify-center items-center text-center">
@@ -323,6 +423,11 @@ export default function CoverLetterClient() {
                   >
                     {showResumeModal ? "Close" : "Your Resume"}
                   </button>
+                  {errors.resume && (
+                    <p className="text-red-500 dark:text-red-700 text-sm mt-1">
+                      {errors.resume}
+                    </p>
+                  )}
                   {showResumeModal && (
                     <div className="relative w-full mt-3">
                       <label className="block text-sm font-semibold mb-1">
@@ -381,19 +486,12 @@ export default function CoverLetterClient() {
                           <button
                             onClick={onSaveResume}
                             className="mb-5 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
-                            disabled={!resume.trim()}
+                            disabled={loading}
                           >
                             Save Resume
                           </button>
                         ) : (
-                          <button
-                            onClick={() => {
-                              setTimeout(() => {
-                                resumeRef.current?.focus();
-                              }, 0);
-                            }}
-                            className="mt-1 mb-5 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
-                          >
+                          <button className="mt-1 mb-5 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105">
                             Edit Resume
                           </button>
                         )}
@@ -434,7 +532,7 @@ export default function CoverLetterClient() {
                 <div className="">
                   <button
                     onClick={onGenerate}
-                    disabled={loading || !resume || !jobAd}
+                    disabled={loading}
                     className={`mt-3 w-full  cursor-pointer py-3 rounded-[3px]  uppercase tracking-wide  px-3 text-lg text-[#f6f4ed] dark:text-black border-[#f6f4ed] shadow-md shadow-white/35 dark:shadow-black/25 border-2 dark:border-black font-bold transform transition-transform duration-300 ease-in-out hover:scale-105 ${
                       loading
                         ? "cursor-not-allowed"
@@ -458,7 +556,9 @@ export default function CoverLetterClient() {
             <h2 className="text-xl font-semibold mb-2">
               Generated Cover Letter
             </h2>
-            <p>Your coverletter will apper here after you click generate.</p>
+            {!coverLetter && (
+              <p>Your coverletter will apper here after you click generate.</p>
+            )}
 
             {loading ? (
               <div className="mt-8 animate-pulse flex gap-x-4 items-center">
@@ -468,21 +568,39 @@ export default function CoverLetterClient() {
               </div>
             ) : coverLetter ? (
               <>
-                <div className="flex flex-wrap gap-3 mt-4">
+                <div className="flex flex-wrap gap-3 mt-1">
                   <button
                     onClick={onCopy}
-                    className="mt-2 border cursor-pointer px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27]"
+                    className="mt-1 border cursor-pointer px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27]"
                   >
                     Copy to Clipboard
                   </button>
                   <button
                     onClick={onDownload}
-                    className="mt-2 border cursor-pointer px-3 py-1.5 rounded-[3px] bg-[#f6f4ed] text-sm text-[#2b2a27] dark:text-[#f6f4ed] dark:bg-[#2b2a27]"
+                    className="mt-1 border cursor-pointer px-3 py-1.5 rounded-[3px] bg-[#f6f4ed] text-sm text-[#2b2a27] dark:text-[#f6f4ed] dark:bg-[#2b2a27]"
                   >
                     Download as PDF
                   </button>
                 </div>
-                <h1 className="font-bold mt-2">Edit if necessary</h1>
+                <h1 className="font-bold mt-2">Edit:</h1>
+                <button
+                  onClick={onBoldSelection}
+                  className={`mt-2 mr-2 border font-bold cursor-pointer px-3 py-1.5 rounded-[3px] text-sm transition-all duration-200 ${
+                    isBoldActive
+                      ? "bg-[#f6f4ed] text-[#2b2a27] border-[#f6f4ed] dark:bg-[#2b2a27] dark:text-[#f6f4ed] dark:border-[#2b2a27]"
+                      : "bg-transparent text-[#f6f4ed] border-[#f6f4ed] dark:text-[#2b2a27] dark:border-[#2b2a27]"
+                  }`}
+                >
+                  B
+                </button>
+                <FontDropdown />
+                <FontSizeDropdown />
+                <button
+                  onClick={onMarkAll}
+                  className="mt-2 border ml-2 font-semibold cursor-pointer px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27]"
+                >
+                  Mark All
+                </button>
                 <div
                   ref={editableRef}
                   className="p-4 bg-white mt-2 border text-black border-gray-300 rounded-[3px] whitespace-pre-wrap text-sm min-h-[300px]"

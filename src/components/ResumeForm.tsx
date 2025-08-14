@@ -1,9 +1,11 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import toast from "react-hot-toast";
+import FontDropdown from "./FontDropdown";
+import FontSizeDropdown from "./FontSizeDropdown";
 
 interface ResumeFormProps {
   resume: string;
@@ -13,26 +15,57 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
   const [content, setContent] = useState(resume);
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const resumeRef = useRef<HTMLDivElement>(null);
+  const [isBoldActive, setIsBoldActive] = useState(false);
+
+  const resumeEditorRef = useRef<HTMLDivElement>(null);
+  const resumePdfRef = useRef<HTMLDivElement>(null);
+
+  const markAllText = () => {
+    if (!resumeEditorRef.current) return;
+    const range = document.createRange();
+    range.selectNodeContents(resumeEditorRef.current);
+    const selection = window.getSelection();
+    selection?.removeAllRanges();
+    selection?.addRange(range);
+  };
+  const onBoldSelection = () => {
+    document.execCommand("bold");
+    setTimeout(syncContent, 0);
+  };
+
+  useEffect(() => {
+    if (resumeEditorRef.current) {
+      resumeEditorRef.current.innerHTML = content;
+    }
+  }, [content]);
 
   const handleSave = async () => {
+    if (!resumeEditorRef.current) return;
+    const currentContent = resumeEditorRef.current.innerHTML;
     setIsSaving(true);
     try {
       await fetch("/api/resume", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ content }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content: currentContent }),
       });
       toast("Resume saved!");
-    } catch (err) {
-      console.error(err);
+    } catch {
       toast("Failed to save resume.");
     } finally {
       setIsSaving(false);
     }
   };
+
+  useEffect(() => {
+    const handleSelectionChange = () => {
+      setIsBoldActive(document.queryCommandState("bold"));
+    };
+    document.addEventListener("selectionchange", handleSelectionChange);
+    return () => {
+      document.removeEventListener("selectionchange", handleSelectionChange);
+    };
+  }, []);
 
   const handleDelete = async () => {
     const confirmed = confirm("Are you sure you want to delete your resume?");
@@ -53,10 +86,18 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
     }
   };
 
-  const handleDownload = async () => {
-    if (!resumeRef.current) return;
+  const syncContent = () => {
+    if (resumeEditorRef.current) {
+      setContent(resumeEditorRef.current.innerHTML);
+    }
+  };
 
-    const canvas = await html2canvas(resumeRef.current, {
+  const handleDownload = async () => {
+    syncContent();
+
+    if (!resumePdfRef.current) return;
+
+    const canvas = await html2canvas(resumePdfRef.current, {
       scale: 2,
       backgroundColor: "#ffffff",
     });
@@ -72,14 +113,37 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
   };
 
   return (
-    <div>
-      <textarea
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-        rows={12}
-        className="w-full border bg-white text-black border-gray-400 p-4 text-sm leading-relaxed"
-        placeholder="Paste or write your resume here..."
-      />
+    <div className="">
+      <div className=" relative">
+        <p className="text-md  text-white dark:text-black  mb-2">
+          Select the text you want to modify.
+        </p>
+        <button
+          onClick={onBoldSelection}
+          className={`mt-1 mr-3 mb-2 border font-bold cursor-pointer px-3 py-1.5 rounded-[3px] text-sm transition-all duration-200 ${
+            isBoldActive
+              ? "bg-[#f6f4ed] text-[#2b2a27] border-[#f6f4ed] dark:bg-[#2b2a27] dark:text-[#f6f4ed] dark:border-[#2b2a27]"
+              : "bg-transparent text-[#f6f4ed] border-[#f6f4ed] dark:text-[#2b2a27] dark:border-[#2b2a27]"
+          }`}
+        >
+          B
+        </button>
+        <FontDropdown />
+        <FontSizeDropdown />
+        <button
+          onClick={markAllText}
+          className="mt-1 border ml-3 font-bold cursor-pointer px-3 py-1.5 rounded-[3px] text-sm bg-transparent text-[#f6f4ed] border-[#f6f4ed] dark:text-[#2b2a27] dark:border-[#2b2a27]"
+        >
+          Mark All
+        </button>
+      </div>
+
+      <div
+        ref={resumeEditorRef}
+        contentEditable
+        suppressContentEditableWarning={true}
+        className="w-full h-80 overflow-scroll border bg-white text-black p-4 text-sm leading-relaxed min-h-[300px] whitespace-pre-wrap outline-none"
+      ></div>
 
       <div className="mt-4 flex flex-wrap gap-4">
         <button
@@ -106,7 +170,7 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
       </div>
 
       <div
-        ref={resumeRef}
+        ref={resumePdfRef}
         style={{
           width: "800px",
           padding: "24px",
@@ -119,12 +183,7 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
           top: "-9999px",
           left: "-9999px",
         }}
-        dangerouslySetInnerHTML={{
-          __html: content
-            .split("\n")
-            .map((line) => `<p>${line}</p>`)
-            .join(""),
-        }}
+        dangerouslySetInnerHTML={{ __html: content }}
       />
     </div>
   );
