@@ -84,8 +84,8 @@ export default async function ProfilePage() {
 
         <SubscriptionSection user={user} />
 
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">Your Resume</h2>
+        <section className="mb-5">
+          <h2 className="text-2xl font-semibold mb-2">Your Resume</h2>
           <ResumeForm resume={user.resume?.content || ""} />
         </section>
 

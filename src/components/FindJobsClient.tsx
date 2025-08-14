@@ -355,7 +355,7 @@ export default function FindJobsPage() {
       setTextAreaSize("180px");
       setTextAreaSizeTitle("show more");
     } else {
-      setTextAreaSize("650px");
+      setTextAreaSize("500px");
       setTextAreaSizeTitle("Show Less");
     }
   }, [textAreaState]);
@@ -519,9 +519,20 @@ export default function FindJobsPage() {
               )}
 
               {showResumeModal && (
-                <div className="w-full">
-                  <div className="w-full">
-                    <div className="relative w-full inline-block px-2">
+                <div className="fixed  inset-0 flex items-center justify-center bg-black/50 z-50">
+                  <div className="w-[95%] max-w-5xl bg-stone-800 px-2 sm:px-5 py-4">
+                    <div className="">
+                      <div className="flex justify-between px-1">
+                        <h1 className="text-xl mb-2 font-semibold">
+                          Your Resume
+                        </h1>
+                        <button
+                          onClick={() => setShowResumeModal(false)}
+                          className="mb-4 text-2xl cursor-pointer font-semibold"
+                        >
+                          ✕
+                        </button>
+                      </div>
                       <textarea
                         ref={textAreaRef}
                         style={{ scrollbarWidth: "thin", height: textAreaSize }}

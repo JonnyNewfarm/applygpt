@@ -114,28 +114,33 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
 
   return (
     <div className="">
-      <div className=" relative">
-        <p className="text-md  text-white dark:text-black  mb-2">
-          Select the text you want to modify.
-        </p>
-        <button
-          onClick={onBoldSelection}
-          className={`mt-1 mr-3 mb-2 border font-bold cursor-pointer px-3 py-1.5 rounded-[3px] text-sm transition-all duration-200 ${
-            isBoldActive
-              ? "bg-[#f6f4ed] text-[#2b2a27] border-[#f6f4ed] dark:bg-[#2b2a27] dark:text-[#f6f4ed] dark:border-[#2b2a27]"
-              : "bg-transparent text-[#f6f4ed] border-[#f6f4ed] dark:text-[#2b2a27] dark:border-[#2b2a27]"
-          }`}
-        >
-          B
-        </button>
-        <FontDropdown />
-        <FontSizeDropdown />
-        <button
-          onClick={markAllText}
-          className="mt-1 border ml-3 font-bold cursor-pointer px-3 py-1.5 rounded-[3px] text-sm bg-transparent text-[#f6f4ed] border-[#f6f4ed] dark:text-[#2b2a27] dark:border-[#2b2a27]"
-        >
-          Mark All
-        </button>
+      <div className="flex flex-col-reverse sm:justify-between sm:flex-row  ">
+        <div>
+          <p className="text-md mt-1 mb-2 sm:mb-0  text-white dark:text-black  ">
+            Select the text you want to modify.
+          </p>
+        </div>
+
+        <div className=" relative">
+          <button
+            onClick={onBoldSelection}
+            className={`mt-1 mr-3 mb-1 border font-bold cursor-pointer px-3 py-1.5 rounded-[3px] text-sm transition-all duration-200 ${
+              isBoldActive
+                ? "bg-[#f6f4ed] text-[#2b2a27] border-[#f6f4ed] dark:bg-[#2b2a27] dark:text-[#f6f4ed] dark:border-[#2b2a27]"
+                : "bg-transparent text-[#f6f4ed] border-[#f6f4ed] dark:text-[#2b2a27] dark:border-[#2b2a27]"
+            }`}
+          >
+            B
+          </button>
+          <FontDropdown />
+          <FontSizeDropdown />
+          <button
+            onClick={markAllText}
+            className="mt-1 border ml-3 font-bold cursor-pointer px-3 py-1.5 rounded-[3px] text-sm bg-transparent text-[#f6f4ed] border-[#f6f4ed] dark:text-[#2b2a27] dark:border-[#2b2a27]"
+          >
+            Mark All
+          </button>
+        </div>
       </div>
 
       <div

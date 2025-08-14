@@ -33,7 +33,7 @@ export default function CoverLetterClient() {
   const [loading, setLoading] = useState(false);
   const [coverLetter, setCoverLetter] = useState("");
   const [resumeSaved, setResumeSaved] = useState(false);
-  const [textAreaSize, setTextAreaSize] = useState("100px");
+  const [textAreaSize, setTextAreaSize] = useState("150px");
   const [textAreaState, setTextAreaSizeState] = useState(false);
   const [textAreaTitle, setTextAreaSizeTitle] = useState("Show More");
   const [resumeLoading, setResumeLoading] = useState(true);
@@ -245,7 +245,7 @@ export default function CoverLetterClient() {
 
   useEffect(() => {
     if (textAreaState === false) {
-      setTextAreaSize("100px");
+      setTextAreaSize("150px");
       setTextAreaSizeTitle("show more");
     } else {
       setTextAreaSize("500px");
@@ -429,78 +429,88 @@ export default function CoverLetterClient() {
                     </p>
                   )}
                   {showResumeModal && (
-                    <div className="relative w-full mt-3">
-                      <label className="block text-sm font-semibold mb-1">
-                        Resume
-                      </label>
-                      <div
-                        style={{ height: textAreaSize }}
-                        className="relative"
-                      >
-                        <textarea
-                          ref={resumeRef}
-                          className="w-full h-full p-3 border bg-white text-black"
-                          value={resume}
-                          onChange={(e) => {
-                            setResume(e.target.value);
-                            setResumeSaved(false);
-                          }}
-                          placeholder="Paste your resume here..."
-                        />
+                    <div className="fixed  inset-0 flex items-center justify-center bg-black/50 z-50">
+                      <div className="p-4 w-[95%] max-w-6xl bg-stone-800">
+                        <div className="flex justify-between items-center">
+                          <label className="block text-xl font-semibold mb-1">
+                            Resume
+                          </label>
+                          <button
+                            onClick={() => setShowResumeModal(false)}
+                            className="mb-4 text-2xl cursor-pointer font-semibold"
+                          >
+                            ✕
+                          </button>
+                        </div>
+                        <div
+                          style={{ height: textAreaSize }}
+                          className="relative"
+                        >
+                          <textarea
+                            ref={resumeRef}
+                            className="w-full h-full p-3 border bg-white text-black"
+                            value={resume}
+                            onChange={(e) => {
+                              setResume(e.target.value);
+                              setResumeSaved(false);
+                            }}
+                            placeholder="Paste your resume here..."
+                          />
 
-                        {!resumeLoading && showOverlay && (
-                          <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-stone-200 text-black/90 z-10">
-                            <div className="px-5 md:px-5 flex flex-col gap-y-2 justify-center items-center w-full">
-                              <p className="font-semibold w-full text-xs sm:text-sm ">
-                                Create or upload your resume to start generating
-                                a tailored cover letter.
-                              </p>
-                              <div className="flex gap-4">
-                                <button
-                                  onClick={() =>
-                                    router.push("/resume-generator")
-                                  }
-                                  className="inline-block font-bold cursor-pointer bg-stone-900 text-white px-4 py-2 rounded mr-3 text-xs sm:text-sm"
-                                >
-                                  Create Resume
-                                </button>
-                                <button
-                                  onClick={() => {
-                                    setShowOverlay(false);
-                                    setTimeout(() => {
-                                      resumeRef.current?.focus();
-                                    }, 0);
-                                  }}
-                                  className="cursor-pointer text-xs sm:text-sm font-semibold  border-2 py-1 px-3 rounded-[4px]"
-                                >
-                                  Paste
-                                </button>
+                          {!resumeLoading && showOverlay && (
+                            <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-stone-200 text-black/90 z-10">
+                              <div className="px-5 md:px-5 flex flex-col gap-y-2 justify-center items-center w-full">
+                                <p className="font-semibold w-full text-xs sm:text-sm ">
+                                  Create or upload your resume to start
+                                  generating a tailored cover letter.
+                                </p>
+                                <div className="flex gap-4">
+                                  <button
+                                    onClick={() =>
+                                      router.push("/resume-generator")
+                                    }
+                                    className="inline-block font-bold cursor-pointer bg-stone-900 text-white px-4 py-2 rounded mr-3 text-xs sm:text-sm"
+                                  >
+                                    Create Resume
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      setShowOverlay(false);
+                                      setTimeout(() => {
+                                        resumeRef.current?.focus();
+                                      }, 0);
+                                    }}
+                                    className="cursor-pointer text-xs sm:text-sm font-semibold  border-2 py-1 px-3 rounded-[4px]"
+                                  >
+                                    Paste
+                                  </button>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        )}
-                      </div>
+                          )}
+                        </div>
 
-                      <div className="flex mt-2 justify-between items-center">
-                        {!resumeSaved ? (
+                        <div className="flex mt-2 justify-between items-center">
+                          {!resumeSaved ? (
+                            <button
+                              onClick={onSaveResume}
+                              className="mb-5 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
+                              disabled={loading}
+                            >
+                              Save Resume
+                            </button>
+                          ) : (
+                            <button className="mt-1 mb-5 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105">
+                              Edit Resume
+                            </button>
+                          )}
                           <button
-                            onClick={onSaveResume}
-                            className="mb-5 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
-                            disabled={loading}
+                            className="cursor-pointer"
+                            onClick={handleTextAreaState}
                           >
-                            Save Resume
+                            {textAreaTitle}
                           </button>
-                        ) : (
-                          <button className="mt-1 mb-5 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105">
-                            Edit Resume
-                          </button>
-                        )}
-                        <button
-                          className="cursor-pointer"
-                          onClick={handleTextAreaState}
-                        >
-                          {textAreaTitle}
-                        </button>
+                        </div>
                       </div>
                     </div>
                   )}
