@@ -144,10 +144,11 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
       </div>
 
       <div
+        style={{}}
         ref={resumeEditorRef}
         contentEditable
         suppressContentEditableWarning={true}
-        className="w-full h-80 overflow-scroll border bg-white text-black p-4 text-sm leading-relaxed min-h-[300px] whitespace-pre-wrap outline-none"
+        className="w-full  h-100 overflow-y-scroll border bg-white text-black p-4 text-sm leading-relaxed min-h-[300px] whitespace-pre-wrap outline-none"
       ></div>
 
       <div className="mt-4 flex flex-wrap gap-4">

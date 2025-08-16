@@ -64,7 +64,7 @@ export default function FindJobsPage() {
   });
 
   const [matchingJobId, setMatchingJobId] = useState<string | null>(null);
-  const [textAreaSize, setTextAreaSize] = useState("180px");
+  const [textAreaSize, setTextAreaSize] = useState("350px");
   const [textAreaState, setTextAreaSizeState] = useState(false);
   const [textAreaTitle, setTextAreaSizeTitle] = useState("Show More");
   const [showNoResumePopup, setShowNoResumePopup] = useState(false);
@@ -352,7 +352,7 @@ export default function FindJobsPage() {
 
   useEffect(() => {
     if (textAreaState === false) {
-      setTextAreaSize("180px");
+      setTextAreaSize("350px");
       setTextAreaSizeTitle("show more");
     } else {
       setTextAreaSize("500px");

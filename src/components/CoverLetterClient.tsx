@@ -33,7 +33,7 @@ export default function CoverLetterClient() {
   const [loading, setLoading] = useState(false);
   const [coverLetter, setCoverLetter] = useState("");
   const [resumeSaved, setResumeSaved] = useState(false);
-  const [textAreaSize, setTextAreaSize] = useState("150px");
+  const [textAreaSize, setTextAreaSize] = useState("350px");
   const [textAreaState, setTextAreaSizeState] = useState(false);
   const [textAreaTitle, setTextAreaSizeTitle] = useState("Show More");
   const [resumeLoading, setResumeLoading] = useState(true);
@@ -99,7 +99,6 @@ export default function CoverLetterClient() {
       return;
     }
 
-    // Otherwise, apply bold
     const boldNode = document.createElement("b");
     boldNode.appendChild(range.extractContents());
     range.insertNode(boldNode);
@@ -245,7 +244,7 @@ export default function CoverLetterClient() {
 
   useEffect(() => {
     if (textAreaState === false) {
-      setTextAreaSize("150px");
+      setTextAreaSize("350px");
       setTextAreaSizeTitle("show more");
     } else {
       setTextAreaSize("500px");
