@@ -53,7 +53,7 @@ const LiveCoverLetterDemo = () => {
     <div className="min-h-screen w-full flex items-center justify-center border-b-white z-50 dark:border-b-black/20 bg-[#2b2a27] text-[#f6f4ed] px-4 py-12 dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
       <div className="w-full max-w-2xl text-left space-y-6">
         <h2 className="text-xl sm:text-3xl font-bold uppercase">
-          Cover Letter Generator
+          AI Cover Letter Generator
         </h2>
         <div className="text-base space-y-3">
           <p className="text-lg max-w-xl">

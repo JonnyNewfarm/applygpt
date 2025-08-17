@@ -47,7 +47,7 @@ const LiveGenerateResumeDemo = () => {
     <div className="min-h-screen w-full flex items-center justify-center bg-[#2b2a27] text-[#f6f4ed] px-4 py-12 dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
       <div className="max-w-2xl text-left space-y-6">
         <h2 className="text-xl sm:text-3xl font-bold uppercase">
-          Live Resume Generator
+          AI Resume Generator
         </h2>
 
         <p className="text-base max-w-xl">

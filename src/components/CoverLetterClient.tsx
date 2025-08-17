@@ -458,8 +458,8 @@ export default function CoverLetterClient() {
 
                           {!resumeLoading && showOverlay && (
                             <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-stone-200 text-black/90 z-10">
-                              <div className="px-5 md:px-5 flex flex-col gap-y-2 justify-center items-center w-full">
-                                <p className="font-semibold w-full text-xs sm:text-sm ">
+                              <div className="px-5 md:px-5 flex flex-col gap-y-2  justify-center items-center w-full">
+                                <p className="font-semibold text-sm  sm:text-lg text-left ">
                                   Create or upload your resume to start
                                   generating a tailored cover letter.
                                 </p>

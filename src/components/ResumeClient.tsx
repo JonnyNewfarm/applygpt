@@ -224,7 +224,10 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
 
   return (
     <div className="w-full bg-[#2b2a27] text-[#f6f4ed] mb-10 dark:bg-[#f6f4f2] dark:text-[#2b2a27] min-h-screen">
-      <ResumeUploadPopUp>
+      <ResumeUploadPopUp
+        title={resume ? "Edit Your Resume:" : "Already have a resume?"}
+        buttonTitle={resume ? "Edit " : "Upload"}
+      >
         <ResumeForm resume={resume} />
       </ResumeUploadPopUp>
       <main className="max-w-5xl mx-auto px-4 md:px-8">
@@ -253,7 +256,6 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
             )}
           </div>
 
-          {/* Address Section */}
           <div className="flex-1">
             <label className="block text-sm font-semibold mb-1">Address</label>
             <button
@@ -288,7 +290,6 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
             )}
           </div>
 
-          {/* Skills Section */}
           <div className="flex-1">
             <label className="block text-sm font-semibold mb-1">Skills</label>
             <button
@@ -509,7 +510,7 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
         ) : (
           <button
             onClick={onGenerate}
-            disabled={isGenerating} // only disable during generating
+            disabled={isGenerating}
             className={`w-full cursor-pointer py-3 rounded-[3px] uppercase tracking-wide px-3 text-lg text-[#f6f4ed] dark:text-black border-[#f6f4ed] shadow-md shadow-white/35 dark:shadow-black/25 border-2 dark:border-black font-bold transform transition-transform duration-300 ease-in-out hover:scale-105 ${
               isGenerating ? "cursor-not-allowed" : "hover:opacity-80"
             }`}

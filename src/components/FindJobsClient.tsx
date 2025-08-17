@@ -488,35 +488,6 @@ export default function FindJobsPage() {
                     : `Usage: ${usage.generationCount} / ${usage.generationLimit} generations`}
                 </p>
               </div>
-              {showNoResumePopup && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-40">
-                  <div className="bg-white z-50  relative transform  text-black p-6 rounded  max-w-md py-10">
-                    <div className="flex justify-between items-center">
-                      <p className="  max-w-[70%]">
-                        You need to create or upload a resume first.
-                      </p>
-                      <button
-                        onClick={() => setShowNoResumePopup(false)}
-                        className="cursor-pointer absolute right-2 top-2  text-black  text-3xl rounded"
-                      >
-                        <IoMdClose />
-                      </button>
-                    </div>
-                    <Link
-                      href="/resume-generator"
-                      className="inline-block z-50 mt-4 bg-stone-900 text-white px-4 py-2 rounded mr-3"
-                    >
-                      Create Resume
-                    </Link>
-                    <Link
-                      href="/profile"
-                      className="inline-block z-50 bg-stone-600 text-white px-4 py-2 rounded mr-3"
-                    >
-                      Upload
-                    </Link>
-                  </div>
-                </div>
-              )}
 
               {showResumeModal && (
                 <div className="fixed  inset-0 flex items-center justify-center bg-black/50 z-50">
@@ -533,18 +504,60 @@ export default function FindJobsPage() {
                           ✕
                         </button>
                       </div>
-                      <textarea
-                        ref={textAreaRef}
-                        style={{ scrollbarWidth: "thin", height: textAreaSize }}
-                        value={resume}
-                        onChange={(e) => {
-                          setResume(e.target.value);
-                          setResumeSaved(false);
-                        }}
-                        placeholder="Paste your resume here..."
-                        rows={8}
-                        className="w-full border bg-white text-black border-gray-500 rounded p-2"
-                      />
+                      <div className="relative">
+                        <textarea
+                          ref={textAreaRef}
+                          style={{
+                            scrollbarWidth: "thin",
+                            height: textAreaSize,
+                          }}
+                          value={resume}
+                          onChange={(e) => {
+                            setResume(e.target.value);
+                            setResumeSaved(false);
+                          }}
+                          placeholder="Paste your resume here..."
+                          rows={8}
+                          className="w-full border bg-white text-black border-gray-500 rounded p-2"
+                        />
+                        {!resume && !resumeLoading && (
+                          <div className="absolute inset-0 bg-stone-200 text-black/90 rounded p-4 z-10 flex items-center justify-center">
+                            <div className="max-w-xl p-5 w-full  space-y-3">
+                              <div className="space-y-0 md:text-lg text-md    sm:text-base  leading-relaxed">
+                                <p className="mb-1.5 font-semibold">
+                                  Create or upload your resume to get
+                                  personalized job matches.
+                                </p>
+                                <p>
+                                  Prefer to do it later? No problem – you can
+                                  still browse and search for jobs anytime.
+                                </p>
+                              </div>
+
+                              <div className="flex items-center mt-3 w-full justify-between gap-4 flex-wrap">
+                                <Link
+                                  href="/resume-generator"
+                                  className="bg-stone-800 font-semibold rounded-[4px] text-sm text-white border border-white px-5 py-2   hover:bg-stone-700 transition"
+                                >
+                                  Create Resume
+                                </Link>
+                                <button
+                                  onClick={() => {
+                                    setResume(" ");
+                                    setTimeout(
+                                      () => textAreaRef.current?.focus(),
+                                      50
+                                    );
+                                  }}
+                                  className="border-2 text-sm rounded-[4px] border-black text-black px-5 py-2  font-semibold cursor-pointer hover:bg-black hover:text-white transition"
+                                >
+                                  Paste
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
                       <div className="w-full flex mt-2 px-2 justify-between items-center">
                         {!resumeSaved ? (
                           <button
@@ -575,45 +588,41 @@ export default function FindJobsPage() {
                           {textAreaTitle}
                         </button>
                       </div>
-
-                      {!resume && !resumeLoading && (
-                        <div className="absolute top-0 left-0 w-full h-full bg-stone-200 text-black/90 rounded p-4 z-10 flex items-center justify-center">
-                          <div className="max-w-xl p-5 w-full text-center space-y-3">
-                            <div className="space-y-0 text-sm font-semibold   sm:text-base  leading-relaxed">
-                              <p>
-                                Create or upload your resume to get personalized
-                                job matches.
-                              </p>
-                              <p>
-                                Prefer to do it later? No problem – you can
-                                still browse and search for jobs anytime.
-                              </p>
-                            </div>
-
-                            <div className="flex items-center justify-center gap-4 flex-wrap">
-                              <Link
-                                href="/resume-generator"
-                                className="bg-stone-800 font-semibold rounded-[4px] text-sm text-white border border-white px-5 py-2   hover:bg-stone-700 transition"
-                              >
-                                Create Resume
-                              </Link>
-                              <button
-                                onClick={() => {
-                                  setResume(" ");
-                                  setTimeout(
-                                    () => textAreaRef.current?.focus(),
-                                    50
-                                  );
-                                }}
-                                className="border-2 text-sm rounded-[4px] border-black text-black px-5 py-2  font-semibold cursor-pointer hover:bg-black hover:text-white transition"
-                              >
-                                Paste
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      )}
                     </div>
+                  </div>
+                </div>
+              )}
+              {showNoResumePopup && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-40">
+                  <div className="bg-white ml-2  mr-2 z-50  relative transform  text-black p-6 rounded  max-w-md py-10">
+                    <div className="flex ml-2 justify-between items-center">
+                      <div>
+                        <h1 className="font-semibold">No Resume Found</h1>
+                        <p className="  max-w-[80%] mt-0.5">
+                          You need to create or upload a resume first.
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => setShowNoResumePopup(false)}
+                        className="cursor-pointer absolute right-2 top-2  text-black  text-3xl rounded"
+                      >
+                        <IoMdClose />
+                      </button>
+                    </div>
+                    <Link
+                      href="/resume-generator"
+                      className="inline-block z-50 mt-4 bg-stone-900 text-white px-4 py-2 rounded mr-3"
+                    >
+                      Create Resume
+                    </Link>
+                    <button
+                      onClick={() => {
+                        setShowResumeModal(true);
+                      }}
+                      className="inline-block z-50 bg-stone-600 text-white px-4 py-2 rounded mr-3"
+                    >
+                      Upload
+                    </button>
                   </div>
                 </div>
               )}
