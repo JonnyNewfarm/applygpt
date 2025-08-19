@@ -5,6 +5,7 @@ import ResumeForm from "../../components/ResumeForm";
 import SubscriptionSection from "@/components/SubscriptionSection";
 import ProfileTabs from "../../components/ProfileTabs";
 import { Metadata } from "next";
+import ProfileDetailsTab from "@/components/ProfileDetailsTab";
 
 export const metadata: Metadata = {
   title: "Your Profile – Manage Resumes and Cover Letters",
@@ -66,28 +67,25 @@ export default async function ProfilePage() {
 
   return (
     <div className="w-full min-h-screen flex justify-center bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4f2] dark:text-[#2b2a27] border-b-white/80 border-b dark:border-b-black/80">
-      <main className="w-[90%] mx-auto px-2 md:p-12 rounded-[3px] mb-10 mt-12">
-        <h1 className="text-3xl font-semibold mb-6 border-b-[1px] border-[#f6f4ed] dark:border-[#2b2a27] pb-2">
-          Profile
-        </h1>
-
+      <main className="w-[90%] mx-auto px-2 md:p-12 rounded-[3px] mb-10 mt-6">
         <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-2">Profile Details</h2>
-          <p className="mb-1 flex flex-col">
+          <h2 className="text-2xl font-semibold mb-2">Profile Details</h2>
+          <p className="mb-1 flex text-lg flex-col">
             <span className="font-semibold">Name:</span>{" "}
             {user.name ? capitalizeName(user.name) : "N/A"}
           </p>
-          <p className="flex flex-col">
+          <p className="flex text-lg flex-col">
             <span className="font-semibold">Email:</span> {user.email}
           </p>
         </section>
+        <section className="mb-5 w-full">
+          <ProfileDetailsTab>
+            <h2 className="text-xl font-semibold mb-2">Edit Resume</h2>
+            <ResumeForm resume={user.resume?.content || ""} />
+          </ProfileDetailsTab>
+        </section>
 
         <SubscriptionSection user={user} />
-
-        <section className="mb-5">
-          <h2 className="text-2xl font-semibold mb-2">Your Resume</h2>
-          <ResumeForm resume={user.resume?.content || ""} />
-        </section>
 
         <ProfileTabs serializedCoverLetters={serializedCoverLetters} />
       </main>

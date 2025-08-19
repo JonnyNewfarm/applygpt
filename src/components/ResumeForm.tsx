@@ -102,13 +102,62 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
       backgroundColor: "#ffffff",
     });
 
-    const imgData = canvas.toDataURL("image/jpeg", 1.0);
     const pdf = new jsPDF("p", "mm", "a4");
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
 
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+    const topBottomPadding = 10; // mm
+    const usableHeight = pageHeight - topBottomPadding * 2;
 
-    pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight);
+    const canvasPageHeight = (canvas.width * usableHeight) / pageWidth;
+
+    let renderedHeight = 0;
+    let pageIndex = 0;
+
+    while (renderedHeight < canvas.height) {
+      // Slice out one page worth of the canvas
+      const pageCanvas = document.createElement("canvas");
+      pageCanvas.width = canvas.width;
+      pageCanvas.height = Math.min(
+        canvasPageHeight,
+        canvas.height - renderedHeight
+      );
+
+      const ctx = pageCanvas.getContext("2d");
+      if (ctx) {
+        ctx.drawImage(
+          canvas,
+          0,
+          renderedHeight,
+          canvas.width,
+          pageCanvas.height,
+          0,
+          0,
+          canvas.width,
+          pageCanvas.height
+        );
+      }
+
+      const imgData = pageCanvas.toDataURL("image/jpeg", 1.0);
+
+      if (pageIndex > 0) pdf.addPage();
+
+      // Scale slice height properly
+      const pageImgHeight = (pageCanvas.height * pageWidth) / pageCanvas.width;
+
+      pdf.addImage(
+        imgData,
+        "JPEG",
+        0,
+        topBottomPadding,
+        pageWidth,
+        pageImgHeight > usableHeight ? usableHeight : pageImgHeight
+      );
+
+      renderedHeight += canvasPageHeight;
+      pageIndex++;
+    }
+
     pdf.save("resume.pdf");
   };
 
@@ -136,7 +185,7 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
           <FontSizeDropdown />
           <button
             onClick={markAllText}
-            className="mt-1 border ml-3 font-bold cursor-pointer px-3 py-1.5 rounded-[3px] text-sm bg-transparent text-[#f6f4ed] border-[#f6f4ed] dark:text-[#2b2a27] dark:border-[#2b2a27]"
+            className="mt-1 border ml-3 font-bold cursor-pointer px-3 py-1.5 rounded-[3px] text-sm bg-transparent text-[#f6f4ed] border-[#f6f4ed] dark:text-[#2b2a27] dark:border-[#2b2a27] "
           >
             Mark All
           </button>

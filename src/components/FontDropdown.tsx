@@ -26,7 +26,6 @@ export default function FontDropdown() {
     setIsOpen(false);
   };
 
-  // Close dropdown if clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -47,7 +46,7 @@ export default function FontDropdown() {
         onClick={toggleDropdown}
         className="px-3 py-1.5 cursor-pointer border font-semibold rounded text-sm text-[#f6f4ed] border-[#f6f4ed] dark:text-[#2b2a27] dark:border-[#2b2a27]"
       >
-        {selectedFont}
+        {selectedFont.slice(0, 8)}
       </button>
 
       {isOpen && (
