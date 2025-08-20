@@ -428,8 +428,14 @@ export default function CoverLetterClient() {
                     </p>
                   )}
                   {showResumeModal && (
-                    <div className="fixed  inset-0 flex items-center justify-center bg-black/50 z-50">
-                      <div className="p-4 w-[95%] max-w-6xl bg-stone-800">
+                    <div
+                      onClick={() => setShowResumeModal(false)}
+                      className="fixed  inset-0 flex items-center justify-center bg-black/50 z-50"
+                    >
+                      <div
+                        onClick={(e) => e.stopPropagation()}
+                        className="p-4 w-[95%] max-w-6xl bg-stone-800"
+                      >
                         <div className="flex justify-between items-center">
                           <label className="block text-xl font-semibold mb-1">
                             Resume

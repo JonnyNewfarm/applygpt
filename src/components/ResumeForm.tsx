@@ -106,7 +106,7 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
     const pageWidth = pdf.internal.pageSize.getWidth();
     const pageHeight = pdf.internal.pageSize.getHeight();
 
-    const topBottomPadding = 10; // mm
+    const topBottomPadding = 10;
     const usableHeight = pageHeight - topBottomPadding * 2;
 
     const canvasPageHeight = (canvas.width * usableHeight) / pageWidth;
@@ -115,7 +115,6 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
     let pageIndex = 0;
 
     while (renderedHeight < canvas.height) {
-      // Slice out one page worth of the canvas
       const pageCanvas = document.createElement("canvas");
       pageCanvas.width = canvas.width;
       pageCanvas.height = Math.min(
@@ -142,7 +141,6 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
 
       if (pageIndex > 0) pdf.addPage();
 
-      // Scale slice height properly
       const pageImgHeight = (pageCanvas.height * pageWidth) / pageCanvas.width;
 
       pdf.addImage(
@@ -165,7 +163,7 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
     <div className="">
       <div className="flex flex-col-reverse sm:justify-between sm:flex-row  ">
         <div>
-          <p className="text-md mt-1 mb-2 sm:mb-0  text-white dark:text-black  ">
+          <p className="text-md mt-1 mb-2 sm:mb-0  text-white  ">
             Select the text you want to modify.
           </p>
         </div>
@@ -175,8 +173,8 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
             onClick={onBoldSelection}
             className={`mt-1 mr-3 mb-1 border font-bold cursor-pointer px-3 py-1.5 rounded-[3px] text-sm transition-all duration-200 ${
               isBoldActive
-                ? "bg-[#f6f4ed] text-[#2b2a27] border-[#f6f4ed] dark:bg-[#2b2a27] dark:text-[#f6f4ed] dark:border-[#2b2a27]"
-                : "bg-transparent text-[#f6f4ed] border-[#f6f4ed] dark:text-[#2b2a27] dark:border-[#2b2a27]"
+                ? "bg-[#f6f4ed]  border-[#f6f4ed]  text-black"
+                : "bg-transparent text-[#f6f4ed] border-[#f6f4ed] "
             }`}
           >
             B
@@ -185,7 +183,7 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
           <FontSizeDropdown />
           <button
             onClick={markAllText}
-            className="mt-1 border ml-3 font-bold cursor-pointer px-3 py-1.5 rounded-[3px] text-sm bg-transparent text-[#f6f4ed] border-[#f6f4ed] dark:text-[#2b2a27] dark:border-[#2b2a27] "
+            className="mt-1 border ml-3 font-bold cursor-pointer px-3 py-1.5 rounded-[3px] text-sm bg-transparent text-[#f6f4ed] border-[#f6f4ed]  "
           >
             Mark All
           </button>
@@ -203,14 +201,14 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
       <div className="mt-4 flex flex-wrap gap-4">
         <button
           onClick={handleSave}
-          className="cursor-pointer mt-2 border-2 font-bold dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27] transform transition-transform duration-300 ease-in-out hover:scale-105"
+          className="cursor-pointer mt-2 border-2 font-bold   px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm transform transition-transform duration-300 ease-in-out hover:scale-105"
           disabled={isSaving}
         >
           {isSaving ? "Saving..." : "Save"}
         </button>
         <button
           onClick={handleDownload}
-          className="cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105 mt-2 border-2 font-bold dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]"
+          className="cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105 mt-2 border-2 font-bold   px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]"
         >
           Download as PDF
         </button>

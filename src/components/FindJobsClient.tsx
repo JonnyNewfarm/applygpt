@@ -490,8 +490,14 @@ export default function FindJobsPage() {
               </div>
 
               {showResumeModal && (
-                <div className="fixed  inset-0 flex items-center justify-center bg-black/50 z-50">
-                  <div className="w-[95%] max-w-5xl bg-stone-800 px-2 sm:px-5 py-4">
+                <div
+                  onClick={() => setShowResumeModal(false)}
+                  className="fixed  inset-0 flex items-center justify-center bg-black/50 z-50"
+                >
+                  <div
+                    onClick={(e) => e.stopPropagation()}
+                    className="w-[95%] max-w-5xl bg-stone-800 px-2 sm:px-5 py-4"
+                  >
                     <div className="">
                       <div className="flex justify-between px-1">
                         <h1 className="text-xl mb-2 font-semibold">

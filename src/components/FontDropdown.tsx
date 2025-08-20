@@ -44,7 +44,7 @@ export default function FontDropdown() {
     <div ref={dropdownRef} className="relative mr-2 inline-block text-left">
       <button
         onClick={toggleDropdown}
-        className="px-3 py-1.5 cursor-pointer border font-semibold rounded text-sm text-[#f6f4ed] border-[#f6f4ed] dark:text-[#2b2a27] dark:border-[#2b2a27]"
+        className="px-3 py-1.5 cursor-pointer border font-semibold rounded text-sm text-[#f6f4ed] border-[#f6f4ed]"
       >
         {selectedFont.slice(0, 8)}
       </button>

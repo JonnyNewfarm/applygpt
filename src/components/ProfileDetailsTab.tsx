@@ -16,13 +16,19 @@ const ProfileDetailsTab = ({ children }: ProfileDetailsProps) => {
         Edit Resume
       </button>
       {isModalOpen && (
-        <div className="fixed   inset-0 w-full h-full  bg-stone-900/60 flex justify-center items-center z-[9999]">
-          <div className="max-w-6xl flex flex-col ml-2 mr-2 mt-1 mb-1 w-full relative bg-stone-800 p-4">
+        <div
+          onClick={() => setIsModalOpen(false)}
+          className="fixed   inset-0 w-full h-full text-white  bg-stone-900/60 flex justify-center items-center z-[9999]"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="max-w-6xl flex flex-col text-white ml-2 mr-2 mt-1 mb-1 w-full relative bg-stone-800 p-4"
+          >
             {children}
             <div className="w-full flex justify-end">
               <button
                 onClick={() => setIsModalOpen(false)}
-                className=" mt-7 bg-white/90 text-black dark:bg-black/90 dark:text-white px-3 text-md font-semibold rounded-[3px] cursor-pointer py-1  hover:scale-105 transform transition-transform  "
+                className=" border-2 border-white rounded-[3px] px-3 py-1.5  text-md cursor-pointer font-bold  hover:scale-105 transform transition-transform  "
               >
                 Close
               </button>

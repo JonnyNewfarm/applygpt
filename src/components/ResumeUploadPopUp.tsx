@@ -26,16 +26,24 @@ const ResumeUploadPopUp = ({ children, title, buttonTitle }: Props) => {
         </div>
 
         {showUploadModal && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black/80 z-50">
-            <div className="bg-stone-800 mr-2 ml-2 text-white dark:bg-white   dark:text-black px-2.5 md:px-8 py-6 rounded-[3px] max-w-4xl w-full relative">
-              <button
-                onClick={() => setShowUploadModal(false)}
-                className="absolute top-4 right-4 text-xl cursor-pointer font-bold"
-              >
-                ✕
-              </button>
+          <div
+            onClick={() => setShowUploadModal(false)}
+            className="fixed inset-0 flex items-center justify-center bg-black/80 z-50"
+          >
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="bg-stone-800 mr-2 ml-2 text-white   px-2.5 md:px-8 py-6 rounded-[3px] max-w-4xl w-full relative"
+            >
               <h2 className="text-xl font-semibold ">Your Resume</h2>
               {children}{" "}
+              <div className="w-full flex justify-end">
+                <button
+                  onClick={() => setShowUploadModal(false)}
+                  className="border-2 border-white rounded-[3px] px-3 py-1.5  text-md cursor-pointer font-bold"
+                >
+                  Close
+                </button>
+              </div>
             </div>
           </div>
         )}
