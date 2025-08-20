@@ -3,7 +3,7 @@ import { authOptions } from "../../../lib/auth";
 import prisma from "../../../lib/prisma";
 import ResumeForm from "../../components/ResumeForm";
 import SubscriptionSection from "@/components/SubscriptionSection";
-import ProfileTabs from "../../components/ProfileTabs";
+import SavedJobsClient from "@/components/SavedJobsClient";
 import { Metadata } from "next";
 import ProfileDetailsTab from "@/components/ProfileDetailsTab";
 
@@ -60,34 +60,37 @@ export default async function ProfilePage() {
       </div>
     );
 
-  const serializedCoverLetters = user.coverLetters.map((cl) => ({
-    ...cl,
-    createdAt: cl.createdAt.toISOString(),
-  }));
-
   return (
     <div className="w-full min-h-screen flex justify-center bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4f2] dark:text-[#2b2a27] border-b-white/80 border-b dark:border-b-black/80">
       <main className="w-[90%] mx-auto px-2 md:p-12 rounded-[3px] mb-10 mt-6">
-        <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-2">Profile Details</h2>
-          <p className="mb-1 flex text-lg flex-col">
-            <span className="font-semibold">Name:</span>{" "}
-            {user.name ? capitalizeName(user.name) : "N/A"}
-          </p>
-          <p className="flex text-lg flex-col">
-            <span className="font-semibold">Email:</span> {user.email}
-          </p>
-        </section>
-        <section className="mb-5 w-full">
-          <ProfileDetailsTab>
-            <h2 className="text-xl font-semibold mb-2">Edit Resume</h2>
-            <ResumeForm resume={user.resume?.content || ""} />
-          </ProfileDetailsTab>
+        <section className="mb-8 flex   justify-between w-full">
+          <div className="flex flex-col md:flex-row gap-x-56 justify-between">
+            <div>
+              <p className="mb-1 flex text-lg flex-col">
+                <span className="font-semibold">Name:</span>{" "}
+                {user.name ? capitalizeName(user.name) : "N/A"}
+              </p>
+            </div>
+            <div>
+              <p className="flex text-lg flex-col">
+                <span className="font-semibold">Email:</span> {user.email}
+              </p>
+            </div>
+          </div>
+          <section className="">
+            <ProfileDetailsTab>
+              <h2 className="text-xl font-semibold mb-2">Edit Resume</h2>
+              <ResumeForm resume={user.resume?.content || ""} />
+            </ProfileDetailsTab>
+          </section>
         </section>
 
         <SubscriptionSection user={user} />
 
-        <ProfileTabs serializedCoverLetters={serializedCoverLetters} />
+        <section>
+          <h1 className="text-2xl font-semibold">Saved Jobs</h1>
+          <SavedJobsClient />
+        </section>
       </main>
     </div>
   );

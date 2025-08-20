@@ -32,7 +32,7 @@ const ResumeUploadPopUp = ({ children, title, buttonTitle }: Props) => {
           >
             <div
               onClick={(e) => e.stopPropagation()}
-              className="bg-stone-800 mr-2 ml-2 text-white   px-2.5 md:px-8 py-6 rounded-[3px] max-w-4xl w-full relative"
+              className="bg-[#2b2a27] mr-2 ml-2 text-white   px-2.5 md:px-8 py-6 rounded-[3px] max-w-4xl w-full relative"
             >
               <h2 className="text-xl font-semibold ">Your Resume</h2>
               {children}{" "}

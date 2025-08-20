@@ -10,7 +10,7 @@ const ProfileDetailsTab = ({ children }: ProfileDetailsProps) => {
   return (
     <div className="w-full h-full">
       <button
-        className="cursor-pointer border-2 font-semibold rounded-[3px] border-white dark:border-black px-3 py-2 text-lg  hover:scale-105 transform transition-transform  "
+        className="cursor-pointer border-1 font-semibold rounded-[3px] border-white dark:border-black px-3 py-2 text-md md:text-lg  hover:scale-105 transform transition-transform  "
         onClick={() => setIsModalOpen(true)}
       >
         Edit Resume
@@ -28,7 +28,7 @@ const ProfileDetailsTab = ({ children }: ProfileDetailsProps) => {
             <div className="w-full flex justify-end">
               <button
                 onClick={() => setIsModalOpen(false)}
-                className=" border-2 border-white rounded-[3px] px-3 py-1.5  text-md cursor-pointer font-bold  hover:scale-105 transform transition-transform  "
+                className=" border-2 border-white rounded-[3px] px-3 py-1.5 mt-5 mr-4.5  text-md cursor-pointer font-bold  hover:scale-105 transform transition-transform  "
               >
                 Close
               </button>

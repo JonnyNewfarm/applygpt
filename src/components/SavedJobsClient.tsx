@@ -2,13 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
+import CoverLetterClientModal from "./CoverLetterClientModal";
+import { IoMdClose } from "react-icons/io";
 
 type SavedJob = {
   id: string;
-  jobId: string;
-  title: string;
+  jobId?: string;
+  title?: string;
   company: string;
-  location: string;
+  location?: string;
   url: string;
   description: string;
 };
@@ -17,6 +19,8 @@ export default function ProfilePage() {
   const [savedJobs, setSavedJobs] = useState<SavedJob[]>([]);
   const [deletingJobId, setDeletingJobId] = useState<string | null>(null);
   const [expandedJobs, setExpandedJobs] = useState<Record<string, boolean>>({});
+  const [showCoverLetterModal, setShowCoverLetterModal] = useState(false);
+  const [selectedJob, setSelectedJob] = useState<SavedJob | null>(null);
 
   useEffect(() => {
     async function fetchSavedJobs() {
@@ -59,9 +63,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="p-4">
-      <h2 className="text-2xl font-bold mb-4">Saved Jobs</h2>
-
+    <div className=" mt-3">
       {savedJobs.length === 0 && <p>No saved jobs yet.</p>}
 
       <ul className="space-y-4">
@@ -73,42 +75,70 @@ export default function ProfilePage() {
               : job.description;
 
           return (
-            <li key={job.id} className="border p-4 rounded shadow">
-              <h3 className="text-lg font-semibold">{job.title}</h3>
-              <p>
-                {job.company} — {job.location}
-              </p>
+            <>
+              <li key={job.id} className="border p-4 rounded shadow">
+                <h3 className="text-lg font-semibold">{job.title}</h3>
+                <p>
+                  {job.company} — {job.location}
+                </p>
 
-              <div className="mt-2 text-sm  ">
-                {isExpanded ? job.description : shortDescription}
-              </div>
-              {job.description.length > 200 && (
-                <button
-                  onClick={() => toggleDescription(job.id)}
-                  className=" hover:underline cursor-pointer mt-2 opacity-90 text-sm"
-                >
-                  {isExpanded ? "Show Less" : "Show More"}
-                </button>
+                <div className="mt-2 text-sm  ">
+                  {isExpanded ? job.description : shortDescription}
+                </div>
+                {job.description.length > 200 && (
+                  <button
+                    onClick={() => toggleDescription(job.id)}
+                    className=" hover:underline cursor-pointer mt-2 opacity-90 text-sm"
+                  >
+                    {isExpanded ? "Show Less" : "Show More"}
+                  </button>
+                )}
+
+                <div className="flex flex-col gap-y-2 mt-6 w-[175px] text-center">
+                  <button
+                    onClick={() => {
+                      setSelectedJob(job);
+                      setShowCoverLetterModal(true);
+                    }}
+                    className="cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105 mt-2 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] whitespace-nowrap "
+                  >
+                    Create Cover Letter
+                  </button>
+                  <a
+                    href={job.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105 mt-2 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27]"
+                  >
+                    View Job
+                  </a>
+                  <button
+                    onClick={() => deleteSavedJob(job.id)}
+                    disabled={deletingJobId === job.id}
+                    className="cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105 mt-2 border-2 font-bold px-3 py-1.5 rounded-[3px] border-red-600 text-sm text-red-600"
+                  >
+                    {deletingJobId === job.id ? "Deleting..." : "Delete"}
+                  </button>
+                </div>
+              </li>
+
+              {showCoverLetterModal && (
+                <div className="fixed inset-0 p-5 md:p-10 bg-black/80 z-50 flex items-center justify-center">
+                  <div
+                    style={{ scrollbarWidth: "none" }}
+                    className="w-full h-full rounded-[6px] bg-white overflow-auto relative"
+                  >
+                    <button
+                      className="absolute  text-white  text-3xl md:text-5xl cursor-pointer dark:text-black top-4 right-4   z-50"
+                      onClick={() => setShowCoverLetterModal(false)}
+                    >
+                      <IoMdClose strokeWidth={16} />
+                    </button>
+                    <CoverLetterClientModal job={selectedJob!} />
+                  </div>
+                </div>
               )}
-
-              <div className="flex flex-col gap-y-2 mt-6 w-[150px] text-center">
-                <a
-                  href={job.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105 mt-2 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27]"
-                >
-                  View Job
-                </a>
-                <button
-                  onClick={() => deleteSavedJob(job.id)}
-                  disabled={deletingJobId === job.id}
-                  className="cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105 mt-2 border-2 font-bold px-3 py-1.5 rounded-[3px] border-red-600 text-sm text-red-600"
-                >
-                  {deletingJobId === job.id ? "Deleting..." : "Delete"}
-                </button>
-              </div>
-            </li>
+            </>
           );
         })}
       </ul>
