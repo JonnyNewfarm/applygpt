@@ -36,16 +36,11 @@ const FindJobsDemo = () => {
         </div>
       </div>
 
-      {/* Demo Job Card */}
       <div className="w-full max-w-xl border border-[#f6f4ed] dark:border-[#2b2a27] rounded p-6 cursor-pointer hover:bg-[#3a3834] dark:hover:bg-[#dcdad6] transition relative">
-        {/* MATCH % badge top-right */}
-        <div className="absolute top-4 right-2 text-green-600 text-sm  sm:text-lg font-bold px-2 py-1 rounded-md uppercase select-none">
-          Match 7/10
-        </div>
-
         <h3 className="text-lg font-semibold">{demoJob.title}</h3>
         <p className="mt-1 text-sm font-medium opacity-80">{demoJob.company}</p>
         <p className="mt-1 text-sm opacity-70">{demoJob.location}</p>
+        <p>Match: 7/10</p>
         <p className="mt-1 font-semibold">{demoJob.salary}</p>
 
         <div className="mt-3 flex flex-wrap gap-2">
@@ -59,8 +54,8 @@ const FindJobsDemo = () => {
           ))}
         </div>
 
-        <div className="flex py-4 w-full justify-between">
-          <h1 className="mt-2 border-2 font-semibold dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]">
+        <div className="flex py-4 w-full gap-x-2 justify-between">
+          <h1 className="mt-2 border-2 whitespace-nowrap font-semibold dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]">
             Generate Cover Letter
           </h1>
           <h1 className="mt-2 border-2 font-semibold dark:border-[#2b2a27]  px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]   dark:text-[#2b2a27]">

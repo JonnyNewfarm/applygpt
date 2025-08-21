@@ -62,8 +62,8 @@ const LiveCoverLetterDemo = () => {
           </p>
           <p className="text-lg max-w-xl">
             The AI uses this information to generate a customized cover letter
-            tailored to the job. You can edit, save, copy, or download the final
-            letter as a PDF.
+            tailored to the job. You can edit, save, copy, and download the
+            final letter as a PDF.
           </p>
         </div>
 

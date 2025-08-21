@@ -1,7 +1,5 @@
-import LiveCoverLetterDemo from "@/components/home/CoverletterDemo";
-import FindJobSection from "@/components/home/FindJobSection";
 import HeroSection from "@/components/home/HeroSection";
-import GenerateResumeDemo from "@/components/home/ResumeDemo";
+import SectionLoader from "@/components/home/SectionLoader";
 import SmoothScroll from "@/components/SmoothScroll";
 import { Metadata } from "next";
 import React from "react";
@@ -41,9 +39,8 @@ const Homepage = () => {
           </p>
         </div>
         <HeroSection />
-        <GenerateResumeDemo />
-        <FindJobSection />
-        <LiveCoverLetterDemo />
+
+        <SectionLoader />
       </main>
     </SmoothScroll>
   );
