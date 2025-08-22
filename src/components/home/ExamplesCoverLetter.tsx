@@ -32,8 +32,8 @@ export default function CoverLetterExampleSection() {
           <p className="text-lg ">
             Jobscriptor uses <strong>AI</strong> to help you generate
             personalized, professional cover letters in minutes. Just enter the
-            job details, and we’ll craft a tailored letter that highlights your
-            strengths.
+            job details, and we&apos;ll craft a tailored letter that highlights
+            your strengths.
           </p>
           <ul className="space-y-2 ">
             <li>✔ AI-generated, job-specific cover letters</li>
@@ -41,10 +41,7 @@ export default function CoverLetterExampleSection() {
             <li>✔ Download in PDF</li>
 
             <li className="mt-5">
-              <Link
-                className="border-2 px-3 py-2 mt-8"
-                href={"/resume-generator"}
-              >
+              <Link className="border-2 px-3 py-2 mt-8" href={"/cover-letter"}>
                 Try it out
               </Link>
             </li>
