@@ -49,12 +49,12 @@ export default function JobsExampleSection() {
             upload your details, explore opportunities, and see how well your
             skills match each position.
           </p>
-          <ul className="space-y-2 ">
+          <ul className="space-y-2.5 ">
             <li>✔ Match jobs directly to your resume</li>
             <li>✔ Discover opportunities from LinkedIn, Indeed, and more</li>
             <li>✔ Generate tailored cover letters instantly</li>
-            <li className="mt-5">
-              <Link className="border-2 px-3 py-2 mt-8" href={"/jobs"}>
+            <li className="mt-6">
+              <Link className="border-2 px-3 py-2" href={"/jobs"}>
                 Find Jobs
               </Link>
             </li>

@@ -1,10 +1,31 @@
 "use client";
 import Link from "next/link";
-import React, { useState } from "react";
-import { X, Maximize2 } from "lucide-react";
+import React, { useState, useRef } from "react";
+import { X, Maximize2, ZoomIn, ZoomOut } from "lucide-react";
 
 export default function CoverLetterExampleSection() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isZoomed, setIsZoomed] = useState(false);
+  const [transformOrigin, setTransformOrigin] = useState("center center");
+
+  const imgRef = useRef<HTMLImageElement>(null);
+
+  const handleImageClick = (e: React.MouseEvent<HTMLImageElement>) => {
+    if (!imgRef.current) return;
+
+    if (isZoomed) {
+      // Reset zoom
+      setIsZoomed(false);
+      setTransformOrigin("center center");
+    } else {
+      // Zoom in at click position
+      const rect = imgRef.current.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      setTransformOrigin(`${x}% ${y}%`);
+      setIsZoomed(true);
+    }
+  };
 
   return (
     <section className="w-full bg-[#2b2a27] text-[#f5f4ef] dark:bg-[#f6f4f2] dark:text-[#2b2a27] py-20">
@@ -12,8 +33,9 @@ export default function CoverLetterExampleSection() {
         <div className="flex justify-center relative group">
           <button
             onClick={() => setIsOpen(true)}
-            className="relative cursor-pointer"
+            className="relative cursor-pointer text-left"
           >
+            <p>Example Cover Letter:</p>
             <img
               src="/example-coverletter.jpg"
               alt="Cover letter example"
@@ -27,7 +49,7 @@ export default function CoverLetterExampleSection() {
 
         <div className="flex flex-col space-y-6">
           <h2 className="text-4xl font-bold leading-tight">
-            Create Cover Letters That Get You Interviews{" "}
+            Create Cover Letters That Get You Interviews
           </h2>
           <p className="text-lg ">
             Jobscriptor uses <strong>AI</strong> to help you generate
@@ -35,13 +57,12 @@ export default function CoverLetterExampleSection() {
             job details, and we&apos;ll craft a tailored letter that highlights
             your strengths.
           </p>
-          <ul className="space-y-2 ">
+          <ul className="space-y-2.5 ">
             <li>✔ AI-generated, job-specific cover letters</li>
             <li>✔ Easy editing and customization</li>
             <li>✔ Download in PDF</li>
-
-            <li className="mt-5">
-              <Link className="border-2 px-3 py-2 mt-8" href={"/cover-letter"}>
+            <li className="mt-6">
+              <Link className="border-2 px-3 py-2" href={"/cover-letter"}>
                 Try it out
               </Link>
             </li>
@@ -51,8 +72,11 @@ export default function CoverLetterExampleSection() {
 
       {isOpen && (
         <div
-          className="fixed   inset-0 bg-black/90 flex items-center justify-center z-50"
-          onClick={() => setIsOpen(false)}
+          className="fixed inset-0 bg-black/90 flex items-center justify-center z-50"
+          onClick={() => {
+            setIsOpen(false);
+            setIsZoomed(false);
+          }}
         >
           <button
             className="absolute top-5 right-5 text-white"
@@ -61,12 +85,30 @@ export default function CoverLetterExampleSection() {
             <X className="w-8 h-8 cursor-pointer" />
           </button>
 
-          <div className="" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="relative overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
             <img
+              ref={imgRef}
               src="/example-coverletter.jpg"
               alt="Cover letter example Fullscreen"
-              className="max-w-[90%] md:max-w-[80%] mx-auto  max-h-[90%] border border-gray-400"
+              onClick={handleImageClick}
+              style={{
+                transform: isZoomed ? "scale(2)" : "scale(1)",
+                transformOrigin,
+                transition: "transform 0.3s ease",
+                cursor: isZoomed ? "zoom-out" : "zoom-in",
+              }}
+              className="max-w-[90%] md:max-w-[80%] mx-auto max-h-[90%] border border-gray-400"
             />
+
+            {/* Zoom icons */}
+            {!isZoomed ? (
+              <ZoomIn className="absolute top-4 left-4 w-8 h-8 text-white opacity-70 pointer-events-none" />
+            ) : (
+              <ZoomOut className="absolute top-4 left-4 w-8 h-8 text-white opacity-70 pointer-events-none" />
+            )}
           </div>
         </div>
       )}
