@@ -527,10 +527,13 @@ export default function FindJobsPage() {
                           className="w-full border bg-white text-black border-gray-500 rounded p-2"
                         />
                         {!resume && !resumeLoading && (
-                          <div className="absolute inset-0 bg-stone-200 text-black/90 rounded p-4 z-10 flex items-center justify-center">
-                            <div className="max-w-xl p-5 w-full  space-y-3">
+                          <div className="absolute inset-0 bg-stone-50 text-black/90 rounded p-4 z-10 flex items-center justify-center">
+                            <div className="max-w-xl  w-full  space-y-3">
                               <div className="space-y-0 md:text-lg text-md    sm:text-base  leading-relaxed">
-                                <p className="mb-1.5 font-semibold">
+                                <h1 className="font-semibold">
+                                  Use AI to create a Resume
+                                </h1>
+                                <p className="mb-1.5">
                                   Create or upload your resume to get
                                   personalized job matches.
                                 </p>
@@ -540,7 +543,7 @@ export default function FindJobsPage() {
                                 </p>
                               </div>
 
-                              <div className="flex items-center mt-3 w-full justify-between gap-4 flex-wrap">
+                              <div className="flex items-center mt-3   gap-6 flex-wrap">
                                 <Link
                                   href="/resume-generator"
                                   className="bg-stone-800 font-semibold rounded-[4px] text-sm text-white border border-white px-5 py-2   hover:bg-stone-700 transition"

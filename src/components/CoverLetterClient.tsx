@@ -464,31 +464,41 @@ export default function CoverLetterClient() {
 
                           {!resumeLoading && showOverlay && (
                             <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-stone-200 text-black/90 z-10">
-                              <div className="px-5 md:px-5 flex flex-col gap-y-2  justify-center items-center w-full">
-                                <p className="font-semibold text-sm  sm:text-lg text-left ">
-                                  Create or upload your resume to start
-                                  generating a tailored cover letter.
-                                </p>
-                                <div className="flex gap-4">
-                                  <button
-                                    onClick={() =>
-                                      router.push("/resume-generator")
-                                    }
-                                    className="inline-block font-bold cursor-pointer bg-stone-900 text-white px-4 py-2 rounded mr-3 text-xs sm:text-sm"
-                                  >
-                                    Create Resume
-                                  </button>
-                                  <button
-                                    onClick={() => {
-                                      setShowOverlay(false);
-                                      setTimeout(() => {
-                                        resumeRef.current?.focus();
-                                      }, 0);
-                                    }}
-                                    className="cursor-pointer text-xs sm:text-sm font-semibold  border-2 py-1 px-3 rounded-[4px]"
-                                  >
-                                    Paste
-                                  </button>
+                              <div className="px-5 md:px-26 text-md md:text-lg flex flex-col gap-y-2  justify-center items-center w-full">
+                                <div className="text-left ">
+                                  <h1 className="font-semibold">
+                                    Resume Missing
+                                  </h1>
+                                  <p className="">
+                                    Create a new resume or upload your existing
+                                    one to get started.{" "}
+                                  </p>
+                                  <p className="mt-0.5">
+                                    Once it’s ready, you can generate a
+                                    personalized cover letter tailored to the
+                                    job you’re applying for.
+                                  </p>
+                                  <div className="flex  w-full mt-2 gap-4">
+                                    <button
+                                      onClick={() =>
+                                        router.push("/resume-generator")
+                                      }
+                                      className="inline-block font-bold cursor-pointer bg-stone-900 text-white px-4 py-2 rounded mr-3 text-xs sm:text-sm"
+                                    >
+                                      Create Resume
+                                    </button>
+                                    <button
+                                      onClick={() => {
+                                        setShowOverlay(false);
+                                        setTimeout(() => {
+                                          resumeRef.current?.focus();
+                                        }, 0);
+                                      }}
+                                      className="cursor-pointer text-xs sm:text-sm font-semibold  border-2 py-1 px-3 rounded-[4px]"
+                                    >
+                                      Paste
+                                    </button>
+                                  </div>
                                 </div>
                               </div>
                             </div>
