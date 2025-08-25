@@ -494,7 +494,7 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
         </div>
 
         {isAtLimit ? (
-          <div className="p-4 border border-red-500 rounded bg-red-100 text-red-700">
+          <div className="p-4  bg-[#efefec] text-stone-900">
             <p className="mb-3 font-semibold">
               You have used up all your resume generations.
             </p>

@@ -33,7 +33,7 @@ export default function BuyAccessButton() {
   return (
     <div className="flex flex-col items-start space-y-4 w-full max-w-sm">
       <Select value={plan} onValueChange={setPlan}>
-        <SelectTrigger className="w-full">
+        <SelectTrigger className="w-full border-2 font-semibold">
           <SelectValue placeholder="Select a plan" />
         </SelectTrigger>
         <SelectContent>

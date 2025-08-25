@@ -279,7 +279,6 @@ export default function CoverLetterClientModal({ job }: Props) {
       return;
     }
 
-    // Otherwise, apply bold
     const boldNode = document.createElement("b");
     boldNode.appendChild(range.extractContents());
     range.insertNode(boldNode);
@@ -425,7 +424,7 @@ export default function CoverLetterClientModal({ job }: Props) {
               </p>
 
               {isAtLimit ? (
-                <div className="p-4 border border-red-500 rounded bg-red-100 text-red-700">
+                <div className="p-4 bg-[#faf7f1] text-stone-900 rounded ">
                   <p className="mb-3 font-semibold">
                     You have used up all your cover letter generations.
                   </p>

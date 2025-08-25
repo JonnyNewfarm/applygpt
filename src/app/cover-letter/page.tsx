@@ -82,7 +82,7 @@ export default async function CoverLetterPage() {
     return (
       <div className="bg-[#2b2a27]  font-semibold min-h-screen p-10 flex justify-center items-center  text-[#f6f4ed]  dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
         <div>
-          <p className="text-xl mb-4">
+          <p className="text-xl mb-8">
             You&apos;ve reached your monthly generation limit on the free plan.
             Upgrade to continue.
           </p>

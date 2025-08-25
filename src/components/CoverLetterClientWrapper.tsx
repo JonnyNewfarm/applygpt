@@ -8,7 +8,7 @@ function ResumeClientWrapper() {
   useEffect(() => {
     const timeout = setTimeout(() => {
       setIsMounted(true);
-    }, 1000); // simulate delay, or set to 0 if not needed
+    }, 1000);
     return () => clearTimeout(timeout);
   }, []);
 

@@ -540,7 +540,7 @@ export default function CoverLetterClient() {
               </div>
 
               {isAtLimit ? (
-                <div className="p-4 border border-red-500 rounded bg-red-100 text-red-700">
+                <div className="p-4 border  rounded bg-[#faf7f1] text-stone-900">
                   <p className="mb-3 font-semibold">
                     You have used up all your cover letter generations.
                   </p>
