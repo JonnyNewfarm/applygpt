@@ -231,8 +231,11 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
         <ResumeForm resume={resume} />
       </ResumeUploadPopUp>
       <main className="max-w-5xl mx-auto px-4 md:px-8">
-        <h1 className="mb-2 text-lg md:mt-2  font-semibold">
-          Or generate a new resume:
+        <h1 className="font-semibold text-xl">
+          Build a Professional Resume with AI
+        </h1>
+        <h1 className="mb-2 text-xl">
+          Craft a resume instantly and start discovering jobs that fit you.{" "}
         </h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <div className="flex-1">

@@ -42,7 +42,7 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
   const handleSave = async () => {
     if (!resumeEditorRef.current) return;
     const currentContent = resumeEditorRef.current.innerHTML;
-    setIsSaving(true);
+
     try {
       await fetch("/api/resume", {
         method: "POST",
@@ -164,9 +164,15 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
       <div className="px-5 sm:py-5">
         <div className="flex   flex-col-reverse md:items-end sm:flex-row sm:justify-between  text-[#f6f4ed] dark:text-black">
           <div>
-            <h2 className="text-xl font-semibold hidden sm:block ">
-              Edit Resume
-            </h2>
+            {resume ? (
+              <h2 className="text-xl font-semibold hidden sm:block ">
+                Edit Resume
+              </h2>
+            ) : (
+              <h2 className="text-xl font-semibold hidden sm:block ">
+                Upload & Edit
+              </h2>
+            )}
 
             <p className="text-md ">Select the text you want to modify.</p>
           </div>

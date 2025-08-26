@@ -78,7 +78,7 @@ export default async function ProfilePage() {
             </div>
           </div>
           <section className="">
-            <ProfileDetailsTab>
+            <ProfileDetailsTab resume={user.resume?.content ? true : false}>
               <ResumeForm resume={user.resume?.content || ""} />
             </ProfileDetailsTab>
           </section>

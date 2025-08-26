@@ -75,7 +75,7 @@ export default function ProfilePage() {
               : job.description;
 
           return (
-            <>
+            <div key={job.id}>
               <li key={job.id} className="border p-4 rounded shadow">
                 <h3 className="text-lg font-semibold">{job.title}</h3>
                 <p>
@@ -138,7 +138,7 @@ export default function ProfilePage() {
                   </div>
                 </div>
               )}
-            </>
+            </div>
           );
         })}
       </ul>

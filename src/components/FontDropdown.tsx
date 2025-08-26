@@ -5,12 +5,17 @@ import { useState, useRef, useEffect } from "react";
 const fonts = [
   "Arial",
   "Georgia",
-  "Courier New",
   "Times New Roman",
   "Verdana",
   "Trebuchet MS",
-  "Comic Sans MS",
-  "Impact",
+  "Calibri",
+  "Cambria",
+  "Garamond",
+  "Helvetica",
+  "Tahoma",
+  "Palatino Linotype",
+  "Book Antiqua",
+  "Lucida Sans",
 ];
 
 export default function FontDropdown() {

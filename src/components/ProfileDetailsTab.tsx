@@ -3,18 +3,28 @@ import React, { ReactNode, useState } from "react";
 
 interface ProfileDetailsProps {
   children: ReactNode;
+  resume: boolean;
 }
 
-const ProfileDetailsTab = ({ children }: ProfileDetailsProps) => {
+const ProfileDetailsTab = ({ children, resume }: ProfileDetailsProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <div className="w-full h-full ">
-      <button
-        className="cursor-pointer border-1 font-semibold rounded-[3px] border-white dark:border-black px-3 py-2 text-md md:text-lg  hover:scale-105 transform transition-transform  "
-        onClick={() => setIsModalOpen(true)}
-      >
-        Edit Resume
-      </button>
+      {resume ? (
+        <button
+          className="cursor-pointer border-1 font-semibold rounded-[3px] border-white dark:border-black px-3 py-2 text-md md:text-lg  hover:scale-105 transform transition-transform  "
+          onClick={() => setIsModalOpen(true)}
+        >
+          Edit Resume
+        </button>
+      ) : (
+        <button
+          className="cursor-pointer border-1 font-semibold rounded-[3px] border-white dark:border-black px-3 py-2 text-md md:text-lg  hover:scale-105 transform transition-transform  "
+          onClick={() => setIsModalOpen(true)}
+        >
+          Upload Resume
+        </button>
+      )}
       {isModalOpen && (
         <div
           onClick={() => setIsModalOpen(false)}
