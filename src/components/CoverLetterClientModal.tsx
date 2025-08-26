@@ -425,12 +425,19 @@ export default function CoverLetterClientModal({ job }: Props) {
 
               {isAtLimit ? (
                 <div className="p-4 bg-[#faf7f1] text-stone-900 rounded ">
-                  <p className="mb-3 font-semibold">
+                  <p className="font-semibold mb-1">No more tokens</p>
+
+                  <p className="mb-3">
                     You have used up all your cover letter generations.
                   </p>
                   {usage.generationLimit !== null ? (
                     <>
-                      <p className="mb-3">Upgrade to continue generating:</p>
+                      <h1 className="font-bold mb-1">No more tokens</h1>
+                      <p className="mb-3">
+                        Upgrade today to keep generating —{" "}
+                        <strong>no commitment</strong> required, and enjoy our{" "}
+                        <strong>limited-time sale</strong>:
+                      </p>
                       <BuyAccessButton />
                     </>
                   ) : (

@@ -54,7 +54,10 @@ export default function JobsExampleSection() {
             <li>✔ Discover opportunities from LinkedIn, Indeed, and more</li>
             <li>✔ Generate tailored cover letters instantly</li>
             <li className="mt-6">
-              <Link className="border-2 px-3 py-2" href={"/jobs"}>
+              <Link
+                className="border-2 rounded-[4px] font-semibold px-3 py-2"
+                href={"/jobs"}
+              >
                 Find Jobs
               </Link>
             </li>

@@ -74,7 +74,7 @@ const LiveCoverLetterDemo = () => {
               value={fixedResume}
               readOnly
               rows={3}
-              className="w-full px-4 py-2 border rounded bg-transparent border-[#f6f4ed] dark:border-[#2b2a27] text-[#f6f4ed] dark:text-[#2b2a27] cursor-not-allowed"
+              className="w-full px-4 py-2 border rounded bg-white border-[#f6f4ed] dark:border-[#2b2a27] text-[#f6f4ed] dark:text-[#2b2a27] cursor-not-allowed"
             />
 
             <label className="block font-semibold mb-1 mt-4">
@@ -84,7 +84,7 @@ const LiveCoverLetterDemo = () => {
               value={fixedJobDescription}
               readOnly
               rows={3}
-              className="w-full px-4 py-2 border rounded bg-transparent border-[#f6f4ed] dark:border-[#2b2a27] text-[#f6f4ed] dark:text-[#2b2a27] cursor-not-allowed"
+              className="w-full px-4 py-2 border rounded bg-white border-[#f6f4ed] dark:border-[#2b2a27] text-[#f6f4ed] dark:text-[#2b2a27] cursor-not-allowed"
             />
 
             <button
@@ -112,7 +112,7 @@ const LiveCoverLetterDemo = () => {
             href="/cover-letter"
             className="inline-block mt-6 cursor-pointer border-2 px-4 py-2 rounded border-[#f6f4ed] dark:border-[#2b2a27] hover:opacity-80 transition"
           >
-            Try It Yourself →
+            Try It Yourself
           </Link>
         )}
 

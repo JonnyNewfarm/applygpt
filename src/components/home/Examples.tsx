@@ -48,7 +48,6 @@ export default function ResumeExampleSection() {
           </button>
         </div>
 
-        {/* Text Section */}
         <div className="flex flex-col space-y-6">
           <h2 className="text-4xl font-bold leading-tight">
             Build Resumes That Get You Hired
@@ -63,7 +62,10 @@ export default function ResumeExampleSection() {
             <li>✔ Easy editing and customization</li>
             <li>✔ Download in PDF</li>
             <li className="mt-6">
-              <Link className="border-2 px-3 py-2" href={"/resume-generator"}>
+              <Link
+                className="border-2 rounded-[4px] font-semibold px-3 py-2"
+                href={"/resume-generator"}
+              >
                 Try it out
               </Link>
             </li>

@@ -67,7 +67,7 @@ const LiveGenerateResumeDemo = () => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Your Name"
-              className="w-full px-4 py-2 border rounded bg-transparent border-[#f6f4ed] dark:border-[#2b2a27]"
+              className="w-full px-4 bg-white text-black py-2 border rounded  border-[#f6f4ed] dark:border-[#2b2a27]"
             />
             <input
               type="number"
@@ -75,14 +75,14 @@ const LiveGenerateResumeDemo = () => {
               value={age}
               onChange={(e) => setAge(Number(e.target.value))}
               placeholder="Your Age"
-              className="w-full px-4 py-2 border rounded bg-transparent border-[#f6f4ed] dark:border-[#2b2a27]"
+              className="w-full px-4 py-2 text-black border rounded bg-white border-[#f6f4ed] dark:border-[#2b2a27]"
             />
             <input
               value={jobTitle}
               onChange={(e) => setJobTitle(e.target.value)}
               placeholder="Job title"
               list="jobTitles"
-              className="w-full px-4 py-2 border rounded bg-transparent border-[#f6f4ed] dark:border-[#2b2a27]"
+              className="w-full px-4 py-2 text-black border rounded bg-white border-[#f6f4ed] dark:border-[#2b2a27]"
             />
             <datalist id="jobTitles">
               {jobTitles.map((title) => (
@@ -119,7 +119,7 @@ const LiveGenerateResumeDemo = () => {
               href="/resume-generator"
               className="inline-block mt-6 cursor-pointer border px-4 py-2 rounded border-[#f6f4ed] dark:border-[#2b2a27] hover:opacity-80 transition"
             >
-              Try It Yourself →
+              Try It Yourself
             </Link>
           )}
       </div>

@@ -397,7 +397,7 @@ export default function FindJobsPage() {
                     }
                   }}
                   placeholder="Job title (e.g. frontend developer)"
-                  className="w-full   dark:shadow-stone-400/45 border-2 shadow-md relative   border-[#f6f4ed] dark:border-[#2b2a27] bg-white/95 text-black rounded p-2 mb-3"
+                  className="w-full   dark:shadow-stone-900/5 border-2 shadow-md relative   border-[#f6f4ed] dark:border-[#2b2a27] bg-white/95 text-black rounded p-2 mb-3"
                 />
               </label>
               {jobTitleSuggestions.length > 0 && (
@@ -427,7 +427,7 @@ export default function FindJobsPage() {
                   value={country}
                   onChange={(e) => handleCountryInput(e.target.value)}
                   placeholder="Country"
-                  className="w-full   dark:shadow-stone-400/45 border-2 shadow-md relative   border-[#f6f4ed] dark:border-[#2b2a27] bg-white/95 text-black rounded p-2 mb-3"
+                  className="w-full   dark:shadow-stone-900/5 border-2 shadow-md relative   border-[#f6f4ed] dark:border-[#2b2a27] bg-white/95 text-black rounded p-2 mb-3"
                 />
               </label>
               {countrySuggestions.length > 0 && (
@@ -454,7 +454,7 @@ export default function FindJobsPage() {
                   value={city}
                   onChange={(e) => handleCityInput(e.target.value)}
                   placeholder="City"
-                  className="w-full   dark:shadow-stone-400/45 border-2 shadow-md relative   border-[#f6f4ed] dark:border-[#2b2a27] bg-white text-black rounded p-2 mb-3"
+                  className="w-full   dark:shadow-stone-900/5 border-2 shadow-md relative   border-[#f6f4ed] dark:border-[#2b2a27] bg-white text-black rounded p-2 mb-3"
                 />
               </label>
               {citySuggestions.length > 0 && (
@@ -474,7 +474,7 @@ export default function FindJobsPage() {
                 </ul>
               )}
             </div>
-            <div className="w-full relative">
+            <div className="w-full relative ">
               <div className="flex justify-between  px-3">
                 <button
                   onClick={() => setShowResumeModal((prev) => !prev)}
@@ -496,7 +496,7 @@ export default function FindJobsPage() {
                 >
                   <div
                     onClick={(e) => e.stopPropagation()}
-                    className="w-[95%] max-w-5xl bg-stone-800 px-2 sm:px-5 py-4"
+                    className="w-[95%] max-w-5xl bg-[#2b2a27] text-[#f6f4ed] mb-10 dark:bg-[#f6f4f2] dark:text-[#2b2a27] px-2 sm:px-5 py-4"
                   >
                     <div className="">
                       <div className="flex justify-between px-1">
@@ -641,7 +641,7 @@ export default function FindJobsPage() {
               <button
                 onClick={handleFindJobs}
                 disabled={loading}
-                className="mt-3 w-full  cursor-pointer py-3 rounded-[3px]  uppercase tracking-wide  px-3 text-lg text-[#f6f4ed] dark:text-black border-[#f6f4ed] shadow-md shadow-white/35 dark:shadow-black/25 border-2 dark:border-black font-bold transform transition-transform duration-300 ease-in-out hover:scale-105"
+                className="mt-3 w-full  cursor-pointer py-3 rounded-[3px]  uppercase tracking-wide  px-3 text-lg text-[#f6f4ed] dark:text-black border-[#f6f4ed] shadow-md shadow-white/15 dark:shadow-black/10 border-2 dark:border-black font-bold transform transition-transform duration-300 ease-in-out hover:scale-105"
               >
                 {loading ? "Searching..." : "Find Jobs"}
               </button>

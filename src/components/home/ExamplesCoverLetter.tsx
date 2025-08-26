@@ -62,7 +62,10 @@ export default function CoverLetterExampleSection() {
             <li>✔ Easy editing and customization</li>
             <li>✔ Download in PDF</li>
             <li className="mt-6">
-              <Link className="border-2 px-3 py-2" href={"/cover-letter"}>
+              <Link
+                className="border-2 rounded-[4px] font-semibold px-3 py-2"
+                href={"/cover-letter"}
+              >
                 Try it out
               </Link>
             </li>

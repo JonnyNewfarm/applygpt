@@ -434,7 +434,7 @@ export default function CoverLetterClient() {
                     >
                       <div
                         onClick={(e) => e.stopPropagation()}
-                        className="p-4 w-[95%] max-w-6xl bg-stone-800"
+                        className="p-4 w-[95%] max-w-6xl bg-stone-800 dark:bg-stone-50"
                       >
                         <div className="flex justify-between items-center">
                           <label className="block text-xl font-semibold mb-1">
@@ -463,17 +463,17 @@ export default function CoverLetterClient() {
                           />
 
                           {!resumeLoading && showOverlay && (
-                            <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-stone-200 text-black/90 z-10">
-                              <div className="px-5 md:px-26 text-md md:text-lg flex flex-col gap-y-2  justify-center items-center w-full">
+                            <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-stone-800 dark:bg-stone-50 text-black/90 z-10">
+                              <div className="px-5 md:px-26 text-md text-white dark:text-black md:text-lg flex flex-col gap-y-2  justify-center items-center w-full">
                                 <div className="text-left ">
-                                  <h1 className="font-semibold">
+                                  <h1 className="font-semibold text-lg md:text-xl">
                                     Resume Missing
                                   </h1>
-                                  <p className="">
+                                  <p className="m-0">
                                     Create a new resume or upload your existing
                                     one to get started.{" "}
                                   </p>
-                                  <p className="mt-0.5">
+                                  <p className="m-0">
                                     Once it’s ready, you can generate a
                                     personalized cover letter tailored to the
                                     job you’re applying for.
@@ -483,7 +483,7 @@ export default function CoverLetterClient() {
                                       onClick={() =>
                                         router.push("/resume-generator")
                                       }
-                                      className="inline-block font-bold cursor-pointer bg-stone-900 text-white px-4 py-2 rounded mr-3 text-xs sm:text-sm"
+                                      className="inline-block font-bold cursor-pointer bg-stone-200 text-black dark:bg-stone-900 dark:text-white px-4 py-2 rounded mr-3 text-sm"
                                     >
                                       Create Resume
                                     </button>
@@ -541,12 +541,20 @@ export default function CoverLetterClient() {
 
               {isAtLimit ? (
                 <div className="p-4 border  rounded bg-[#faf7f1] text-stone-900">
-                  <p className="mb-3 font-semibold">
+                  <p className="font-semibold mb-1">No more tokens</p>
+
+                  <p className="mb-3">
                     You have used up all your cover letter generations.
                   </p>
                   {usage.generationLimit !== null ? (
                     <>
-                      <p className="mb-3">Upgrade to continue generating:</p>
+                      <h1 className="font-semibold">Upgrade plan:</h1>
+                      <p className="mb-3">
+                        Upgrade today to keep generating —{" "}
+                        <strong>no commitment</strong>
+                        required, and enjoy our{" "}
+                        <strong>limited-time sale</strong>:
+                      </p>
                       <BuyAccessButton />
                     </>
                   ) : (

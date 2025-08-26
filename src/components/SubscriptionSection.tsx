@@ -68,7 +68,12 @@ export default function SubscriptionSection({ user }: { user: User }) {
           )}
         </button>
         {openUpgrade && (
-          <div className="p-4">
+          <div className="p-4 space-y-0.5">
+            <h1 className="font-semibold">Upgrade Plan</h1>
+            <p className="mb-3">
+              Upgrade today to keep generating — <strong>no commitment</strong>{" "}
+              required, and enjoy our <strong>limited-time sale</strong>:
+            </p>
             <BuyAccessButton />
           </div>
         )}

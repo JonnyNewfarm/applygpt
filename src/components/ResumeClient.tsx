@@ -231,7 +231,9 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
         <ResumeForm resume={resume} />
       </ResumeUploadPopUp>
       <main className="max-w-5xl mx-auto px-4 md:px-8">
-        <h1 className="mb-2 text-lg  font-semibold">Or generate a resume:</h1>
+        <h1 className="mb-2 text-lg md:mt-2  font-semibold">
+          Or generate a new resume:
+        </h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <div className="flex-1">
             <label className="block text-sm font-semibold mb-1">
@@ -495,12 +497,20 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
 
         {isAtLimit ? (
           <div className="p-4  bg-[#efefec] text-stone-900">
-            <p className="mb-3 font-semibold">
+            <p className="font-semibold">No more tokens</p>
+            <p className="mb-3 ">
               You have used up all your resume generations.
             </p>
             {usage.generationLimit !== null ? (
               <>
-                <p className="mb-3">Upgrade to continue generating:</p>
+                <p className="mb-3">
+                  <h1 className="font-semibold">Upgrade Plan</h1>
+                  <p className="mb-3">
+                    Upgrade today to keep generating —{" "}
+                    <strong>no commitment</strong> required, and enjoy our{" "}
+                    <strong>limited-time sale</strong>:
+                  </p>
+                </p>
                 <BuyAccessButton />
               </>
             ) : (
@@ -511,7 +521,7 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
           <button
             onClick={onGenerate}
             disabled={isGenerating}
-            className={`w-full cursor-pointer py-3 rounded-[3px] uppercase tracking-wide px-3 text-lg text-[#f6f4ed] dark:text-black border-[#f6f4ed] shadow-md shadow-white/35 dark:shadow-black/25 border-2 dark:border-black font-bold transform transition-transform duration-300 ease-in-out hover:scale-105 ${
+            className={`w-full cursor-pointer py-3 rounded-[3px] uppercase tracking-wide px-3 text-lg text-[#f6f4ed] dark:text-black border-[#f6f4ed] shadow-md shadow-white/15 dark:shadow-black/10 border-2 dark:border-black font-bold transform transition-transform duration-300 ease-in-out hover:scale-105 ${
               isGenerating ? "cursor-not-allowed" : "hover:opacity-80"
             }`}
           >

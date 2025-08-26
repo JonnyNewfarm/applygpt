@@ -14,12 +14,12 @@ const ResumeUploadPopUp = ({ children, title, buttonTitle }: Props) => {
       <div className="max-w-5xl rounded-[3px] mx-auto px-4 md:px-8    text-white dark:text-black py-4 mt-5 sm:mt-0">
         <div>
           <h1 className="text-2xl font-bold">AI Resume Generator</h1>
-          <p className="mb-0 mt-2 text-xl ">{title} </p>
+          <p className="mb-0 mt-1 text-xl ">{title} </p>
         </div>
         <div className="mb-3">
           <button
             onClick={() => setShowUploadModal(true)}
-            className="mt-2 border-2 font-bold cursor-pointer dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px]  text-lg   transform transition-transform duration-300 ease-in-out hover:scale-105"
+            className="mt-2 border-2 font-bold cursor-pointer dark:border-[#2b2a27] px-3 py-1 rounded-[3px]  text-lg   transform transition-transform duration-300 ease-in-out hover:scale-105"
           >
             {buttonTitle}
           </button>
@@ -32,14 +32,14 @@ const ResumeUploadPopUp = ({ children, title, buttonTitle }: Props) => {
           >
             <div
               onClick={(e) => e.stopPropagation()}
-              className="bg-[#2b2a27] mr-2 ml-2 text-white   px-2.5 md:px-8 py-6 rounded-[3px] max-w-4xl w-full relative"
+              className=" mr-2 ml-2 bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4f2] dark:text-[#2b2a27]   px-2.5 md:px-8 py-6 rounded-[3px] max-w-4xl w-full relative"
             >
               <h2 className="text-xl font-semibold ">Your Resume</h2>
               {children}{" "}
               <div className="w-full flex justify-end">
                 <button
                   onClick={() => setShowUploadModal(false)}
-                  className="border-2 border-white rounded-[3px] px-3 py-1.5  text-md cursor-pointer font-bold"
+                  className="border-2 mt-5 dark:border-[#2b2a27] border-[#f6f4ed] rounded-[3px] px-3 py-1.5  text-md cursor-pointer font-bold"
                 >
                   Close
                 </button>

@@ -161,83 +161,83 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
 
   return (
     <div className="">
-      <div className="flex flex-col-reverse sm:justify-between sm:flex-row  ">
-        <div>
-          <p className="text-md mt-1 mb-2 sm:mb-0  text-white  ">
+      <div className="">
+        {" "}
+        <div className="flex dark:text-black text-[#f6f4ed] flex-col sm:justify-between sm:flex-row ">
+          <p className="text-md  sm:mb-0  ">
             Select the text you want to modify.
           </p>
+
+          <div className=" relative">
+            <button
+              onClick={onBoldSelection}
+              className={`mt-1 mr-3 mb-1 border  cursor-pointer px-3 py-1.5 rounded-[3px] text-sm transition-all duration-200
+    ${
+      isBoldActive
+        ? "bg-[#f6f4ed]  border-[#f6f4ed] text-black dark:text-black dark:bg-[#f6f4ed] dark:border-[#2b2a27]"
+        : "bg-transparent font-semibold text-[#f6f4ed] border-[#f6f4ed] dark:border-[#2b2a27] dark:text-black"
+    }`}
+            >
+              B
+            </button>
+
+            <FontDropdown />
+            <FontSizeDropdown />
+            <button
+              onClick={markAllText}
+              className="mt-1 border ml-3 font-bold cursor-pointer px-3 py-1.5 rounded-[3px] text-sm bg-transparent text-[#f6f4ed] dark:text-black  border-[#f6f4ed] dark:border-black  "
+            >
+              Mark All
+            </button>
+          </div>
         </div>
-
-        <div className=" relative">
+        <div
+          style={{}}
+          ref={resumeEditorRef}
+          contentEditable
+          suppressContentEditableWarning={true}
+          className="w-full  h-100 overflow-y-scroll border bg-white text-black p-4 text-sm leading-relaxed min-h-[300px] whitespace-pre-wrap outline-none"
+        ></div>
+        <div className="mt-4 flex flex-wrap gap-4">
           <button
-            onClick={onBoldSelection}
-            className={`mt-1 mr-3 mb-1 border font-bold cursor-pointer px-3 py-1.5 rounded-[3px] text-sm transition-all duration-200 ${
-              isBoldActive
-                ? "bg-[#f6f4ed]  border-[#f6f4ed]  text-black"
-                : "bg-transparent text-[#f6f4ed] border-[#f6f4ed] "
-            }`}
+            onClick={handleSave}
+            className="cursor-pointer mt-2 border-2 font-bold   px-3 py-1.5 rounded-[3px] border-[#f6f4ed] dark:border-black text-sm transform transition-transform duration-300 ease-in-out hover:scale-105"
+            disabled={isSaving}
           >
-            B
+            {isSaving ? "Saving..." : "Save"}
           </button>
-          <FontDropdown />
-          <FontSizeDropdown />
           <button
-            onClick={markAllText}
-            className="mt-1 border ml-3 font-bold cursor-pointer px-3 py-1.5 rounded-[3px] text-sm bg-transparent text-[#f6f4ed] border-[#f6f4ed]  "
+            onClick={handleDownload}
+            className="cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105 mt-2 border-2 font-bold   px-3 py-1.5 rounded-[3px] border-[#f6f4ed] dark:text-black dark:border-black  text-sm text-[#f6f4ed]"
           >
-            Mark All
+            Download as PDF
+          </button>
+
+          <button
+            onClick={handleDelete}
+            className="cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105 mt-2 border-2 font-bold  px-3 py-1.5 rounded-[3px] border-red-600  text-sm text-red-600  "
+            disabled={isDeleting}
+          >
+            {isDeleting ? "Deleting..." : "Delete"}
           </button>
         </div>
+        <div
+          ref={resumePdfRef}
+          style={{
+            width: "800px",
+            padding: "24px",
+            backgroundColor: "white",
+            color: "black",
+            fontSize: "14px",
+            lineHeight: "1.6",
+            whiteSpace: "pre-wrap",
+            position: "absolute",
+            top: "-9999px",
+            left: "-9999px",
+          }}
+          dangerouslySetInnerHTML={{ __html: content }}
+        />
       </div>
-
-      <div
-        style={{}}
-        ref={resumeEditorRef}
-        contentEditable
-        suppressContentEditableWarning={true}
-        className="w-full  h-100 overflow-y-scroll border bg-white text-black p-4 text-sm leading-relaxed min-h-[300px] whitespace-pre-wrap outline-none"
-      ></div>
-
-      <div className="mt-4 flex flex-wrap gap-4">
-        <button
-          onClick={handleSave}
-          className="cursor-pointer mt-2 border-2 font-bold   px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm transform transition-transform duration-300 ease-in-out hover:scale-105"
-          disabled={isSaving}
-        >
-          {isSaving ? "Saving..." : "Save"}
-        </button>
-        <button
-          onClick={handleDownload}
-          className="cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105 mt-2 border-2 font-bold   px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-sm text-[#f6f4ed]"
-        >
-          Download as PDF
-        </button>
-
-        <button
-          onClick={handleDelete}
-          className="cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105 mt-2 border-2 font-bold  px-3 py-1.5 rounded-[3px] border-red-600  text-sm text-red-600  "
-          disabled={isDeleting}
-        >
-          {isDeleting ? "Deleting..." : "Delete"}
-        </button>
-      </div>
-
-      <div
-        ref={resumePdfRef}
-        style={{
-          width: "800px",
-          padding: "24px",
-          backgroundColor: "white",
-          color: "black",
-          fontSize: "14px",
-          lineHeight: "1.6",
-          whiteSpace: "pre-wrap",
-          position: "absolute",
-          top: "-9999px",
-          left: "-9999px",
-        }}
-        dangerouslySetInnerHTML={{ __html: content }}
-      />
     </div>
   );
 }
