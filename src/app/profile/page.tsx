@@ -79,7 +79,6 @@ export default async function ProfilePage() {
           </div>
           <section className="">
             <ProfileDetailsTab>
-              <h2 className="text-xl font-semibold mb-2">Edit Resume</h2>
               <ResumeForm resume={user.resume?.content || ""} />
             </ProfileDetailsTab>
           </section>

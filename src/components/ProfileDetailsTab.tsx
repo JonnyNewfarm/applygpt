@@ -25,10 +25,10 @@ const ProfileDetailsTab = ({ children }: ProfileDetailsProps) => {
             className="max-w-6xl flex flex-col bg-[#2b2a27] text-[#f5f4ef] dark:bg-[#f6f4f2] dark:text-[#2b2a27] ml-2 mr-2 mt-1 mb-1 w-full relative  p-4"
           >
             {children}
-            <div className="w-full flex justify-end">
+            <div className="w-full px-6 flex justify-end">
               <button
                 onClick={() => setIsModalOpen(false)}
-                className=" border-2 border-white dark:border-black rounded-[3px] px-3 py-1.5 mt-5 mr-4.5  text-md cursor-pointer font-bold  hover:scale-105 transform transition-transform  "
+                className=" border-2 mt-5 border-white dark:border-black rounded-[3px] px-3 py-1.5    text-xs cursor-pointer font-bold  hover:scale-105 transform transition-transform  "
               >
                 Close
               </button>
