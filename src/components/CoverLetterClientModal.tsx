@@ -485,7 +485,7 @@ export default function CoverLetterClientModal({ job }: Props) {
               </div>
             ) : coverLetter ? (
               <>
-                <div className="flex flex-wrap gap-3 -mb-6">
+                <div className="flex flex-wrap gap-3">
                   {url && (
                     <a
                       href={url}
@@ -509,25 +509,26 @@ export default function CoverLetterClientModal({ job }: Props) {
                     Download as PDF
                   </button>
                 </div>
-                <h1 className="font-bold mt-4">Edit:</h1>
-                <button
-                  onClick={onBoldSelection}
-                  className={`mt-2 mr-2 border font-bold cursor-pointer px-3 py-1.5 rounded-[3px] text-sm transition-all duration-200 ${
-                    isBoldActive
-                      ? "bg-[#f6f4ed] text-[#2b2a27] border-[#f6f4ed] dark:bg-[#2b2a27] dark:text-[#f6f4ed] dark:border-[#2b2a27]"
-                      : "bg-transparent text-[#f6f4ed] border-[#f6f4ed] dark:text-[#2b2a27] dark:border-[#2b2a27]"
-                  }`}
-                >
-                  B
-                </button>
-                <FontDropdown />
-                <FontSizeDropdown />
-                <button
-                  onClick={onMarkAll}
-                  className="mt-2 border ml-2 font-semibold cursor-pointer px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27]"
-                >
-                  Mark All
-                </button>
+                <div className="-mb-8 mt-2">
+                  <button
+                    onClick={onBoldSelection}
+                    className={`mt-2 mr-2 border font-bold cursor-pointer px-3 py-1.5 rounded-[3px] text-sm transition-all duration-200 ${
+                      isBoldActive
+                        ? "bg-[#f6f4ed] text-[#2b2a27] border-[#f6f4ed] dark:bg-[#2b2a27] dark:text-[#f6f4ed] dark:border-[#2b2a27]"
+                        : "bg-transparent text-[#f6f4ed] border-[#f6f4ed] dark:text-[#2b2a27] dark:border-[#2b2a27]"
+                    }`}
+                  >
+                    B
+                  </button>
+                  <FontDropdown />
+                  <FontSizeDropdown />
+                  <button
+                    onClick={onMarkAll}
+                    className="mt-2 border ml-2 font-semibold cursor-pointer px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27]"
+                  >
+                    Mark All
+                  </button>
+                </div>
 
                 <div
                   ref={editableRef}
