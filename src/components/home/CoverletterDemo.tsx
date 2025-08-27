@@ -5,9 +5,9 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 
 const fixedResume =
-  "Experienced Frontend Developer skilled in React, Next.js, and UI/UX design.";
+  "Experienced Frontend Developer skilled in React, Next.js, and UI/UX design...";
 const fixedJobDescription =
-  "Frontend Developer role focusing on building scalable web applications at Telenor.";
+  "Frontend Developer role focusing on building scalable web applications at Telenor...";
 
 const sampleCoverLetterTemplate = (resume: string, jobDescription: string) => `
 Dear Hiring Manager,
@@ -74,7 +74,7 @@ const LiveCoverLetterDemo = () => {
               value={fixedResume}
               readOnly
               rows={3}
-              className="w-full px-4 py-2 border rounded bg-white border-[#f6f4ed] dark:border-[#2b2a27] text-[#f6f4ed] dark:text-[#2b2a27] cursor-not-allowed"
+              className="w-full px-4 py-2 border rounded bg-white border-[#f6f4ed] dark:border-[#2b2a27] text-black cursor-not-allowed"
             />
 
             <label className="block font-semibold mb-1 mt-4">
@@ -84,7 +84,7 @@ const LiveCoverLetterDemo = () => {
               value={fixedJobDescription}
               readOnly
               rows={3}
-              className="w-full px-4 py-2 border rounded bg-white border-[#f6f4ed] dark:border-[#2b2a27] text-[#f6f4ed] dark:text-[#2b2a27] cursor-not-allowed"
+              className="w-full px-4 py-2 border rounded bg-white border-[#f6f4ed] dark:border-[#2b2a27]  text-black cursor-not-allowed"
             />
 
             <button

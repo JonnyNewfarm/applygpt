@@ -292,7 +292,7 @@ export default function CoverLetterClientModal({ job }: Props) {
 
   return (
     <div className="w-full min-h-screen border-b-white/20 dark:border-b-black/20 bg-[#2b2a27]   text-[#f6f4ed]  dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
-      <main className="max-w-7xl bg-light mx-auto p-1 md:p-8">
+      <main className="max-w-7xl bg-light mx-auto p-2 md:p-8">
         <h1 className="text-2xl px-2 mt-3  text-wrap w-[80%] sm:w-[100%] text-left font-xl md:mt-0 font-bold mb-6 ">
           AI Cover Letter Generator
         </h1>

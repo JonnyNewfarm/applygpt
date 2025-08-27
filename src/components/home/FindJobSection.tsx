@@ -37,11 +37,11 @@ const FindJobsDemo = () => {
         </div>
       </div>
 
-      <div className="w-full max-w-xl border border-[#2b2a27] rounded p-6 cursor-pointer bg-white text-black  transition relative">
+      <div className="w-full max-w-xl border border-[#2b2a27] rounded p-3 md:p-5 cursor-pointer bg-white text-black  transition relative">
         <div className="w-full flex items-center justify-between">
-          <h3 className="text-lg font-semibold">{demoJob.title}</h3>
-          <h1 className="flex items-center font-semibold gap-x-1">
-            Saved <CheckIcon />
+          <h3 className="text-lg font-semibold text-nowrap">{demoJob.title}</h3>
+          <h1 className="flex items-center text-sm font-semibold gap-x-1">
+            Saved <CheckIcon className="w-5 h-5 sm:w-8 sm:h-8" />
           </h1>
         </div>
         <p className="mt-1 text-sm font-medium opacity-80">{demoJob.company}</p>
@@ -61,7 +61,7 @@ const FindJobsDemo = () => {
         </div>
 
         <div className="flex py-4 w-full gap-x-2 justify-between">
-          <h1 className="mt-2 border-2 whitespace-nowrap font-semibold border-[#2b2a27]  px-3 py-1.5 rounded-[3px]   text-sm ">
+          <h1 className="mt-2 border-2 whitespace-nowrap font-semibold border-[#2b2a27] bg-[#2b2a27] text-[#f5f4ef]  px-3 py-1.5 rounded-[3px]   text-sm ">
             Generate Cover Letter
           </h1>
           <h1 className="mt-2 border-2 font-semibold border-[#2b2a27]  px-3 py-1.5 rounded-[3px]   text-sm  dark:text-[#2b2a27]">

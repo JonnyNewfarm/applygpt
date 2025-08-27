@@ -8,6 +8,7 @@ import CoverLetterClientModal from "./CoverLetterClientModal";
 import { IoMdClose } from "react-icons/io";
 import { jobTitleList } from "../../lib/jobTitleSuggestions";
 import { FaCheck } from "react-icons/fa6";
+import ResumeForm from "./ResumeForm";
 
 interface Job {
   id: string;
@@ -28,7 +29,6 @@ export default function FindJobsPage() {
 
   const [resume, setResume] = useState("");
   const [resumeSaved, setResumeSaved] = useState(false);
-  const [resumeLoading, setResumeLoading] = useState(true);
   const [query, setQuery] = useState("");
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
@@ -64,12 +64,8 @@ export default function FindJobsPage() {
   });
 
   const [matchingJobId, setMatchingJobId] = useState<string | null>(null);
-  const [textAreaSize, setTextAreaSize] = useState("350px");
-  const [textAreaState, setTextAreaSizeState] = useState(false);
-  const [textAreaTitle, setTextAreaSizeTitle] = useState("Show More");
   const [showNoResumePopup, setShowNoResumePopup] = useState(false);
 
-  const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
   const jobTitleRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -104,24 +100,36 @@ export default function FindJobsPage() {
       }
     }
 
-    function stripHtml(html: string) {
-      const temp = document.createElement("div");
-      temp.innerHTML = html;
-      return temp.textContent || temp.innerText || "";
-    }
-
     async function fetchResume() {
       try {
-        const res = await fetch("/api/resume");
-        if (res.ok) {
-          const data = await res.json();
-          const cleanResume = stripHtml(data.content || "");
+        setLoading(true);
 
-          setResume(cleanResume);
-          if (cleanResume) setResumeSaved(true);
+        const res = await fetch("/api/resume", {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        });
+
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          toast.error(err.error || "Failed to fetch resume");
+          return;
         }
+
+        const data = await res.json();
+
+        if (data?.content) {
+          setResume(data.content);
+          setResumeSaved(true);
+        } else {
+          setResume("");
+          toast("No resume found. Please create one.");
+          setResumeSaved(false);
+        }
+      } catch {
+        toast.error("Something went wrong while fetching resume");
       } finally {
-        setResumeLoading(false);
+        setLoading(false);
       }
     }
 
@@ -161,25 +169,6 @@ export default function FindJobsPage() {
       toast.error("Failed to save job.");
     } finally {
       setSavingJobId(null);
-    }
-  }
-
-  async function onSaveResume() {
-    try {
-      const res = await fetch("/api/resume", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content: resume }),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        toast(data.error || "Error saving resume");
-      } else {
-        setResumeSaved(true);
-        toast("Resume saved!");
-      }
-    } catch {
-      toast("Failed to save resume");
     }
   }
 
@@ -350,24 +339,6 @@ export default function FindJobsPage() {
     }
   }
 
-  useEffect(() => {
-    if (textAreaState === false) {
-      setTextAreaSize("350px");
-      setTextAreaSizeTitle("show more");
-    } else {
-      setTextAreaSize("500px");
-      setTextAreaSizeTitle("Show Less");
-    }
-  }, [textAreaState]);
-
-  const handleTextAreaState = () => {
-    if (textAreaState === false) {
-      setTextAreaSizeState(true);
-    } else {
-      setTextAreaSizeState(false);
-    }
-  };
-
   return (
     <main className="w-full px-2  min-h-screen flex flex-col justify-center bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
       <div className="max-w-5xl relative h-full items-center mx-auto flex justify-center flex-col  py-10">
@@ -496,106 +467,19 @@ export default function FindJobsPage() {
                 >
                   <div
                     onClick={(e) => e.stopPropagation()}
-                    className="w-[95%] max-w-5xl bg-[#2b2a27] text-[#f6f4ed] mb-10 dark:bg-[#f6f4f2] dark:text-[#2b2a27] px-2 sm:px-5 py-4"
+                    className="w-[95%] max-w-5xl bg-[#2b2a27] text-[#f6f4ed] mb-10 dark:bg-[#f6f4f2] dark:text-[#2b2a27]  sm:px-5 py-4"
                   >
-                    <div className="">
+                    <div className="relative">
                       <div className="flex justify-between px-1">
-                        <h1 className="text-xl mb-2 font-semibold">
-                          Your Resume
-                        </h1>
                         <button
                           onClick={() => setShowResumeModal(false)}
-                          className="mb-4 text-2xl cursor-pointer font-semibold"
+                          className="mb-4 absolute right-2.5 text-2xl  sm:text-3xl cursor-pointer font-semibold"
                         >
-                          ✕
+                          <IoMdClose />
                         </button>
                       </div>
-                      <div className="relative">
-                        <textarea
-                          ref={textAreaRef}
-                          style={{
-                            scrollbarWidth: "thin",
-                            height: textAreaSize,
-                          }}
-                          value={resume}
-                          onChange={(e) => {
-                            setResume(e.target.value);
-                            setResumeSaved(false);
-                          }}
-                          placeholder="Paste your resume here..."
-                          rows={8}
-                          className="w-full border bg-white text-black border-gray-500 rounded p-2"
-                        />
-                        {!resume && !resumeLoading && (
-                          <div className="absolute inset-0 bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4f2] dark:text-[#2b2a27] rounded p-4 z-10 flex items-center justify-center">
-                            <div className="max-w-xl  w-full  space-y-3">
-                              <div className="space-y-0  md:text-lg text-md    sm:text-base  leading-relaxed">
-                                <h1 className="font-semibold">
-                                  Use AI to create a Resume
-                                </h1>
-                                <p className="mb-1.5">
-                                  Create or upload your resume to get
-                                  personalized job matches.
-                                </p>
-                                <p>
-                                  Prefer to do it later? No problem – you can
-                                  still browse and search for jobs anytime.
-                                </p>
-                              </div>
-
-                              <div className="flex items-center mt-3   gap-6 flex-wrap">
-                                <Link
-                                  href="/resume-generator"
-                                  className="bg-[#f6f4ed] text-[#2b2a27] dark:bg-[#2b2a27] dark:text-[#f6f4ed] font-semibold rounded-[4px] text-sm   px-5 py-2   hover:bg-stone-400 transition"
-                                >
-                                  Create Resume
-                                </Link>
-                                <button
-                                  onClick={() => {
-                                    setResume(" ");
-                                    setTimeout(
-                                      () => textAreaRef.current?.focus(),
-                                      50
-                                    );
-                                  }}
-                                  className="border-2 text-sm rounded-[4px] border-white text-white dark:border-black dark:text-black px-5 py-2  font-semibold cursor-pointer hover:bg-stone-700 dark:hover:bg-stone-100 hover:text-white transition"
-                                >
-                                  Paste
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                      <div className="w-full flex mt-2 px-2 justify-between items-center">
-                        {!resumeSaved ? (
-                          <button
-                            onClick={onSaveResume}
-                            disabled={!resume.trim()}
-                            className=" mb-5 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
-                          >
-                            Save Resume
-                          </button>
-                        ) : (
-                          <button
-                            onClick={() => {
-                              setTimeout(
-                                () => textAreaRef.current?.focus(),
-                                50
-                              );
-                            }}
-                            className=" mb-5 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
-                          >
-                            Edit Resume
-                          </button>
-                        )}
-
-                        <button
-                          className="mb-5 cursor-pointer  dark:text-black"
-                          onClick={handleTextAreaState}
-                        >
-                          {textAreaTitle}
-                        </button>
+                      <div className="relative w-full mt-4">
+                        <ResumeForm resume={resume} />
                       </div>
                     </div>
                   </div>
@@ -661,7 +545,11 @@ export default function FindJobsPage() {
             >
               <div className="h-full w-full">
                 <div className="flex w-full justify-between gap-x-4 items-start">
-                  <h2 className="text-xl font-semibold">{job.title}</h2>
+                  <h2 className="text-xl font-semibold">
+                    {job.title.length > 45
+                      ? job.title.slice(0, 45) + "..."
+                      : job.title}
+                  </h2>
                   <button
                     onClick={() => saveJob(job)}
                     disabled={savingJobId === job.id || savedJobs.has(job.id)}

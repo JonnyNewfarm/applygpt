@@ -28,7 +28,7 @@ const ProfileDetailsTab = ({ children, buttonTitle }: Props) => {
           >
             <div
               onClick={(e) => e.stopPropagation()}
-              className=" mr-1 ml-1 bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4f2] dark:text-[#2b2a27]   px-0.5 md:px-2.5  py-6 rounded-[3px] max-w-4xl w-full relative"
+              className=" mr-1 ml-1 bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4f2] dark:text-[#2b2a27]   p-0.5 md:px-2.5  py-6 rounded-[3px] max-w-4xl w-full relative"
             >
               <button
                 onClick={() => setShowUploadModal(false)}

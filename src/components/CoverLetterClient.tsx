@@ -7,6 +7,7 @@ import BuyAccessButton from "../components/BuyAccessButton";
 import toast from "react-hot-toast";
 import FontDropdown from "./FontDropdown";
 import FontSizeDropdown from "./FontSizeDropdown";
+import ResumeForm from "./ResumeForm";
 
 export default function CoverLetterClient() {
   const router = useRouter();
@@ -24,7 +25,6 @@ export default function CoverLetterClient() {
     resume?: string;
   }>({});
 
-  const resumeRef = useRef<HTMLTextAreaElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
 
   const [resume, setResume] = useState("");
@@ -32,11 +32,6 @@ export default function CoverLetterClient() {
   const [tone, setTone] = useState("professional");
   const [loading, setLoading] = useState(false);
   const [coverLetter, setCoverLetter] = useState("");
-  const [resumeSaved, setResumeSaved] = useState(false);
-  const [textAreaSize, setTextAreaSize] = useState("350px");
-  const [textAreaState, setTextAreaSizeState] = useState(false);
-  const [textAreaTitle, setTextAreaSizeTitle] = useState("Show More");
-  const [resumeLoading, setResumeLoading] = useState(true);
 
   const [textAreaSizeDescription, setTextAreaSizeDescription] =
     useState("100px");
@@ -52,8 +47,6 @@ export default function CoverLetterClient() {
     generationLimit: null,
     generationCount: 0,
   });
-
-  const [showOverlay, setShowOverlay] = useState(false);
 
   const onMarkAll = () => {
     if (!editableRef.current) return;
@@ -115,31 +108,34 @@ export default function CoverLetterClient() {
   }, [description, company]);
 
   useEffect(() => {
-    function stripHtml(html: string) {
-      const temp = document.createElement("div");
-      temp.innerHTML = html;
-      return temp.textContent || temp.innerText || "";
-    }
-
     async function fetchResume() {
-      setResumeLoading(true);
       try {
-        const res = await fetch("/api/resume");
-        if (res.ok) {
-          const data = await res.json();
-          const cleanResume = stripHtml(data.content || "");
-          setResume(cleanResume);
-          if (cleanResume.trim()) {
-            setResumeSaved(true);
-            setShowOverlay(false);
-          } else {
-            setShowOverlay(true);
-          }
-        } else {
-          setShowOverlay(true);
+        setLoading(true);
+
+        const res = await fetch("/api/resume", {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        });
+
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          toast.error(err.error || "Failed to fetch resume");
+          return;
         }
+
+        const data = await res.json();
+
+        if (data?.content) {
+          setResume(data.content);
+        } else {
+          setResume("");
+          toast("No resume found. Please create one.");
+        }
+      } catch {
+        toast.error("Something went wrong while fetching resume");
       } finally {
-        setResumeLoading(false);
+        setLoading(false);
       }
     }
 
@@ -215,46 +211,6 @@ export default function CoverLetterClient() {
 
     setLoading(false);
   }
-
-  async function onSaveResume() {
-    try {
-      const res = await fetch("/api/resume", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content: resume }),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        toast(data.error || "Error saving resume");
-      } else {
-        setResumeSaved(true);
-        setShowOverlay(false);
-        toast("Resume Saved");
-      }
-    } catch {
-      toast("Failed to save resume");
-    }
-  }
-
-  useEffect(() => {
-    if (!resume.trim()) {
-      setShowOverlay(true);
-    }
-  }, [resume]);
-
-  useEffect(() => {
-    if (textAreaState === false) {
-      setTextAreaSize("350px");
-      setTextAreaSizeTitle("show more");
-    } else {
-      setTextAreaSize("500px");
-      setTextAreaSizeTitle("Show Less");
-    }
-  }, [textAreaState]);
-
-  const handleTextAreaState = () => {
-    setTextAreaSizeState(!textAreaState);
-  };
 
   useEffect(() => {
     if (textAreaStateDescription === false) {
@@ -434,98 +390,15 @@ export default function CoverLetterClient() {
                     >
                       <div
                         onClick={(e) => e.stopPropagation()}
-                        className="p-4 w-[95%] max-w-6xl bg-stone-800 dark:bg-stone-50"
+                        className="md:pt-7 py-8 pt-10   relative w-[95%] max-w-6xl bg-stone-800 dark:bg-stone-50"
                       >
-                        <div className="flex justify-between items-center">
-                          <label className="block text-xl font-semibold mb-1">
-                            Resume
-                          </label>
-                          <button
-                            onClick={() => setShowResumeModal(false)}
-                            className="mb-4 text-2xl cursor-pointer font-semibold"
-                          >
-                            ✕
-                          </button>
-                        </div>
-                        <div
-                          style={{ height: textAreaSize }}
-                          className="relative"
+                        <button
+                          onClick={() => setShowResumeModal(false)}
+                          className=" absolute  text-xl right-5 top-4 cursor-pointer font-semibold"
                         >
-                          <textarea
-                            ref={resumeRef}
-                            className="w-full h-full p-3 border bg-white text-black"
-                            value={resume}
-                            onChange={(e) => {
-                              setResume(e.target.value);
-                              setResumeSaved(false);
-                            }}
-                            placeholder="Paste your resume here..."
-                          />
-
-                          {!resumeLoading && showOverlay && (
-                            <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-stone-800 dark:bg-stone-50 text-black/90 z-10">
-                              <div className="px-5 md:px-26 text-md text-white dark:text-black md:text-lg flex flex-col gap-y-2  justify-center items-center w-full">
-                                <div className="text-left ">
-                                  <h1 className="font-semibold text-lg md:text-xl">
-                                    Resume Missing
-                                  </h1>
-                                  <p className="m-0">
-                                    Create a new resume or upload your existing
-                                    one to get started.{" "}
-                                  </p>
-                                  <p className="m-0">
-                                    Once it’s ready, you can generate a
-                                    personalized cover letter tailored to the
-                                    job you’re applying for.
-                                  </p>
-                                  <div className="flex  w-full mt-2 gap-4">
-                                    <button
-                                      onClick={() =>
-                                        router.push("/resume-generator")
-                                      }
-                                      className="inline-block font-bold cursor-pointer bg-stone-200 text-black dark:bg-stone-900 dark:text-white px-4 py-2 rounded mr-3 text-sm"
-                                    >
-                                      Create Resume
-                                    </button>
-                                    <button
-                                      onClick={() => {
-                                        setShowOverlay(false);
-                                        setTimeout(() => {
-                                          resumeRef.current?.focus();
-                                        }, 0);
-                                      }}
-                                      className="cursor-pointer text-xs sm:text-sm font-semibold  border-2 py-1 px-3 rounded-[4px]"
-                                    >
-                                      Paste
-                                    </button>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-
-                        <div className="flex mt-2 justify-between items-center">
-                          {!resumeSaved ? (
-                            <button
-                              onClick={onSaveResume}
-                              className="mb-5 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
-                              disabled={loading}
-                            >
-                              Save Resume
-                            </button>
-                          ) : (
-                            <button className="mt-1 mb-5 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105">
-                              Edit Resume
-                            </button>
-                          )}
-                          <button
-                            className="cursor-pointer"
-                            onClick={handleTextAreaState}
-                          >
-                            {textAreaTitle}
-                          </button>
-                        </div>
+                          ✕
+                        </button>
+                        <ResumeForm resume={resume} />
                       </div>
                     </div>
                   )}
@@ -601,42 +474,46 @@ export default function CoverLetterClient() {
               </div>
             ) : coverLetter ? (
               <>
-                <div className="flex flex-wrap gap-3 mt-1">
-                  <button
-                    onClick={onCopy}
-                    className="mt-1 border cursor-pointer px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27]"
-                  >
-                    Copy to Clipboard
-                  </button>
-                  <button
-                    onClick={onDownload}
-                    className="mt-1 border cursor-pointer px-3 py-1.5 rounded-[3px] bg-[#f6f4ed] text-sm text-[#2b2a27] dark:text-[#f6f4ed] dark:bg-[#2b2a27]"
-                  >
-                    Download as PDF
-                  </button>
+                <div className="flex  w-full  -mb-6 justify-between flex-col gap-y-2 mt-1 ">
+                  <div className="flex gap-x-2 items-center">
+                    <button
+                      onClick={onCopy}
+                      className="mt-1 border cursor-pointer px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-xs text-[#f6f4ed] dark:text-[#2b2a27]"
+                    >
+                      Copy
+                    </button>
+                    <button
+                      onClick={onDownload}
+                      className="mt-1 border cursor-pointer font-semibold px-3 py-1.5 rounded-[3px] bg-[#f6f4ed] text-xs text-[#2b2a27] dark:text-[#f6f4ed] dark:bg-[#2b2a27]"
+                    >
+                      Download as PDF
+                    </button>
+                  </div>
+                  <div className="">
+                    <button
+                      onClick={onBoldSelection}
+                      className={`mt-1 mr-2 border font-bold cursor-pointer px-3 py-1.5 rounded-[3px] text-sm transition-all duration-200 ${
+                        isBoldActive
+                          ? "bg-[#f6f4ed] text-[#2b2a27] border-[#f6f4ed] dark:bg-[#2b2a27] dark:text-[#f6f4ed] dark:border-[#2b2a27]"
+                          : "bg-transparent text-[#f6f4ed] border-[#f6f4ed] dark:text-[#2b2a27] dark:border-[#2b2a27]"
+                      }`}
+                    >
+                      B
+                    </button>
+                    <FontDropdown />
+                    <FontSizeDropdown />
+                    <button
+                      onClick={onMarkAll}
+                      className="mt-1 border ml-2 font-semibold cursor-pointer px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27]"
+                    >
+                      Mark All
+                    </button>
+                  </div>
                 </div>
-                <h1 className="font-bold mt-2">Edit:</h1>
-                <button
-                  onClick={onBoldSelection}
-                  className={`mt-2 mr-2 border font-bold cursor-pointer px-3 py-1.5 rounded-[3px] text-sm transition-all duration-200 ${
-                    isBoldActive
-                      ? "bg-[#f6f4ed] text-[#2b2a27] border-[#f6f4ed] dark:bg-[#2b2a27] dark:text-[#f6f4ed] dark:border-[#2b2a27]"
-                      : "bg-transparent text-[#f6f4ed] border-[#f6f4ed] dark:text-[#2b2a27] dark:border-[#2b2a27]"
-                  }`}
-                >
-                  B
-                </button>
-                <FontDropdown />
-                <FontSizeDropdown />
-                <button
-                  onClick={onMarkAll}
-                  className="mt-2 border ml-2 font-semibold cursor-pointer px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27]"
-                >
-                  Mark All
-                </button>
+
                 <div
                   ref={editableRef}
-                  className="p-4 bg-white mt-2 border text-black border-gray-300 rounded-[3px] whitespace-pre-wrap text-sm min-h-[300px]"
+                  className="p-4 bg-white border text-black border-gray-300 rounded-[3px] whitespace-pre-wrap text-sm min-h-[300px]"
                   contentEditable
                   suppressContentEditableWarning
                 >
