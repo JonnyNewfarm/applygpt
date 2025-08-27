@@ -100,7 +100,7 @@ export default function ProfilePage() {
                       setSelectedJob(job);
                       setShowCoverLetterModal(true);
                     }}
-                    className="cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105 mt-2 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] whitespace-nowrap "
+                    className="cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105 mt-2 font-bold  px-3 py-1.5 rounded-[3px]  text-sm  whitespace-nowrap bg-[#f6f4ed] text-[#2b2a27] dark:bg-[#2b2a27] dark:text-[#f6f4ed]"
                   >
                     Create Cover Letter
                   </button>
@@ -115,7 +115,7 @@ export default function ProfilePage() {
                   <button
                     onClick={() => deleteSavedJob(job.id)}
                     disabled={deletingJobId === job.id}
-                    className="cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105 mt-2 border-2 font-bold px-3 py-1.5 rounded-[3px] border-red-600 text-sm text-red-600"
+                    className="cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105 mt-2 border-2 font-bold px-3 py-1.5 rounded-[3px] border-red-600 dark:border-red-700 text-sm text-red-600 dark:text-red-700"
                   >
                     {deletingJobId === job.id ? "Deleting..." : "Delete"}
                   </button>
@@ -129,10 +129,10 @@ export default function ProfilePage() {
                     className="w-full h-full rounded-[6px] bg-white overflow-auto relative"
                   >
                     <button
-                      className="absolute  text-white  text-3xl md:text-5xl cursor-pointer dark:text-black top-4 right-4   z-50"
+                      className="absolute  text-white  text-xl md:text-4xl cursor-pointer dark:text-black top-4 right-4   z-50"
                       onClick={() => setShowCoverLetterModal(false)}
                     >
-                      <IoMdClose strokeWidth={16} />
+                      <IoMdClose />
                     </button>
                     <CoverLetterClientModal job={selectedJob!} />
                   </div>

@@ -15,6 +15,8 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
   const [content, setContent] = useState(resume);
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
   const [isBoldActive, setIsBoldActive] = useState(false);
 
   const resumeEditorRef = useRef<HTMLDivElement>(null);
@@ -71,21 +73,19 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
   }, []);
 
   const handleDelete = async () => {
-    const confirmed = confirm("Are you sure you want to delete your resume?");
-    if (!confirmed) return;
-
     setIsDeleting(true);
     try {
       await fetch("/api/resume", {
         method: "DELETE",
       });
       setContent("");
-      alert("Resume deleted!");
+      toast("Resume deleted!");
     } catch (err) {
       console.error(err);
-      alert("Failed to delete resume.");
+      toast("Failed to delete resume.");
     } finally {
       setIsDeleting(false);
+      setShowDeleteModal(false);
     }
   };
 
@@ -224,13 +224,43 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
             {isSaving ? "Saving..." : "Save"}
           </button>
 
-          <button
-            onClick={handleDelete}
-            className="cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105 mt-2 border-2 font-bold  px-3 py-1.5 rounded-[3px] border-red-700 text-red-700 dark:border-red-800 text-xs md:text-sm dark:text-red-800  "
-            disabled={isDeleting}
-          >
-            {isDeleting ? "Deleting..." : "Delete"}
-          </button>
+          <div>
+            <button
+              onClick={() => setShowDeleteModal(true)}
+              className="border-red-600 border-2 text-red-600 cursor-pointer dark:border-red-700 dark:text-red-700 font-semibold  rounded-[4px] text-sm px-4 py-1.5 mt-2"
+            >
+              Delete Resume
+            </button>
+
+            {/* Custom modal */}
+            {showDeleteModal && (
+              <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+                <div className="bg-white text-black p-6 rounded-lg w-80">
+                  <h2 className="text-lg font-semibold mb-4">Delete Resume?</h2>
+                  <p className="mb-6 text-gray-600">
+                    Are you sure you want to delete your resume? This action
+                    cannot be undone.
+                  </p>
+                  <div className="flex justify-end gap-3">
+                    <button
+                      onClick={() => setShowDeleteModal(false)}
+                      className="px-4 py-2 border-2 font-semibold cursor-pointer rounded"
+                      disabled={isDeleting}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={handleDelete}
+                      className="px-4 py-2 border-1 cursor-pointer font-s border-red-600 text-red-600 rounded"
+                      disabled={isDeleting}
+                    >
+                      {isDeleting ? "Deleting..." : "Delete"}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
         <div
           ref={resumePdfRef}

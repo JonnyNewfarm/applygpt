@@ -527,9 +527,9 @@ export default function FindJobsPage() {
                           className="w-full border bg-white text-black border-gray-500 rounded p-2"
                         />
                         {!resume && !resumeLoading && (
-                          <div className="absolute inset-0 bg-stone-50 text-black/90 rounded p-4 z-10 flex items-center justify-center">
+                          <div className="absolute inset-0 bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4f2] dark:text-[#2b2a27] rounded p-4 z-10 flex items-center justify-center">
                             <div className="max-w-xl  w-full  space-y-3">
-                              <div className="space-y-0 md:text-lg text-md    sm:text-base  leading-relaxed">
+                              <div className="space-y-0  md:text-lg text-md    sm:text-base  leading-relaxed">
                                 <h1 className="font-semibold">
                                   Use AI to create a Resume
                                 </h1>
@@ -546,7 +546,7 @@ export default function FindJobsPage() {
                               <div className="flex items-center mt-3   gap-6 flex-wrap">
                                 <Link
                                   href="/resume-generator"
-                                  className="bg-stone-800 font-semibold rounded-[4px] text-sm text-white border border-white px-5 py-2   hover:bg-stone-700 transition"
+                                  className="bg-[#f6f4ed] text-[#2b2a27] dark:bg-[#2b2a27] dark:text-[#f6f4ed] font-semibold rounded-[4px] text-sm   px-5 py-2   hover:bg-stone-400 transition"
                                 >
                                   Create Resume
                                 </Link>
@@ -558,7 +558,7 @@ export default function FindJobsPage() {
                                       50
                                     );
                                   }}
-                                  className="border-2 text-sm rounded-[4px] border-black text-black px-5 py-2  font-semibold cursor-pointer hover:bg-black hover:text-white transition"
+                                  className="border-2 text-sm rounded-[4px] border-white text-white dark:border-black dark:text-black px-5 py-2  font-semibold cursor-pointer hover:bg-stone-700 dark:hover:bg-stone-100 hover:text-white transition"
                                 >
                                   Paste
                                 </button>
