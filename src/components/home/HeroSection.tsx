@@ -54,12 +54,15 @@ const HeroSection = () => {
   const lerp = (x: number, y: number, a: number) => x * (1 - a) + y * a;
 
   const animateOut = () => {
-    const newProgress = progress.current + Math.sin(time.current);
-    time.current += 0.2;
+    // more stretch and bounce
+    const newProgress = progress.current + Math.sin(time.current) * 4;
+    time.current += 0.38; // medium-fast oscillation
     setPath(newProgress);
-    progress.current = lerp(progress.current, 0, 0.025);
 
-    if (Math.abs(progress.current) > 0.75) {
+    // softer damping → more bouncy/stretchy feel
+    progress.current = lerp(progress.current, 0, 0.11);
+
+    if (Math.abs(progress.current) > 0.25) {
       reqId.current = requestAnimationFrame(animateOut);
     } else {
       resetAnimation();

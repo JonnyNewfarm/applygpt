@@ -103,7 +103,7 @@ const LiveGenerateResumeDemo = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="whitespace-pre-wrap border p-4 rounded text-sm border-[#f6f4ed] dark:border-[#2b2a27] bg-opacity-10"
+            className="whitespace-pre-wrap border p-4 rounded text-sm bg-white text-black border-[#f6f4ed] dark:border-[#2b2a27] bg-opacity-10"
           >
             {typedText}
           </motion.pre>

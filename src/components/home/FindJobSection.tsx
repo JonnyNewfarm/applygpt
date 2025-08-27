@@ -37,7 +37,7 @@ const FindJobsDemo = () => {
         </div>
       </div>
 
-      <div className="w-full max-w-xl border border-[#2b2a27] rounded p-3 md:p-5 cursor-pointer bg-white text-black  transition relative">
+      <div className="w-full max-w-xl border border-[#2b2a27] rounded p-3 md:p-5 cursor-pointer bg-stone-50 text-black  transition relative">
         <div className="w-full flex items-center justify-between">
           <h3 className="text-lg font-semibold text-nowrap">{demoJob.title}</h3>
           <h1 className="flex items-center text-sm font-semibold gap-x-1">

@@ -73,7 +73,7 @@ const LiveCoverLetterDemo = () => {
             <textarea
               value={fixedResume}
               readOnly
-              rows={3}
+              rows={2}
               className="w-full px-4 py-2 border rounded bg-white border-[#f6f4ed] dark:border-[#2b2a27] text-black cursor-not-allowed"
             />
 
@@ -101,7 +101,7 @@ const LiveCoverLetterDemo = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="whitespace-pre-wrap border p-4 rounded text-sm border-[#f6f4ed] dark:border-[#2b2a27] bg-opacity-10"
+            className="whitespace-pre-wrap border p-4 rounded text-sm border-[#f6f4ed] bg-white text-black dark:border-[#2b2a27] bg-opacity-10"
           >
             {typedText}
           </motion.div>
@@ -122,7 +122,7 @@ const LiveCoverLetterDemo = () => {
               setShowLetter(false);
               setTypedText("");
             }}
-            className="mt-4 ml-3 border-2  border-red-500 text-red-500 px-4 py-2 rounded hover:bg-red-500 hover:text-white transition"
+            className="mt-4 ml-3 border-2 cursor-pointer  border-red-500 text-red-500 px-4 py-2 rounded hover:bg-red-500 hover:text-white transition"
           >
             Start Over
           </button>
