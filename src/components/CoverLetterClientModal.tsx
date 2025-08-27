@@ -485,7 +485,7 @@ export default function CoverLetterClientModal({ job }: Props) {
               </div>
             ) : coverLetter ? (
               <>
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-wrap gap-3 -mb-6">
                   {url && (
                     <a
                       href={url}
