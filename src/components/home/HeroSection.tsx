@@ -54,12 +54,10 @@ const HeroSection = () => {
   const lerp = (x: number, y: number, a: number) => x * (1 - a) + y * a;
 
   const animateOut = () => {
-    // more stretch and bounce
     const newProgress = progress.current + Math.sin(time.current) * 4;
-    time.current += 0.38; // medium-fast oscillation
+    time.current += 0.38;
     setPath(newProgress);
 
-    // softer damping → more bouncy/stretchy feel
     progress.current = lerp(progress.current, 0, 0.11);
 
     if (Math.abs(progress.current) > 0.25) {
@@ -137,7 +135,7 @@ const HeroSection = () => {
             <MagneticComp>
               <Link
                 className=" w-full uppercase  cursor-pointer py-3 rounded-[3px]  tracking-wide  px-3 text-lg text-[#f6f4ed] dark:text-black border-[#f6f4ed] shadow-md shadow-white/20  dark:shadow-black/5 border-2 dark:border-black font-bold transform transition-transform duration-300 ease-in-out hover:scale-105 whitespace-nowrap"
-                href={"/jobs"}
+                href={"/resume-generator"}
               >
                 Get Started
               </Link>
