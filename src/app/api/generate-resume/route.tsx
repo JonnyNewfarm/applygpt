@@ -34,6 +34,7 @@ export async function POST(req: Request) {
     phoneNumber,
     email,
     links,
+    other,
   } = await req.json();
 
   if (!name || !jobTitle || !experience) {
@@ -63,6 +64,7 @@ Links: ${links}
 
 Work Experience: ${experience}
 Skills: ${skills}
+other information: ${other}
 
 Format the resume in plain text only.
 - Keep the name and job title in normal capitalization (do NOT convert to uppercase).

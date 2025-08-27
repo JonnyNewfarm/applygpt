@@ -25,6 +25,7 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
     phoneNumber: "",
     email: "",
     links: "",
+    other: "",
   });
 
   const [errors, setErrors] = useState<{
@@ -35,6 +36,7 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
     address?: string;
     experience?: string;
     skills?: string;
+    other?: string;
   }>({});
 
   const [generatedResume, setGeneratedResume] = useState("");
@@ -254,7 +256,9 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
               onClick={() => setShowExperienceModal(true)}
               className="w-full cursor-pointer py-3 rounded-[3px] uppercase tracking-wide px-3 text-sm text-[#f6f4ed] dark:text-black border-[#f6f4ed] border-2 dark:border-black font-bold hover:scale-105"
             >
-              {form.experience ? "Edit Experience" : "Add Experience"}
+              {form.experience
+                ? "Edit Experience / Education"
+                : "Add Experience / Education"}
             </button>
             {errors.experience && (
               <p className="mt-1 text-sm text-red-500 dark:text-red-700">
@@ -269,12 +273,14 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
               onClick={() => setShowSkillsModal(true)}
               className="w-full cursor-pointer py-3 rounded-[3px] uppercase tracking-wide px-3 text-sm text-[#f6f4ed] dark:text-black border-[#f6f4ed] border-2 dark:border-black font-bold hover:scale-105"
             >
-              {form.skills ? "Edit Skills" : "Add Skills"}
+              {form.skills ? "Edit Skills / Other" : "Add Skills / Other"}
             </button>
             {errors.skills && (
-              <p className="mt-1 text-sm text-red-500 dark:text-red-700">
-                {errors.skills}
-              </p>
+              <div>
+                <p className="mt-1 text-sm text-red-500 dark:text-red-700">
+                  {errors.skills}
+                </p>
+              </div>
             )}
           </div>
         </div>
@@ -402,12 +408,12 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
 
         {showExperienceModal && (
           <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
-            <div className="bg-white text-black p-6 rounded-[3px] w-[90%] max-w-xl">
+            <div className="bg-white text-black px-2.5 py-4 md:p-6 rounded-[3px] w-[90%] max-w-xl">
               <h2 className="text-lg font-semibold mb-2">
                 Work Experience & Education
               </h2>
               <textarea
-                rows={6}
+                rows={20}
                 value={form.experience}
                 onChange={(e) => handleChange("experience", e.target.value)}
                 className="w-full p-2 border rounded-[3px] text-sm"
@@ -436,11 +442,21 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
             <div className="bg-white text-black p-6 rounded-[3px] w-[90%] max-w-xl">
               <h2 className="text-lg font-semibold mb-2">Skills</h2>
               <textarea
-                rows={6}
+                rows={12}
                 value={form.skills}
                 onChange={(e) => handleChange("skills", e.target.value)}
                 className="w-full p-2 border rounded-[3px] text-sm"
                 placeholder="Add your skills"
+              />
+              <h1 className="text-lg font-semibold mb-2 mt-4">
+                {"Other(Optional)"}
+              </h1>
+              <textarea
+                rows={9}
+                value={form.other}
+                onChange={(e) => handleChange("other", e.target.value)}
+                className="w-full p-2 border rounded-[3px] text-sm"
+                placeholder="Add other information."
               />
               <div className="flex justify-end mt-4 gap-2">
                 <button
