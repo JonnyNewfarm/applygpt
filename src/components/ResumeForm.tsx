@@ -8,7 +8,7 @@ import FontDropdown from "./FontDropdown";
 import FontSizeDropdown from "./FontSizeDropdown";
 
 interface ResumeFormProps {
-  resume: string;
+  resume: string | null;
 }
 
 export default function ResumeForm({ resume }: ResumeFormProps) {
@@ -35,7 +35,7 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
 
   useEffect(() => {
     if (resumeEditorRef.current) {
-      resumeEditorRef.current.innerHTML = content;
+      resumeEditorRef.current.innerHTML = content!;
     }
   }, [content]);
 
@@ -43,15 +43,18 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
     if (!resumeEditorRef.current) return;
     const currentContent = resumeEditorRef.current.innerHTML;
 
+    setIsSaving(true);
     try {
       await fetch("/api/resume", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ content: currentContent }),
       });
-      toast("Resume saved!");
+
+      setContent(currentContent);
+      toast.success("Resume saved!");
     } catch {
-      toast("Failed to save resume.");
+      toast.error("Failed to save resume.");
     } finally {
       setIsSaving(false);
     }
@@ -200,7 +203,7 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
           </div>
         </div>
         <div
-          style={{}}
+          style={{ scrollbarWidth: "thin" }}
           ref={resumeEditorRef}
           contentEditable
           suppressContentEditableWarning={true}
@@ -243,7 +246,7 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
             top: "-9999px",
             left: "-9999px",
           }}
-          dangerouslySetInnerHTML={{ __html: content }}
+          dangerouslySetInnerHTML={{ __html: content! }}
         />
       </div>
     </div>

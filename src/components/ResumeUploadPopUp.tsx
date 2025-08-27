@@ -1,5 +1,6 @@
 "use client";
 import React, { ReactNode, useState } from "react";
+import { IoMdClose } from "react-icons/io";
 
 interface Props {
   children: ReactNode;
@@ -32,17 +33,15 @@ const ResumeUploadPopUp = ({ children, title, buttonTitle }: Props) => {
           >
             <div
               onClick={(e) => e.stopPropagation()}
-              className=" mr-1 ml-1 bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4f2] dark:text-[#2b2a27]   px-2.5 md:px-8 py-6 rounded-[3px] max-w-4xl w-full relative"
+              className=" mr-1 ml-1 bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4f2] dark:text-[#2b2a27]   md:px-2.5  py-6 rounded-[3px] max-w-4xl w-full relative"
             >
+              <button
+                onClick={() => setShowUploadModal(false)}
+                className="absolute top-3 right-3 text-2xl cursor-pointer text-gray-200 dark:text-gray-700 hover:text-gray-200 transition-colors"
+              >
+                <IoMdClose />
+              </button>
               {children}{" "}
-              <div className="w-full px-5 mt-5 flex justify-end">
-                <button
-                  onClick={() => setShowUploadModal(false)}
-                  className="border-2 text-xs   dark:border-[#2b2a27] border-[#f6f4ed] rounded-[3px] px-3 py-1.5  text-md cursor-pointer font-bold"
-                >
-                  Close
-                </button>
-              </div>
             </div>
           </div>
         )}

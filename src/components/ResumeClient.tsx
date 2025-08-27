@@ -6,6 +6,8 @@ import ManageSubscriptionButton from "../components/ManageSubscriptionButton";
 import toast from "react-hot-toast";
 import ResumeUploadPopUp from "./ResumeUploadPopUp";
 import ResumeForm from "./ResumeForm";
+import Link from "next/link";
+import { IoMdClose } from "react-icons/io";
 
 interface ResumeClientProps {
   resume: string;
@@ -45,6 +47,7 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
   const [isResumeSaved, setIsResumeSaved] = useState(false);
   const [showEditResumeModal, setShowEditResumeModal] = useState(false);
   const [latestResume, setLatestResume] = useState(resume);
+  const [showJobsBtn, setShowJobsBtn] = useState(false);
 
   const [usage, setUsage] = useState<{
     generationLimit: number | null;
@@ -76,6 +79,13 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
   }, []);
 
   function handleChange(field: string, value: string) {
+    if (field === "name") {
+      value = value
+        .split(" ")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+    }
+
     setForm((prev) => ({ ...prev, [field]: value }));
   }
 
@@ -153,13 +163,6 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
     setIsGenerating(false);
   }
 
-  function onCopy() {
-    if (!editableRef.current) return;
-    navigator.clipboard.writeText(editableRef.current.innerText).then(() => {
-      toast("Copied to clipboard!");
-    });
-  }
-
   const handleSave = async () => {
     if (!editableRef.current) return;
     const content = editableRef.current.innerText.trim();
@@ -168,6 +171,7 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
       return;
     }
     setIsSaving(true);
+    setShowJobsBtn(true);
     try {
       await fetch("/api/resume", {
         method: "POST",
@@ -185,42 +189,6 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
       setIsSaving(false);
     }
   };
-
-  async function onDownload() {
-    if (!editableRef.current) return;
-
-    const html2canvas = (await import("html2canvas")).default;
-    const jsPDF = (await import("jspdf")).default;
-
-    const tempDiv = document.createElement("div");
-    tempDiv.style.width = "800px";
-    tempDiv.style.padding = "24px";
-    tempDiv.style.backgroundColor = "#ffffff";
-    tempDiv.style.color = "black";
-    tempDiv.style.fontSize = "14px";
-    tempDiv.style.lineHeight = "1.6";
-    tempDiv.style.whiteSpace = "pre-wrap";
-    tempDiv.style.position = "absolute";
-    tempDiv.style.top = "-9999px";
-    tempDiv.style.left = "-9999px";
-    tempDiv.innerText = editableRef.current.innerText;
-    document.body.appendChild(tempDiv);
-
-    const canvas = await html2canvas(tempDiv, {
-      scale: 2,
-      backgroundColor: "#ffffff",
-    });
-
-    const imgData = canvas.toDataURL("image/jpeg", 1.0);
-    const pdf = new jsPDF("p", "mm", "a4");
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-    pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight);
-    pdf.save("resume.pdf");
-
-    document.body.removeChild(tempDiv);
-  }
 
   return (
     <div className="w-full bg-[#2b2a27] text-[#f6f4ed] mb-10 dark:bg-[#f6f4f2] dark:text-[#2b2a27] min-h-screen">
@@ -547,18 +515,22 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
         )}
 
         {showEditResumeModal && (
-          <div className="fixed inset-0 z-50 bg-stone-800/60 flex items-center justify-center">
-            <div className="bg-[#2b2a27] border-white/20 dark:border-black/20 border dark:bg-white p-6 rounded-[3px] w-[90%] max-w-6xl">
-              <h1 className="text-xl font-semibold">Edit Resume</h1>
-              <ResumeForm resume={latestResume} />{" "}
-              <div className="flex justify-end mt-4 gap-2">
-                <button
-                  onClick={() => setShowEditResumeModal(false)}
-                  className="px-4 py-2 cursor-pointer bg-gray-200 text-black rounded-[3px] hover:bg-gray-300"
-                >
-                  Close
-                </button>
-              </div>
+          <div
+            onClick={() => setShowEditResumeModal(false)}
+            className="fixed inset-0 z-50 bg-stone-900/60  flex items-center justify-center"
+          >
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="bg-[#2b2a27] relative py-6 border-white/20 dark:border-black/20 border dark:bg-white  rounded-[3px] w-[90%] max-w-6xl"
+            >
+              <button
+                onClick={() => setShowEditResumeModal(false)}
+                className="absolute top-3  right-3 text-2xl cursor-pointer text-gray-200 dark:text-gray-600 hover:text-gray-200 transition-colors"
+              >
+                <IoMdClose />
+              </button>
+
+              <ResumeForm resume={latestResume} />
             </div>
           </div>
         )}
@@ -568,32 +540,26 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
             <h2 className="text-xl font-semibold mb-2">Generated Resume</h2>
 
             <div className="flex flex-wrap gap-3 mb-4">
-              <button
-                onClick={onCopy}
-                className="px-4 py-2 border rounded-[3px] cursor-pointer hover:opacity-50"
-              >
-                Copy to Clipboard
-              </button>
-              <button
-                onClick={onDownload}
-                className="px-4 py-2 border cursor-pointer rounded-[3px] hover:opacity-50"
-              >
-                Download as PDF
-              </button>
               {isResumeSaved ? (
                 <button
                   onClick={handleEditResume}
-                  className="px-4 py-2 border rounded-[3px] cursor-pointer bg-white/90 dark:bg-black/80 text-black dark:text-white hover:opacity-50"
+                  className="px-4 py-2 border-2 font-semibold rounded-[3px] cursor-pointer hover:opacity-50"
                 >
                   Edit Resume
                 </button>
               ) : (
                 <button
                   onClick={handleSave}
-                  className="px-4 py-2 border font-bold rounded-[3px] cursor-pointer bg-white/90 dark:bg-black/80 text-black dark:text-white hover:opacity-50"
+                  className="px-4 py-2 border-2 font-bold rounded-[3px] cursor-pointer hover:opacity-50"
                   disabled={isSaving}
                 >
                   {isSaving ? "Saving..." : "Save & Edit"}
+                </button>
+              )}
+
+              {showJobsBtn && (
+                <button className="px-4 font-semibold  py-2  rounded-[3px] cursor-pointer bg-white dark:bg-black/80 text-black dark:text-white hover:opacity-50">
+                  <Link href={"/jobs"}>Find Jobs</Link>
                 </button>
               )}
             </div>
