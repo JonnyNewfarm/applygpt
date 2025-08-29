@@ -163,10 +163,10 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
   };
 
   return (
-    <div className="">
-      <div className="px-5 sm:py-5">
-        <div className="flex   flex-col-reverse md:items-end sm:flex-row sm:justify-between  text-[#f6f4ed] dark:text-black">
-          <div>
+    <div className="relative h-full pt-2">
+      <div className="px-2 sm:px-3 sm:py-5 h-full">
+        <div className="flex  flex-col-reverse md:items-end sm:flex-row sm:justify-between  text-[#f6f4ed] dark:text-black">
+          <div className="h-full">
             {resume ? (
               <h2 className="text-xl font-semibold hidden sm:block ">
                 Edit Resume
@@ -179,7 +179,8 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
 
             <p className="text-md ">Select the text you want to modify.</p>
           </div>
-          <div className=" relative -mb-8">
+
+          <div className=" relative -mb-8 h-full">
             <button
               onClick={onBoldSelection}
               className={`mt-1 mr-3 border  cursor-pointer px-3 py-1.5 rounded-[3px] text-xs sm:text-sm transition-all duration-200
@@ -207,8 +208,8 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
           ref={resumeEditorRef}
           contentEditable
           suppressContentEditableWarning={true}
-          className="w-full  h-100 overflow-y-scroll border bg-white text-black p-4 text-sm leading-relaxed min-h-[300px] whitespace-pre-wrap outline-none"
-        ></div>
+          className="h-[calc(100vh-240px)] w-full overflow-y-auto border bg-white text-black p-4 text-sm leading-relaxed whitespace-pre-wrap outline-none"
+        />
         <div className="mt-4 flex flex-wrap gap-x-3 gap-y-1">
           <button
             onClick={handleDownload}
@@ -229,7 +230,7 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
               onClick={() => setShowDeleteModal(true)}
               className="border-red-600 border-2 text-red-600 cursor-pointer dark:border-red-700 dark:text-red-700 font-semibold  rounded-[4px] text-sm px-4 py-1.5 mt-2"
             >
-              Delete Resume
+              Delete
             </button>
 
             {showDeleteModal && (

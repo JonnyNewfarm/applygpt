@@ -366,9 +366,13 @@ export default function FindJobsPage() {
       <div className="max-w-5xl relative h-full items-center mx-auto flex justify-center flex-col  py-10">
         <div className="flex justify-center items-center flex-col w-full">
           <div className="max-w-4xl">
-            <h1 className="text-3xl  h-full px-3 font-bold mb-6">
+            <h1 className="text-3xl  h-full px-3 font-bold">
               Find Jobs That Match Your Resume
             </h1>
+            <p className="px-3 max-w-lg mt-0.5 text-md md:text-lg mb-3 text-gray-200 dark:text-gray-700">
+              Search jobs from top providers like <strong>LinkedIn</strong>,{" "}
+              <strong>Indeed</strong>, and more — all in one place. <br />
+            </p>
 
             <div ref={jobTitleRef} className="relative  px-2">
               <label>
@@ -561,22 +565,21 @@ export default function FindJobsPage() {
               {showResumeModal && (
                 <div
                   onClick={() => setShowResumeModal(false)}
-                  className="fixed  inset-0 flex items-center justify-center bg-black/50 z-50"
+                  className="fixed h-screen w-full inset-0 flex items-center justify-center bg-black/50 z-50"
                 >
                   <div
                     onClick={(e) => e.stopPropagation()}
-                    className="w-[96%] max-w-5xl bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4f2] dark:text-[#2b2a27]  sm:px-2 py-4"
+                    className="w-[96%] h-[92vh]  max-w-6xl bg-[#2b2a27] text-[#f6f4ed] 
+               dark:bg-[#f6f4f2] dark:text-[#2b2a27] sm:px-2 py-4 flex flex-col"
                   >
-                    <div className="relative">
-                      <div className="flex justify-between px-1">
-                        <button
-                          onClick={() => setShowResumeModal(false)}
-                          className="mb-4 absolute right-2.5 text-2xl  sm:text-3xl cursor-pointer font-semibold"
-                        >
-                          <IoMdClose />
-                        </button>
-                      </div>
-                      <div className="relative w-full mt-4">
+                    <div className="relative h-full">
+                      <button
+                        onClick={() => setShowResumeModal(false)}
+                        className="absolute right-2.5 top-1 z-50 text-2xl cursor-pointer font-semibold"
+                      >
+                        <IoMdClose />
+                      </button>
+                      <div className="h-full">
                         <ResumeForm resume={resume} />
                       </div>
                     </div>
