@@ -185,8 +185,8 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
               className={`mt-1 mr-3 border  cursor-pointer px-3 py-1.5 rounded-[3px] text-xs sm:text-sm transition-all duration-200
     ${
       isBoldActive
-        ? "bg-[#f6f4ed]  border-[#f6f4ed] text-black dark:text-black dark:bg-[#f6f4ed] dark:border-[#2b2a27]"
-        : "bg-transparent font-semibold text-[#f6f4ed] border-[#f6f4ed] dark:border-[#2b2a27] dark:text-black"
+        ? "bg-[#f6f4ed]  border-white/60 text-black dark:text-black dark:bg-[#f6f4ed] dark:border-black/60"
+        : "bg-transparent font-semibold text-[#f6f4ed] border-white/60 dark:border-[#2b2a27] dark:text-black/60"
     }`}
             >
               B
@@ -196,7 +196,7 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
             <FontSizeDropdown />
             <button
               onClick={markAllText}
-              className="mt-1 border ml-3 font-bold cursor-pointer px-3 py-1.5 rounded-[3px] text-xs md:text-sm bg-transparent text-[#f6f4ed] dark:text-black  border-[#f6f4ed] dark:border-black  "
+              className="mt-1  ml-3 font-bold cursor-pointer px-3 py-1.5 rounded-[3px] text-xs md:text-sm bg-transparent text-[#f6f4ed] dark:text-black border border-white/60 dark:border-black/60   "
             >
               Mark All
             </button>
@@ -232,7 +232,6 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
               Delete Resume
             </button>
 
-            {/* Custom modal */}
             {showDeleteModal && (
               <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
                 <div className="bg-white text-black p-6 rounded-lg w-80">
@@ -251,7 +250,7 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
                     </button>
                     <button
                       onClick={handleDelete}
-                      className="px-4 py-2 border-1 cursor-pointer font-s border-red-600 text-red-600 rounded"
+                      className="px-4 py-2 border-1 cursor-pointer font-semibold bg-red-700 text-white rounded"
                       disabled={isDeleting}
                     >
                       {isDeleting ? "Deleting..." : "Delete"}

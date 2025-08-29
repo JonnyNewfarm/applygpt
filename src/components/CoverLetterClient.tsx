@@ -413,7 +413,7 @@ export default function CoverLetterClient() {
               </div>
 
               {isAtLimit ? (
-                <div className="p-4 border  rounded bg-[#faf7f1] text-stone-900">
+                <div className="p-4 border max-w-xl text-white  rounded dark:text-stone-900">
                   <p className="font-semibold mb-1">No more tokens</p>
 
                   <p className="mb-3">

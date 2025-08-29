@@ -23,7 +23,7 @@ export default function SignInPage() {
     if (res?.error) {
       setError(res.error);
     } else {
-      router.push("/resume-generator");
+      router.push("/jobs");
     }
   }
 

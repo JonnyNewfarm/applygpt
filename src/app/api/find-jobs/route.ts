@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../../../lib/auth";
+import prisma  from "../../../../lib/prisma"; 
+
 
 const JSEARCH_API_KEY = process.env.JSEARCH_API_KEY;
 const JSEARCH_API_HOST = "jsearch.p.rapidapi.com";
@@ -55,6 +57,11 @@ export async function POST(req: NextRequest) {
   try {
     const results = await fetchJobs(query, city, country, page);
 
+      await prisma.user.update({
+      where: { email: session.user.email },
+      data: { generationCount: { increment: 1 } },
+    });
+
     if (!results || results.length === 0) {
       return NextResponse.json({
         jobs: [],
@@ -62,7 +69,6 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // Map to your job object without scoring
     const jobs = results.slice(0, 10).map((job: JobResult) => ({
       id: job.job_id,
       title: job.job_title,
