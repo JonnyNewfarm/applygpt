@@ -6,6 +6,7 @@ import jsPDF from "jspdf";
 import toast from "react-hot-toast";
 import FontDropdown from "./FontDropdown";
 import FontSizeDropdown from "./FontSizeDropdown";
+import Link from "next/link";
 
 interface ResumeFormProps {
   resume: string | null;
@@ -13,9 +14,13 @@ interface ResumeFormProps {
 
 export default function ResumeForm({ resume }: ResumeFormProps) {
   const [content, setContent] = useState(resume);
+
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const [showEmptyModal, setShowEmptyModal] = useState(false);
 
   const [isBoldActive, setIsBoldActive] = useState(false);
 
@@ -40,6 +45,12 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
       resumeEditorRef.current.innerHTML = content!;
     }
   }, [content]);
+
+  useEffect(() => {
+    if (!resume || resume.trim() === "") {
+      setShowEmptyModal(true);
+    }
+  }, [resume]);
 
   const handleSave = async () => {
     if (!resumeEditorRef.current) return;
@@ -210,6 +221,32 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
           suppressContentEditableWarning={true}
           className="h-[calc(100vh-240px)] w-full overflow-y-auto border bg-white text-black p-4 text-sm leading-relaxed whitespace-pre-wrap outline-none"
         />
+        {showEmptyModal && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+            <div className="bg-white text-black p-6 rounded-lg w-80">
+              <h2 className="text-lg font-semibold mb-4">No Resume Found</h2>
+              <p className="mb-6 text-gray-600">
+                You don’t have a resume yet. Start with using AI to generate a
+                Resume or upload one.
+              </p>
+              <div className="flex  gap-x-2 justify-center items-center">
+                <Link
+                  className="bg-black text-white px-4 py-2 font-bold rounded-[3px]"
+                  href={"/resume-generator"}
+                >
+                  Create Resume
+                </Link>
+                <button
+                  onClick={() => setShowEmptyModal(false)}
+                  className="px-4 py-2 border-2 font-semibold cursor-pointer rounded-[3px]re"
+                >
+                  Paste
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="mt-4 flex flex-wrap gap-x-3 gap-y-1">
           <button
             onClick={handleDownload}
@@ -251,7 +288,7 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
                     </button>
                     <button
                       onClick={handleDelete}
-                      className="px-4 py-2 border-1 cursor-pointer font-semibold bg-red-700 text-white rounded"
+                      className="px-4 py-2 border-1 cursor-pointer font-semibold bg-red-800 text-white rounded"
                       disabled={isDeleting}
                     >
                       {isDeleting ? "Deleting..." : "Delete"}

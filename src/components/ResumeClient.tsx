@@ -349,7 +349,7 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
 
         {showGeneralInfoModal && (
           <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
-            <div className="bg-white text-black p-6 rounded-[3px] w-[90%] max-w-xl">
+            <div className="bg-white/95 text-black p-6 rounded-[3px] w-[90%] max-w-xl">
               <h2 className="text-lg font-semibold mb-4">
                 General Information
               </h2>
@@ -383,7 +383,7 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
                     type="text"
                     value={form[field as keyof typeof form]}
                     onChange={(e) => handleChange(field, e.target.value)}
-                    className="w-full p-2 border rounded-[3px] text-sm"
+                    className="w-full p-2 bg-white text-black border rounded-[3px] text-sm"
                     placeholder={placeholder}
                   />
                 </div>
@@ -397,7 +397,7 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
                 </button>
                 <button
                   onClick={() => setShowGeneralInfoModal(false)}
-                  className="px-4 py-2 cursor-pointer bg-black text-white rounded-[3px] hover:bg-black/80"
+                  className="px-4 py-2 font-bold cursor-pointer bg-black text-white rounded-[3px] hover:bg-black/80"
                 >
                   Add
                 </button>
@@ -408,7 +408,7 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
 
         {showExperienceModal && (
           <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
-            <div className="bg-white text-black px-2.5 py-4 md:p-6 rounded-[3px] w-[90%] max-w-xl">
+            <div className="bg-white/95 text-black px-2 py-4 md:px-3 rounded-[3px] w-[96%] max-w-xl">
               <h2 className="text-lg font-semibold mb-2">
                 Work Experience & Education
               </h2>
@@ -416,7 +416,7 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
                 rows={20}
                 value={form.experience}
                 onChange={(e) => handleChange("experience", e.target.value)}
-                className="w-full p-2 border rounded-[3px] text-sm"
+                className="w-full bg-white text-black p-2 border rounded-[3px] text-sm"
                 placeholder="Add your experience and education"
               />
               <div className="flex justify-end mt-4 gap-2">
@@ -428,7 +428,7 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
                 </button>
                 <button
                   onClick={() => setShowExperienceModal(false)}
-                  className="px-4 py-2 cursor-pointer bg-black text-white rounded-[3px] hover:bg-black/80"
+                  className="px-4 py-2 font-semibold cursor-pointer bg-black text-white rounded-[3px] hover:bg-black/80"
                 >
                   Add
                 </button>
@@ -439,35 +439,35 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
 
         {showSkillsModal && (
           <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
-            <div className="bg-white text-black p-6 rounded-[3px] w-[90%] max-w-xl">
-              <h2 className="text-lg font-semibold mb-2">Skills</h2>
+            <div className="bg-white text-black px-2 py-4  rounded-[3px] w-[96%] max-w-xl">
+              <h2 className="text-lg font-semibold mb-1">Skills</h2>
               <textarea
                 rows={12}
                 value={form.skills}
                 onChange={(e) => handleChange("skills", e.target.value)}
-                className="w-full p-2 border rounded-[3px] text-sm"
+                className="w-full p-2 border border-stone-500 rounded-[3px] text-sm"
                 placeholder="Add your skills"
               />
-              <h1 className="text-lg font-semibold mb-2 mt-4">
+              <h1 className="text-lg font-semibold mb-1 mt-4">
                 {"Other(Optional)"}
               </h1>
               <textarea
                 rows={9}
                 value={form.other}
                 onChange={(e) => handleChange("other", e.target.value)}
-                className="w-full p-2 border rounded-[3px] text-sm"
+                className="w-full p-2 border border-stone-500 rounded-[3px] text-sm"
                 placeholder="Add other information."
               />
               <div className="flex justify-end mt-4 gap-2">
                 <button
                   onClick={() => setShowSkillsModal(false)}
-                  className="px-4 py-2 cursor-pointer bg-gray-200 text-black rounded-[3px] hover:bg-gray-300"
+                  className="px-4 py-2 cursor-pointer bg-stone-200 text-black rounded-[3px] hover:bg-gray-300"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={() => setShowSkillsModal(false)}
-                  className="px-4 py-2 cursor-pointer bg-black text-white rounded-[3px] hover:bg-black/80"
+                  className="px-4 font-semibold py-2 cursor-pointer bg-black text-white rounded-[3px] hover:bg-black/80"
                 >
                   Add
                 </button>
