@@ -367,7 +367,7 @@ export default function FindJobsPage() {
         <div className="flex justify-center items-center flex-col w-full">
           <div className="max-w-4xl">
             <h1 className="text-3xl  h-full px-3 font-bold">
-              Find Jobs That Match Your Resume
+              Find Jobs With AI Tools
             </h1>
             <p className="px-3 max-w-lg mt-0.5 text-md md:text-lg mb-3 text-gray-200 dark:text-gray-700">
               Search jobs from top providers like <strong>LinkedIn</strong>,{" "}
@@ -650,7 +650,7 @@ export default function FindJobsPage() {
                   <button
                     onClick={handleFindJobs}
                     disabled={loading}
-                    className="mt-3 w-full  cursor-pointer py-3 rounded-[3px]  uppercase tracking-wide  px-3 text-lg text-[#f6f4ed] dark:text-black border-[#f6f4ed] shadow-md shadow-white/15 dark:shadow-black/10 border-2 dark:border-black font-bold transform transition-transform duration-300 ease-in-out hover:scale-105"
+                    className="mt-3 w-full cursor-pointer py-3 rounded-[5px] uppercase tracking-wide px-3 text-lg bg-[#f6f4ed] text-black dark:bg-stone-700 dark:text-white border-2 font-bold transform transition-transform duration-300 ease-in-out hover:scale-105"
                   >
                     {loading ? "Searching..." : "Find Jobs"}
                   </button>

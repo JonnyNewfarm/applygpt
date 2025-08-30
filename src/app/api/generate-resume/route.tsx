@@ -23,21 +23,10 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
 
-  const {
-    name,
-    jobTitle,
-    country,
-    city,
-    address,
-    experience,
-    skills,
-    phoneNumber,
-    email,
-    links,
-    other,
-  } = await req.json();
+  const { generalInfo, fullAddress, experience, skills, other } =
+    await req.json();
 
-  if (!name || !jobTitle || !experience) {
+  if (!generalInfo || !experience) {
     return NextResponse.json(
       { error: "Missing required fields" },
       { status: 400 }
@@ -55,34 +44,26 @@ export async function POST(req: Request) {
   }
 
   const prompt = `
-Name: ${name}
-Job Title: ${jobTitle}
-Location: ${address}, ${city}, ${country}
-Phone: ${phoneNumber}
-Email: ${email}
-Links: ${links}
+General Info: ${generalInfo}
+Address: ${fullAddress}
 
-Work Experience: ${experience}
+Work Experience & Education: ${experience}
 Skills: ${skills}
-other information: ${other}
+Other Information: ${other}
 
 Format the resume in plain text only.
-- Keep the name and job title in normal capitalization (do NOT convert to uppercase).
+- Keep the name and job title in normal capitalization.
 - Write section titles in UPPERCASE (SUMMARY, EXPERIENCE, SKILLS, EDUCATION).
 - Do NOT use asterisks, stars, or Markdown.
 - Use bullet points with "-" for lists.
 - Keep it clean and professional.
-
 `;
 
   try {
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
-        {
-          role: "system",
-          content: "You are a professional resume writer.",
-        },
+        { role: "system", content: "You are a professional resume writer." },
         { role: "user", content: prompt },
       ],
       max_tokens: 800,

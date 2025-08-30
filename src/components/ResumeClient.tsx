@@ -8,6 +8,7 @@ import ResumeUploadPopUp from "./ResumeUploadPopUp";
 import ResumeForm from "./ResumeForm";
 import Link from "next/link";
 import { IoMdClose } from "react-icons/io";
+import VoiceInput from "./VoiceInput";
 
 interface ResumeClientProps {
   resume: string;
@@ -15,37 +16,30 @@ interface ResumeClientProps {
 
 export default function ResumeClient({ resume }: ResumeClientProps) {
   const [form, setForm] = useState({
-    name: "",
-    jobTitle: "",
-    country: "",
-    city: "",
-    address: "",
+    generalInfo: "",
+    fullAddress: "",
     experience: "",
     skills: "",
-    phoneNumber: "",
-    email: "",
-    links: "",
     other: "",
   });
 
   const [errors, setErrors] = useState<{
-    name?: string;
-    jobTitle?: string;
-    country?: string;
-    city?: string;
-    address?: string;
+    generalInfo?: string;
+    fullAddress?: string;
     experience?: string;
     skills?: string;
-    other?: string;
   }>({});
 
   const [generatedResume, setGeneratedResume] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [showExperienceModal, setShowExperienceModal] = useState(false);
-  const [showSkillsModal, setShowSkillsModal] = useState(false);
-  const [showAddressModal, setShowAddressModal] = useState(false);
-  const [showGeneralInfoModal, setShowGeneralInfoModal] = useState(false);
+  const [showExperienceModalRecord, setShowExperienceModalRecord] =
+    useState(false);
+
+  const [showVoiceCommands, setShowVoiceCommands] = useState(false);
+  const [showSkillsModalRecord, setShowSkillsModalRecord] = useState(false);
+  const [showAddressModalRecord, setShowAddressModalRecord] = useState(false);
+  const [showGeneralInfoRecord, setShowGeneralInfoRecord] = useState(false);
   const [isResumeSaved, setIsResumeSaved] = useState(false);
   const [showEditResumeModal, setShowEditResumeModal] = useState(false);
   const [latestResume, setLatestResume] = useState(resume);
@@ -81,44 +75,7 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
   }, []);
 
   function handleChange(field: string, value: string) {
-    if (field === "name") {
-      value = value
-        .split(" ")
-        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(" ");
-    }
-
     setForm((prev) => ({ ...prev, [field]: value }));
-  }
-
-  const handleEditResume = async () => {
-    try {
-      const res = await fetch("/api/resume", { cache: "no-store" });
-      if (res.ok) {
-        const data = await res.json();
-        setShowEditResumeModal(true);
-        setLatestResume(data.content || "");
-      } else {
-        toast.error("Failed to fetch latest resume");
-      }
-    } catch {
-      toast.error("Error fetching latest resume");
-    }
-  };
-
-  function validateForm() {
-    const newErrors: typeof errors = {};
-
-    if (!form.name.trim()) newErrors.name = "Name is required.";
-    if (!form.jobTitle.trim()) newErrors.jobTitle = "Job title is required.";
-    if (!form.experience.trim())
-      newErrors.experience = "Work experience is required.";
-    if (!form.country.trim()) newErrors.country = "Country is required.";
-    if (!form.city.trim()) newErrors.city = "City is required.";
-    if (!form.address.trim()) newErrors.address = "Address is required.";
-    if (!form.skills.trim()) newErrors.skills = "Skills are required.";
-
-    return newErrors;
   }
 
   async function onGenerate() {
@@ -127,17 +84,22 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
       return;
     }
 
-    const validationErrors = validateForm();
-    setErrors(validationErrors);
+    const newErrors: typeof errors = {};
+    if (!form.generalInfo.trim())
+      newErrors.generalInfo = "General info required.";
+    if (!form.fullAddress.trim()) newErrors.fullAddress = "Address required.";
+    if (!form.experience.trim()) newErrors.experience = "Experience required.";
+    if (!form.skills.trim()) newErrors.skills = "Skills required.";
 
-    if (Object.keys(validationErrors).length > 0) {
+    setErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) {
       toast.error("Please fill out all required fields.");
       return;
     }
 
-    setErrors({});
     setIsGenerating(true);
     setGeneratedResume("");
+
     try {
       const res = await fetch("/api/generate-resume", {
         method: "POST",
@@ -162,6 +124,7 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
     } catch {
       toast("Something went wrong");
     }
+
     setIsGenerating(false);
   }
 
@@ -177,9 +140,7 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
     try {
       await fetch("/api/resume", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ content }),
       });
       toast("Resume saved!");
@@ -192,6 +153,21 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
     }
   };
 
+  const handleEditResume = async () => {
+    try {
+      const res = await fetch("/api/resume", { cache: "no-store" });
+      if (res.ok) {
+        const data = await res.json();
+        setShowEditResumeModal(true);
+        setLatestResume(data.content || "");
+      } else {
+        toast.error("Failed to fetch latest resume");
+      }
+    } catch {
+      toast.error("Error fetching latest resume");
+    }
+  };
+
   return (
     <div className="w-full bg-[#2b2a27] text-[#f6f4ed] mb-10 dark:bg-[#f6f4f2] dark:text-[#2b2a27] min-h-screen">
       <ResumeUploadPopUp
@@ -200,282 +176,308 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
       >
         <ResumeForm resume={resume} />
       </ResumeUploadPopUp>
-      <main className="max-w-5xl mx-auto px-4 md:px-8">
-        <h1 className="font-semibold text-xl">
-          Build a Professional Resume with AI
-        </h1>
-        <h1 className="mb-2 text-xl">
-          Craft a resume instantly and start discovering jobs that fit you.{" "}
-        </h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          <div className="flex-1">
-            <label className="block text-sm font-semibold mb-1">
-              General Info
-            </label>
-            <button
-              onClick={() => setShowGeneralInfoModal(true)}
-              className="w-full cursor-pointer py-3 rounded-[3px] uppercase tracking-wide px-3 text-sm text-[#f6f4ed] dark:text-black border-[#f6f4ed] border-2 dark:border-black font-bold hover:scale-105"
-            >
-              {form.name ||
-              form.jobTitle ||
-              form.phoneNumber ||
-              form.email ||
-              form.links
-                ? "Edit General Info"
-                : "Add General Info"}
-            </button>
-            {(errors.name || errors.jobTitle) && (
-              <p className="mt-1 text-sm text-red-500 dark:text-red-700">
-                Please fill in required fields.
-              </p>
-            )}
-          </div>
+      <div className="w-full flex justify-center">
+        <div className="max-w-3xl px-4 md:px-8 w-full">
+          <h1 className="font-semibold text-lg md:text-xl">
+            Create a Standout Resume — Now with Voice Recording
+          </h1>
+          <h1 className="mb-5 md:text-xl text-sm">
+            Just talk, and we’ll turn your words into a polished resume ready
+            for job applications.
+          </h1>
+        </div>
+      </div>
 
-          <div className="flex-1">
-            <label className="block text-sm font-semibold mb-1">Address</label>
-            <button
-              onClick={() => setShowAddressModal(true)}
-              className="w-full cursor-pointer py-3 rounded-[3px] uppercase tracking-wide px-3 text-sm text-[#f6f4ed] dark:text-black border-[#f6f4ed] border-2 dark:border-black font-bold hover:scale-105"
-            >
-              {form.country || form.city || form.address
-                ? "Edit Address"
-                : "Add Address"}
-            </button>
-            {(errors.address || errors.country || errors.city) && (
-              <p className="mt-2 text-sm text-red-500 dark:text-red-700">
-                Please fill in required fields.
-              </p>
-            )}
-          </div>
+      <div className="flex justify-center flex-col items-center w-full ">
+        <div className="grid px-4 md:px-8 grid-cols-2 w-full max-w-3xl  gap-4">
+          <button
+            className="border-2 cursor-pointer border-white dark:border-black hover:scale-102  transition-transform hover:ease-out px-3 py-1.5 text-sm md:text-lg rounded-[5px] font-semibold"
+            onClick={() => setShowGeneralInfoRecord(true)}
+          >
+            Add General Info
+          </button>
+          <button
+            className="border-2 cursor-pointer border-white hover:scale-102  transition-transform hover:ease-out dark:border-black px-3 py-1.5 text-sm md:text-lg rounded-[5px] font-semibold"
+            onClick={() => setShowAddressModalRecord(true)}
+          >
+            Add Address
+          </button>
 
-          <div className="flex-1">
-            <label className="block text-sm font-semibold mb-1">
-              Work Experience & Education
-            </label>
-            <button
-              onClick={() => setShowExperienceModal(true)}
-              className="w-full cursor-pointer py-3 rounded-[3px] uppercase tracking-wide px-3 text-sm text-[#f6f4ed] dark:text-black border-[#f6f4ed] border-2 dark:border-black font-bold hover:scale-105"
-            >
-              {form.experience
-                ? "Edit Experience / Education"
-                : "Add Experience / Education"}
-            </button>
-            {errors.experience && (
-              <p className="mt-1 text-sm text-red-500 dark:text-red-700">
-                {errors.experience}
-              </p>
-            )}
-          </div>
+          <button
+            className="border-2 cursor-pointer hover:scale-102  transition-transform hover:ease-out border-white dark:border-black px-3 py-1.5 text-sm md:text-lg rounded-[5px] font-semibold"
+            onClick={() => setShowExperienceModalRecord(true)}
+          >
+            <p className="text-wrap"> Work/Education</p>
+          </button>
 
-          <div className="flex-1">
-            <label className="block text-sm font-semibold mb-1">Skills</label>
-            <button
-              onClick={() => setShowSkillsModal(true)}
-              className="w-full cursor-pointer py-3 rounded-[3px] uppercase tracking-wide px-3 text-sm text-[#f6f4ed] dark:text-black border-[#f6f4ed] border-2 dark:border-black font-bold hover:scale-105"
-            >
-              {form.skills ? "Edit Skills / Other" : "Add Skills / Other"}
-            </button>
-            {errors.skills && (
-              <div>
-                <p className="mt-1 text-sm text-red-500 dark:text-red-700">
-                  {errors.skills}
-                </p>
-              </div>
-            )}
+          <button
+            className="border-2 cursor-pointer hover:scale-102  transition-transform hover:ease-out border-white dark:border-black px-3 py-1.5 text-sm md:text-lg rounded-[5px] font-semibold"
+            onClick={() => setShowSkillsModalRecord(true)}
+          >
+            Skills/Other
+          </button>
+        </div>
+      </div>
+
+      <div className="text-red-700 max-w-3xl text-xs w-full mx-auto px-8 mt-1 grid grid-cols-2">
+        <p>{errors.generalInfo}</p>
+        <p>{errors.fullAddress}</p>
+        <p>{errors.experience}</p>
+        <p>{errors.skills}</p>
+      </div>
+
+      {showGeneralInfoRecord && (
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
+          <div className="bg-white/95 text-black p-3 md:p-6 rounded w-[90%] max-w-xl">
+            <h2 className="text-lg font-semibold mb-1">General Information</h2>
+            <VoiceInput
+              value={form.generalInfo}
+              onTextChangeAction={(newText) =>
+                setForm((prev) => ({ ...prev, generalInfo: newText }))
+              }
+            />
+
+            <p className="text-sm text-gray-600 mt-2">
+              Voice commands supported: say <strong>“new line”</strong> to break
+              a line, <strong>“comma”</strong> for <code>,</code>,{" "}
+              <strong>“dot”</strong> for <code>.</code>
+              <button
+                type="button"
+                onClick={() => setShowVoiceCommands((prev) => !prev)}
+                className=" underline text-stone-900 hover:text-stone-700 text-sm ml-1.5"
+              >
+                {showVoiceCommands ? "Hide all commands" : "Show all commands"}
+              </button>
+            </p>
+
+            <textarea
+              rows={5}
+              value={form.generalInfo}
+              onChange={(e) => handleChange("generalInfo", e.target.value)}
+              className="w-full p-2 bg-white text-black border rounded text-sm mt-2"
+              placeholder="Add your general info here (name, profession, contact, etc.)"
+            />
+            <div className="flex justify-end mt-4 gap-2">
+              <button
+                onClick={() => setShowGeneralInfoRecord(false)}
+                className="px-4 py-2 cursor-pointer bg-gray-200 rounded-[5px] hover:bg-gray-300"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => setShowGeneralInfoRecord(false)}
+                className="px-4 py-2 cursor-pointer bg-stone-800 text-white rounded-[5px] hover:bg-black/80 font-bold"
+              >
+                Add
+              </button>
+            </div>
           </div>
         </div>
-        {showAddressModal && (
-          <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
-            <div className="bg-white text-black p-6 rounded-[3px] w-[90%] max-w-xl">
-              <h2 className="text-lg font-semibold mb-2">Address Details</h2>
-              <div className="space-y-2">
-                <div>
-                  <label>
-                    <h1 className="font-semibold">Country</h1>
-                    <input
-                      type="text"
-                      value={form.country}
-                      onChange={(e) => handleChange("country", e.target.value)}
-                      className="w-full p-2 border rounded-[3px] text-sm"
-                      placeholder="Country.."
-                    />
-                  </label>
-                </div>
+      )}
 
-                <div>
-                  <label>
-                    <h1 className="font-semibold">City</h1>
-                    <input
-                      type="text"
-                      value={form.city}
-                      onChange={(e) => handleChange("city", e.target.value)}
-                      className="w-full p-2 border rounded-[3px] text-sm"
-                      placeholder="City.."
-                    />
-                  </label>
-                </div>
-
-                <div>
-                  <label>
-                    <h1 className="font-semibold">Address</h1>
-                    <input
-                      type="text"
-                      value={form.address}
-                      onChange={(e) => handleChange("address", e.target.value)}
-                      className="w-full p-2 border rounded-[3px] text-sm"
-                      placeholder="Address.."
-                    />
-                  </label>
-                </div>
-              </div>
-
-              <div className="flex justify-end mt-4 gap-2">
-                <button
-                  onClick={() => setShowAddressModal(false)}
-                  className="px-4 py-2 cursor-pointer bg-gray-200 text-black rounded-[3px] hover:bg-gray-300"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={() => setShowAddressModal(false)}
-                  className="px-4 py-2 cursor-pointer bg-black text-white rounded-[3px] hover:bg-black/80"
-                >
-                  Add
-                </button>
-              </div>
+      {showVoiceCommands && (
+        <div className="fixed inset-0 z-[60] bg-black/50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded max-w-sm w-[90%] text-black">
+            <h3 className="text-lg font-semibold mb-4">
+              Available Voice Commands
+            </h3>
+            <div className=" p-2 rounded text-sm bg-gray-50 text-gray-800 space-y-1">
+              <p>
+                <strong>comma</strong> → ,
+              </p>
+              <p>
+                <strong>dot</strong> or <strong>period</strong> → .
+              </p>
+              <p>
+                <strong>question mark</strong> → ?
+              </p>
+              <p>
+                <strong>exclamation mark</strong> → !
+              </p>
+              <p>
+                <strong>colon</strong> → :
+              </p>
+              <p>
+                <strong>semicolon</strong> → ;
+              </p>
+              <p>
+                <strong>new line</strong> or <strong>next line</strong> → line
+                break
+              </p>
+            </div>
+            <div className="flex justify-end mt-4">
+              <button
+                onClick={() => setShowVoiceCommands(false)}
+                className="px-4 py-2 bg-stone-800 text-white rounded hover:bg-black/80 font-bold"
+              >
+                Close
+              </button>
             </div>
           </div>
-        )}
+        </div>
+      )}
 
-        {showGeneralInfoModal && (
-          <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
-            <div className="bg-white/95 text-black p-6 rounded-[3px] w-[90%] max-w-xl">
-              <h2 className="text-lg font-semibold mb-4">
-                General Information
-              </h2>
-              {[
-                { label: "Name", field: "name", placeholder: "Name.." },
-                {
-                  label: "Your Profession ",
-                  field: "jobTitle",
-                  placeholder: "Profession..",
-                },
+      {showAddressModalRecord && (
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded w-[90%] max-w-xl text-black">
+            <h2 className="text-lg font-semibold mb-2">Address</h2>
+            <VoiceInput
+              value={form.fullAddress}
+              onTextChangeAction={(newText) =>
+                setForm((prev) => ({ ...prev, fullAddress: newText }))
+              }
+            />
 
-                {
-                  label: "Phone Number(Optional)",
-                  field: "phoneNumber",
-                  placeholder: "Phone Number..",
-                },
-                {
-                  label: "Email(Optional)",
-                  field: "email",
-                  placeholder: "Email..",
-                },
-                {
-                  label: "Links(Optional)",
-                  field: "links",
-                  placeholder: "Links..",
-                },
-              ].map(({ label, field, placeholder }) => (
-                <div key={field} className="mb-3">
-                  <label className="block text-sm font-semibold">{label}</label>
-                  <input
-                    type="text"
-                    value={form[field as keyof typeof form]}
-                    onChange={(e) => handleChange(field, e.target.value)}
-                    className="w-full p-2 bg-white text-black border rounded-[3px] text-sm"
-                    placeholder={placeholder}
-                  />
-                </div>
-              ))}
-              <div className="flex justify-end mt-4 gap-2">
-                <button
-                  onClick={() => setShowGeneralInfoModal(false)}
-                  className="px-4 py-2 cursor-pointer bg-gray-200 text-black rounded-[3px] hover:bg-gray-300"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={() => setShowGeneralInfoModal(false)}
-                  className="px-4 py-2 font-bold cursor-pointer bg-black text-white rounded-[3px] hover:bg-black/80"
-                >
-                  Add
-                </button>
-              </div>
+            <p className="text-sm text-gray-600 mt-2">
+              Voice commands supported: say <strong>“new line”</strong> to break
+              a line, <strong>“comma”</strong> for <code>,</code>,{" "}
+              <strong>“dot”</strong> for <code>.</code>
+              <button
+                type="button"
+                onClick={() => setShowVoiceCommands((prev) => !prev)}
+                className=" underline text-stone-900 hover:text-stone-700 text-sm ml-1.5"
+              >
+                {showVoiceCommands ? "Hide all commands" : "Show all commands"}
+              </button>
+            </p>
+
+            <textarea
+              rows={5}
+              value={form.fullAddress}
+              onChange={(e) => handleChange("fullAddress", e.target.value)}
+              className="w-full p-2 bg-white text-black border rounded text-sm mt-2"
+              placeholder="Add your full address here (country, city, street, etc.)"
+            />
+            <div className="flex justify-end mt-4 gap-2">
+              <button
+                onClick={() => setShowAddressModalRecord(false)}
+                className="px-4 py-2 cursor-pointer bg-gray-200 rounded hover:bg-gray-300"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => setShowAddressModalRecord(false)}
+                className="px-4 py-2 cursor-pointer bg-black text-white rounded hover:bg-black/80 font-bold"
+              >
+                Add
+              </button>
             </div>
           </div>
-        )}
+        </div>
+      )}
 
-        {showExperienceModal && (
-          <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
-            <div className="bg-white/95 text-black px-2 py-4 md:px-3 rounded-[3px] w-[96%] max-w-xl">
-              <h2 className="text-lg font-semibold mb-2">
-                Work Experience & Education
-              </h2>
-              <textarea
-                rows={20}
-                value={form.experience}
-                onChange={(e) => handleChange("experience", e.target.value)}
-                className="w-full bg-white text-black p-2 border rounded-[3px] text-sm"
-                placeholder="Add your experience and education"
-              />
-              <div className="flex justify-end mt-4 gap-2">
-                <button
-                  onClick={() => setShowExperienceModal(false)}
-                  className="px-4 py-2 cursor-pointer bg-gray-200 text-black rounded-[3px] hover:bg-gray-300"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={() => setShowExperienceModal(false)}
-                  className="px-4 py-2 font-semibold cursor-pointer bg-black text-white rounded-[3px] hover:bg-black/80"
-                >
-                  Add
-                </button>
-              </div>
+      {showExperienceModalRecord && (
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
+          <div className="bg-white p-4 rounded w-[96%] max-w-xl text-black">
+            <h2 className="text-lg font-semibold mb-2">
+              Work Experience & Education
+            </h2>
+            <VoiceInput
+              value={form.experience}
+              onTextChangeAction={(newText) =>
+                setForm((prev) => ({ ...prev, experience: newText }))
+              }
+            />
+
+            <p className="text-sm text-gray-600 mt-2">
+              Voice commands supported: say <strong>“new line”</strong> to break
+              a line, <strong>“comma”</strong> for <code>,</code>,{" "}
+              <strong>“dot”</strong> for <code>.</code>
+              <button
+                type="button"
+                onClick={() => setShowVoiceCommands((prev) => !prev)}
+                className=" underline text-stone-900 hover:text-stone-700 text-sm ml-1.5"
+              >
+                {showVoiceCommands ? "Hide all commands" : "Show all commands"}
+              </button>
+            </p>
+
+            <textarea
+              rows={20}
+              value={form.experience}
+              onChange={(e) => handleChange("experience", e.target.value)}
+              className="w-full bg-white text-black p-2 border rounded text-sm mt-2"
+              placeholder="Add your experience and education"
+            />
+            <div className="flex justify-end mt-4 gap-2">
+              <button
+                onClick={() => setShowExperienceModalRecord(false)}
+                className="px-4 py-2 cursor-pointer bg-gray-200 rounded hover:bg-gray-300"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => setShowExperienceModalRecord(false)}
+                className="px-4 py-2 cursor-pointer bg-stone-800 text-white rounded hover:bg-black/80 font-semibold"
+              >
+                Add
+              </button>
             </div>
           </div>
-        )}
+        </div>
+      )}
 
-        {showSkillsModal && (
-          <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
-            <div className="bg-white text-black px-2 py-4  rounded-[3px] w-[96%] max-w-xl">
-              <h2 className="text-lg font-semibold mb-1">Skills</h2>
-              <textarea
-                rows={12}
-                value={form.skills}
-                onChange={(e) => handleChange("skills", e.target.value)}
-                className="w-full p-2 border border-stone-500 rounded-[3px] text-sm"
-                placeholder="Add your skills"
-              />
-              <h1 className="text-lg font-semibold mb-1 mt-4">
-                {"Other(Optional)"}
-              </h1>
-              <textarea
-                rows={9}
-                value={form.other}
-                onChange={(e) => handleChange("other", e.target.value)}
-                className="w-full p-2 border border-stone-500 rounded-[3px] text-sm"
-                placeholder="Add other information."
-              />
-              <div className="flex justify-end mt-4 gap-2">
-                <button
-                  onClick={() => setShowSkillsModal(false)}
-                  className="px-4 py-2 cursor-pointer bg-stone-200 text-black rounded-[3px] hover:bg-gray-300"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={() => setShowSkillsModal(false)}
-                  className="px-4 font-semibold py-2 cursor-pointer bg-black text-white rounded-[3px] hover:bg-black/80"
-                >
-                  Add
-                </button>
-              </div>
+      {showSkillsModalRecord && (
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
+          <div className="bg-white p-4 rounded w-[96%] max-w-xl text-black">
+            <h2 className="text-lg font-semibold mb-2">Skills / Other</h2>
+            <VoiceInput
+              value={form.skills}
+              onTextChangeAction={(newText) =>
+                setForm((prev) => ({ ...prev, skills: newText }))
+              }
+            />
+            <p className="text-sm text-gray-600 mt-2">
+              Voice commands supported: say <strong>“new line”</strong> to break
+              a line, <strong>“comma”</strong> for <code>,</code>,{" "}
+              <strong>“dot”</strong> for <code>.</code>
+              <button
+                type="button"
+                onClick={() => setShowVoiceCommands((prev) => !prev)}
+                className=" underline text-stone-900 hover:text-stone-700 text-sm ml-1.5"
+              >
+                {showVoiceCommands ? "Hide all commands" : "Show all commands"}
+              </button>
+            </p>
+            <textarea
+              rows={10}
+              value={form.skills}
+              onChange={(e) => handleChange("skills", e.target.value)}
+              className="w-full p-2 bg-white text-black border rounded text-sm mt-2"
+              placeholder="Add your skills"
+            />
+            <VoiceInput
+              value={form.other}
+              onTextChangeAction={(newText) =>
+                setForm((prev) => ({ ...prev, other: newText }))
+              }
+            />
+            <textarea
+              rows={8}
+              value={form.other}
+              onChange={(e) => handleChange("other", e.target.value)}
+              className="w-full p-2 bg-white text-black border rounded text-sm mt-2"
+              placeholder="Other information (optional)"
+            />
+            <div className="flex justify-end mt-4 gap-2">
+              <button
+                onClick={() => setShowSkillsModalRecord(false)}
+                className="px-4 py-2 cursor-pointer bg-gray-200 rounded hover:bg-gray-300"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => setShowSkillsModalRecord(false)}
+                className="px-4 py-2 cursor-pointer bg-stone-800 text-white rounded hover:bg-black/80 font-semibold"
+              >
+                Add
+              </button>
             </div>
           </div>
-        )}
+        </div>
+      )}
 
+      <main className="max-w-3xl mx-auto px-4 md:px-8">
         <div className="mb-3 text-sm mt-2 text-[#f6f4ed] dark:text-[#2b2a27]">
           {usage.generationLimit === null
             ? `Used ${usage.generationCount} generations (Unlimited plan)`
@@ -483,23 +485,13 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
         </div>
 
         {isAtLimit ? (
-          <div className="p-4 border w-full text-white  rounded dark:text-stone-900">
+          <div className="p-4 border w-full text-white rounded dark:text-stone-900">
             <p className="font-semibold">No more tokens</p>
-            <p className="mb-3 ">
+            <p className="mb-3">
               You have used up all your resume generations.
             </p>
             {usage.generationLimit !== null ? (
-              <>
-                <p className="mb-3">
-                  <h1 className="font-semibold">Upgrade Plan</h1>
-                  <p className="mb-3">
-                    Upgrade today to keep generating —{" "}
-                    <strong>no commitment</strong> required, and enjoy our{" "}
-                    <strong>limited-time sale</strong>:
-                  </p>
-                </p>
-                <BuyAccessButton />
-              </>
+              <BuyAccessButton />
             ) : (
               <ManageSubscriptionButton />
             )}
@@ -508,7 +500,7 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
           <button
             onClick={onGenerate}
             disabled={isGenerating}
-            className={`w-full cursor-pointer py-3 rounded-[3px] uppercase tracking-wide px-3 text-lg text-[#f6f4ed] dark:text-black border-[#f6f4ed] shadow-md shadow-white/15 dark:shadow-black/10 border-2 dark:border-black font-bold transform transition-transform duration-300 ease-in-out hover:scale-105 ${
+            className={`w-full cursor-pointer py-3 rounded-[5px] uppercase tracking-wide px-3 text-lg bg-[#f6f4ed] text-black dark:bg-stone-700 dark:text-white border-2 font-bold transform transition-transform duration-300 ease-in-out hover:scale-105 ${
               isGenerating ? "cursor-not-allowed" : "hover:opacity-80"
             }`}
           >
@@ -533,19 +525,18 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
         {showEditResumeModal && (
           <div
             onClick={() => setShowEditResumeModal(false)}
-            className="fixed inset-0 z-50 bg-stone-900/60  flex items-center justify-center"
+            className="fixed inset-0 z-50 bg-stone-900/60 flex items-center justify-center"
           >
             <div
               onClick={(e) => e.stopPropagation()}
-              className="bg-[#2b2a27] relative py-6 border-white/20 dark:border-black/20 border dark:bg-white  rounded-[3px] w-[90%] max-w-6xl"
+              className="bg-[#2b2a27] relative py-6 border-white/20 dark:border-black/20 border dark:bg-white rounded w-[90%] max-w-6xl"
             >
               <button
                 onClick={() => setShowEditResumeModal(false)}
-                className="absolute top-3  right-3 text-2xl cursor-pointer text-gray-200 dark:text-gray-600 hover:text-gray-200 transition-colors"
+                className="absolute top-3 right-3 text-2xl cursor-pointer text-gray-200 dark:text-gray-600 hover:text-gray-200 transition-colors"
               >
                 <IoMdClose />
               </button>
-
               <ResumeForm resume={latestResume} />
             </div>
           </div>
@@ -554,7 +545,6 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
         {generatedResume && (
           <div className="mt-8">
             <h2 className="text-xl font-semibold mb-2">Generated Resume</h2>
-
             <div className="flex flex-wrap gap-3 mb-4">
               {isResumeSaved ? (
                 <button
@@ -566,7 +556,7 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
               ) : (
                 <button
                   onClick={handleSave}
-                  className="px-4 py-2 border-2 font-bold rounded-[3px] cursor-pointer hover:opacity-50"
+                  className="px-4 py-2 border-2 font-bold rounded-[5px] cursor-pointer hover:opacity-50"
                   disabled={isSaving}
                 >
                   {isSaving ? "Saving..." : "Save & Edit"}
@@ -574,7 +564,7 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
               )}
 
               {showJobsBtn && (
-                <button className="px-4 font-semibold  py-2  rounded-[3px] cursor-pointer bg-white dark:bg-black/80 text-black dark:text-white hover:opacity-50">
+                <button className="px-4 font-semibold py-2 rounded-[5px] cursor-pointer bg-white dark:bg-black/80 text-black dark:text-white hover:opacity-50">
                   <Link href={"/jobs"}>Find Jobs</Link>
                 </button>
               )}
@@ -585,7 +575,7 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
             <div
               style={{ scrollbarWidth: "thin" }}
               ref={editableRef}
-              className="p-4 bg-white text-black border rounded-[3px] whitespace-pre-wrap  text-sm min-h-[300px]"
+              className="p-4 bg-white text-black border rounded whitespace-pre-wrap text-sm min-h-[300px]"
               contentEditable
               suppressContentEditableWarning
             >

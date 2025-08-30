@@ -307,7 +307,7 @@ export default function CoverLetterClient() {
                 )}
 
                 {!description && (
-                  <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-stone-200 text-black/90 z-10">
+                  <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-stone-100 dark:bg-stone-200 text-black/90 z-10">
                     <div className="px-5 md:px-5 flex flex-col justify-center items-center text-center">
                       <p className="  text-left text-xs sm:text-sm mb-1  font-semibold">
                         Upload job description or find jobs with our job search.
@@ -439,7 +439,7 @@ export default function CoverLetterClient() {
                   <button
                     onClick={onGenerate}
                     disabled={loading}
-                    className={`mt-3 w-full  cursor-pointer py-3 rounded-[3px]  uppercase tracking-wide  px-3 text-lg text-[#f6f4ed] dark:text-black border-[#f6f4ed] shadow-md shadow-white/35 dark:shadow-black/25 border-2 dark:border-black font-bold transform transition-transform duration-300 ease-in-out hover:scale-105 ${
+                    className={`w-full cursor-pointer py-3 rounded-[5px] uppercase tracking-wide px-3 text-lg bg-[#f6f4ed] text-black dark:bg-stone-700 dark:text-white border-2 font-bold transform transition-transform duration-300 ease-in-out hover:scale-105 ${
                       loading
                         ? "cursor-not-allowed"
                         : "hover:opacity-80 cursor-pointer"
