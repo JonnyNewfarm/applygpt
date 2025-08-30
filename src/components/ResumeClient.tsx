@@ -227,9 +227,14 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
       </div>
 
       {showGeneralInfoRecord && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
-          <div className="bg-white/95 text-black p-3 md:p-6 rounded w-[90%] max-w-xl">
-            <h2 className="text-lg font-semibold mb-1">General Information</h2>
+        <div
+          onClick={() => setShowGeneralInfoRecord(false)}
+          className="fixed inset-0 z-50 bg-black/65 flex items-center justify-center"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white/95 text-black p-3  rounded w-[90%] max-w-xl"
+          >
             <VoiceInput
               value={form.generalInfo}
               onTextChangeAction={(newText) =>
@@ -237,36 +242,38 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
               }
             />
 
-            <p className="text-sm text-gray-600 mt-2">
+            <p className="text-sm text-gray-600 mt-2 mr-1.5">
               Voice commands supported: say <strong>“new line”</strong> to break
               a line, <strong>“comma”</strong> for <code>,</code>,{" "}
-              <strong>“dot”</strong> for <code>.</code>
+              <strong>“dot”</strong> for <code className="mr-1.5">.</code>
               <button
                 type="button"
                 onClick={() => setShowVoiceCommands((prev) => !prev)}
-                className=" underline text-stone-900 hover:text-stone-700 text-sm ml-1.5"
+                className=" underline cursor-pointer text-stone-900 hover:text-stone-700 text-sm"
               >
                 {showVoiceCommands ? "Hide all commands" : "Show all commands"}
               </button>
             </p>
 
+            <h2 className="text-md font-semibold mt-2">General Information</h2>
+
             <textarea
               rows={5}
               value={form.generalInfo}
               onChange={(e) => handleChange("generalInfo", e.target.value)}
-              className="w-full p-2 bg-white text-black border rounded text-sm mt-2"
+              className="w-full p-2 bg-white text-black border rounded text-sm mt-0.5"
               placeholder="Add your general info here (name, profession, contact, etc.)"
             />
             <div className="flex justify-end mt-4 gap-2">
               <button
                 onClick={() => setShowGeneralInfoRecord(false)}
-                className="px-4 py-2 cursor-pointer bg-gray-200 rounded-[5px] hover:bg-gray-300"
+                className="px-4 py-2 cursor-pointer border border-stone-700 text-stone-700  rounded-[3px] hover:scale-105 transition-transform ease-in-out "
               >
                 Cancel
               </button>
               <button
                 onClick={() => setShowGeneralInfoRecord(false)}
-                className="px-4 py-2 cursor-pointer bg-stone-800 text-white rounded-[5px] hover:bg-black/80 font-bold"
+                className="px-4 py-2 cursor-pointer bg-stone-800 text-white rounded-[3px] hover:bg-black/80 font-semibold hover:scale-105 transition-transform ease-in-out"
               >
                 Add
               </button>
@@ -276,12 +283,12 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
       )}
 
       {showVoiceCommands && (
-        <div className="fixed inset-0 z-[60] bg-black/50 flex items-center justify-center">
+        <div className="fixed inset-0 z-[60] bg-black/65 flex items-center justify-center">
           <div className="bg-white p-6 rounded max-w-sm w-[90%] text-black">
             <h3 className="text-lg font-semibold mb-4">
               Available Voice Commands
             </h3>
-            <div className=" p-2 rounded text-sm bg-gray-50 text-gray-800 space-y-1">
+            <div className=" p-2 rounded text-sm md:text-lg bg-gray-50 text-gray-800 space-y-1">
               <p>
                 <strong>comma</strong> → ,
               </p>
@@ -308,7 +315,7 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
             <div className="flex justify-end mt-4">
               <button
                 onClick={() => setShowVoiceCommands(false)}
-                className="px-4 py-2 bg-stone-800 text-white rounded hover:bg-black/80 font-bold"
+                className="px-4 py-2 cursor-pointer bg-stone-800 text-white rounded hover:bg-black/80 font-bold"
               >
                 Close
               </button>
@@ -318,8 +325,14 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
       )}
 
       {showAddressModalRecord && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded w-[90%] max-w-xl text-black">
+        <div
+          onClick={() => setShowAddressModalRecord(false)}
+          className="fixed inset-0 z-50 bg-black/65 flex items-center justify-center"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white p-3 rounded w-[90%] max-w-xl text-black"
+          >
             <h2 className="text-lg font-semibold mb-2">Address</h2>
             <VoiceInput
               value={form.fullAddress}
@@ -331,11 +344,11 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
             <p className="text-sm text-gray-600 mt-2">
               Voice commands supported: say <strong>“new line”</strong> to break
               a line, <strong>“comma”</strong> for <code>,</code>,{" "}
-              <strong>“dot”</strong> for <code>.</code>
+              <strong>“dot”</strong> for <code className="mr-1.5">.</code>
               <button
                 type="button"
                 onClick={() => setShowVoiceCommands((prev) => !prev)}
-                className=" underline text-stone-900 hover:text-stone-700 text-sm ml-1.5"
+                className=" underline cursor-pointer text-stone-900 hover:text-stone-700 text-sm"
               >
                 {showVoiceCommands ? "Hide all commands" : "Show all commands"}
               </button>
@@ -351,13 +364,13 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
             <div className="flex justify-end mt-4 gap-2">
               <button
                 onClick={() => setShowAddressModalRecord(false)}
-                className="px-4 py-2 cursor-pointer bg-gray-200 rounded hover:bg-gray-300"
+                className="px-4 py-2 cursor-pointer border border-stone-700 text-stone-700  rounded-[3px] hover:scale-105 transition-transform ease-in-out "
               >
                 Cancel
               </button>
               <button
                 onClick={() => setShowAddressModalRecord(false)}
-                className="px-4 py-2 cursor-pointer bg-black text-white rounded hover:bg-black/80 font-bold"
+                className="px-4 py-2 cursor-pointer bg-stone-800 text-white rounded-[3px] hover:bg-black/80 font-semibold hover:scale-105 transition-transform ease-in-out"
               >
                 Add
               </button>
@@ -367,11 +380,14 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
       )}
 
       {showExperienceModalRecord && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
-          <div className="bg-white p-4 rounded w-[96%] max-w-xl text-black">
-            <h2 className="text-lg font-semibold mb-2">
-              Work Experience & Education
-            </h2>
+        <div
+          onClick={() => setShowExperienceModalRecord(false)}
+          className="fixed inset-0 z-50 bg-black/65 flex items-center justify-center"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white p-3 rounded w-[96%] max-w-xl text-black"
+          >
             <VoiceInput
               value={form.experience}
               onTextChangeAction={(newText) =>
@@ -382,33 +398,35 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
             <p className="text-sm text-gray-600 mt-2">
               Voice commands supported: say <strong>“new line”</strong> to break
               a line, <strong>“comma”</strong> for <code>,</code>,{" "}
-              <strong>“dot”</strong> for <code>.</code>
+              <strong>“dot”</strong> for <code className="mr-1.5">.</code>
               <button
                 type="button"
                 onClick={() => setShowVoiceCommands((prev) => !prev)}
-                className=" underline text-stone-900 hover:text-stone-700 text-sm ml-1.5"
+                className=" underline cursor-pointer text-stone-900 hover:text-stone-700 text-sm"
               >
                 {showVoiceCommands ? "Hide all commands" : "Show all commands"}
               </button>
             </p>
-
+            <h2 className="text-md mt-2 font-semibold">
+              Work Experience & Education
+            </h2>
             <textarea
               rows={20}
               value={form.experience}
               onChange={(e) => handleChange("experience", e.target.value)}
-              className="w-full bg-white text-black p-2 border rounded text-sm mt-2"
+              className="w-full bg-white text-black p-2 border rounded text-sm mt-0.5"
               placeholder="Add your experience and education"
             />
             <div className="flex justify-end mt-4 gap-2">
               <button
                 onClick={() => setShowExperienceModalRecord(false)}
-                className="px-4 py-2 cursor-pointer bg-gray-200 rounded hover:bg-gray-300"
+                className="px-4 py-2 cursor-pointer border border-stone-700 text-stone-700  rounded-[3px] hover:scale-105 transition-transform ease-in-out "
               >
                 Cancel
               </button>
               <button
                 onClick={() => setShowExperienceModalRecord(false)}
-                className="px-4 py-2 cursor-pointer bg-stone-800 text-white rounded hover:bg-black/80 font-semibold"
+                className="px-4 py-2 cursor-pointer bg-stone-800 text-white rounded-[3px] hover:bg-black/80 font-semibold hover:scale-105 transition-transform ease-in-out"
               >
                 Add
               </button>
@@ -418,9 +436,14 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
       )}
 
       {showSkillsModalRecord && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
-          <div className="bg-white p-4 rounded w-[96%] max-w-xl text-black">
-            <h2 className="text-lg font-semibold mb-2">Skills / Other</h2>
+        <div
+          onClick={() => setShowSkillsModalRecord(false)}
+          className="fixed inset-0 z-50 bg-black/65 flex items-center justify-center"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white mt-10  p-4 rounded w-[96%] max-w-xl text-black"
+          >
             <VoiceInput
               value={form.skills}
               onTextChangeAction={(newText) =>
@@ -430,20 +453,22 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
             <p className="text-sm text-gray-600 mt-2">
               Voice commands supported: say <strong>“new line”</strong> to break
               a line, <strong>“comma”</strong> for <code>,</code>,{" "}
-              <strong>“dot”</strong> for <code>.</code>
+              <strong>“dot”</strong> for <code className="mr-1.5">.</code>
               <button
                 type="button"
                 onClick={() => setShowVoiceCommands((prev) => !prev)}
-                className=" underline text-stone-900 hover:text-stone-700 text-sm ml-1.5"
+                className=" underline cursor-pointer text-stone-900 hover:text-stone-700 text-sm"
               >
                 {showVoiceCommands ? "Hide all commands" : "Show all commands"}
               </button>
             </p>
+            <h2 className="text-md  font-semibold mt-2">Skills</h2>
+
             <textarea
-              rows={10}
+              rows={7}
               value={form.skills}
               onChange={(e) => handleChange("skills", e.target.value)}
-              className="w-full p-2 bg-white text-black border rounded text-sm mt-2"
+              className="w-full p-2 bg-white text-black border rounded text-sm mt-0.5"
               placeholder="Add your skills"
             />
             <VoiceInput
@@ -452,23 +477,25 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
                 setForm((prev) => ({ ...prev, other: newText }))
               }
             />
+            <h2 className="text-md font-semibold mt-2">Other(Optional)</h2>
+
             <textarea
-              rows={8}
+              rows={5}
               value={form.other}
               onChange={(e) => handleChange("other", e.target.value)}
-              className="w-full p-2 bg-white text-black border rounded text-sm mt-2"
+              className="w-full p-2 bg-white text-black border rounded text-sm mt-0.5"
               placeholder="Other information (optional)"
             />
             <div className="flex justify-end mt-4 gap-2">
               <button
                 onClick={() => setShowSkillsModalRecord(false)}
-                className="px-4 py-2 cursor-pointer bg-gray-200 rounded hover:bg-gray-300"
+                className="px-4 py-2 cursor-pointer border border-stone-700 text-stone-700  rounded-[3px] hover:scale-105 transition-transform ease-in-out "
               >
                 Cancel
               </button>
               <button
                 onClick={() => setShowSkillsModalRecord(false)}
-                className="px-4 py-2 cursor-pointer bg-stone-800 text-white rounded hover:bg-black/80 font-semibold"
+                className="px-4 py-2 cursor-pointer bg-stone-800 text-white rounded-[3px] hover:bg-black/80 font-semibold hover:scale-105 transition-transform ease-in-out"
               >
                 Add
               </button>
@@ -525,7 +552,7 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
         {showEditResumeModal && (
           <div
             onClick={() => setShowEditResumeModal(false)}
-            className="fixed inset-0 z-50 bg-stone-900/60 flex items-center justify-center"
+            className="fixed inset-0 z-50 bg-stone-900/65 flex items-center justify-center"
           >
             <div
               onClick={(e) => e.stopPropagation()}

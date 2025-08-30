@@ -219,7 +219,7 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
           ref={resumeEditorRef}
           contentEditable
           suppressContentEditableWarning={true}
-          className="h-[calc(100vh-240px)] w-full overflow-y-auto border bg-white text-black p-4 text-sm leading-relaxed whitespace-pre-wrap outline-none"
+          className="h-[calc(100vh-240px)] w-full overflow-y-auto border bg-white text-black p-4 text-xs sm:text-sm leading-relaxed whitespace-pre-wrap outline-none"
         />
         {showEmptyModal && (
           <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">

@@ -51,6 +51,10 @@ export function cleanVoiceText(text: string): string {
   cleaned = safeReplace(cleaned, /\bnew line\b/gi, "\n");
   cleaned = safeReplace(cleaned, /\bnext line\b/gi, "\n");
 
+  cleaned = cleaned.replace(/(^\s*\w|[.!?,]\s*\w)/g, (match) => {
+    return match.toUpperCase();
+  });
+
   return cleaned;
 }
 
@@ -116,7 +120,7 @@ export default function VoiceInput({
     <div className="flex flex-col gap-2">
       <button
         onClick={isRecording ? handleStopRecording : handleStartRecording}
-        className={`px-4 py-2 cursor-pointer rounded-[5px] font-semibold text-white ${
+        className={`px-4 py-2 cursor-pointer rounded-[5px] hover:scale-102 transition-transform ease-in-out font-semibold text-white ${
           isRecording ? "bg-red-600" : "bg-stone-800"
         }`}
       >
