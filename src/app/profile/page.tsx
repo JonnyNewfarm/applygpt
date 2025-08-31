@@ -66,13 +66,13 @@ export default async function ProfilePage() {
         <section className="mb-8 flex   justify-between w-full">
           <div className="flex flex-col md:flex-row gap-x-56 justify-between">
             <div>
-              <p className="mb-1 flex text-lg flex-col">
+              <p className="mb-1 flex text-sm md:text-lg flex-col">
                 <span className="font-semibold">Name:</span>{" "}
                 {user.name ? capitalizeName(user.name) : "N/A"}
               </p>
             </div>
             <div>
-              <p className="flex text-lg flex-col">
+              <p className="flex text-sm md:text-lg flex-col">
                 <span className="font-semibold">Email:</span> {user.email}
               </p>
             </div>

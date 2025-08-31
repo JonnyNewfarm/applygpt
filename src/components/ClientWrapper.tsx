@@ -28,10 +28,8 @@ function ResumeClientWrapper({ resume }: Props) {
 
   return (
     <>
-      <div className="flex w-full justify-center flex-col">
-        <div className="w-full">
-          <ResumeClient resume={resume} />
-        </div>
+      <div className="w-full h-full flex justify-center items-center">
+        <ResumeClient resume={resume} />
       </div>
     </>
   );

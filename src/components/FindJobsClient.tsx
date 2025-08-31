@@ -363,8 +363,8 @@ export default function FindJobsPage() {
 
   return (
     <main className="w-full px-2  min-h-screen flex flex-col justify-center bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
-      <div className="max-w-5xl relative h-full items-center mx-auto flex justify-center flex-col  py-10">
-        <div className="flex justify-center items-center flex-col w-full">
+      <div className="max-w-5xl relative h-full  mx-auto flex justify-center flex-col  ">
+        <div className="flex -mt-10 justify-center items-center flex-col w-full">
           <div className="max-w-4xl">
             <h1 className="text-3xl  h-full px-3 font-bold">
               Find Jobs With AI Tools
@@ -415,11 +415,14 @@ export default function FindJobsPage() {
                     }
                   }}
                   placeholder="Job title (e.g. frontend developer)"
-                  className="w-full   dark:shadow-stone-900/5 border-2 shadow-md relative   border-[#f6f4ed] dark:border-[#2b2a27] bg-white/95 text-black rounded p-2 mb-3"
+                  className="w-full border-2 rounded-[3px] relative   border-[#f6f4ed] dark:border-[#2b2a27] text-white dark:text-black  p-3 mb-3"
                 />
               </label>
               {jobTitleSuggestions.length > 0 && (
-                <ul className="bg-white absolute z-50 w-full text-black border border-gray-500 rounded overflow-hidden mb-4 max-h-40">
+                <ul
+                  style={{ scrollbarWidth: "thin" }}
+                  className="text-[#f6f4f2] overflow-y-scroll  bg-[#2b2a27] dark:bg-[#f6f4f2]  absolute z-50 w-full  border border-white dark:border-black dark:text-black rounded overflow-hidden mb-4 max-h-40"
+                >
                   {jobTitleSuggestions.map((title, idx) => (
                     <li
                       key={idx}
@@ -428,8 +431,10 @@ export default function FindJobsPage() {
                         setJobTitleSuggestions([]);
                         setHighlightedIndex(-1);
                       }}
-                      className={`p-2 cursor-pointer hover:bg-gray-100 ${
-                        highlightedIndex === idx ? "bg-gray-200" : ""
+                      className={`px-2 py-2.5 cursor-pointer hover:bg-stone-600 border-b-white/30 border-b hover:dark:bg-stone-300  ${
+                        highlightedIndex === idx
+                          ? "bg-stone-600 dark:bg-stone-300"
+                          : ""
                       }`}
                     >
                       {title}
@@ -474,16 +479,21 @@ export default function FindJobsPage() {
                   }
                 }}
                 placeholder="Country"
-                className="w-full border-2 shadow-md relative border-[#f6f4ed] dark:border-[#2b2a27] bg-white/95 text-black rounded p-2 mb-3"
+                className="w-full border-2 rounded-[3px] relative   border-[#f6f4ed] dark:border-[#2b2a27] text-white dark:text-black  p-3 mb-3"
               />
               {countrySuggestions.length > 0 && (
-                <ul className="bg-white top-19 z-50 absolute w-full text-black border border-gray-500 rounded mb-3 max-h-40 overflow-y-auto">
+                <ul
+                  style={{ scrollbarWidth: "thin" }}
+                  className="text-[#f6f4f2] overflow-y-scroll  bg-[#2b2a27] dark:bg-[#f6f4f2]  absolute z-50 w-full  border border-white dark:border-black dark:text-black rounded overflow-hidden mb-4 max-h-40"
+                >
                   {countrySuggestions.map((c, idx) => (
                     <li
                       key={c.isoCode}
                       onClick={() => handleSelectCountry(c)}
-                      className={`p-2 cursor-pointer hover:bg-gray-100 ${
-                        highlightedCountryIndex === idx ? "bg-gray-200" : ""
+                      className={`px-2 py-2.5 cursor-pointer hover:bg-stone-600 border-b-white/30 border-b hover:dark:bg-stone-300  ${
+                        highlightedCountryIndex === idx
+                          ? "bg-stone-600 dark:bg-stone-300"
+                          : ""
                       }`}
                     >
                       {c.name}
@@ -524,11 +534,14 @@ export default function FindJobsPage() {
                   }
                 }}
                 placeholder="City"
-                className="w-full border-2 shadow-md relative border-[#f6f4ed] dark:border-[#2b2a27] bg-white text-black rounded p-2 mb-3"
+                className="w-full border-2 rounded-[5px] relative   border-[#f6f4ed] dark:border-[#2b2a27] text-white dark:text-black  p-3 mb-3"
               />
 
               {citySuggestions.length > 0 && (
-                <ul className="bg-white absolute w-full z-50 text-black border border-gray-500 rounded mb-4 max-h-40 overflow-y-auto">
+                <ul
+                  style={{ scrollbarWidth: "thin" }}
+                  className="text-[#f6f4f2] overflow-y-scroll  bg-[#2b2a27] dark:bg-[#f6f4f2]  absolute z-50 w-full  border border-white dark:border-black dark:text-black rounded overflow-hidden mb-4 max-h-40"
+                >
                   {citySuggestions.map((c, idx) => (
                     <li
                       key={idx}
@@ -537,8 +550,10 @@ export default function FindJobsPage() {
                         setCitySuggestions([]);
                         setHighlightedCityIndex(-1);
                       }}
-                      className={`p-2 cursor-pointer hover:bg-gray-100 ${
-                        highlightedCityIndex === idx ? "bg-gray-200" : ""
+                      className={`px-2 py-2.5 cursor-pointer hover:bg-stone-600 border-b-white/30 border-b hover:dark:bg-stone-300  ${
+                        highlightedCityIndex === idx
+                          ? "bg-stone-600 dark:bg-stone-300"
+                          : ""
                       }`}
                     >
                       {c}
@@ -569,7 +584,7 @@ export default function FindJobsPage() {
                 >
                   <div
                     onClick={(e) => e.stopPropagation()}
-                    className="w-[96%] h-[92vh]  max-w-6xl bg-[#2b2a27] text-[#f6f4ed] 
+                    className="w-[96%] h-[92vh] rounded-[5px]  max-w-6xl bg-[#2b2a27] text-[#f6f4ed] 
                dark:bg-[#f6f4f2] dark:text-[#2b2a27] sm:px-2 py-4 flex flex-col"
                   >
                     <div className="relative h-full">
@@ -650,7 +665,12 @@ export default function FindJobsPage() {
                   <button
                     onClick={handleFindJobs}
                     disabled={loading}
-                    className="mt-3 w-full cursor-pointer py-3 rounded-[5px] uppercase tracking-wide px-3 text-lg bg-[#f6f4ed] text-black dark:bg-stone-700 dark:text-white border-2 font-bold transform transition-transform duration-300 ease-in-out hover:scale-105"
+                    className={`w-full mt-1.5 cursor-pointer py-3 rounded-[5px] uppercase tracking-wide px-3 text-lg
+    bg-gradient-to-tr from-[#f5f4edd0] via-[#e2dfc7] to-[#f5f4edad]
+    dark:from-[#2c2c2cd2] dark:via-[#3a3a3a] dark:to-[#2c2c2cc2]
+    text-black dark:text-white font-bold transform transition-transform duration-300 ease-in-out hover:scale-105 ${
+      loading ? "cursor-not-allowed" : "hover:opacity-90"
+    }`}
                   >
                     {loading ? "Searching..." : "Find Jobs"}
                   </button>

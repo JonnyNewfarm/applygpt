@@ -440,11 +440,12 @@ export default function CoverLetterClient() {
                   <button
                     onClick={onGenerate}
                     disabled={loading}
-                    className={`w-full cursor-pointer py-3 rounded-[5px] uppercase tracking-wide px-3 text-lg bg-[#f6f4ed] text-black dark:bg-stone-700 dark:text-white border-2 font-bold transform transition-transform duration-300 ease-in-out hover:scale-105 ${
-                      loading
-                        ? "cursor-not-allowed"
-                        : "hover:opacity-80 cursor-pointer"
-                    }`}
+                    className={`w-full cursor-pointer py-3 rounded-[5px] uppercase tracking-wide px-3 text-lg
+    bg-gradient-to-tr from-[#f5f4edd0] via-[#e2dfc7] to-[#f5f4edad]
+    dark:from-[#2c2c2cd2] dark:via-[#3a3a3a] dark:to-[#2c2c2cc2]
+    text-black dark:text-white font-bold transform transition-transform duration-300 ease-in-out hover:scale-105 ${
+      loading ? "cursor-not-allowed" : "hover:opacity-90"
+    }`}
                   >
                     {coverLetter
                       ? loading

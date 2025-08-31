@@ -32,7 +32,7 @@ const ProfileDetailsTab = ({ children, buttonTitle }: Props) => {
             >
               <button
                 onClick={() => setShowUploadModal(false)}
-                className="absolute top-3 right-3 text-3xl cursor-pointer text-gray-200 dark:text-gray-700 hover:text-gray-200 transition-colors"
+                className="absolute top-3 right-3 text-3xl z-[99999] cursor-pointer text-gray-200 dark:text-gray-700 hover:text-gray-200 transition-colors"
               >
                 <IoMdClose />
               </button>

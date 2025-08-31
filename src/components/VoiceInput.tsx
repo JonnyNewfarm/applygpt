@@ -121,7 +121,9 @@ export default function VoiceInput({
       <button
         onClick={isRecording ? handleStopRecording : handleStartRecording}
         className={`px-4 py-2 cursor-pointer rounded-[5px] hover:scale-102 transition-transform ease-in-out font-semibold text-white ${
-          isRecording ? "bg-red-600" : "bg-stone-800"
+          isRecording
+            ? "bg-red-800"
+            : "bg-gradient-to-tr from-[#2c2c2cf2]  via-[#3a3a3a] to-[#2c2c2cd6] text-white"
         }`}
       >
         {isRecording ? "Stop Recording" : "Start Recording"}{" "}

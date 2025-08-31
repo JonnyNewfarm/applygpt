@@ -110,7 +110,7 @@ export default function ProfilePage() {
                     rel="noopener noreferrer"
                     className="cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105 mt-2 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27]"
                   >
-                    View Job
+                    Apply
                   </a>
                   <button
                     onClick={() => deleteSavedJob(job.id)}

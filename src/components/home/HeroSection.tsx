@@ -76,7 +76,7 @@ const HeroSection = () => {
     <div
       className={`min-h-screen  bg-[#2b2a27] text-[#f5f4ef]  dark:bg-[#f6f4f2] dark:text-[#2b2a27] items-center w-full flex justify-center px-6 sm:px-20`}
     >
-      <div className=" w-full text-left  h-full  flex flex-col sm:gap-y-6 gap-y-2 ">
+      <div className=" w-full text-left -mt-10  h-full  flex flex-col sm:gap-y-6 gap-y-2 ">
         <h1 className="sm:text-3xl   uppercase text-xl  font-bold">
           Simplify Job Searching
         </h1>

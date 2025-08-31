@@ -15,12 +15,12 @@ const ResumeUploadPopUp = ({ children, title, buttonTitle }: Props) => {
       <div className="max-w-3xl rounded-[5px] mx-auto px-4 md:px-8    text-white dark:text-black py-4 mt-5 sm:mt-0">
         <div>
           <h1 className="text-2xl font-bold">AI Resume Generator</h1>
-          <p className="mb-0 mt-1 text-lg md:text-xl ">{title} </p>
+          <p className="  text-lg md:text-xl ">{title} </p>
         </div>
-        <div className="mb-3">
+        <div className="mb-1">
           <button
             onClick={() => setShowUploadModal(true)}
-            className="mt-2 border-2 font-bold cursor-pointer dark:border-[#2b2a27] px-3 py-1 rounded-[5px]  text-md   transform transition-transform duration-300 ease-in-out hover:scale-105"
+            className="mt-2 border-2 font-bold cursor-pointer dark:border-[#2b2a27] px-3 py-1 rounded-[5px] text-md md:text-lg   transform transition-transform duration-300 ease-in-out hover:scale-105"
           >
             {buttonTitle}
           </button>
@@ -37,7 +37,7 @@ const ResumeUploadPopUp = ({ children, title, buttonTitle }: Props) => {
             >
               <button
                 onClick={() => setShowUploadModal(false)}
-                className="absolute top-3 right-3 text-3xl cursor-pointer text-gray-200 dark:text-gray-700 hover:text-gray-200 transition-colors"
+                className="absolute z-[99999] top-3 right-3 text-3xl cursor-pointer text-gray-200 dark:text-gray-700 hover:text-gray-200 transition-colors"
               >
                 <IoMdClose />
               </button>

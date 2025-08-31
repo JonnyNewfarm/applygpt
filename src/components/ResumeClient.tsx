@@ -170,7 +170,7 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
   };
 
   return (
-    <div className="w-full bg-[#2b2a27] text-[#f6f4ed] mb-10 dark:bg-[#f6f4f2] dark:text-[#2b2a27] min-h-screen">
+    <div className="w-full md:pt-10   min-h-screen bg-[#2b2a27] text-[#f6f4ed]   dark:bg-[#f6f4f2] dark:text-[#2b2a27] ">
       <ResumeUploadPopUp
         title={resume ? "Edit Your Resume:" : "Already have a resume?"}
         buttonTitle={resume ? "Edit " : "Upload"}
@@ -190,29 +190,29 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
       </div>
 
       <div className="flex justify-center flex-col items-center w-full ">
-        <div className="grid px-4 md:px-8 grid-cols-2 w-full max-w-3xl  gap-4">
+        <div className="grid px-4 md:px-8 grid-cols-1 md:grid-cols-2 w-full max-w-3xl  gap-4">
           <button
-            className="border-2 cursor-pointer border-white dark:border-black hover:scale-102  transition-transform hover:ease-out px-3 py-1.5 text-sm md:text-lg rounded-[5px] font-semibold"
+            className="border-2 cursor-pointer border-white dark:border-black hover:scale-102  transition-transform hover:ease-out px-3 py-2 text-sm md:text-lg rounded-[5px] font-semibold"
             onClick={() => setShowGeneralInfoRecord(true)}
           >
             Add General Info
           </button>
           <button
-            className="border-2 cursor-pointer border-white hover:scale-102  transition-transform hover:ease-out dark:border-black px-3 py-1.5 text-sm md:text-lg rounded-[5px] font-semibold"
+            className="border-2 cursor-pointer border-white hover:scale-102  transition-transform hover:ease-out dark:border-black px-3 py-2 text-sm md:text-lg rounded-[5px] font-semibold"
             onClick={() => setShowAddressModalRecord(true)}
           >
             Add Address
           </button>
 
           <button
-            className="border-2 cursor-pointer hover:scale-102  transition-transform hover:ease-out border-white dark:border-black px-3 py-1.5 text-sm md:text-lg rounded-[5px] font-semibold"
+            className="border-2 cursor-pointer hover:scale-102  transition-transform hover:ease-out border-white dark:border-black px-3 py-2 text-sm md:text-lg rounded-[5px] font-semibold"
             onClick={() => setShowExperienceModalRecord(true)}
           >
             <p className="text-wrap"> Work/Education</p>
           </button>
 
           <button
-            className="border-2 cursor-pointer hover:scale-102  transition-transform hover:ease-out border-white dark:border-black px-3 py-1.5 text-sm md:text-lg rounded-[5px] font-semibold"
+            className="border-2 cursor-pointer hover:scale-102  transition-transform hover:ease-out border-white dark:border-black px-3 py-2 text-sm md:text-lg rounded-[5px] font-semibold"
             onClick={() => setShowSkillsModalRecord(true)}
           >
             Skills/Other
@@ -234,7 +234,7 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="bg-white/95 text-black p-3  rounded w-[90%] max-w-xl"
+            className="bg-white text-black p-3  rounded w-[90%] max-w-xl"
           >
             <VoiceInput
               value={form.generalInfo}
@@ -243,10 +243,12 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
               }
             />
 
-            <p className="text-sm text-gray-600 mt-2 mr-1.5">
-              Voice commands supported: say <strong>“new line”</strong> to break
-              a line, <strong>“comma”</strong> for <code>,</code>,{" "}
-              <strong>“dot”</strong> for <code className="mr-1.5">.</code>
+            <p className="text-sm md:text-md text-gray-800 mt-2 mr-1.5">
+              Voice commands supported: say{" "}
+              <strong>&lsquo;new line&lsquo;</strong> to break a line,{" "}
+              <strong>&lsquo;comma&lsquo;</strong> for <code>,</code>,{" "}
+              <strong>&lsquo;dot&lsquo;</strong> for{" "}
+              <code className="mr-1.5">.</code>
               <button
                 type="button"
                 onClick={() => setShowVoiceCommands((prev) => !prev)}
@@ -332,7 +334,6 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
             onClick={(e) => e.stopPropagation()}
             className="bg-white p-3 rounded w-[90%] max-w-xl text-black"
           >
-            <h2 className="text-lg font-semibold mb-2">Address</h2>
             <VoiceInput
               value={form.fullAddress}
               onTextChangeAction={(newText) =>
@@ -340,10 +341,12 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
               }
             />
 
-            <p className="text-sm text-gray-600 mt-2">
-              Voice commands supported: say <strong>“new line”</strong> to break
-              a line, <strong>“comma”</strong> for <code>,</code>,{" "}
-              <strong>“dot”</strong> for <code className="mr-1.5">.</code>
+            <p className="text-sm md:text-md text-gray-900 mt-2">
+              Voice commands supported: say{" "}
+              <strong>&lsquo;new line&lsquo;</strong> to break a line,{" "}
+              <strong>&lsquo;comma&lsquo;</strong> for <code>,</code>,{" "}
+              <strong>&lsquo;dot&lsquo;</strong> for{" "}
+              <code className="mr-1.5">.</code>
               <button
                 type="button"
                 onClick={() => setShowVoiceCommands((prev) => !prev)}
@@ -352,6 +355,7 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
                 {showVoiceCommands ? "Hide all commands" : "Show all commands"}
               </button>
             </p>
+            <h2 className="text-lg font-semibold ml-0.5 mt-1.5">Address</h2>
 
             <ResizableTextarea
               value={form.fullAddress}
@@ -362,7 +366,7 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
             <div className="flex justify-end mt-4 gap-2">
               <button
                 onClick={() => setShowAddressModalRecord(false)}
-                className="px-4 py-2 cursor-pointer border border-stone-700 text-stone-700  rounded-[3px] hover:scale-105 transition-transform ease-in-out "
+                className="px-4 py-2 cursor-pointer border border-stone-400 text-stone-700  rounded-[3px] hover:scale-105 transition-transform ease-in-out "
               >
                 Cancel
               </button>
@@ -393,10 +397,12 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
               }
             />
 
-            <p className="text-sm text-gray-600 mt-2">
-              Voice commands supported: say <strong>“new line”</strong> to break
-              a line, <strong>“comma”</strong> for <code>,</code>,{" "}
-              <strong>“dot”</strong> for <code className="mr-1.5">.</code>
+            <p className="text-sm md:text-md text-gray-900 mt-2">
+              Voice commands supported: say{" "}
+              <strong>&lsquo;new line&lsquo;</strong> to break a line,{" "}
+              <strong>&lsquo;comma&lsquo;</strong> for <code>,</code>,{" "}
+              <strong>&lsquo;dot&lsquo;</strong> for{" "}
+              <code className="mr-1.5">.</code>
               <button
                 type="button"
                 onClick={() => setShowVoiceCommands((prev) => !prev)}
@@ -446,10 +452,12 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
                 setForm((prev) => ({ ...prev, skills: newText }))
               }
             />
-            <p className="text-sm text-gray-600 mt-2">
-              Voice commands supported: say <strong>“new line”</strong> to break
-              a line, <strong>“comma”</strong> for <code>,</code>,{" "}
-              <strong>“dot”</strong> for <code className="mr-1.5">.</code>
+            <p className="text-sm md:text-md text-gray-900 mt-2">
+              Voice commands supported: say{" "}
+              <strong>&lsquo;new line&lsquo;</strong> to break a line,{" "}
+              <strong>&lsquo;comma&lsquo;</strong> for <code>,</code>,{" "}
+              <strong>&lsquo;dot&lsquo;</strong> for{" "}
+              <code className="mr-1.5">.</code>
               <button
                 type="button"
                 onClick={() => setShowVoiceCommands((prev) => !prev)}
@@ -459,21 +467,20 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
               </button>
             </p>
             <h2 className="text-md  font-semibold mt-2">Skills</h2>
-
             <ResizableTextarea
               value={form.skills}
               onChange={(val) => handleChange("skills", val)}
               placeholder="Add your skills"
             />
-
-            <VoiceInput
-              value={form.other}
-              onTextChangeAction={(newText) =>
-                setForm((prev) => ({ ...prev, other: newText }))
-              }
-            />
+            <div className="w-full mt-2">
+              <VoiceInput
+                value={form.other}
+                onTextChangeAction={(newText) =>
+                  setForm((prev) => ({ ...prev, other: newText }))
+                }
+              />
+            </div>
             <h2 className="text-md font-semibold mt-2">Other(Optional)</h2>
-
             <ResizableTextarea
               value={form.other}
               onChange={(val) => handleChange("other", val)}
@@ -520,9 +527,12 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
           <button
             onClick={onGenerate}
             disabled={isGenerating}
-            className={`w-full cursor-pointer py-3 rounded-[5px] uppercase tracking-wide px-3 text-lg bg-[#f6f4ed] text-black dark:bg-stone-700 dark:text-white border-2 font-bold transform transition-transform duration-300 ease-in-out hover:scale-105 ${
-              isGenerating ? "cursor-not-allowed" : "hover:opacity-80"
-            }`}
+            className={`w-full cursor-pointer py-3 rounded-[5px] uppercase tracking-wide px-3 text-lg
+    bg-gradient-to-tr from-[#f5f4edd0] via-[#e2dfc7] to-[#f5f4edad]
+    dark:from-[#2c2c2cd2] dark:via-[#3a3a3a] dark:to-[#2c2c2cc2]
+    text-black dark:text-white font-bold transform transition-transform duration-300 ease-in-out hover:scale-105 ${
+      isGenerating ? "cursor-not-allowed" : "hover:opacity-90"
+    }`}
           >
             {generatedResume
               ? isGenerating

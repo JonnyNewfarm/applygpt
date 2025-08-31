@@ -359,13 +359,13 @@ export default function CoverLetterClientModal({ job }: Props) {
                         resumeRef.current?.focus();
                       }, 0);
                     }}
-                    className="mt-1 mb-5 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
+                    className=" mb-5 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
                   >
                     Edit Resume
                   </button>
                 )}
                 <button
-                  className="cursor-pointer"
+                  className="cursor-pointer -mt-7"
                   onClick={handleTextAreaState}
                 >
                   {textAreaTitle}
@@ -449,11 +449,12 @@ export default function CoverLetterClientModal({ job }: Props) {
                   <button
                     onClick={onGenerate}
                     disabled={loading || !resume || !jobAd}
-                    className={`mt-3 w-full  cursor-pointer py-3 rounded-[3px]  uppercase tracking-wide  px-3 text-lg text-[#f6f4ed] dark:text-black border-[#f6f4ed] shadow-md shadow-white/35 dark:shadow-black/25 border-2 dark:border-black font-bold transform transition-transform duration-300 ease-in-out hover:scale-105 ${
-                      loading
-                        ? "cursor-not-allowed opacity-50"
-                        : "hover:opacity-80"
-                    }`}
+                    className={`w-full mt-3 cursor-pointer py-3 rounded-[5px] uppercase tracking-wide px-3 text-lg
+    bg-gradient-to-tr from-[#f5f4edd0] via-[#e2dfc7] to-[#f5f4edad]
+    dark:from-[#2c2c2cd2] dark:via-[#3a3a3a] dark:to-[#2c2c2cc2]
+    text-black dark:text-white font-bold transform transition-transform duration-300 ease-in-out hover:scale-105 ${
+      loading ? "cursor-not-allowed" : "hover:opacity-90"
+    }`}
                   >
                     {coverLetter
                       ? loading
