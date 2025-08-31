@@ -28,7 +28,7 @@ export default function Navbar() {
     <>
       <nav
         data-nosnippet
-        className="w-full bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4f2] dark:text-[#2b2a27]  g-[#f6f4ed]  fixed top-0 left-0 z-50"
+        className="w-full bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4f2] dark:text-[#2b2a27]  g-[#f6f4ed]  sticky top-0 left-0 z-50"
       >
         <div className="max-w-7xl mx-auto flex items-center justify-between py-4 px-6 md:px-14">
           <h2>
