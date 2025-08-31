@@ -44,20 +44,19 @@ const LiveGenerateResumeDemo = () => {
   }, [showResume, jobTitle, name, age]);
 
   return (
-    <div className="min-h-screen  w-full flex items-center justify-center bg-[#2b2a27] text-[#f6f4ed] px-4  dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
-      <div className="max-w-2xl text-left space-y-6">
+    <div className="min-h-screen  w-full flex  pt-10 justify-center bg-[#2b2a27] text-[#f6f4ed] px-4  dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
+      <div className=" w-full px-4 text-left space-y-1">
         <h2 className="text-xl sm:text-3xl font-bold uppercase">
           AI Resume Generator
         </h2>
 
         <p className="text-base max-w-xl">
-          Provide your personal details, work experience, skills, and education
-          to generate a professional resume tailored to your career goals.
+          Provide your details, experience, skills, and education to generate a
+          professional resume using <strong>AI</strong>.
         </p>
-        <p className="text-base max-w-xl">
-          Provide your personal details, work experience, skills, and education
-          to generate a professional, well-structured resume tailored to your
-          career goals.
+        <p className="text-base max-w-xl mb-2">
+          You can <strong>use the voice recorder</strong> to fill in the form
+          quickly and hands-free.
         </p>
 
         {!showResume && (

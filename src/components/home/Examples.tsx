@@ -48,16 +48,17 @@ export default function ResumeExampleSection() {
           </button>
         </div>
 
-        <div className="flex flex-col space-y-6">
-          <h2 className="text-4xl font-bold leading-tight">
+        <div className="flex flex-col space-y-4">
+          <h2 className="text-3xl font-bold leading-tight">
             Build Resumes That Get You Hired
           </h2>
-          <p className="text-lg ">
+          <p className="text-lg">
             Jobscriptor uses <strong>AI</strong> to help you create
             professional, ATS-friendly resumes in minutes. No design skills
-            needed — just fill in your details and watch your resume take shape.
+            needed — just fill in your details or{" "}
+            <strong>use the voice recorder</strong> to input them quickly.
           </p>
-          <ul className="space-y-2.5 ">
+          <ul className="space-y-2.5">
             <li>✔ AI generated resumes</li>
             <li>✔ Easy editing and customization</li>
             <li>✔ Download in PDF</li>

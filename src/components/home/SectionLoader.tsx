@@ -55,8 +55,8 @@ export default function SectionLoader() {
 
   return (
     <div className="pb-20 min-h-screen pt-30 bg-[#2b2a27] text-[#f5f4ef]  dark:bg-[#f6f4f2] dark:text-[#2b2a27] -mt-8 w-full">
-      <div className="max-w-3xl px-3 w-full mx-auto">
-        <div className="flex w-full space-x-2" ref={ref}>
+      <div className="max-w-3xl w-full mx-auto">
+        <div className="flex w-full space-x-2 px-4" ref={ref}>
           {sections.map((section, idx) => (
             <div
               key={section.id}
@@ -94,7 +94,7 @@ export default function SectionLoader() {
                 setPaused((p) => !p);
               }
             }}
-            className="px-3 py-1 cursor-pointer  rounded"
+            className="px-4 py-1 cursor-pointer  rounded"
           >
             {paused ? (
               <p>

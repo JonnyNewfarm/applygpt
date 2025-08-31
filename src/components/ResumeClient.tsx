@@ -9,6 +9,7 @@ import ResumeForm from "./ResumeForm";
 import Link from "next/link";
 import { IoMdClose } from "react-icons/io";
 import VoiceInput from "./VoiceInput";
+import ResizableTextarea from "./ResizebleTextarea";
 
 interface ResumeClientProps {
   resume: string;
@@ -257,11 +258,9 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
 
             <h2 className="text-md font-semibold mt-2">General Information</h2>
 
-            <textarea
-              rows={5}
+            <ResizableTextarea
               value={form.generalInfo}
-              onChange={(e) => handleChange("generalInfo", e.target.value)}
-              className="w-full p-2 bg-white text-black border rounded text-sm mt-0.5"
+              onChange={(val) => handleChange("generalInfo", val)}
               placeholder="Add your general info here (name, profession, contact, etc.)"
             />
             <div className="flex justify-end mt-4 gap-2">
@@ -354,13 +353,12 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
               </button>
             </p>
 
-            <textarea
-              rows={5}
+            <ResizableTextarea
               value={form.fullAddress}
-              onChange={(e) => handleChange("fullAddress", e.target.value)}
-              className="w-full p-2 bg-white text-black border rounded text-sm mt-2"
+              onChange={(val) => handleChange("fullAddress", val)}
               placeholder="Add your full address here (country, city, street, etc.)"
             />
+
             <div className="flex justify-end mt-4 gap-2">
               <button
                 onClick={() => setShowAddressModalRecord(false)}
@@ -410,11 +408,9 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
             <h2 className="text-md mt-2 font-semibold">
               Work Experience & Education
             </h2>
-            <textarea
-              rows={20}
+            <ResizableTextarea
               value={form.experience}
-              onChange={(e) => handleChange("experience", e.target.value)}
-              className="w-full bg-white text-black p-2 border rounded text-sm mt-0.5"
+              onChange={(val) => handleChange("experience", val)}
               placeholder="Add your experience and education"
             />
             <div className="flex justify-end mt-4 gap-2">
@@ -464,13 +460,12 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
             </p>
             <h2 className="text-md  font-semibold mt-2">Skills</h2>
 
-            <textarea
-              rows={7}
+            <ResizableTextarea
               value={form.skills}
-              onChange={(e) => handleChange("skills", e.target.value)}
-              className="w-full p-2 bg-white text-black border rounded text-sm mt-0.5"
+              onChange={(val) => handleChange("skills", val)}
               placeholder="Add your skills"
             />
+
             <VoiceInput
               value={form.other}
               onTextChangeAction={(newText) =>
@@ -479,11 +474,9 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
             />
             <h2 className="text-md font-semibold mt-2">Other(Optional)</h2>
 
-            <textarea
-              rows={5}
+            <ResizableTextarea
               value={form.other}
-              onChange={(e) => handleChange("other", e.target.value)}
-              className="w-full p-2 bg-white text-black border rounded text-sm mt-0.5"
+              onChange={(val) => handleChange("other", val)}
               placeholder="Other information (optional)"
             />
             <div className="flex justify-end mt-4 gap-2">

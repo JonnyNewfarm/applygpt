@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import FontDropdown from "./FontDropdown";
 import FontSizeDropdown from "./FontSizeDropdown";
 import ResumeForm from "./ResumeForm";
+import { IoMdClose } from "react-icons/io";
 
 export default function CoverLetterClient() {
   const router = useRouter();
@@ -394,9 +395,9 @@ export default function CoverLetterClient() {
                       >
                         <button
                           onClick={() => setShowResumeModal(false)}
-                          className=" absolute  text-xl right-5 top-4 cursor-pointer font-semibold"
+                          className=" absolute  text-3xl right-2 top-3 cursor-pointer font-semibold"
                         >
-                          ✕
+                          <IoMdClose />
                         </button>
                         <ResumeForm resume={resume} />
                       </div>

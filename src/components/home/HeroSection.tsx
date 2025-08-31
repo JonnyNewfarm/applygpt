@@ -76,7 +76,7 @@ const HeroSection = () => {
     <div
       className={`min-h-screen  bg-[#2b2a27] text-[#f5f4ef]  dark:bg-[#f6f4f2] dark:text-[#2b2a27] items-center w-full flex justify-center px-6 sm:px-20`}
     >
-      <div className="mb-16 w-full text-left  h-full  flex flex-col sm:gap-y-6 gap-y-2 ">
+      <div className=" w-full text-left  h-full  flex flex-col sm:gap-y-6 gap-y-2 ">
         <h1 className="sm:text-3xl   uppercase text-xl  font-bold">
           Simplify Job Searching
         </h1>
@@ -134,7 +134,7 @@ const HeroSection = () => {
           <div className="mt-5">
             <MagneticComp>
               <Link
-                className=" w-full uppercase  cursor-pointer py-3 rounded-[3px]  tracking-wide  px-3 text-lg text-[#f6f4ed] dark:text-black border-[#f6f4ed] shadow-md shadow-white/20  dark:shadow-black/5 border-2 dark:border-black font-bold transform transition-transform duration-300 ease-in-out hover:scale-105 whitespace-nowrap"
+                className=" w-full uppercase  cursor-pointer py-3 rounded-[3px]  tracking-wide  px-3 text-base text-[#f6f4ed] dark:text-black border-[#f6f4ed] shadow-md shadow-white/20  dark:shadow-black/5 border-2 dark:border-black font-bold transform transition-transform duration-300 ease-in-out hover:scale-105 whitespace-nowrap"
                 href={"/resume-generator"}
               >
                 Get Started

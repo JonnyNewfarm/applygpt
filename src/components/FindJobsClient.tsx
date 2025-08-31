@@ -575,7 +575,7 @@ export default function FindJobsPage() {
                     <div className="relative h-full">
                       <button
                         onClick={() => setShowResumeModal(false)}
-                        className="absolute right-2.5 top-1 z-50 text-2xl cursor-pointer font-semibold"
+                        className="absolute right-2 -top-1 z-50 text-3xl cursor-pointer font-semibold"
                       >
                         <IoMdClose />
                       </button>

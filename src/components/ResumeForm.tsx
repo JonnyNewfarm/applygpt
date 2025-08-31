@@ -194,7 +194,7 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
           <div className=" relative -mb-8 h-full">
             <button
               onClick={onBoldSelection}
-              className={`mt-1 mr-3 border  cursor-pointer px-3 py-1.5 rounded-[3px] text-xs sm:text-sm transition-all duration-200
+              className={`mt-1 mr-3 border  cursor-pointer px-3 py-1.5 rounded-[3px]  text-sm transition-all duration-200
     ${
       isBoldActive
         ? "bg-[#f6f4ed]  border-white/60 text-black dark:text-black dark:bg-[#f6f4ed] dark:border-black/60"
@@ -208,18 +208,21 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
             <FontSizeDropdown />
             <button
               onClick={markAllText}
-              className="mt-1  ml-3 font-bold cursor-pointer px-3 py-1.5 rounded-[3px] text-xs md:text-sm bg-transparent text-[#f6f4ed] dark:text-black border border-white/60 dark:border-black/60   "
+              className="mt-1  ml-3 font-bold cursor-pointer px-3 py-1.5 rounded-[3px] text-sm bg-transparent text-[#f6f4ed] dark:text-black border border-white/60 dark:border-black/60   "
             >
               Mark All
             </button>
           </div>
         </div>
         <div
-          style={{ scrollbarWidth: "thin" }}
           ref={resumeEditorRef}
           contentEditable
           suppressContentEditableWarning={true}
-          className="h-[calc(100vh-240px)] w-full overflow-y-auto border bg-white text-black p-4 text-xs sm:text-sm leading-relaxed whitespace-pre-wrap outline-none"
+          className="h-[calc(100vh-240px)] w-full overflow-y-auto border bg-white text-black p-2  leading-snug text-xs md:text-sm sm:leading-relaxed whitespace-pre-wrap outline-none"
+          style={{
+            scrollbarWidth: "thin",
+            WebkitTextSizeAdjust: "100%",
+          }}
         />
         {showEmptyModal && (
           <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">

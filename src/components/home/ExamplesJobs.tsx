@@ -40,8 +40,8 @@ export default function JobsExampleSection() {
           </div>
         </div>
 
-        <div className="flex flex-col space-y-6">
-          <h2 className="text-4xl font-bold leading-tight">
+        <div className="flex flex-col space-y-4">
+          <h2 className="text-3xl font-bold leading-tight">
             Find Jobs That Match Your Resume
           </h2>
           <p className="text-lg ">
@@ -49,7 +49,7 @@ export default function JobsExampleSection() {
             upload your details, explore opportunities, and see how well your
             skills match each position.
           </p>
-          <ul className="space-y-2.5 ">
+          <ul className="space-y-2.5">
             <li>✔ Match jobs directly to your resume</li>
             <li>✔ Discover opportunities from LinkedIn, Indeed, and more</li>
             <li>✔ Generate tailored cover letters instantly</li>

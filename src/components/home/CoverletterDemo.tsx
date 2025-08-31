@@ -50,17 +50,17 @@ const LiveCoverLetterDemo = () => {
   }, [showLetter, generatedLetter]);
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center border-b-white z-50 dark:border-b-black/20 bg-[#2b2a27] text-[#f6f4ed] px-4 py-12 dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
-      <div className="w-full max-w-2xl text-left space-y-6">
-        <h2 className="text-xl sm:text-3xl font-bold uppercase">
+    <div className="min-h-screen w-full flex  justify-center border-b-white z-50 dark:border-b-black/20 bg-[#2b2a27] text-[#f6f4ed] px-4 pt-10 dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
+      <div className="w-full px-4 text-left space-y-4">
+        <h2 className="text-xl sm:text-2xl font-bold uppercase">
           AI Cover Letter Generator
         </h2>
-        <div className="text-base space-y-3">
-          <p className="text-lg max-w-xl">
+        <div className="text-base space-y-2">
+          <p className="text-md max-w-xl">
             You provide your resume and a job description, then select the tone
             you want for your letter.
           </p>
-          <p className="text-lg max-w-xl">
+          <p className="text-md max-w-xl">
             The AI uses this information to generate a customized cover letter
             tailored to the job. You can edit, save, copy, and download the
             final letter as a PDF.
@@ -68,13 +68,13 @@ const LiveCoverLetterDemo = () => {
         </div>
 
         {!showLetter && (
-          <div className="space-y-4">
+          <div className="space-y-1 max-w-xl">
             <label className="block font-semibold mb-1">Resume </label>
             <textarea
               value={fixedResume}
               readOnly
               rows={2}
-              className="w-full px-4 py-2 border rounded bg-white border-[#f6f4ed] dark:border-[#2b2a27] text-black cursor-not-allowed"
+              className="w-full px-4 py-2 text-sm md:text-md border rounded bg-white border-[#f6f4ed] dark:border-[#2b2a27] text-black cursor-not-allowed"
             />
 
             <label className="block font-semibold mb-1 mt-4">
@@ -84,7 +84,7 @@ const LiveCoverLetterDemo = () => {
               value={fixedJobDescription}
               readOnly
               rows={3}
-              className="w-full px-4 py-2 border rounded bg-white border-[#f6f4ed] dark:border-[#2b2a27]  text-black cursor-not-allowed"
+              className="w-full px-4 py-2 text-sm md:text-md border rounded bg-white border-[#f6f4ed] dark:border-[#2b2a27]  text-black cursor-not-allowed"
             />
 
             <button

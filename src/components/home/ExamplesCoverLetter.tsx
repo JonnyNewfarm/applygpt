@@ -45,8 +45,8 @@ export default function CoverLetterExampleSection() {
           </button>
         </div>
 
-        <div className="flex flex-col space-y-6">
-          <h2 className="text-4xl font-bold leading-tight">
+        <div className="flex flex-col space-y-4">
+          <h2 className="text-3xl font-bold leading-tight">
             Create Cover Letters That Get You Interviews
           </h2>
           <p className="text-lg ">
