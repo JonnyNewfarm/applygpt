@@ -263,7 +263,7 @@ export default function CoverLetterClient() {
     usage.generationCount >= usage.generationLimit;
 
   return (
-    <div className="w-full -mt-4 min-h-screen border-b-white/20 dark:border-b-black/20 bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
+    <div className="w-full  min-h-screen border-b-white/20 dark:border-b-black/20 bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
       <main className="max-w-7xl bg-light mx-auto p-4 md:p-8">
         <h1 className="text-2xl font-bold mb-2 text-center md:text-left">
           AI Cover Letter Generator
