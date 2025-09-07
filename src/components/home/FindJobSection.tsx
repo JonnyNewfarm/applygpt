@@ -1,7 +1,6 @@
 "use client";
 
-import { CheckIcon } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 
 const demoJob = {
   title: "Frontend Developer",
@@ -10,68 +9,79 @@ const demoJob = {
   salary: "650,000 NOK",
   tags: ["Full-time", "Remote", "React"],
   match: 92,
+  description:
+    "We are seeking a passionate Frontend Developer to join our team at Telenor. You will work on cutting-edge web..",
 };
 
 const FindJobsDemo = () => {
+  const [expanded, setExpanded] = useState(false);
+
   return (
-    <div className="min-h-screen w-full px-4 pt-10 bg-[#2b2a27] text-[#f5f4ef]  dark:bg-[#f6f4f2] dark:text-[#2b2a27] flex   justify-center ">
-      <div className="w-full px-2">
-        <div className="space-y-3">
-          <h2 className="text-xl font-bold uppercase">
+    <div className="h-full w-full bg-[#2b2a27] text-[#f5f4ef] dark:bg-[#f6f4f2] dark:text-[#2b2a27] flex justify-center py-10">
+      <div className="w-full max-w-2xl px-2">
+        <div className="space-y-2 mb-6">
+          <h2 className="text-2xl font-bold uppercase">
             Find Jobs That Truly Match You
           </h2>
 
-          <div className="text-base space-y-3">
-            <p className="max-w-xl ">
+          <div className="md:text-base text-sm space-y-1">
+            <p className="max-w-xl">
               Discover real jobs from top platforms like LinkedIn and Indeed.
             </p>
-
-            <p className="max-w-xl ">
-              See key details — title, company, location, salary, tags, and
-              compare it to your CV.
-            </p>
-            <p className="max-w-xl mb-2">
-              {" "}
-              Found the perfect job? Instantly generate an AI-powered cover
-              letter and apply.
+            <p className="max-w-xl">
+              See key details — title, company, location, salary, tags — and
+              compare it to your CV instantly.
             </p>
           </div>
         </div>
 
-        <div className="w-full max-w-xl border border-[#2b2a27] rounded p-3 md:p-5 cursor-pointer bg-stone-50 text-black  transition relative">
-          <div className="w-full flex items-center justify-between">
-            <h3 className="text-lg font-semibold text-nowrap">
-              {demoJob.title}
-            </h3>
-            <h1 className="flex items-center text-sm font-semibold gap-x-1">
-              Saved <CheckIcon className="w-5 h-5 sm:w-8 sm:h-8" />
-            </h1>
-          </div>
-          <p className="mt-1 text-sm font-medium opacity-80">
-            {demoJob.company}
+        <div className="max-w-lg   rounded p-2 shadow">
+          <h1 className="text-lg font-semibold">{demoJob.title}</h1>
+          <p className="text-sm">
+            {demoJob.company} • {demoJob.location}
           </p>
-          <p className="mt-1 text-sm opacity-70">{demoJob.location}</p>
-          <p>Match: 7/10</p>
-          <p className="mt-1 font-semibold">{demoJob.salary}</p>
+          <p className="text-sm mb-2 text-[#d6d4d1] dark:text-[#444]">
+            Salary: {demoJob.salary}
+          </p>
 
-          <div className="mt-3 flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 mb-3">
             {demoJob.tags.map((tag) => (
               <span
                 key={tag}
-                className=" rounded px-3 border py-1 text-xs font-semibold uppercase"
+                className="text-xs px-2 py-1 border border-current rounded"
               >
                 {tag}
               </span>
             ))}
           </div>
 
-          <div className="flex py-4 w-full gap-x-2 justify-between">
-            <h1 className="mt-2 border-2 whitespace-nowrap font-semibold border-[#2b2a27] bg-[#2b2a27] text-[#f5f4ef]  px-3 py-1.5 rounded-[3px]   text-sm ">
-              Generate Cover Letter
-            </h1>
-            <h1 className="mt-2 border-2 font-semibold border-[#2b2a27]  px-3 py-1.5 rounded-[3px]   text-sm  dark:text-[#2b2a27]">
-              Apply
-            </h1>
+          <p className="text-sm mb-2">{demoJob.description}</p>
+
+          <h1 className="mb-0.5 mt-1 font-semibold">
+            Match Score: {Math.round(demoJob.match / 10)} / 10
+          </h1>
+
+          <p className="text-sm">
+            The applicant&apos;s skills and experience closely match the job
+            description. The applicant has significant frontend development
+            experience with JavaScript, React, and other
+            {expanded && (
+              <>
+                {" "}
+                relevant technologies mentioned in the job description. However,
+                they do not have experience in TypeScript and cloud services
+                such as AWS, GCP, or Azure.
+              </>
+            )}
+          </p>
+
+          <div className="w-full flex justify-end">
+            <button
+              onClick={() => setExpanded(!expanded)}
+              className="hover:underline text-sm cursor-pointer opacity-80"
+            >
+              {expanded ? "Read less" : "Read more"}
+            </button>
           </div>
         </div>
       </div>

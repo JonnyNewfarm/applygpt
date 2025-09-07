@@ -6,7 +6,7 @@ interface MagneticCompProps {
   children: ReactNode;
 }
 
-const MagneticComp = ({ children }: MagneticCompProps) => {
+const MagneticCompWide = ({ children }: MagneticCompProps) => {
   const ref = useRef<HTMLDivElement | null>(null);
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -40,6 +40,7 @@ const MagneticComp = ({ children }: MagneticCompProps) => {
         transform: "translateZ(0)",
         x: springX,
         y: springY,
+        width: "100%",
       }}
     >
       {children}
@@ -47,4 +48,4 @@ const MagneticComp = ({ children }: MagneticCompProps) => {
   );
 };
 
-export default MagneticComp;
+export default MagneticCompWide;

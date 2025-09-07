@@ -11,6 +11,10 @@ import { FaCheck } from "react-icons/fa6";
 import ResumeForm from "./ResumeForm";
 import BuyAccessButton from "./BuyAccessButton";
 import ManageSubscriptionButton from "./ManageSubscriptionButton";
+import { AnimatePresence, motion } from "framer-motion";
+import MagneticCompWide from "./MagneticCompWide";
+import { FaExternalLinkAlt, FaFileAlt, FaBookmark } from "react-icons/fa";
+import ExpandableText from "./ExpandableText";
 
 interface Job {
   id: string;
@@ -26,29 +30,19 @@ interface Job {
 
 export default function FindJobsPage() {
   const [showCoverLetterModal, setShowCoverLetterModal] = useState(false);
-  const [selectedJob, setSelectedJob] = useState<Job | null>(null);
+  const [selectedJob, setSelectedJob] = useState<Job | null>(null); // used by cover letter modal
   const [jobTitleSuggestions, setJobTitleSuggestions] = useState<string[]>([]);
   const [savedJobs, setSavedJobs] = useState<Set<string>>(new Set());
 
   const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
-  const [highlightedCountryIndex, setHighlightedCountryIndex] = useState(-1);
   const [highlightedCityIndex, setHighlightedCityIndex] = useState(-1);
 
   const [resume, setResume] = useState("");
-  const [activeJob, setActiveJob] = useState<Job | null>(null);
   const [resumeSaved, setResumeSaved] = useState(false);
   const [query, setQuery] = useState("");
 
   const [city, setCity] = useState("");
-  const [country, setCountry] = useState("");
   const [citySuggestions, setCitySuggestions] = useState<string[]>([]);
-  const [countrySuggestions, setCountrySuggestions] = useState<
-    { name: string; isoCode: string }[]
-  >([]);
-  const [selectedCountryCode, setSelectedCountryCode] = useState<string | null>(
-    null
-  );
-  const [allCities, setAllCities] = useState<string[]>([]);
 
   const [jobsCache, setJobsCache] = useState<Record<number, Job[]>>({});
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -57,6 +51,7 @@ export default function FindJobsPage() {
   const [showResumeModal, setShowResumeModal] = useState(false);
 
   const [showApplyPopup, setShowApplyPopup] = useState(false);
+  const [allCityOptions, setAllCityOptions] = useState<string[]>([]);
 
   const [applyJob, setApplyJob] = useState<Job | null>(null);
 
@@ -78,6 +73,15 @@ export default function FindJobsPage() {
   const [showNoResumePopup, setShowNoResumePopup] = useState(false);
 
   const jobTitleRef = useRef<HTMLDivElement>(null);
+
+  const jobResultsRef = useRef<HTMLDivElement>(null);
+
+  const [selectedJobForPanel, setSelectedJobForPanel] = useState<Job | null>(
+    null
+  );
+  const [showDetailOnMobile, setShowDetailOnMobile] = useState(false);
+
+  const detailPanelRef = useRef<HTMLDivElement>(null);
 
   function getHostFromUrl(url: string): string {
     try {
@@ -105,6 +109,20 @@ export default function FindJobsPage() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
+  }, []);
+
+  useEffect(() => {
+    const allCountries = Country.getAllCountries();
+    const cityList: string[] = [];
+
+    allCountries.forEach((country) => {
+      const cities = City.getCitiesOfCountry(country.isoCode) || [];
+      cities.forEach((c) => {
+        cityList.push(`${c.name}, ${country.isoCode}`);
+      });
+    });
+
+    setAllCityOptions(cityList);
   }, []);
 
   useEffect(() => {
@@ -185,7 +203,7 @@ export default function FindJobsPage() {
         toast.error(data.error || "Failed to save job.");
       } else {
         toast.success("Job saved!");
-        setSavedJobs((prev) => new Set(prev).add(job.id)); // ✅ Add job to saved
+        setSavedJobs((prev) => new Set(prev).add(job.id));
       }
     } catch {
       toast.error("Failed to save job.");
@@ -195,8 +213,14 @@ export default function FindJobsPage() {
   }
 
   const fetchJobs = async (pageToLoad: number) => {
-    if (!query || !city || !selectedCountryCode) {
+    if (!query || !city) {
       toast("Please fill in all fields.");
+      return;
+    }
+
+    const [cityName, countryCode] = city.split(",").map((p) => p.trim());
+    if (!cityName || !countryCode) {
+      toast("Please use format: City, CountryCode (e.g. Oslo, NO)");
       return;
     }
 
@@ -210,34 +234,35 @@ export default function FindJobsPage() {
         body: JSON.stringify({
           resume,
           query,
-          city,
-          country: selectedCountryCode.toLowerCase(),
+          city: cityName,
+          country: countryCode.toLowerCase(),
           page: pageToLoad,
         }),
       });
 
-      const data = await res.json();
       if (!res.ok) {
-        setError(data.error || "Failed to fetch");
+        const data = await res.json();
+        setError(data.error || "Failed to fetch jobs");
+        setLoading(false);
         return;
       }
 
-      if (data.message) {
-        setError(data.message);
-        return;
+      const data = await res.json();
+      setJobs(data.jobs || []);
+      setJobsCache((prev) => ({ ...prev, [pageToLoad]: data.jobs }));
+
+      setLoading(false);
+
+      if (jobResultsRef.current) {
+        const y =
+          jobResultsRef.current.getBoundingClientRect().top +
+          window.scrollY -
+          80;
+        window.scrollTo({ top: y, behavior: "smooth" });
       }
-
-      setJobsCache((prev) => ({
-        ...prev,
-        [pageToLoad]: data.jobs,
-      }));
-
-      setJobs(data.jobs);
-      setPage(pageToLoad);
     } catch (err) {
       console.error(err);
       setError("Something went wrong");
-    } finally {
       setLoading(false);
     }
   };
@@ -246,50 +271,40 @@ export default function FindJobsPage() {
     if (jobsCache[1]) {
       setJobs(jobsCache[1]);
       setPage(1);
+      setSelectedJobForPanel(jobsCache[1][0] ?? null);
     } else {
       await fetchJobs(1);
     }
+    // ensure mobile detail is closed when new search runs
+    setShowDetailOnMobile(false);
   };
 
   const handlePageChange = async (newPage: number) => {
+    if (newPage < 1) return;
     if (jobsCache[newPage]) {
       setJobs(jobsCache[newPage]);
       setPage(newPage);
+      setSelectedJobForPanel(jobsCache[newPage][0] ?? null);
     } else {
       await fetchJobs(newPage);
     }
-  };
-
-  const handleCountryInput = (val: string) => {
-    setCountry(val);
-    const filtered = Country.getAllCountries().filter((c) =>
-      c.name.toLowerCase().startsWith(val.toLowerCase())
-    );
-    setCountrySuggestions(filtered);
+    setShowDetailOnMobile(false);
   };
 
   const handleCityInput = (val: string) => {
     setCity(val);
-    if (allCities.length > 0) {
-      setCitySuggestions(
-        allCities.filter((c) => c.toLowerCase().startsWith(val.toLowerCase()))
-      );
+
+    if (!val) {
+      setCitySuggestions([]);
+      return;
     }
-  };
 
-  const handleSelectCountry = (countryObj: {
-    name: string;
-    isoCode: string;
-  }) => {
-    setCountry(countryObj.name);
-    setSelectedCountryCode(countryObj.isoCode);
-    setCountrySuggestions([]);
+    // just filter the preloaded array — very fast
+    const filtered = allCityOptions
+      .filter((c) => c.toLowerCase().startsWith(val.toLowerCase()))
+      .slice(0, 50); // optional limit, prevents rendering too many at once
 
-    const cities = City.getCitiesOfCountry(countryObj.isoCode) || [];
-    const cityNames = Array.from(new Set(cities.map((c) => c.name))).sort();
-    setAllCities(cityNames);
-    setCity("");
-    setCitySuggestions([]);
+    setCitySuggestions(filtered);
   };
 
   const truncateText = (text: string, maxLength: number) => {
@@ -306,18 +321,6 @@ export default function FindJobsPage() {
     setSelectedJob(job);
     setShowCoverLetterModal(true);
   };
-
-  const isCachedPage = !!jobsCache[page + 1];
-
-  const SkeletonCard = () => (
-    <div className=" absolute left-4  -mt-8 w-full">
-      <div className="w-full flex gap-x-3 animate-pulse">
-        <div className="h-2 w-2 bg-white/80 dark:bg-black/80 rounded-full"></div>
-        <div className="h-2 w-2 bg-white/80 dark:bg-black/80 rounded-full"></div>
-        <div className="h-2 w-2 bg-white/80 dark:bg-black/80 rounded-full"></div>
-      </div>
-    </div>
-  );
 
   async function matchJobToResume(job: Job) {
     if (!resumeSaved) {
@@ -345,6 +348,12 @@ export default function FindJobsPage() {
               : j
           )
         );
+        // also update selected panel job if it matches
+        setSelectedJobForPanel((prev) =>
+          prev && prev.id === job.id
+            ? { ...prev, score: data.score, explanation: data.explanation }
+            : prev
+        );
         setUsage((u) => ({
           ...u,
           generationCount: u.generationCount + 1,
@@ -361,22 +370,51 @@ export default function FindJobsPage() {
     usage.generationLimit !== null &&
     usage.generationCount >= usage.generationLimit;
 
+  const isCachedPage = !!jobsCache[page + 1];
+
+  const onJobListItemClick = (job: Job) => {
+    setSelectedJobForPanel(job);
+    if (window.innerWidth < 1024) {
+      setShowDetailOnMobile(true);
+
+      setTimeout(() => {
+        detailPanelRef.current?.scrollIntoView({ behavior: "smooth" });
+      }, 50);
+    }
+  };
+
+  const backToListOnMobile = () => {
+    setShowDetailOnMobile(false);
+  };
+
+  useEffect(() => {
+    function onResize() {
+      if (window.innerWidth >= 1024) {
+        setShowDetailOnMobile(false);
+      }
+    }
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
   return (
-    <main className="w-full px-2  min-h-screen flex flex-col justify-center bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
-      <div className="max-w-5xl relative h-full  mx-auto flex justify-center flex-col  ">
+    <main className="w-full px-2 min-h-screen flex flex-col justify-center bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
+      <div className="max-w-7xl relative h-full mx-auto flex justify-center flex-col w-full">
         <div className="flex justify-center items-center flex-col w-full">
-          <div className="max-w-4xl">
-            <h1 className="text-3xl  h-full px-3 font-bold">
+          <div className="w-full max-w-3xl">
+            <h1 className="text-[25px] md:text-3xl h-full px-6 font-bold">
               Find Jobs With AI Tools
             </h1>
-            <p className="px-3 max-w-lg mt-0.5 text-md md:text-lg mb-3 text-gray-200 dark:text-gray-700">
+            <p className="px-6 w-full mt-0.5 text-lg md:text-lg mb-3 text-gray-200 dark:text-gray-700">
               Search jobs from top providers like <strong>LinkedIn</strong>,{" "}
               <strong>Indeed</strong>, and more — all in one place. <br />
             </p>
 
-            <div ref={jobTitleRef} className="relative  px-2">
+            <div ref={jobTitleRef} className="relative px-4">
               <label>
-                <p className="mb-1 font-bold">Job Title</p>
+                <p className="mb-1 border-t-1 w-full border-t-white/40 dark:border-t-black/50 text-2xl pt-4 px-6">
+                  Job Title
+                </p>
                 <input
                   type="text"
                   value={query}
@@ -415,13 +453,13 @@ export default function FindJobsPage() {
                     }
                   }}
                   placeholder="Job title (e.g. frontend developer)"
-                  className="w-full border-2 rounded-[3px] relative   border-[#f6f4ed] dark:border-[#2b2a27] text-white dark:text-black  p-3 mb-3"
+                  className="w-full outline-none border-b-1 border-b-white/40 dark:border-b-black/50 relative border-[#f6f4ed] dark:border-[#2b2a27] text-white dark:text-black text-xl px-6 pt-1 pb-4 mb-3 bg-transparent"
                 />
               </label>
               {jobTitleSuggestions.length > 0 && (
                 <ul
-                  style={{ scrollbarWidth: "thin" }}
-                  className="text-[#f6f4f2] overflow-y-scroll  bg-[#2b2a27] dark:bg-[#f6f4f2]  absolute z-50 w-full  border border-white dark:border-black dark:text-black rounded overflow-hidden mb-4 max-h-40"
+                  id="custom-scrollbar"
+                  className="text-[#f6f4f2] overflow-y-scroll bg-[#383833] absolute z-50 w-full border border-gray-100/20 rounded overflow-hidden mb-4 max-h-40"
                 >
                   {jobTitleSuggestions.map((title, idx) => (
                     <li
@@ -431,7 +469,7 @@ export default function FindJobsPage() {
                         setJobTitleSuggestions([]);
                         setHighlightedIndex(-1);
                       }}
-                      className={`px-2 py-2.5 cursor-pointer hover:bg-stone-600 border-b-white/30 border-b hover:dark:bg-stone-300  ${
+                      className={`py-2.5 px-3 cursor-pointer hover:dark:text-black hover:bg-stone-600 border-b-white/5 border-b hover:dark:bg-stone-300  ${
                         highlightedIndex === idx
                           ? "bg-stone-600 dark:bg-stone-300"
                           : ""
@@ -444,67 +482,8 @@ export default function FindJobsPage() {
               )}
             </div>
 
-            <div className="relative m-0 px-2">
-              {" "}
-              <p className="mb-1 font-bold">Country</p>
-              <input
-                type="text"
-                value={country}
-                onChange={(e) => {
-                  handleCountryInput(e.target.value);
-                  setHighlightedCountryIndex(-1);
-                }}
-                onKeyDown={(e) => {
-                  if (countrySuggestions.length > 0) {
-                    if (e.key === "ArrowDown") {
-                      e.preventDefault();
-                      setHighlightedCountryIndex((prev) =>
-                        prev < countrySuggestions.length - 1 ? prev + 1 : 0
-                      );
-                    } else if (e.key === "ArrowUp") {
-                      e.preventDefault();
-                      setHighlightedCountryIndex((prev) =>
-                        prev > 0 ? prev - 1 : countrySuggestions.length - 1
-                      );
-                    } else if (
-                      e.key === "Enter" &&
-                      highlightedCountryIndex >= 0
-                    ) {
-                      e.preventDefault();
-                      handleSelectCountry(
-                        countrySuggestions[highlightedCountryIndex]
-                      );
-                      setHighlightedCountryIndex(-1);
-                    }
-                  }
-                }}
-                placeholder="Country"
-                className="w-full border-2 rounded-[3px] relative   border-[#f6f4ed] dark:border-[#2b2a27] text-white dark:text-black  p-3 mb-3"
-              />
-              {countrySuggestions.length > 0 && (
-                <ul
-                  style={{ scrollbarWidth: "thin" }}
-                  className="text-[#f6f4f2] overflow-y-scroll  bg-[#2b2a27] dark:bg-[#f6f4f2]  absolute z-50 w-full  border border-white dark:border-black dark:text-black rounded overflow-hidden mb-4 max-h-40"
-                >
-                  {countrySuggestions.map((c, idx) => (
-                    <li
-                      key={c.isoCode}
-                      onClick={() => handleSelectCountry(c)}
-                      className={`px-2 py-2.5 cursor-pointer hover:bg-stone-600 border-b-white/30 border-b hover:dark:bg-stone-300  ${
-                        highlightedCountryIndex === idx
-                          ? "bg-stone-600 dark:bg-stone-300"
-                          : ""
-                      }`}
-                    >
-                      {c.name}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-
-            <div className="relative px-2">
-              <p className="mb-1 font-bold">City</p>
+            <div className="relative px-4">
+              <p className="mb-1 px-4 text-2xl pt-4">City</p>
 
               <input
                 type="text"
@@ -534,13 +513,13 @@ export default function FindJobsPage() {
                   }
                 }}
                 placeholder="City"
-                className="w-full border-2 rounded-[5px] relative   border-[#f6f4ed] dark:border-[#2b2a27] text-white dark:text-black  p-3 mb-3"
+                className="w-full border-b-1 outline-none border-b-white/40 dark:border-b-black/50 relative border-[#f6f4ed] dark:border-[#2b2a27] text-white dark:text-black px-4 pb-4 text-xl mb-3 bg-transparent"
               />
 
               {citySuggestions.length > 0 && (
                 <ul
-                  style={{ scrollbarWidth: "thin" }}
-                  className="text-[#f6f4f2] overflow-y-scroll  bg-[#2b2a27] dark:bg-[#f6f4f2]  absolute z-50 w-full  border border-white dark:border-black dark:text-black rounded overflow-hidden mb-4 max-h-40"
+                  id="custom-scrollbar"
+                  className="text-[#f6f4f2] overflow-y-scroll bg-[#383833] absolute z-50 w-full border border-gray-100/20 rounded overflow-hidden mb-4 max-h-40"
                 >
                   {citySuggestions.map((c, idx) => (
                     <li
@@ -550,7 +529,7 @@ export default function FindJobsPage() {
                         setCitySuggestions([]);
                         setHighlightedCityIndex(-1);
                       }}
-                      className={`px-2 py-2.5 cursor-pointer hover:bg-stone-600 border-b-white/30 border-b hover:dark:bg-stone-300  ${
+                      className={`py-2.5 px-3 cursor-pointer hover:dark:text-black hover:bg-stone-600 border-b-white/5 border-b hover:dark:bg-stone-300 ${
                         highlightedCityIndex === idx
                           ? "bg-stone-600 dark:bg-stone-300"
                           : ""
@@ -562,45 +541,55 @@ export default function FindJobsPage() {
                 </ul>
               )}
             </div>
-            <div className="w-full relative ">
-              <div className="flex justify-between  px-3">
+
+            <div className="w-full relative  mt-2">
+              <div className="flex justify-between px-6 md:px-8">
                 <button
                   onClick={() => setShowResumeModal((prev) => !prev)}
-                  className="border-2 sticky cursor-pointer px-4 py-2 mb-2  rounded-[3px] text-sm font-semibold dark:border-[#2b2a27] border-[#f6f4ed] text-[#f6f4ed] dark:text-[#2b2a27] hover:scale-105 transform transition-transform duration-200"
+                  className="border sticky cursor-pointer px-4 py-2 mb-2 mt-1 rounded-[5px] text-md font-semibold dark:border-[#2b2a27] border-white/40 text-[#ebe9e2] dark:text-[#2b2a27] hover:scale-105 transform transition-transform duration-200"
                 >
                   {showResumeModal ? "Close" : "Your Resume"}
                 </button>
-                <p className="text-sm mb-2 mt-2">
+                <p className="text-sm mb-2 mt-3.5">
                   {usage.generationLimit === null
                     ? `Used ${usage.generationCount} generations (Unlimited plan)`
-                    : `Usage: ${usage.generationCount} / ${usage.generationLimit} generations`}
+                    : `Usage: ${usage.generationCount} / ${usage.generationLimit}`}
                 </p>
               </div>
-
-              {showResumeModal && (
-                <div
-                  onClick={() => setShowResumeModal(false)}
-                  className="fixed h-screen w-full inset-0 flex items-center justify-center bg-black/50 z-50"
-                >
-                  <div
-                    onClick={(e) => e.stopPropagation()}
-                    className="w-[96%] h-[92vh] rounded-[5px]  max-w-6xl bg-[#2b2a27] text-[#f6f4ed] 
-               dark:bg-[#f6f4f2] dark:text-[#2b2a27] sm:px-2 py-4 flex flex-col"
+              <AnimatePresence>
+                {showResumeModal && (
+                  <motion.div
+                    key="overlay"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    onClick={() => setShowResumeModal(false)}
+                    className="fixed inset-0 flex items-center justify-center bg-black/70 z-50"
                   >
-                    <div className="relative h-full">
+                    <motion.div
+                      key="modal"
+                      initial={{ scale: 0.7, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      exit={{ scale: 0.7, opacity: 0 }}
+                      transition={{ duration: 0.35, ease: "easeInOut" }}
+                      onClick={(e) => e.stopPropagation()}
+                      className="mr-1.5 relative ml-1.5 bg-[#1c1c1be8] text-[#f6f4ed]  md:px-2.5 px-1.5 py-3 rounded-[5px] max-w-6xl w-full "
+                    >
                       <button
                         onClick={() => setShowResumeModal(false)}
-                        className="absolute right-2 -top-1 z-50 text-3xl cursor-pointer font-semibold"
+                        className="absolute  hover:scale-103 top-3 transition-transform ease-in-out bg-[#eaeae584] rounded-full p-[3px] right-3.5 text-lg z-[99999] cursor-pointer text-stone-900 "
                       >
                         <IoMdClose />
                       </button>
-                      <div className="h-full">
-                        <ResumeForm resume={resume} />
+                      <div className="relative h-full">
+                        <div className="h-full">
+                          <ResumeForm resume={resume} />
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                </div>
-              )}
+                    </motion.div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
               {showNoResumePopup && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-40">
                   <div className="bg-white ml-3  mr-3 z-50  relative transform  text-black p-6 rounded  max-w-md py-10">
@@ -639,7 +628,7 @@ export default function FindJobsPage() {
 
             <div className="px-3">
               {isAtLimit ? (
-                <div className="p-4 border max-w-xl text-white  rounded dark:text-stone-900">
+                <div className="p-4 border w-full max-w-2xl text-white rounded dark:text-stone-900">
                   <p className="font-semibold mb-1">No more tokens</p>
 
                   <p className="mb-3">
@@ -661,19 +650,22 @@ export default function FindJobsPage() {
                   )}
                 </div>
               ) : (
-                <div className="">
-                  <button
-                    onClick={handleFindJobs}
-                    disabled={loading}
-                    className={`w-full mt-1.5 cursor-pointer py-3 rounded-[5px] uppercase tracking-wide px-3 text-lg
-    bg-gradient-to-tr from-[#f5f4edd0] via-[#e2dfc7] to-[#f5f4edad]
-    dark:from-[#2c2c2cd2] dark:via-[#3a3a3a] dark:to-[#2c2c2cc2]
-    text-black dark:text-white font-bold transform transition-transform duration-300 ease-in-out hover:scale-105 ${
-      loading ? "cursor-not-allowed" : "hover:opacity-90"
-    }`}
-                  >
-                    {loading ? "Searching..." : "Find Jobs"}
-                  </button>
+                <div className="w-full px-4 mt-2.5">
+                  <MagneticCompWide>
+                    <motion.button
+                      whileHover={{ scale: 1.04, y: -2 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={handleFindJobs}
+                      disabled={loading}
+                      className="w-full  cursor-pointer mt-2 py-3 mb-3 rounded-[5px] uppercase tracking-wide px-3 text-lg
+             font-bold bg-gradient-to-tr from-[#f6f4ed] to-[#e2dfc7]
+             dark:from-[#2c2c2c] dark:to-[#3a3a3a]
+             text-black dark:text-white shadow-inner hover:shadow-lg
+             transition-all duration-300 ease-in-out"
+                    >
+                      {loading ? "Searching..." : "Find Jobs"}
+                    </motion.button>
+                  </MagneticCompWide>
                 </div>
               )}
             </div>
@@ -682,227 +674,330 @@ export default function FindJobsPage() {
           </div>
         </div>
 
-        <div className="mt-16 gap-y-10 grid grid-cols-1 md:grid-cols-2 gap-6">
-          {loading && jobs.length === 0 ? <SkeletonCard /> : null}
+        <div
+          ref={jobResultsRef}
+          className="mt-5 md:mt-10 mb-6 grid grid-cols-1 md:grid-cols-2 gap-4 w-full"
+        >
+          <aside
+            id="custom-scrollbar"
+            className={` bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4f2] dark:text-[#2b2a27] border-l border-t md:border-t-0 border-r md:border-r-0  border-white/20 dark:border-black/30 md:max-h-[80vh] mb-5 md:overflow-y-auto ${
+              showDetailOnMobile ? "hidden md:block" : "block"
+            }`}
+          >
+            {loading && jobs.length === 0 && (
+              <div className="p-4 text-md opacity-90">Loading jobs…</div>
+            )}
 
-          {jobs.map((job) => (
-            <div
-              key={job.id}
-              className="border relative h-full w-full bg-white text-black flex flex-col justify-start items-start border-gray-300 rounded-[3px] p-4"
-            >
-              <div className="h-full w-full">
-                <div className="flex w-full justify-between gap-x-4 items-start">
-                  <h2 className="text-xl font-semibold">
-                    {job.title.length > 45
-                      ? job.title.slice(0, 45) + "..."
-                      : job.title}
-                  </h2>
-                  <button
-                    onClick={() => saveJob(job)}
-                    disabled={savingJobId === job.id || savedJobs.has(job.id)}
-                    className=" px-2 opacity-80 cursor-pointer font-semibold py-1.5 rounded-[3px] text-sm text-[#2b2a27] border-[#2b2a27] transform transition-transform duration-300 ease-in-out hover:scale-105"
-                  >
-                    {savingJobId === job.id ? (
-                      <p>Saving..</p>
-                    ) : savedJobs.has(job.id) ? (
-                      <p className="flex items-center gap-x-2">
-                        Saved <FaCheck />{" "}
-                      </p>
-                    ) : (
-                      <p>Save</p>
-                    )}
-                  </button>
-                </div>
-                <p className="text-md flex  gap-x-1 font-semibold text-gray-800 mt-1">
-                  <p>Source:</p> {job.source || getHostFromUrl(job.url)}
-                </p>
-                <p className="text-gray-700 font-semibold">
-                  {job.company} — {job.location}
-                </p>
-
-                <p className="mt-2 text-sm text-gray-600 whitespace-pre-line transition-all duration-300line-clamp-3 max-h-20 overflow-hidden">
-                  {job.description}
-                </p>
-
-                {job.description.length > 200 && (
-                  <button
-                    onClick={() => setActiveJob(job)}
-                    className="underline text-sm font-semibold cursor-pointer hover:opacity-90 mt-1"
-                  >
-                    Read more
-                  </button>
-                )}
-
-                {activeJob && (
-                  <div
-                    onClick={() => setActiveJob(null)}
-                    className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
-                  >
-                    <div
-                      onClick={(e) => e.stopPropagation()}
-                      className="bg-white ml-1.5 mr-1.5  p-6 rounded-[3px] max-w-2xl max-h-[80vh] overflow-y-auto"
+            {jobs.length === 0 && !loading ? (
+              <div className="p-4 text-md opacity-90 ">
+                No jobs yet. Search above.
+              </div>
+            ) : (
+              <ul id="custom-scrollbar">
+                {jobs.map((job) => {
+                  const isActive = selectedJobForPanel?.id === job.id;
+                  return (
+                    <li
+                      key={job.id}
+                      className={`border-b border-white/10 dark:border-black/10 cursor-pointer ${
+                        isActive ? "bg-black/20 dark:bg-stone-200" : ""
+                      }`}
+                      onClick={() => onJobListItemClick(job)}
                     >
-                      <h2 className="text-lg font-bold">{activeJob.title}</h2>
-                      <p className="mt-4 whitespace-pre-line text-md text-gray-900 ">
-                        {activeJob.description}
-                      </p>
+                      <div className="p-4">
+                        <div className="flex items-start justify-between gap-3">
+                          <h3 className="text-lg font-semibold leading-6">
+                            {job.title.length > 64
+                              ? job.title.slice(0, 64) + "…"
+                              : job.title}
+                          </h3>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              saveJob(job);
+                            }}
+                            disabled={
+                              savingJobId === job.id || savedJobs.has(job.id)
+                            }
+                            className="px-2 opacity-80 cursor-pointer font-semibold py-1 text-sm text-[#2b2a27] border border-[#2b2a27] dark:text-[#f6f4ed] dark:border-[#f6f4ed]"
+                          >
+                            {savingJobId === job.id ? (
+                              <span className="text-white dark:text-black">
+                                Saving…
+                              </span>
+                            ) : savedJobs.has(job.id) ? (
+                              <span className="inline-flex text-white dark:text-black items-center gap-2">
+                                Saved <FaCheck />
+                              </span>
+                            ) : (
+                              <span className="inline-flex text-white dark:text-black items-center gap-2">
+                                <FaBookmark /> Save
+                              </span>
+                            )}
+                          </button>
+                        </div>
+                        <p className="text-sm mt-0.5 opacity-80">
+                          {job.company} — {job.location}
+                        </p>
+                        <p className="text-xs mt-2 opacity-90 line-clamp-2 whitespace-pre-line">
+                          {job.description}
+                        </p>
+                        <div className="mt-2 text-xs opacity-70">
+                          Source: {job.source || getHostFromUrl(job.url)}
+                        </div>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+
+            {jobs.length > 0 && (
+              <div className="p-4 flex items-center justify-between sticky bottom-0 bg-inherit">
+                <button
+                  onClick={() => handlePageChange(page - 1)}
+                  disabled={page === 1}
+                  className="px-3 py-1 border cursor-pointer rounded-[3px] text-sm disabled:opacity-50"
+                >
+                  Previous
+                </button>
+                <span className="text-sm">{page}</span>
+                <button
+                  onClick={() => handlePageChange(page + 1)}
+                  className="px-3 cursor-pointer py-1 rounded-[3px]  border text-sm"
+                >
+                  {loading
+                    ? "Loading…"
+                    : isCachedPage
+                    ? "Next"
+                    : "Find more jobs"}
+                </button>
+              </div>
+            )}
+          </aside>
+          {jobs.length > 0 && (
+            <section
+              ref={detailPanelRef}
+              id="custom-scrollbar"
+              className={`bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4f2] dark:text-[#2b2a27]
+    border-r border-l border-b md:border-b-0 border-white/20 dark:border-black/30
+    mb-8 rounded-[3px] h-screen 
+    md:max-h-[80vh] overflow-y-auto
+    ${showDetailOnMobile ? "block" : "hidden md:block"}`}
+            >
+              {!selectedJobForPanel ? (
+                <div className="p-6 text-sm opacity-70">
+                  Select a job to see details.
+                </div>
+              ) : (
+                <div className="h-full w-full flex flex-col   justify-between">
+                  <div>
+                    <div
+                      ref={detailPanelRef}
+                      className="md:hidden p-3 border-b "
+                    >
                       <button
-                        onClick={() => setActiveJob(null)}
-                        className="mt-4 px-4 py-2 font-semibold bg-[#2b2a27] text-white cursor-pointer hover:scale-105 transition-transform ease-in-out rounded-[3px]"
+                        className="text-sm underline cursor-pointer  font-semibold"
+                        onClick={backToListOnMobile}
                       >
-                        Close
+                        Back to results
                       </button>
                     </div>
-                  </div>
-                )}
-              </div>
 
-              <div className="w-full relative  bottom-2 mt-5">
-                {job.score === undefined ? (
-                  <div className="">
-                    <button
-                      disabled={matchingJobId === job.id}
-                      onClick={() => matchJobToResume(job)}
-                      className="mt-2 mb-2 bg-stone-600 text-white px-3  cursor-pointer font-semibold py-1.5 rounded-[3px] text-sm    transform transition-transform duration-300 ease-in-out hover:scale-105"
+                    <div className="p-5 ">
+                      <div className="flex flex-row w-full justify-between gap-x-4 items-start">
+                        <div>
+                          <h2 className="text-2xl font-semibold">
+                            {selectedJobForPanel.title}
+                          </h2>
+                          <p className="text-md font-semibold text-gray-100 dark:text-stone-700 mt-1">
+                            {selectedJobForPanel.company} —{" "}
+                            {selectedJobForPanel.location}
+                          </p>
+
+                          <p className="text-sm mt-1 text-gray-200 dark:text-stone-900">
+                            Source:{" "}
+                            {selectedJobForPanel.source ||
+                              getHostFromUrl(selectedJobForPanel.url)}
+                          </p>
+                        </div>
+
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => saveJob(selectedJobForPanel)}
+                            disabled={
+                              savingJobId === selectedJobForPanel.id ||
+                              savedJobs.has(selectedJobForPanel.id)
+                            }
+                            className="px-3 cursor-pointer py-1.5 text-sm "
+                          >
+                            {savingJobId === selectedJobForPanel.id ? (
+                              <span>Saving…</span>
+                            ) : savedJobs.has(selectedJobForPanel.id) ? (
+                              <span className="inline-flex items-center gap-2">
+                                Saved <FaCheck />
+                              </span>
+                            ) : (
+                              <span className="inline-flex  items-center gap-2">
+                                <FaBookmark /> Save
+                              </span>
+                            )}
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="mt-4  whitespace-pre-line leading-6 text-gray-100 dark:text-stone-800">
+                        <ExpandableText
+                          text={selectedJobForPanel.description}
+                          limit={400}
+                          className="text-base mt-2"
+                        />
+                      </div>
+
+                      <div className="mt-5">
+                        {typeof selectedJobForPanel.score !== "undefined" && (
+                          <div className="p-3 border ">
+                            <p className="font-semibold">
+                              Match Score: {selectedJobForPanel.score} / 10
+                            </p>
+                            <p className="mt-2 text-sm text-gray-100 dark:text-stone-800 whitespace-pre-line">
+                              {expandedExplanations[selectedJobForPanel.id]
+                                ? selectedJobForPanel.explanation
+                                : truncateText(
+                                    selectedJobForPanel.explanation,
+                                    300
+                                  )}
+                            </p>
+                            {selectedJobForPanel.explanation?.length > 300 && (
+                              <button
+                                onClick={() =>
+                                  toggleExpandExplanation(
+                                    selectedJobForPanel.id
+                                  )
+                                }
+                                className="underline cursor-pointer text-sm mt-1"
+                              >
+                                {expandedExplanations[selectedJobForPanel.id]
+                                  ? "Show less"
+                                  : "Read more"}
+                              </button>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-2 p-5">
+                    <a
+                      href={selectedJobForPanel.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="py-1.5 text-lg border-b border-b-white/40 font-semibold cursor-pointer inline-flex items-center gap-2"
                     >
-                      {matchingJobId === job.id
-                        ? "Matching..."
+                      <FaExternalLinkAlt className="text-" /> Open
+                    </a>
+                    <button
+                      onClick={() =>
+                        handleCreateCoverLetter(selectedJobForPanel)
+                      }
+                      className="bg-gradient-to-tr from-[#f6f4ed] to-[#e2dfc7]
+             dark:from-[#2c2c2c] dark:to-[#3a3a3a]
+             text-black dark:text-white shadow-inner hover:shadow-lg hover:scale-103
+             transition-all duration-300 ease-in-out px-4 py-2 cursor-pointer flex justify-center text-nowrap text-md  font-semibold items-center gap-2"
+                    >
+                      <FaFileAlt className="text-xs" /> AI Cover Letter
+                    </button>
+                    <button
+                      disabled={matchingJobId === selectedJobForPanel.id}
+                      onClick={() => matchJobToResume(selectedJobForPanel)}
+                      className="px-4 py-2 cursor-pointer text-nowrap text-md mt-1  border text-white border-white mb-5 dark:border-black dark:text-black hover:scale-103 ease-in-out transition-transform"
+                    >
+                      {matchingJobId === selectedJobForPanel.id
+                        ? "Matching…"
                         : "Match to Resume"}
                     </button>
                   </div>
-                ) : (
-                  <div className="mt-2   p-2 rounded">
-                    {job.score !== undefined && (
-                      <div className="mt-3 text-sm">
-                        <p className="font-semibold">
-                          Match Score: {job.score} / 10
-                        </p>
-                        <p className="mt-2 text-gray-600 whitespace-pre-line">
-                          {expandedExplanations[job.id]
-                            ? job.explanation
-                            : truncateText(job.explanation, 200)}
-                        </p>
-                        {job.explanation.length > 200 && (
-                          <button
-                            onClick={() => toggleExpandExplanation(job.id)}
-                            className="underline font-semibold text-sm cursor-pointer hover:opacity-90 mt-1"
-                          >
-                            {expandedExplanations[job.id]
-                              ? "Show less"
-                              : "Read more"}
-                          </button>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
+                </div>
+              )}
+            </section>
+          )}
+        </div>
 
-              <div className="flex flex-row-reverse items-center justify-between w-full relative left-auto right-auto bottom-6 mt-5">
+        {showApplyPopup && applyJob && (
+          <div
+            onClick={() => setShowApplyPopup(false)}
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+          >
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white relative ml-3 mr-3 text-black p-6 max-w-md"
+            >
+              <h1 className="text-lg font-semibold">
+                Create Cover Letter First
+              </h1>
+              <p className="mt-2">
+                You need to create a cover letter before applying.
+              </p>
+
+              <div className="flex gap-3 mt-4">
                 <button
                   onClick={() => {
-                    setApplyJob(job);
+                    setApplyJob(selectedJobForPanel);
                     setShowApplyPopup(true);
                   }}
-                  className="mt-2 border-2 px-3 font-semibold py-1.5 rounded-[3px] cursor-pointer"
                 >
                   Apply
                 </button>
-
-                {showApplyPopup && applyJob && (
-                  <div
-                    onClick={() => setShowApplyPopup(false)}
-                    className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
-                  >
-                    <div
-                      onClick={(e) => e.stopPropagation()}
-                      className="bg-white relative ml-3 mr-3 text-black p-6 rounded max-w-md"
-                    >
-                      <h1 className="text-lg font-semibold">
-                        Create Cover Letter First
-                      </h1>
-                      <p className="mt-2">
-                        You need to create a cover letter before applying.
-                      </p>
-
-                      <div className="flex gap-3 mt-4">
-                        <a
-                          href={applyJob.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="mt-2 border-2 px-3 font-semibold py-1.5 rounded-[3px]"
-                        >
-                          Apply
-                        </a>
-                        <button
-                          onClick={() => handleCreateCoverLetter(applyJob)}
-                          className="mt-2 cursor-pointer bg-[#38302c] py-1.5 font-semibold rounded-[3px]  px-3 text-white"
-                        >
-                          Create Cover Letter
-                        </button>
-
-                        <button
-                          className="text-2xl cursor-pointer text-black absolute top-3 right-3"
-                          onClick={() => setShowApplyPopup(false)}
-                        >
-                          <IoMdClose />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
+                <button
+                  onClick={() => handleCreateCoverLetter(applyJob)}
+                  className="mt-2 cursor-pointer bg-[#38302c] py-1.5 font-semibold rounded-[3px] px-3 text-white flex items-center gap-2"
+                >
+                  <FaFileAlt className="text-sm" />
+                  Create Cover Letter
+                </button>
 
                 <button
-                  onClick={() => handleCreateCoverLetter(job)}
-                  className="mt-2   bg-[#38302c] border-2 px-3 cursor-pointer font-semibold py-1.5 rounded-[3px] text-md text-white/95 border-[#2b2a27]  transform transition-transform duration-300 ease-in-out hover:scale-105"
+                  className="text-2xl cursor-pointer text-black absolute top-3 right-3"
+                  onClick={() => setShowApplyPopup(false)}
                 >
-                  Create Cover Letter
+                  <IoMdClose />
                 </button>
               </div>
             </div>
-          ))}
-        </div>
-
-        {jobs.length > 0 && (
-          <div className="mt-8 w-full flex justify-between">
-            <button
-              onClick={() => handlePageChange(page - 1)}
-              disabled={page === 1}
-              className="px-4 py-2 cursor-pointer border-[#f6f4ed] text-[#f6f4ed] dark:border-[#2b2a27] dark:text-[#2b2a27] rounded border-2 font-semibold border-[] text-sm disabled:opacity-50"
-            >
-              Previous
-            </button>
-            <span className="self-center text-sm">{page}</span>
-            <button
-              onClick={() => handlePageChange(page + 1)}
-              className="px-4 py-2 cursor-pointer rounded border-2 font-semibold  text-sm"
-            >
-              {loading
-                ? "Loading..."
-                : isCachedPage
-                ? "Next"
-                : "Find more jobs"}
-            </button>
           </div>
         )}
-      </div>
 
-      {showCoverLetterModal && selectedJob && (
-        <div className="fixed inset-0 p-5 md:p-10 bg-black/80 z-50 flex items-center justify-center">
-          <div
-            style={{ scrollbarWidth: "none" }}
-            className="w-full h-full rounded-[6px] bg-white overflow-auto relative"
+        {showCoverLetterModal && selectedJob && (
+          <motion.div
+            key="overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowCoverLetterModal(false)}
+            className="fixed inset-0 flex items-center justify-center bg-black/70 z-50"
           >
-            <button
-              className="absolute  text-white  text-2xl md:text-4xl cursor-pointer dark:text-black top-4 right-4   z-50"
-              onClick={() => setShowCoverLetterModal(false)}
+            <motion.div
+              id="custom-scrollbar"
+              key="modal"
+              initial={{ scale: 0.7, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.7, opacity: 0 }}
+              transition={{ duration: 0.35, ease: "easeInOut" }}
+              onClick={(e) => e.stopPropagation()}
+              className="mr-1.5 overflow-y-scroll h-[95%] ml-1.5 bg-[#1c1c1b] text-[#f6f4ed] md:px-2.5 px-1.5 py-4 rounded-[5px] max-w-8xl w-full relative"
             >
-              <IoMdClose />
-            </button>
-            <CoverLetterClientModal job={selectedJob} />
-          </div>
-        </div>
-      )}
+              <button
+                className="absolute top-3 hover:scale-103 transition-transform ease-in-out bg-[#eaeae592]  rounded-full p-[3px] right-3.5 text-lg z-[99999] cursor-pointer text-stone-900 dark:text-gray-100 dark:bg-stone-700/90 "
+                onClick={() => setShowCoverLetterModal(false)}
+              >
+                <IoMdClose />
+              </button>
+              <CoverLetterClientModal job={selectedJob} />
+            </motion.div>
+          </motion.div>
+        )}
+      </div>
     </main>
   );
 }

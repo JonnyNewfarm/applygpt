@@ -120,10 +120,8 @@ export default function VoiceInput({
     <div className="flex flex-col gap-2">
       <button
         onClick={isRecording ? handleStopRecording : handleStartRecording}
-        className={`px-4 py-2 cursor-pointer rounded-[5px] hover:scale-102 transition-transform ease-in-out font-semibold text-white ${
-          isRecording
-            ? "bg-red-800"
-            : "bg-gradient-to-tr from-[#2c2c2cf2]  via-[#3a3a3a] to-[#2c2c2cd6] text-white"
+        className={`px-4 py-2 cursor-pointer rounded-[5px] hover:scale-102 transition-transform ease-in-out font-semibold  ${
+          isRecording ? "bg-red-800 text-white" : "bg-[#f6f4ed] text-[#2b2a27]"
         }`}
       >
         {isRecording ? "Stop Recording" : "Start Recording"}{" "}

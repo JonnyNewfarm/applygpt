@@ -44,29 +44,29 @@ const LiveGenerateResumeDemo = () => {
   }, [showResume, jobTitle, name, age]);
 
   return (
-    <div className="min-h-screen  w-full flex  pt-10 justify-center bg-[#2b2a27] text-[#f6f4ed] px-4  dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
-      <div className=" w-full px-4 text-left space-y-1">
+    <div className="h-full w-full flex relative justify-center items-center flex-col bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
+      <div className=" w-full max-w-2xl px-4 text-left space-y-1">
         <h2 className="text-xl sm:text-3xl font-bold uppercase">
           AI Resume Generator
         </h2>
 
-        <p className="text-base max-w-xl">
+        <p className="text-lg ">
           Provide your details, experience, skills, and education to generate a
           professional resume using <strong>AI</strong>.
         </p>
-        <p className="text-base max-w-xl mb-2">
+        <p className="text-base mb-2">
           You can <strong>use the voice recorder</strong> to fill in the form
           quickly and hands-free.
         </p>
 
         {!showResume && (
-          <div className="space-y-4 max-w-md">
+          <div className="space-y-4 w-[95%] text-xl mt-5">
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Your Name"
-              className="w-full px-4 bg-white text-black py-2 border rounded  border-[#f6f4ed] dark:border-[#2b2a27]"
+              className="w-full outline-none focus:outline-none px-4  dark:text-[#2b2a27] py-3.5  border-t border-b  text-[#f6f4ed]  border-stone-200/40 dark:border-stone-800/40"
             />
             <input
               type="number"
@@ -74,14 +74,14 @@ const LiveGenerateResumeDemo = () => {
               value={age}
               onChange={(e) => setAge(Number(e.target.value))}
               placeholder="Your Age"
-              className="w-full px-4 py-2 text-black border rounded bg-white border-[#f6f4ed] dark:border-[#2b2a27]"
+              className="w-full outline-none focus:outline-none px-4 pb-3.5 dark:text-[#2b2a27] text-[#f6f4ed] border-b border-stone-200/40 dark:border-stone-800/40"
             />
             <input
               value={jobTitle}
               onChange={(e) => setJobTitle(e.target.value)}
               placeholder="Job title"
               list="jobTitles"
-              className="w-full px-4 py-2 text-black border rounded bg-white border-[#f6f4ed] dark:border-[#2b2a27]"
+              className="w-full outline-none focus:outline-none px-4 pb-3.5 dark:text-[#2b2a27] text-[#f6f4ed] border-b border-stone-200/40 dark:border-stone-800/40"
             />
             <datalist id="jobTitles">
               {jobTitles.map((title) => (
@@ -90,7 +90,7 @@ const LiveGenerateResumeDemo = () => {
             </datalist>
             <button
               onClick={() => setShowResume(true)}
-              className="border-2 cursor-pointer font-bold border-[#f6f4ed] dark:border-[#2b2a27] px-6 py-2 rounded hover:opacity-80 transition"
+              className="border-2 cursor-pointer font-bold border-stone-200/40 dark:border-stone-800/40 px-6 py-2 rounded hover:opacity-80 transition"
             >
               Generate
             </button>
@@ -102,7 +102,7 @@ const LiveGenerateResumeDemo = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="whitespace-pre-wrap border p-4 rounded text-sm bg-white text-black border-[#f6f4ed] dark:border-[#2b2a27] bg-opacity-10"
+            className="whitespace-pre-wrap border p-4 rounded text-sm bg-white text-black border-stone-200/40 dark:border-stone-800/40 bg-opacity-10"
           >
             {typedText}
           </motion.pre>

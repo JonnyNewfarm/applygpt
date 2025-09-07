@@ -1,6 +1,7 @@
 "use client";
 import React, { ReactNode, useState } from "react";
 import { IoMdClose } from "react-icons/io";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface Props {
   children: ReactNode;
@@ -10,41 +11,53 @@ interface Props {
 
 const ResumeUploadPopUp = ({ children, title, buttonTitle }: Props) => {
   const [showUploadModal, setShowUploadModal] = useState(false);
+
   return (
-    <div className="w-full  relative ">
-      <div className="max-w-3xl rounded-[5px] mx-auto px-4 md:px-8    text-white dark:text-black py-4 mt-5 sm:mt-0">
+    <div className="w-full relative">
+      <div className="max-w-3xl rounded-[5px] mx-auto px-4 md:px-8 text-white dark:text-black py-4 mt-5 sm:mt-0">
         <div>
           <h1 className="text-2xl font-bold">AI Resume Generator</h1>
-          <p className="  text-lg md:text-xl ">{title} </p>
+          <p className="text-lg md:text-xl">{title}</p>
         </div>
         <div className="mb-1">
           <button
             onClick={() => setShowUploadModal(true)}
-            className="mt-2 border-2 font-bold cursor-pointer dark:border-[#2b2a27] px-3 py-1 rounded-[5px] text-md md:text-lg   transform transition-transform duration-300 ease-in-out hover:scale-105"
+            className="mt-2 border-2 font-bold cursor-pointer dark:border-[#2b2a27] px-3 py-1 rounded-[5px] text-md md:text-lg transform transition-transform duration-300 ease-in-out hover:scale-105"
           >
             {buttonTitle}
           </button>
         </div>
 
-        {showUploadModal && (
-          <div
-            onClick={() => setShowUploadModal(false)}
-            className="fixed inset-0 flex items-center justify-center bg-black/80 z-50"
-          >
-            <div
-              onClick={(e) => e.stopPropagation()}
-              className=" mr-1 ml-1 bg-[#2b2a27] text-[#f6f4ed]  dark:bg-[#f6f4f2] dark:text-[#2b2a27]   md:px-2.5  py-6 rounded-[5px] max-w-6xl w-full relative"
+        <AnimatePresence>
+          {showUploadModal && (
+            <motion.div
+              key="overlay"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowUploadModal(false)}
+              className="fixed inset-0 flex items-center justify-center bg-black/80 z-50"
             >
-              <button
-                onClick={() => setShowUploadModal(false)}
-                className="absolute z-[99999] top-3 right-3 text-3xl cursor-pointer text-gray-200 dark:text-gray-700 hover:text-gray-200 transition-colors"
+              <motion.div
+                key="modal"
+                initial={{ scale: 0.7, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.7, opacity: 0 }}
+                transition={{ duration: 0.35, ease: "easeInOut" }}
+                onClick={(e) => e.stopPropagation()}
+                className="mr-1.5 ml-1.5 bg-[#1c1c1b] text-[#f6f4ed] md:px-2.5 px-1.5 py-6 rounded-[5px] max-w-6xl w-full relative"
               >
-                <IoMdClose />
-              </button>
-              {children}{" "}
-            </div>
-          </div>
-        )}
+                <button
+                  onClick={() => setShowUploadModal(false)}
+                  className="absolute top-3 hover:scale-103 transition-transform ease-in-out bg-[#eaeae592]  rounded-full p-[3px] right-3.5 text-lg z-[99999] cursor-pointer text-stone-900  "
+                >
+                  <IoMdClose />
+                </button>
+                {children}
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

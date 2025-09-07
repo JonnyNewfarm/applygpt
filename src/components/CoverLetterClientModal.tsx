@@ -7,6 +7,13 @@ import BuyAccessButton from "../components/BuyAccessButton";
 import toast from "react-hot-toast";
 import FontDropdown from "./FontDropdown";
 import FontSizeDropdown from "./FontSizeDropdown";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
 interface Props {
   job: {
@@ -175,7 +182,7 @@ export default function CoverLetterClientModal({ job }: Props) {
       setTextAreaSize("100px");
       setTextAreaSizeTitle("show more");
     } else {
-      setTextAreaSize("500px");
+      setTextAreaSize("200px");
       setTextAreaSizeTitle("Show Less");
     }
   }, [textAreaState]);
@@ -189,7 +196,7 @@ export default function CoverLetterClientModal({ job }: Props) {
       setTextAreaSizeDescription("100px");
       setTextAreaSizeTitleDescription("show more");
     } else {
-      setTextAreaSizeDescription("500px");
+      setTextAreaSizeDescription("200px");
       setTextAreaSizeTitleDescription("Show Less");
     }
   }, [textAreaStateDescription]);
@@ -208,7 +215,7 @@ export default function CoverLetterClientModal({ job }: Props) {
 
   const onClearDescription = async () => {
     setLoadingDelete(true);
-    await new Promise((res) => setTimeout(res, 500)); // Simulate delay
+    await new Promise((res) => setTimeout(res, 500));
     setJobAd("");
     setLoadingDelete(false);
   };
@@ -291,8 +298,8 @@ export default function CoverLetterClientModal({ job }: Props) {
     usage.generationCount >= usage.generationLimit;
 
   return (
-    <div className="w-full min-h-screen border-b-white/20 dark:border-b-black/20 bg-[#2b2a27]   text-[#f6f4ed]  dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
-      <main className="max-w-7xl bg-light mx-auto p-2 md:p-8">
+    <div className="w-full min-h-screen  border-b-white/20  bg-[#1c1c1b]   text-[#f6f4ed] ">
+      <main className="max-w-7xl  bg-light mx-auto p-2 md:p-8">
         <h1 className="text-2xl px-2 mt-3  text-wrap w-[80%] sm:w-[100%] text-left font-xl md:mt-0 font-bold mb-6 ">
           AI Cover Letter Generator
         </h1>
@@ -302,10 +309,11 @@ export default function CoverLetterClientModal({ job }: Props) {
             <div className="relative">
               <label className="block text-sm font-semibold mb-1">Resume</label>
               <textarea
+                id="custom-scrollbar"
                 ref={resumeRef}
                 style={{ height: textAreaSize }}
                 rows={6}
-                className="w-full p-3 border bg-white text-black relative"
+                className="w-full p-3 border-stone-400/60    border rounded-[3px] relative"
                 value={resume}
                 onChange={(e) => {
                   setResume(e.target.value);
@@ -347,7 +355,7 @@ export default function CoverLetterClientModal({ job }: Props) {
                 {!resumeSaved ? (
                   <button
                     onClick={onSaveResume}
-                    className="mt-1 mb-5 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
+                    className="mt-1 mb-5 border-2 font-bold  px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
                     disabled={!resume.trim()}
                   >
                     Save Resume
@@ -359,7 +367,7 @@ export default function CoverLetterClientModal({ job }: Props) {
                         resumeRef.current?.focus();
                       }, 0);
                     }}
-                    className=" mb-5 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
+                    className=" mb-5 border-2 font-bold  px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
                   >
                     Edit Resume
                   </button>
@@ -378,9 +386,10 @@ export default function CoverLetterClientModal({ job }: Props) {
                 Job Description
               </label>
               <textarea
+                id="custom-scrollbar"
                 style={{ height: textAreaSizeDescription }}
                 rows={6}
-                className="w-full p-3 border rounded-[3px] bg-white text-black"
+                className="w-full p-3 border-stone-400/60   border rounded-[3px]"
                 value={jobAd}
                 onChange={(e) => setJobAd(e.target.value)}
                 placeholder="Paste job description here..."
@@ -388,7 +397,7 @@ export default function CoverLetterClientModal({ job }: Props) {
               <div className="flex justify-between items-center">
                 <button
                   onClick={onClearDescription}
-                  className="mt-2 border-2 font-semibold px-3 py-1.5 cursor-pointer rounded-[3px] text-sm border-[#f6f4ed] dark:border-[#2b2a27] text-[#f6f4ed] dark:text-[#2b2a27] transform transition-transform duration-300 ease-in-out hover:scale-105"
+                  className="mt-2 border-2 font-semibold px-3 py-1.5 cursor-pointer rounded-[3px] text-sm border-[#f6f4ed]  text-[#f6f4ed]  transform transition-transform duration-300 ease-in-out hover:scale-105"
                   disabled={loadingDelete}
                 >
                   {loadingDelete ? "Deleting..." : "Clear description"}
@@ -404,16 +413,28 @@ export default function CoverLetterClientModal({ job }: Props) {
 
             <div>
               <label className="block text-sm font-medium mb-1">Tone</label>
-              <select
-                className="w-full p-2 border rounded-[3px] bg-white text-black"
-                value={tone}
-                onChange={(e) => setTone(e.target.value)}
-              >
-                <option value="professional">Professional</option>
-                <option value="casual">Casual</option>
-                <option value="friendly">Friendly</option>
-                <option value="confident">Confident</option>
-              </select>
+              <Select value={tone} onValueChange={setTone}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select tone" />
+                </SelectTrigger>
+                <SelectContent className="bg-white text-black ">
+                  <SelectItem
+                    value="professional"
+                    className="focus:bg-stone-100 "
+                  >
+                    Professional
+                  </SelectItem>
+                  <SelectItem value="casual" className="focus:bg-stone-100 ">
+                    Casual
+                  </SelectItem>
+                  <SelectItem value="friendly" className="focus:bg-stone-100 ">
+                    Friendly
+                  </SelectItem>
+                  <SelectItem value="confident" className="focus:bg-stone-100">
+                    Confident
+                  </SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             <div>
@@ -445,14 +466,14 @@ export default function CoverLetterClientModal({ job }: Props) {
                   )}
                 </div>
               ) : (
-                <div className="sticky bottom-4 z-20 bg-[#2b2a27] dark:bg-[#f6f4ed] p-2 rounded">
+                <div className="sticky bottom-4 z-20   rounded">
                   <button
                     onClick={onGenerate}
                     disabled={loading || !resume || !jobAd}
                     className={`w-full mt-3 cursor-pointer py-3 rounded-[5px] uppercase tracking-wide px-3 text-lg
     bg-gradient-to-tr from-[#f5f4edd0] via-[#e2dfc7] to-[#f5f4edad]
-    dark:from-[#2c2c2cd2] dark:via-[#3a3a3a] dark:to-[#2c2c2cc2]
-    text-black dark:text-white font-bold transform transition-transform duration-300 ease-in-out hover:scale-105 ${
+    
+    text-black  font-bold transform transition-transform duration-300 ease-in-out hover:scale-105 ${
       loading ? "cursor-not-allowed" : "hover:opacity-90"
     }`}
                   >
@@ -480,9 +501,9 @@ export default function CoverLetterClientModal({ job }: Props) {
 
             {loading ? (
               <div className="mt-8 animate-pulse flex gap-x-4 items-center">
-                <div className="h-2 w-2 bg-white/80 dark:bg-black/80 rounded-full"></div>
-                <div className="h-2 w-2 bg-white/80 dark:bg-black/80 rounded-full"></div>
-                <div className="h-2 w-2 bg-white/80 dark:bg-black/80 rounded-full"></div>
+                <div className="h-2 w-2 bg-white/80 "></div>
+                <div className="h-2 w-2 bg-white/80"></div>
+                <div className="h-2 w-2 bg-white/80"></div>
               </div>
             ) : coverLetter ? (
               <>
@@ -492,20 +513,20 @@ export default function CoverLetterClientModal({ job }: Props) {
                       href={url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="bg-[#f6f4ed] text-[#2b2a27] dark:bg-[#2b2a27] dark:text-[#f6f4ed] py-1 px-3 rounded-[3px] hover:opacity-90 mt-2 inline-block font-bold"
+                      className="bg-[#f6f4ed] text-[#2b2a27]  py-1 px-3 rounded-[3px] hover:opacity-90 mt-2 inline-block font-bold"
                     >
                       Apply
                     </a>
                   )}
                   <button
                     onClick={onCopy}
-                    className="mt-2 border font-semibold cursor-pointer px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27]"
+                    className="mt-2 border font-semibold cursor-pointer px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] "
                   >
                     Copy to Clipboard
                   </button>
                   <button
                     onClick={onDownload}
-                    className="mt-2 border font-semibold cursor-pointer px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27]"
+                    className="mt-2 border font-semibold cursor-pointer px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed]"
                   >
                     Download as PDF
                   </button>
@@ -515,8 +536,8 @@ export default function CoverLetterClientModal({ job }: Props) {
                     onClick={onBoldSelection}
                     className={`mt-2 mr-2 border font-bold cursor-pointer px-3 py-1.5 rounded-[3px] text-sm transition-all duration-200 ${
                       isBoldActive
-                        ? "bg-[#f6f4ed] text-[#2b2a27] border-[#f6f4ed] dark:bg-[#2b2a27] dark:text-[#f6f4ed] dark:border-[#2b2a27]"
-                        : "bg-transparent text-[#f6f4ed] border-[#f6f4ed] dark:text-[#2b2a27] dark:border-[#2b2a27]"
+                        ? "bg-[#f6f4ed] text-[#2b2a27] border-[#f6f4ed] "
+                        : "bg-transparent text-[#f6f4ed] border-[#f6f4ed] "
                     }`}
                   >
                     B
@@ -525,7 +546,7 @@ export default function CoverLetterClientModal({ job }: Props) {
                   <FontSizeDropdown />
                   <button
                     onClick={onMarkAll}
-                    className="mt-2 border ml-2 font-semibold cursor-pointer px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27]"
+                    className="mt-2 border ml-2 font-semibold cursor-pointer px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] "
                   >
                     Mark All
                   </button>

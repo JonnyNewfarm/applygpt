@@ -5,10 +5,19 @@ import { useRouter } from "next/navigation";
 import ManageSubscriptionButton from "../components/ManageSubscriptionButton";
 import BuyAccessButton from "../components/BuyAccessButton";
 import toast from "react-hot-toast";
-import FontDropdown from "./FontDropdown";
-import FontSizeDropdown from "./FontSizeDropdown";
+import FontDropdownWithDarkmode from "./FontDropdownWithDarkmode";
+import FontSizeDropdownWithDarkmode from "./FontSizeDropdownWithDarkmode";
 import ResumeForm from "./ResumeForm";
 import { IoMdClose } from "react-icons/io";
+import { AnimatePresence, motion } from "framer-motion";
+import MagneticCompWide from "./MagneticCompWide";
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function CoverLetterClient() {
   const router = useRouter();
@@ -218,7 +227,7 @@ export default function CoverLetterClient() {
       setTextAreaSizeDescription("100px");
       setTextAreaSizeTitleDescription("show more");
     } else {
-      setTextAreaSizeDescription("500px");
+      setTextAreaSizeDescription("250px");
       setTextAreaSizeTitleDescription("Show Less");
     }
   }, [textAreaStateDescription]);
@@ -265,7 +274,7 @@ export default function CoverLetterClient() {
   return (
     <div className="w-full  min-h-screen border-b-white/20 dark:border-b-black/20 bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
       <main className="max-w-7xl bg-light mx-auto p-4 md:p-8">
-        <h1 className="text-2xl font-bold mb-2 text-center md:text-left">
+        <h1 className="text-2xl font-bold mb-2 text-left">
           AI Cover Letter Generator
         </h1>
 
@@ -277,7 +286,7 @@ export default function CoverLetterClient() {
               </label>
 
               <input
-                className="w-full p-1.5 border rounded-[3px] bg-white text-black"
+                className="w-full p-3.5 text-lg outline-none focus:outline-none dark:border-stone-900/80    dark:text-stone-800 border border-stone-400/80 rounded-[3px] stone-300/80  text-[#f6f4ed]  "
                 value={company}
                 onChange={(e) => setCompany(e.target.value)}
                 placeholder="Company name.."
@@ -288,7 +297,7 @@ export default function CoverLetterClient() {
                 </p>
               )}
 
-              <label className="block text-sm font-semibold mb-1">
+              <label className="block text-sm font-semibold mb-1 mt-3">
                 Job Description
               </label>
               <div className="relative">
@@ -296,7 +305,7 @@ export default function CoverLetterClient() {
                   ref={descriptionRef}
                   style={{ height: textAreaSizeDescription }}
                   rows={6}
-                  className="w-full p-3 border rounded-[3px] bg-white text-black"
+                  className="w-full p-3 outline-none rounded-[3px] focus:outline-none dark:border-stone-900/80    dark:text-stone-800 border-t border-stone-300/80 border   text-[#f6f4ed]  "
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Paste job description here..."
@@ -308,7 +317,7 @@ export default function CoverLetterClient() {
                 )}
 
                 {!description && (
-                  <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-stone-100 dark:bg-stone-200 text-black/90 z-10">
+                  <div className="absolute top-0 left-0 w-full h-[95%] flex justify-center items-center bg-[#2b2a27] text-[#f6f4ed] border-stone-500 border rounded-[3px] dark:bg-[#f6f4ed] dark:text-stone-800 z-10">
                     <div className="px-5 md:px-5 flex flex-col justify-center items-center text-center">
                       <p className="  text-left text-xs sm:text-sm mb-1  font-semibold">
                         Upload job description or find jobs with our job search.
@@ -316,7 +325,7 @@ export default function CoverLetterClient() {
                       <div className="flex flex-row gap-x-4">
                         <button
                           onClick={() => router.push("/jobs")}
-                          className="inline-block text-xs sm:text-sm font-bold cursor-pointer bg-stone-800 text-white px-4 py-2 rounded"
+                          className="inline-block text-xs sm:text-sm font-bold cursor-pointer bg-stone-200 text-stone-800 dark:bg-stone-800 dark:text-stone-200 px-4 py-2 rounded"
                         >
                           Find Jobs
                         </button>
@@ -356,17 +365,21 @@ export default function CoverLetterClient() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1">Tone</label>
-              <select
-                className="w-full p-2 border rounded-[3px] bg-white text-black"
-                value={tone}
-                onChange={(e) => setTone(e.target.value)}
-              >
-                <option value="professional">Professional</option>
-                <option value="casual">Casual</option>
-                <option value="friendly">Friendly</option>
-                <option value="confident">Confident</option>
-              </select>
+              <label className="block text-sm font-medium mb-1 mt-2 text-stone-100 dark:text-stone-800">
+                Tone
+              </label>
+              <Select value={tone} onValueChange={(val) => setTone(val)}>
+                <SelectTrigger className="w-full  border-stone-300 dark:border-stone-700  bg-[#2b2a27] dark:bg-[#f6f4ed] dark:text-stone-900 text-stone-100 p-3 rounded-none">
+                  <SelectValue placeholder="Select tone" />
+                </SelectTrigger>
+
+                <SelectContent className="bg-stone-800 text-stone-100 border-stone-400/30">
+                  <SelectItem value="professional">Professional</SelectItem>
+                  <SelectItem value="casual">Casual</SelectItem>
+                  <SelectItem value="friendly">Friendly</SelectItem>
+                  <SelectItem value="confident">Confident</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="w-full">
@@ -384,25 +397,36 @@ export default function CoverLetterClient() {
                       {errors.resume}
                     </p>
                   )}
-                  {showResumeModal && (
-                    <div
-                      onClick={() => setShowResumeModal(false)}
-                      className="fixed  inset-0 flex items-center justify-center bg-black/50 z-50"
-                    >
-                      <div
-                        onClick={(e) => e.stopPropagation()}
-                        className="md:pt-7 py-8 pt-10   relative w-[95%] max-w-6xl bg-stone-800 dark:bg-stone-50"
+                  <AnimatePresence>
+                    {showResumeModal && (
+                      <motion.div
+                        key="overlay"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setShowResumeModal(false)}
+                        className="fixed inset-0 flex items-center justify-center bg-black/80 z-50"
                       >
-                        <button
-                          onClick={() => setShowResumeModal(false)}
-                          className=" absolute  text-3xl right-2 top-3 cursor-pointer font-semibold"
+                        <motion.div
+                          key="modal"
+                          initial={{ scale: 0.7, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          exit={{ scale: 0.7, opacity: 0 }}
+                          transition={{ duration: 0.35, ease: "easeInOut" }}
+                          onClick={(e) => e.stopPropagation()}
+                          className="mr-1.5 ml-1.5 bg-[#1c1c1b] text-[#f6f4ed] md:px-2.5 px-1.5 py-6 rounded-[5px] max-w-6xl w-full relative"
                         >
-                          <IoMdClose />
-                        </button>
-                        <ResumeForm resume={resume} />
-                      </div>
-                    </div>
-                  )}
+                          <button
+                            onClick={() => setShowResumeModal(false)}
+                            className="absolute top-3 hover:scale-103 transition-transform ease-in-out bg-[#eaeae592]  rounded-full p-[3px] right-3.5 text-lg z-[99999] cursor-pointer text-stone-900 "
+                          >
+                            <IoMdClose />
+                          </button>
+                          <ResumeForm resume={resume} />
+                        </motion.div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
                 <div>
                   <p className="text-sm mb-2 mt-2">
@@ -437,24 +461,26 @@ export default function CoverLetterClient() {
                 </div>
               ) : (
                 <div className="">
-                  <button
-                    onClick={onGenerate}
-                    disabled={loading}
-                    className={`w-full cursor-pointer py-3 rounded-[5px] uppercase tracking-wide px-3 text-lg
+                  <MagneticCompWide>
+                    <button
+                      onClick={onGenerate}
+                      disabled={loading}
+                      className={`w-full cursor-pointer py-3 rounded-[5px] uppercase tracking-wide px-3 text-lg
     bg-gradient-to-tr from-[#f5f4edd0] via-[#e2dfc7] to-[#f5f4edad]
     dark:from-[#2c2c2cd2] dark:via-[#3a3a3a] dark:to-[#2c2c2cc2]
     text-black dark:text-white font-bold transform transition-transform duration-300 ease-in-out hover:scale-105 ${
       loading ? "cursor-not-allowed" : "hover:opacity-90"
     }`}
-                  >
-                    {coverLetter
-                      ? loading
-                        ? "Regenerating..."
-                        : "Regenerate"
-                      : loading
-                      ? "Generating..."
-                      : "Generate Cover Letter"}
-                  </button>
+                    >
+                      {coverLetter
+                        ? loading
+                          ? "Regenerating..."
+                          : "Regenerate"
+                        : loading
+                        ? "Generating..."
+                        : "Generate Cover Letter"}
+                    </button>
+                  </MagneticCompWide>
                 </div>
               )}
             </div>
@@ -480,7 +506,7 @@ export default function CoverLetterClient() {
                   <div className="flex gap-x-2 items-center">
                     <button
                       onClick={onCopy}
-                      className="mt-1 border cursor-pointer px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-xs text-[#f6f4ed] dark:text-[#2b2a27]"
+                      className="mt-1 border cursor-pointer px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-xs text-[#f6f4ed] dark:text-[#2b2a27] dark:border-stone-700"
                     >
                       Copy
                     </button>
@@ -502,11 +528,11 @@ export default function CoverLetterClient() {
                     >
                       B
                     </button>
-                    <FontDropdown />
-                    <FontSizeDropdown />
+                    <FontDropdownWithDarkmode />
+                    <FontSizeDropdownWithDarkmode />
                     <button
                       onClick={onMarkAll}
-                      className="mt-1 border ml-2 font-semibold cursor-pointer px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27]"
+                      className="mt-1 border ml-2 font-semibold cursor-pointer px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] dark:border-stone-600"
                     >
                       Mark All
                     </button>

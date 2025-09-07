@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import CoverLetterClientModal from "./CoverLetterClientModal";
 import { IoMdClose } from "react-icons/io";
+import { AnimatePresence, motion } from "framer-motion";
 
 type SavedJob = {
   id: string;
@@ -121,23 +122,37 @@ export default function ProfilePage() {
                   </button>
                 </div>
               </li>
-
-              {showCoverLetterModal && (
-                <div className="fixed inset-0 p-5 md:p-10 bg-black/80 z-50 flex items-center justify-center">
-                  <div
-                    style={{ scrollbarWidth: "none" }}
-                    className="w-full h-full rounded-[6px] bg-white overflow-auto relative"
+              <AnimatePresence>
+                {showCoverLetterModal && (
+                  <motion.div
+                    key="overlay"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    onClick={() => setShowCoverLetterModal(false)}
+                    className="fixed inset-0 flex items-center justify-center bg-black/80 z-50"
                   >
-                    <button
-                      className="absolute  text-white  text-xl md:text-4xl cursor-pointer dark:text-black top-4 right-4   z-50"
-                      onClick={() => setShowCoverLetterModal(false)}
+                    <motion.div
+                      id="custom-scrollbar"
+                      key="modal"
+                      initial={{ scale: 0.7, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      exit={{ scale: 0.7, opacity: 0 }}
+                      transition={{ duration: 0.35, ease: "easeInOut" }}
+                      onClick={(e) => e.stopPropagation()}
+                      className="mr-1.5  ml-1.5 overflow-y-scroll  h-[95%] w-[98%] bg-[#1c1c1b] text-[#f6f4ed]  md:px-2.5 px-1.5 py-4 rounded-[5px]  relative"
                     >
-                      <IoMdClose />
-                    </button>
-                    <CoverLetterClientModal job={selectedJob!} />
-                  </div>
-                </div>
-              )}
+                      <button
+                        className="absolute top-3 hover:scale-103 transition-transform ease-in-out bg-[#eaeae592]  rounded-full p-[3px] right-3.5 text-xl z-[99999] cursor-pointer text-stone-900 dark:text-gray-100 dark:bg-stone-700/90 "
+                        onClick={() => setShowCoverLetterModal(false)}
+                      >
+                        <IoMdClose />
+                      </button>
+                      <CoverLetterClientModal job={selectedJob!} />
+                    </motion.div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           );
         })}

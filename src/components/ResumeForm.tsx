@@ -176,7 +176,7 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
   return (
     <div className="relative h-full pt-2">
       <div className="px-2 sm:px-3 sm:py-5 h-full">
-        <div className="flex  flex-col-reverse md:items-end sm:flex-row sm:justify-between  text-[#f6f4ed] dark:text-black">
+        <div className="flex  flex-col-reverse md:items-end sm:flex-row sm:justify-between  text-[#f6f4ed] ">
           <div className="h-full">
             {resume ? (
               <h2 className="text-xl font-semibold hidden sm:block ">
@@ -192,13 +192,22 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
           </div>
 
           <div className=" relative -mb-8 h-full">
+            {resume ? (
+              <h2 className="text-lg mb- font-semibold sm:hidden ">
+                Edit Resume
+              </h2>
+            ) : (
+              <h2 className="text-lg font-semibold  sm:hidden ">
+                Upload & Edit
+              </h2>
+            )}
             <button
               onClick={onBoldSelection}
               className={`mt-1 mr-3 border  cursor-pointer px-3 py-1.5 rounded-[3px]  text-sm transition-all duration-200
     ${
       isBoldActive
-        ? "bg-[#f6f4ed]  border-white/60 text-black dark:text-black dark:bg-[#f6f4ed] dark:border-black/60"
-        : "bg-transparent font-semibold text-[#f6f4ed] border-white/40 dark:border-[#2b2a27] dark:text-black/60"
+        ? "bg-[#f6f4ed]  border-white/60 text-black "
+        : "bg-transparent font-semibold text-[#f6f4ed] border-white/40 "
     }`}
             >
               B
@@ -208,21 +217,18 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
             <FontSizeDropdown />
             <button
               onClick={markAllText}
-              className="mt-1  ml-3 font-bold  cursor-pointer px-3 py-1.5 rounded-[3px] text-sm bg-transparent text-[#f6f4ed] dark:text-black border border-white/40 dark:border-black/60   "
+              className="mt-1  ml-3 font-bold  cursor-pointer px-3 py-1.5 rounded-[3px] text-sm bg-transparent text-[#f6f4ed]  border border-white/40    "
             >
               Mark All
             </button>
           </div>
         </div>
         <div
+          id="custom-scrollbar"
           ref={resumeEditorRef}
           contentEditable
           suppressContentEditableWarning={true}
-          className="h-[calc(100vh-240px)] w-full overflow-y-auto border bg-white text-black p-2  leading-snug text-[16px] md:text-[15px]  sm:leading-relaxed whitespace-pre-wrap outline-none"
-          style={{
-            scrollbarWidth: "thin",
-            WebkitTextSizeAdjust: "90%",
-          }}
+          className="h-[calc(100vh-240px)] w-full overflow-y-auto border bg-white text-black p-2  leading-snug text-[16px] md:text-[14px]   sm:leading-relaxed whitespace-pre-wrap outline-none"
         />
         {showEmptyModal && (
           <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
@@ -253,13 +259,13 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
         <div className="mt-4 flex flex-wrap gap-x-3 gap-y-1">
           <button
             onClick={handleDownload}
-            className="cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105 mt-2  font-bold   px-3 py-1.5 rounded-[3px]  text-[#2b2a27] bg-[#f6f4ed] dark:bg-[#2b2a27] dark:text-[#f6f4ed] text-xs  md:text-sm "
+            className="cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105 mt-2  font-bold   px-3 py-1.5 rounded-[3px]  text-[#2b2a27] bg-[#f6f4ed]  text-xs  md:text-sm "
           >
             Download as PDF
           </button>
           <button
             onClick={handleSave}
-            className="cursor-pointer mt-2 border-2 font-bold   px-3 py-1.5 rounded-[3px] border-[#f6f4ed] dark:border-black text-xs md:text-sm transform transition-transform duration-300 ease-in-out hover:scale-105"
+            className="cursor-pointer mt-2 border-2 font-bold   px-3 py-1.5 rounded-[3px] border-[#f6f4ed]  text-xs md:text-sm transform transition-transform duration-300 ease-in-out hover:scale-105"
             disabled={isSaving}
           >
             {isSaving ? "Saving..." : "Save"}
