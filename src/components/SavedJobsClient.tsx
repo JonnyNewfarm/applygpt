@@ -5,6 +5,7 @@ import { toast } from "react-hot-toast";
 import CoverLetterClientModal from "./CoverLetterClientModal";
 import { IoMdClose } from "react-icons/io";
 import { AnimatePresence, motion } from "framer-motion";
+import { FaExternalLinkAlt } from "react-icons/fa";
 
 type SavedJob = {
   id: string;
@@ -101,17 +102,21 @@ export default function ProfilePage() {
                       setSelectedJob(job);
                       setShowCoverLetterModal(true);
                     }}
-                    className="cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105 mt-2 font-bold  px-3 py-1.5 rounded-[3px]  text-sm  whitespace-nowrap bg-[#f6f4ed] text-[#2b2a27] dark:bg-[#2b2a27] dark:text-[#f6f4ed]"
+                    className="w-full  cursor-pointer mt-2 px-3 py-1.5  rounded-[3px] uppercase tracking-wide text-nowrap text-sm
+             font-bold bg-gradient-to-tr from-[#f6f4ed] to-[#e2dfc7]
+             dark:from-[#2c2c2c] dark:to-[#3a3a3a]
+             text-black dark:text-white shadow-inner hover:shadow-lg
+             transition-all duration-300 ease-in-out"
                   >
-                    Create Cover Letter
+                    AI Cover Letter
                   </button>
                   <a
                     href={job.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105 mt-2 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27]"
+                    className="cursor-pointer transform flex items-center justify-center gap-x-2 transition-transform duration-300 ease-in-out hover:scale-105 mt-2 border-2 font-bold dark:border-[#2b2a27] px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27]"
                   >
-                    Apply
+                    <FaExternalLinkAlt className="text-" /> Open
                   </a>
                   <button
                     onClick={() => deleteSavedJob(job.id)}

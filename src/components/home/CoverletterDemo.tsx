@@ -51,7 +51,7 @@ const LiveCoverLetterDemo = () => {
 
   return (
     <div className="h-full w-full flex  justify-center border-b-white z-50 dark:border-b-black/20 bg-[#2b2a27] text-[#f6f4ed] px-4  dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
-      <div className="w-full px-4 text-left max-w-2xl space-y-1">
+      <div className="w-full  text-left max-w-2xl space-y-1">
         <h2 className="text-xl md:text-3xl font-bold uppercase">
           AI Cover Letter Generator
         </h2>
@@ -68,7 +68,7 @@ const LiveCoverLetterDemo = () => {
               value={fixedResume}
               readOnly
               rows={2}
-              className="w-full outline-none focus:outline-none px-4 text-sm  dark:text-[#2b2a27] py-3.5  border-t border-b   text-[#f6f4ed]  border-stone-200/40 dark:border-stone-800/40"
+              className="w-full overflow-hidden outline-none focus:outline-none px-4 text-sm  dark:text-[#2b2a27] py-3.5  border rounded-[3px]   text-[#f6f4ed]  border-stone-200/40 dark:border-stone-800/40"
             />
 
             <label className="block font-semibold mb-1 mt-4">
@@ -78,7 +78,7 @@ const LiveCoverLetterDemo = () => {
               value={fixedJobDescription}
               readOnly
               rows={2}
-              className="w-full px-4 text-sm  dark:text-[#2b2a27] py-3.5  border-t border-b  text-[#f6f4ed]  border-stone-200/40 dark:border-stone-800/40"
+              className="w-full overflow-hidden px-4 outline-none focus:outline-none text-sm  dark:text-[#2b2a27] py-3.5  border rounded-[3px]  text-[#f6f4ed]  border-stone-200/40 dark:border-stone-800/40"
             />
 
             <button

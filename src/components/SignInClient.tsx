@@ -3,6 +3,8 @@ import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import MagneticCompWide from "./MagneticCompWide";
+import { motion } from "framer-motion";
 
 export default function SignInPage() {
   const router = useRouter();
@@ -53,12 +55,20 @@ export default function SignInPage() {
             Forgot your password? <p className="underline">Reset password</p>
           </Link>
 
-          <button
-            type="submit"
-            className="w-full mt-2 cursor-pointer py-2 rounded transition bg-[#f6f4ed] text-black dark:text-white dark:bg-[#2b2a27] border-2 font-bold"
-          >
-            Sign In
-          </button>
+          <MagneticCompWide>
+            <motion.button
+              type="submit"
+              whileHover={{ scale: 1.04, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full  cursor-pointer mt-2 py-3 mb-3 rounded-[5px] uppercase tracking-wide px-3 text-lg
+             font-bold bg-gradient-to-tr from-[#f6f4ed] to-[#e2dfc7]
+             dark:from-[#2c2c2c] dark:to-[#3a3a3a]
+             text-black dark:text-white shadow-inner hover:shadow-lg
+             transition-all duration-300 ease-in-out"
+            >
+              Sign In
+            </motion.button>
+          </MagneticCompWide>
         </form>
 
         <div className="my-6 border-t"></div>

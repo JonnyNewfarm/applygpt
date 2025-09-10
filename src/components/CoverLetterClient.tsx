@@ -23,6 +23,7 @@ export default function CoverLetterClient() {
   const router = useRouter();
   const editableRef = useRef<HTMLDivElement>(null);
   const printRef = useRef<HTMLDivElement>(null);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const [company, setCompany] = useState("");
   const [isBoldActive, setIsBoldActive] = useState(false);
@@ -42,13 +43,6 @@ export default function CoverLetterClient() {
   const [tone, setTone] = useState("professional");
   const [loading, setLoading] = useState(false);
   const [coverLetter, setCoverLetter] = useState("");
-
-  const [textAreaSizeDescription, setTextAreaSizeDescription] =
-    useState("100px");
-  const [textAreaStateDescription, setTextAreaSizeStateDescription] =
-    useState(false);
-  const [textAreaTitleDescription, setTextAreaSizeTitleDescription] =
-    useState("Show More");
 
   const [usage, setUsage] = useState<{
     generationLimit: number | null;
@@ -222,20 +216,6 @@ export default function CoverLetterClient() {
     setLoading(false);
   }
 
-  useEffect(() => {
-    if (textAreaStateDescription === false) {
-      setTextAreaSizeDescription("100px");
-      setTextAreaSizeTitleDescription("show more");
-    } else {
-      setTextAreaSizeDescription("250px");
-      setTextAreaSizeTitleDescription("Show Less");
-    }
-  }, [textAreaStateDescription]);
-
-  const handleTextAreaStateDescription = () => {
-    setTextAreaSizeStateDescription(!textAreaStateDescription);
-  };
-
   function onCopy() {
     if (!editableRef.current) return;
     const text = editableRef.current.innerText;
@@ -301,15 +281,21 @@ export default function CoverLetterClient() {
                 Job Description
               </label>
               <div className="relative">
-                <textarea
-                  ref={descriptionRef}
-                  style={{ height: textAreaSizeDescription }}
-                  rows={6}
-                  className="w-full p-3 outline-none rounded-[3px] focus:outline-none dark:border-stone-900/80    dark:text-stone-800 border-t border-stone-300/80 border   text-[#f6f4ed]  "
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Paste job description here..."
-                />
+                <motion.div
+                  animate={{ height: isExpanded ? 250 : 100 }}
+                  transition={{ duration: 0.4, ease: "easeInOut" }}
+                  className="overflow-hidden"
+                >
+                  <textarea
+                    id="custom-scrollbar"
+                    ref={descriptionRef}
+                    rows={6}
+                    className="w-full h-full p-3 outline-none border-stone-400/60 border rounded-[3px] resize-none max-h-[250px]"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="Paste job description here..."
+                  />
+                </motion.div>
                 {errors.description && (
                   <p className="text-red-500 dark:text-red-700 text-sm mt-1">
                     {errors.description}
@@ -317,7 +303,7 @@ export default function CoverLetterClient() {
                 )}
 
                 {!description && (
-                  <div className="absolute top-0 left-0 w-full h-[95%] flex justify-center items-center bg-[#2b2a27] text-[#f6f4ed] border-stone-500 border rounded-[3px] dark:bg-[#f6f4ed] dark:text-stone-800 z-10">
+                  <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-[#2b2a27] text-[#f6f4ed] border-stone-500 border rounded-[3px] dark:bg-[#f6f4ed] dark:text-stone-800 z-10">
                     <div className="px-5 md:px-5 flex flex-col justify-center items-center text-center">
                       <p className="  text-left text-xs sm:text-sm mb-1  font-semibold">
                         Upload job description or find jobs with our job search.
@@ -356,10 +342,10 @@ export default function CoverLetterClient() {
                   Delete Description
                 </button>
                 <button
-                  className="cursor-pointer"
-                  onClick={handleTextAreaStateDescription}
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  className="-mt-2.5 cursor-pointer"
                 >
-                  {textAreaTitleDescription}
+                  {isExpanded ? "Show Less" : "Show More"}
                 </button>
               </div>
             </div>

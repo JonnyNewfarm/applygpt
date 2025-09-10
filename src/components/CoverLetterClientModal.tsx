@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import ManageSubscriptionButton from "../components/ManageSubscriptionButton";
 import BuyAccessButton from "../components/BuyAccessButton";
+import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import FontDropdown from "./FontDropdown";
 import FontSizeDropdown from "./FontSizeDropdown";
@@ -38,22 +39,15 @@ export default function CoverLetterClientModal({ job }: Props) {
   const [isBoldActive, setIsBoldActive] = useState(false);
 
   const [jobAd, setJobAd] = useState("");
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpandedResume, setIsExpandedResume] = useState(false);
+  const contentRef = useRef<HTMLTextAreaElement>(null);
   const [tone, setTone] = useState("professional");
   const [loading, setLoading] = useState(false);
   const [loadingDelete, setLoadingDelete] = useState(false);
   const [coverLetter, setCoverLetter] = useState("");
   const [resumeSaved, setResumeSaved] = useState(false);
-  const [textAreaSize, setTextAreaSize] = useState("100px");
-  const [textAreaState, setTextAreaSizeState] = useState(false);
-  const [textAreaTitle, setTextAreaSizeTitle] = useState("Show More");
   const [resumeLoading, setResumeLoading] = useState(true);
-
-  const [textAreaSizeDescription, setTextAreaSizeDescription] =
-    useState("100px");
-  const [textAreaStateDescription, setTextAreaSizeStateDescription] =
-    useState(false);
-  const [textAreaTitleDescription, setTextAreaSizeTitleDescription] =
-    useState("Show More");
 
   const [usage, setUsage] = useState<{
     generationLimit: number | null;
@@ -177,34 +171,6 @@ export default function CoverLetterClientModal({ job }: Props) {
     }
   }, [resume]);
 
-  useEffect(() => {
-    if (textAreaState === false) {
-      setTextAreaSize("100px");
-      setTextAreaSizeTitle("show more");
-    } else {
-      setTextAreaSize("200px");
-      setTextAreaSizeTitle("Show Less");
-    }
-  }, [textAreaState]);
-
-  const handleTextAreaState = () => {
-    setTextAreaSizeState(!textAreaState);
-  };
-
-  useEffect(() => {
-    if (textAreaStateDescription === false) {
-      setTextAreaSizeDescription("100px");
-      setTextAreaSizeTitleDescription("show more");
-    } else {
-      setTextAreaSizeDescription("200px");
-      setTextAreaSizeTitleDescription("Show Less");
-    }
-  }, [textAreaStateDescription]);
-
-  const handleTextAreaStateDescription = () => {
-    setTextAreaSizeStateDescription(!textAreaStateDescription);
-  };
-
   function onCopy() {
     if (!editableRef.current) return;
     const text = editableRef.current.innerText;
@@ -308,19 +274,23 @@ export default function CoverLetterClientModal({ job }: Props) {
           <div className="w-full md:w-1/2 space-y-4">
             <div className="relative">
               <label className="block text-sm font-semibold mb-1">Resume</label>
-              <textarea
-                id="custom-scrollbar"
-                ref={resumeRef}
-                style={{ height: textAreaSize }}
-                rows={6}
-                className="w-full p-3 border-stone-400/60    border rounded-[3px] relative"
-                value={resume}
-                onChange={(e) => {
-                  setResume(e.target.value);
-                  setResumeSaved(false);
-                }}
-                placeholder="Paste your resume here..."
-              />
+              <motion.div
+                animate={{ height: isExpandedResume ? 250 : 100 }}
+                transition={{ duration: 0.4, ease: "easeInOut" }}
+                className="overflow-hidden"
+              >
+                <textarea
+                  id="custom-scrollbar"
+                  ref={resumeRef}
+                  className="w-full outline-none h-full p-3 border-stone-400/60 border rounded-[3px] resize-none max-h-[250px]"
+                  value={resume}
+                  onChange={(e) => {
+                    setResume(e.target.value);
+                    setResumeSaved(false);
+                  }}
+                  placeholder="Paste your resume here..."
+                />
+              </motion.div>
               {!resumeLoading && showOverlay && (
                 <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-stone-200 text-black/90   z-10">
                   <div className="p-5 md:p-20 flex flex-col justify-center items-c">
@@ -373,10 +343,10 @@ export default function CoverLetterClientModal({ job }: Props) {
                   </button>
                 )}
                 <button
-                  className="cursor-pointer -mt-7"
-                  onClick={handleTextAreaState}
+                  onClick={() => setIsExpandedResume(!isExpandedResume)}
+                  className="-mt-4 cursor-pointer"
                 >
-                  {textAreaTitle}
+                  {isExpandedResume ? "Show Less" : "Show More"}
                 </button>
               </div>
             </div>
@@ -385,15 +355,20 @@ export default function CoverLetterClientModal({ job }: Props) {
               <label className="block text-sm font-semibold mb-1">
                 Job Description
               </label>
-              <textarea
-                id="custom-scrollbar"
-                style={{ height: textAreaSizeDescription }}
-                rows={6}
-                className="w-full p-3 border-stone-400/60   border rounded-[3px]"
-                value={jobAd}
-                onChange={(e) => setJobAd(e.target.value)}
-                placeholder="Paste job description here..."
-              />
+              <motion.div
+                animate={{ height: isExpanded ? 250 : 100 }}
+                transition={{ duration: 0.4, ease: "easeInOut" }}
+                className="overflow-hidden"
+              >
+                <textarea
+                  id="custom-scrollbar"
+                  ref={contentRef}
+                  className="w-full outline-none h-full p-3 border-stone-400/60 border rounded-[3px] resize-none"
+                  value={jobAd}
+                  onChange={(e) => setJobAd(e.target.value)}
+                  placeholder="Paste job description here..."
+                />
+              </motion.div>
               <div className="flex justify-between items-center">
                 <button
                   onClick={onClearDescription}
@@ -403,10 +378,10 @@ export default function CoverLetterClientModal({ job }: Props) {
                   {loadingDelete ? "Deleting..." : "Clear description"}
                 </button>
                 <button
-                  className="cursor-pointer"
-                  onClick={handleTextAreaStateDescription}
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  className="mt-2 cursor-pointer"
                 >
-                  {textAreaTitleDescription}
+                  {isExpanded ? "Show Less" : "Show More"}
                 </button>
               </div>
             </div>

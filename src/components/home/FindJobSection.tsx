@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const demoJob = {
   title: "Frontend Developer",
@@ -35,7 +36,7 @@ const FindJobsDemo = () => {
           </div>
         </div>
 
-        <div className="max-w-lg   rounded p-2 shadow">
+        <div className="max-w-lg rounded p-2 ">
           <h1 className="text-lg font-semibold">{demoJob.title}</h1>
           <p className="text-sm">
             {demoJob.company} • {demoJob.location}
@@ -65,17 +66,26 @@ const FindJobsDemo = () => {
             The applicant&apos;s skills and experience closely match the job
             description. The applicant has significant frontend development
             experience with JavaScript, React, and other
+          </p>
+
+          <AnimatePresence>
             {expanded && (
-              <>
-                {" "}
+              <motion.div
+                key="extra"
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.4, ease: "easeInOut" }}
+                className="overflow-hidden text-sm"
+              >
                 relevant technologies mentioned in the job description. However,
                 they do not have experience in TypeScript and cloud services
                 such as AWS, GCP, or Azure.
-              </>
+              </motion.div>
             )}
-          </p>
+          </AnimatePresence>
 
-          <div className="w-full flex justify-end">
+          <div className="w-full flex justify-end mt-1">
             <button
               onClick={() => setExpanded(!expanded)}
               className="hover:underline text-sm cursor-pointer opacity-80"

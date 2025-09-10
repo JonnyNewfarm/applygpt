@@ -96,6 +96,26 @@ export default function FindJobsPage() {
   }
 
   useEffect(() => {
+    const savedQuery = localStorage.getItem("jobQuery");
+    const savedCity = localStorage.getItem("jobCity");
+
+    if (savedQuery) setQuery(savedQuery);
+    if (savedCity) setCity(savedCity);
+  }, []);
+
+  useEffect(() => {
+    if (query) {
+      localStorage.setItem("jobQuery", query);
+    }
+  }, [query]);
+
+  useEffect(() => {
+    if (city) {
+      localStorage.setItem("jobCity", city);
+    }
+  }, [city]);
+
+  useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (
         jobTitleRef.current &&
@@ -299,10 +319,9 @@ export default function FindJobsPage() {
       return;
     }
 
-    // just filter the preloaded array — very fast
     const filtered = allCityOptions
       .filter((c) => c.toLowerCase().startsWith(val.toLowerCase()))
-      .slice(0, 50); // optional limit, prevents rendering too many at once
+      .slice(0, 50);
 
     setCitySuggestions(filtered);
   };
@@ -348,7 +367,6 @@ export default function FindJobsPage() {
               : j
           )
         );
-        // also update selected panel job if it matches
         setSelectedJobForPanel((prev) =>
           prev && prev.id === job.id
             ? { ...prev, score: data.score, explanation: data.explanation }
@@ -402,7 +420,7 @@ export default function FindJobsPage() {
       <div className="max-w-7xl relative h-full mx-auto flex justify-center flex-col w-full">
         <div className="flex justify-center items-center flex-col w-full">
           <div className="w-full max-w-3xl">
-            <h1 className="text-[25px] md:text-3xl h-full px-6 font-bold">
+            <h1 className="text-[25px] md:mt-10 md:text-3xl h-full px-6 font-bold">
               Find Jobs With AI Tools
             </h1>
             <p className="px-6 w-full mt-0.5 text-lg md:text-lg mb-3 text-gray-200 dark:text-gray-700">
@@ -911,7 +929,7 @@ export default function FindJobsPage() {
                     <button
                       disabled={matchingJobId === selectedJobForPanel.id}
                       onClick={() => matchJobToResume(selectedJobForPanel)}
-                      className="px-4 py-2 cursor-pointer text-nowrap text-md mt-1  border text-white border-white mb-5 dark:border-black dark:text-black hover:scale-103 ease-in-out transition-transform"
+                      className="px-4 py-2 font-semibold cursor-pointer text-nowrap text-md mt-1  border text-white border-white mb-5 dark:border-black dark:text-black hover:scale-103 ease-in-out transition-transform"
                     >
                       {matchingJobId === selectedJobForPanel.id
                         ? "Matching…"
