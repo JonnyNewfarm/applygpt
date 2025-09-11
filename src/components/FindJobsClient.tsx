@@ -50,6 +50,8 @@ export default function FindJobsPage() {
   const [savingJobId, setSavingJobId] = useState<string | null>(null);
   const [showResumeModal, setShowResumeModal] = useState(false);
 
+  const [searching, setSearching] = useState(false);
+
   const [showApplyPopup, setShowApplyPopup] = useState(false);
   const [allCityOptions, setAllCityOptions] = useState<string[]>([]);
 
@@ -222,7 +224,7 @@ export default function FindJobsPage() {
       if (!res.ok) {
         toast.error(data.error || "Failed to save job.");
       } else {
-        toast.success("Job saved!");
+        toast("Job saved.");
         setSavedJobs((prev) => new Set(prev).add(job.id));
       }
     } catch {
@@ -237,16 +239,13 @@ export default function FindJobsPage() {
       toast("Please fill in all fields.");
       return;
     }
-
     const [cityName, countryCode] = city.split(",").map((p) => p.trim());
     if (!cityName || !countryCode) {
       toast("Please use format: City, CountryCode (e.g. Oslo, NO)");
       return;
     }
-
-    setLoading(true);
+    setSearching(true);
     setError("");
-
     try {
       const res = await fetch("/api/find-jobs", {
         method: "POST",
@@ -259,20 +258,16 @@ export default function FindJobsPage() {
           page: pageToLoad,
         }),
       });
-
       if (!res.ok) {
         const data = await res.json();
         setError(data.error || "Failed to fetch jobs");
-        setLoading(false);
+        setSearching(false);
         return;
       }
-
       const data = await res.json();
       setJobs(data.jobs || []);
       setJobsCache((prev) => ({ ...prev, [pageToLoad]: data.jobs }));
-
-      setLoading(false);
-
+      setSearching(false);
       if (jobResultsRef.current) {
         const y =
           jobResultsRef.current.getBoundingClientRect().top +
@@ -283,7 +278,7 @@ export default function FindJobsPage() {
     } catch (err) {
       console.error(err);
       setError("Something went wrong");
-      setLoading(false);
+      setSearching(false);
     }
   };
 
@@ -295,7 +290,6 @@ export default function FindJobsPage() {
     } else {
       await fetchJobs(1);
     }
-    // ensure mobile detail is closed when new search runs
     setShowDetailOnMobile(false);
   };
 
@@ -674,14 +668,14 @@ export default function FindJobsPage() {
                       whileHover={{ scale: 1.04, y: -2 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={handleFindJobs}
-                      disabled={loading}
-                      className="w-full  cursor-pointer mt-2 py-3 mb-3 rounded-[5px] uppercase tracking-wide px-3 text-lg
-             font-bold bg-gradient-to-tr from-[#f6f4ed] to-[#e2dfc7]
-             dark:from-[#2c2c2c] dark:to-[#3a3a3a]
-             text-black dark:text-white shadow-inner hover:shadow-lg
-             transition-all duration-300 ease-in-out"
+                      disabled={searching}
+                      className="w-full cursor-pointer mt-2 py-3 mb-3 rounded-[5px] uppercase tracking-wide px-3 text-lg
+     font-bold bg-gradient-to-tr from-[#f6f4ed] to-[#e2dfc7]
+     dark:from-[#2c2c2c] dark:to-[#3a3a3a]
+     text-black dark:text-white shadow-inner hover:shadow-lg
+     transition-all duration-300 ease-in-out"
                     >
-                      {loading ? "Searching..." : "Find Jobs"}
+                      {searching ? "Searching..." : "Find Jobs"}
                     </motion.button>
                   </MagneticCompWide>
                 </div>

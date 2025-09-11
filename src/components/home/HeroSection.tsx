@@ -3,11 +3,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import MagneticComp from "../MagneticComp";
 import Link from "next/link";
-import { IoMdClose } from "react-icons/io";
+import { AnimatePresence, motion } from "framer-motion";
 
 const HeroSection = () => {
   const path = useRef<SVGPathElement | null>(null);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
+  const modalRef = useRef<HTMLDivElement | null>(null);
   const [isGenerateModalOpen, setIsGenerateModalOpen] = useState(false);
   const progress = useRef<number>(0);
   const time = useRef(Math.PI / 2);
@@ -52,9 +53,28 @@ const HeroSection = () => {
       resetAnimation();
     }
   };
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(e.target as Node) &&
+        isGenerateModalOpen
+      ) {
+        setIsGenerateModalOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isGenerateModalOpen]);
+
   useEffect(() => {
     setPath(0);
   }, []);
+
   return (
     <div
       ref={wrapperRef}
@@ -80,10 +100,9 @@ const HeroSection = () => {
           </svg>
         </div>
 
-        {/* Text + Buttons */}
         <div className="flex sm:-mt-6 flex-col gap-y-3 md:gap-y-1">
           <div className="md:text-xl text-base lg:text-2xl sm:text-lg">
-            <p className="mb-2.5">
+            <p className="mb-2">
               All-in-one <strong>AI tools</strong> to build resumes, write
               tailored cover letters, and discover
             </p>
@@ -94,11 +113,15 @@ const HeroSection = () => {
             </p>
           </div>
 
-          <div className="mt-5">
+          <div className="mt-3 md:mt-5 ">
             <MagneticComp>
               <Link
-                className="w-full uppercase cursor-pointer py-3 rounded-[3px] tracking-wide px-3 text-base text-white dark:text-black border-white/50 dark:border-black/50 border-2 font-bold transform transition-transform duration-300 ease-in-out hover:scale-105 whitespace-nowrap"
-                href={"/resume-generator"}
+                className="w-full cursor-pointer py-3 mb-3 rounded-[5px] uppercase tracking-wide px-3 text-[12px] md:text-[15px]
+             font-bold bg-gradient-to-tr from-[#f6f4ed] to-[#e2dfc7]
+             dark:from-[#2c2c2c] dark:to-[#3a3a3a]
+             text-black dark:text-white shadow-inner hover:shadow-lg
+             transition-all duration-300 ease-in-out"
+                href={"/jobs"}
               >
                 Get Started
               </Link>
@@ -106,29 +129,38 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
-      <div className="absolute bottom-26 left-0 w-full flex justify-between px-6 sm:px-20 z-10  font-bold text-lg sm:text-2xl md:text-3xl">
-        {isGenerateModalOpen && (
-          <div className="bg-white/90 backdrop-blur-md z-50 text-sm absolute bottom-10 left-10 min-w-[300px] p-12 rounded flex flex-col gap-y-4">
-            <button
-              onClick={() => setIsGenerateModalOpen(false)}
-              className="absolute cursor-pointer top-2 text-3xl right-2 text-black"
+      <div className="absolute bottom-26 left-0 w-full flex justify-between px-6 sm:px-20 z-10 font-bold text-lg sm:text-2xl md:text-3xl">
+        <AnimatePresence>
+          {isGenerateModalOpen && (
+            <motion.div
+              ref={modalRef}
+              key="generate-modal"
+              initial={{ opacity: 0, scale: 0.9, y: 50 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 50 }}
+              transition={{
+                duration: 0.3,
+                ease: [0.25, 0.8, 0.25, 1],
+              }}
+              className="bg-stone-200 backdrop-blur-md z-50 min-h-[150px] text-sm absolute items-center flex justify-center bottom-10 left-6 md:left-20 min-w-[200px] rounded-[5px] shadow-lg"
             >
-              <IoMdClose />
-            </button>
-            <Link
-              className="bg-stone-700 hover:scale-105 transition ease-in rounded-[4px] text-white py-2 px-4 text-center"
-              href="/cover-letter"
-            >
-              <h1>Cover Letter</h1>
-            </Link>
-            <Link
-              className="bg-stone-900 hover:scale-105 transition ease-in rounded-[4px] text-white py-2 px-4 text-center"
-              href="/resume-generator"
-            >
-              <h1>Resume</h1>
-            </Link>
-          </div>
-        )}
+              <div className="flex w-full h-full flex-col gap-y-4 p-4">
+                <Link
+                  className="bg-stone-700 hover:scale-105 transition ease-in rounded-[4px] text-white py-2 px-4 text-center"
+                  href="/cover-letter"
+                >
+                  <h1>Cover Letter</h1>
+                </Link>
+                <Link
+                  className="bg-stone-800 hover:scale-105 transition ease-in rounded-[4px] text-white py-2 px-4 text-center"
+                  href="/resume-generator"
+                >
+                  <h1>Resume</h1>
+                </Link>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
         <MagneticComp>
           <button
             onClick={() => setIsGenerateModalOpen((prev) => !prev)}

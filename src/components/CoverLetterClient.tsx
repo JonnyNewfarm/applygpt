@@ -355,15 +355,35 @@ export default function CoverLetterClient() {
                 Tone
               </label>
               <Select value={tone} onValueChange={(val) => setTone(val)}>
-                <SelectTrigger className="w-full  border-stone-300 dark:border-stone-700  bg-[#2b2a27] dark:bg-[#f6f4ed] dark:text-stone-900 text-stone-100 p-3 rounded-none">
+                <SelectTrigger className="w-full cursor-pointer  border-stone-300 dark:border-stone-700  bg-[#2b2a27] dark:bg-[#f6f4ed] dark:text-stone-900 text-stone-100 p-3 rounded-none">
                   <SelectValue placeholder="Select tone" />
                 </SelectTrigger>
 
-                <SelectContent className="bg-stone-800 text-stone-100 border-stone-400/30">
-                  <SelectItem value="professional">Professional</SelectItem>
-                  <SelectItem value="casual">Casual</SelectItem>
-                  <SelectItem value="friendly">Friendly</SelectItem>
-                  <SelectItem value="confident">Confident</SelectItem>
+                <SelectContent className="bg-stone-800  text-stone-100 border-stone-400/30">
+                  <SelectItem
+                    className="hover:bg-stone-700 cursor-pointer"
+                    value="professional"
+                  >
+                    Professional
+                  </SelectItem>
+                  <SelectItem
+                    className="hover:bg-stone-700 cursor-pointer"
+                    value="casual"
+                  >
+                    Casual
+                  </SelectItem>
+                  <SelectItem
+                    className="hover:bg-stone-700 cursor-pointer"
+                    value="friendly"
+                  >
+                    Friendly
+                  </SelectItem>
+                  <SelectItem
+                    className="hover:bg-stone-700 cursor-pointer"
+                    value="confident"
+                  >
+                    Confident
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>

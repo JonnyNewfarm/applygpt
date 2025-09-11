@@ -66,7 +66,7 @@ const LiveGenerateResumeDemo = () => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Your Name"
-              className="w-full outline-none focus:outline-none px-4  dark:text-[#2b2a27] py-3.5  border-t border-b  text-[#f6f4ed]  border-stone-200/40 dark:border-stone-800/40"
+              className="w-full outline-none focus:outline-none px-4  dark:text-[#2b2a27] py-3.5  border rounded-[3px]  text-[#f6f4ed]  border-stone-200/40 dark:border-stone-800/40"
             />
             <input
               type="number"
@@ -74,14 +74,14 @@ const LiveGenerateResumeDemo = () => {
               value={age}
               onChange={(e) => setAge(Number(e.target.value))}
               placeholder="Your Age"
-              className="w-full outline-none focus:outline-none px-4 pb-3.5 dark:text-[#2b2a27] text-[#f6f4ed] border-b border-stone-200/40 dark:border-stone-800/40"
+              className="w-full outline-none focus:outline-none px-4 pb-3.5 dark:text-[#2b2a27] text-[#f6f4ed] py-3.5  border rounded-[3px]  border-stone-200/40 dark:border-stone-800/40"
             />
             <input
               value={jobTitle}
               onChange={(e) => setJobTitle(e.target.value)}
               placeholder="Job title"
               list="jobTitles"
-              className="w-full outline-none focus:outline-none px-4 pb-3.5 dark:text-[#2b2a27] text-[#f6f4ed] border-b border-stone-200/40 dark:border-stone-800/40"
+              className="w-full outline-none focus:outline-none px-4 pb-3.5 dark:text-[#2b2a27] text-[#f6f4ed] py-3.5  border rounded-[3px] border-stone-200/40 dark:border-stone-800/40"
             />
             <datalist id="jobTitles">
               {jobTitles.map((title) => (

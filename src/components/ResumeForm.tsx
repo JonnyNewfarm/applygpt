@@ -27,6 +27,8 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
   const resumeEditorRef = useRef<HTMLDivElement>(null);
   const resumePdfRef = useRef<HTMLDivElement>(null);
 
+  let savedSelection: Range | null = null;
+
   const markAllText = () => {
     if (!resumeEditorRef.current) return;
     const range = document.createRange();
@@ -34,8 +36,20 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
     const selection = window.getSelection();
     selection?.removeAllRanges();
     selection?.addRange(range);
+
+    savedSelection = range.cloneRange();
   };
+
+  const restoreSelection = () => {
+    const selection = window.getSelection();
+    if (savedSelection && selection) {
+      selection.removeAllRanges();
+      selection.addRange(savedSelection);
+    }
+  };
+
   const onBoldSelection = () => {
+    restoreSelection();
     document.execCommand("bold");
     setTimeout(syncContent, 0);
   };
@@ -65,7 +79,7 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
       });
 
       setContent(currentContent);
-      toast.success("Resume saved!");
+      toast("Resume saved.");
     } catch {
       toast.error("Failed to save resume.");
     } finally {

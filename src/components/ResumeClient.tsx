@@ -11,6 +11,7 @@ import { IoMdClose } from "react-icons/io";
 import VoiceInput from "./VoiceInput";
 import ResizableTextarea from "./ResizebleTextarea";
 import MagneticCompWide from "./MagneticCompWide";
+import { AnimatePresence, motion } from "framer-motion";
 
 interface ResumeClientProps {
   resume: string;
@@ -228,61 +229,74 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
         <p>{errors.skills}</p>
       </div>
 
-      {showGeneralInfoRecord && (
-        <div
-          onClick={() => setShowGeneralInfoRecord(false)}
-          className="fixed inset-0 z-50 bg-black/65 flex items-center justify-center"
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className="bg-[#2b2a27]  text-[#f6f4ed]  p-4  rounded w-[90%] max-w-2xl"
+      <AnimatePresence>
+        {showGeneralInfoRecord && (
+          <motion.div
+            onClick={() => setShowGeneralInfoRecord(false)}
+            className="fixed inset-0 z-50 bg-black/65 flex items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
           >
-            <VoiceInput
-              value={form.generalInfo}
-              onTextChangeAction={(newText) =>
-                setForm((prev) => ({ ...prev, generalInfo: newText }))
-              }
-            />
+            <motion.div
+              onClick={(e) => e.stopPropagation()}
+              className="bg-[#2b2a27] text-[#f6f4ed] p-4 rounded w-[90%] max-w-2xl"
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+            >
+              <VoiceInput
+                value={form.generalInfo}
+                onTextChangeAction={(newText) =>
+                  setForm((prev) => ({ ...prev, generalInfo: newText }))
+                }
+              />
 
-            <p className="text-sm md:text-md  mt-2 mr-1.5">
-              Voice commands supported: say{" "}
-              <strong>&lsquo;new line&lsquo;</strong> to break a line,{" "}
-              <strong>&lsquo;comma&lsquo;</strong> for <code>,</code>,{" "}
-              <strong>&lsquo;dot&lsquo;</strong> for{" "}
-              <code className="mr-1.5">.</code>
-              <button
-                type="button"
-                onClick={() => setShowVoiceCommands((prev) => !prev)}
-                className=" underline cursor-pointer  text-sm"
-              >
-                {showVoiceCommands ? "Hide all commands" : "Show all commands"}
-              </button>
-            </p>
+              <p className="text-sm md:text-md mt-2 mr-1.5">
+                Voice commands supported: say{" "}
+                <strong>&lsquo;new line&lsquo;</strong> to break a line,{" "}
+                <strong>&lsquo;comma&lsquo;</strong> for <code>,</code>,{" "}
+                <strong>&lsquo;dot&lsquo;</strong> for <code>.</code>
+                <button
+                  type="button"
+                  onClick={() => setShowVoiceCommands((prev) => !prev)}
+                  className="underline cursor-pointer text-sm"
+                >
+                  {showVoiceCommands
+                    ? "Hide all commands"
+                    : "Show all commands"}
+                </button>
+              </p>
 
-            <h2 className="text-md font-semibold mt-2">General Information</h2>
+              <h2 className="text-md font-semibold mt-2">
+                General Information
+              </h2>
 
-            <ResizableTextarea
-              value={form.generalInfo}
-              onChange={(val) => handleChange("generalInfo", val)}
-              placeholder="Add your general info here (name, profession, contact, etc.)"
-            />
-            <div className="flex justify-end mt-4 gap-2">
-              <button
-                onClick={() => setShowGeneralInfoRecord(false)}
-                className="px-4 py-2 cursor-pointer border border-stone-50 text-stone-50  rounded-[3px] hover:scale-105 transition-transform ease-in-out "
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => setShowGeneralInfoRecord(false)}
-                className="px-4 py-2 cursor-pointer bg-stone-200 text-stone-900 rounded-[3px]  font-semibold hover:scale-105 transition-transform ease-in-out"
-              >
-                Add
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+              <ResizableTextarea
+                value={form.generalInfo}
+                onChange={(val) => handleChange("generalInfo", val)}
+                placeholder="Add your general info here (name, profession, contact, etc.)"
+              />
+
+              <div className="flex justify-end mt-4 gap-2">
+                <button
+                  onClick={() => setShowGeneralInfoRecord(false)}
+                  className="px-4 py-2 cursor-pointer border border-stone-50 text-stone-50 rounded-[3px] hover:scale-105 transition-transform ease-in-out"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => setShowGeneralInfoRecord(false)}
+                  className="px-4 py-2 cursor-pointer bg-stone-200 text-stone-900 rounded-[3px] font-semibold hover:scale-105 transition-transform ease-in-out"
+                >
+                  Add
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {showVoiceCommands && (
         <div className="fixed inset-0 z-[60] bg-black/65 flex items-center justify-center">
@@ -326,184 +340,221 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
         </div>
       )}
 
-      {showAddressModalRecord && (
-        <div
-          onClick={() => setShowAddressModalRecord(false)}
-          className="fixed inset-0 z-50 bg-black/65 flex items-center justify-center"
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className="bg-[#2b2a27]  text-[#f6f4ed]  p-4  rounded w-[90%] max-w-2xl"
+      <AnimatePresence>
+        {showAddressModalRecord && (
+          <motion.div
+            onClick={() => setShowAddressModalRecord(false)}
+            className="fixed inset-0 z-50 bg-black/65 flex items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
           >
-            <VoiceInput
-              value={form.fullAddress}
-              onTextChangeAction={(newText) =>
-                setForm((prev) => ({ ...prev, fullAddress: newText }))
-              }
-            />
-
-            <p className="text-sm md:text-md text-stone-100 mt-2">
-              Voice commands supported: say{" "}
-              <strong>&lsquo;new line&lsquo;</strong> to break a line,{" "}
-              <strong>&lsquo;comma&lsquo;</strong> for <code>,</code>,{" "}
-              <strong>&lsquo;dot&lsquo;</strong> for{" "}
-              <code className="mr-1.5">.</code>
-              <button
-                type="button"
-                onClick={() => setShowVoiceCommands((prev) => !prev)}
-                className=" underline cursor-pointer text-stone-100 hover:text-stone-200 text-sm"
-              >
-                {showVoiceCommands ? "Hide all commands" : "Show all commands"}
-              </button>
-            </p>
-            <h2 className="text-lg font-semibold ml-0.5 mt-1.5">Address</h2>
-
-            <ResizableTextarea
-              value={form.fullAddress}
-              onChange={(val) => handleChange("fullAddress", val)}
-              placeholder="Add your full address here (country, city, street, etc.)"
-            />
-
-            <div className="flex justify-end mt-4 gap-2">
-              <button
-                onClick={() => setShowAddressModalRecord(false)}
-                className="px-4 py-2 cursor-pointer border border-stone-200 text-stone-100  rounded-[3px] hover:scale-105 transition-transform ease-in-out "
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => setShowAddressModalRecord(false)}
-                className="px-4 py-2 cursor-pointer bg-stone-200 text-stone-900 rounded-[3px]  font-semibold hover:scale-105 transition-transform ease-in-out"
-              >
-                Add
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {showExperienceModalRecord && (
-        <div
-          onClick={() => setShowExperienceModalRecord(false)}
-          className="fixed inset-0 z-50 bg-black/65 flex items-center justify-center"
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className="bg-[#2b2a27]  text-[#f6f4ed]  p-4  rounded w-[90%] max-w-2xl"
-          >
-            <VoiceInput
-              value={form.experience}
-              onTextChangeAction={(newText) =>
-                setForm((prev) => ({ ...prev, experience: newText }))
-              }
-            />
-
-            <p className="text-sm md:text-md text-stone-100 mt-2">
-              Voice commands supported: say{" "}
-              <strong>&lsquo;new line&lsquo;</strong> to break a line,{" "}
-              <strong>&lsquo;comma&lsquo;</strong> for <code>,</code>,{" "}
-              <strong>&lsquo;dot&lsquo;</strong> for{" "}
-              <code className="mr-1.5">.</code>
-              <button
-                type="button"
-                onClick={() => setShowVoiceCommands((prev) => !prev)}
-                className=" underline cursor-pointer text-stone-100 hover:text-stone-200 text-sm"
-              >
-                {showVoiceCommands ? "Hide all commands" : "Show all commands"}
-              </button>
-            </p>
-            <h2 className="text-md mt-2 font-semibold">
-              Work Experience & Education
-            </h2>
-            <ResizableTextarea
-              value={form.experience}
-              onChange={(val) => handleChange("experience", val)}
-              placeholder="Add your experience and education"
-            />
-            <div className="flex justify-end mt-4 gap-2">
-              <button
-                onClick={() => setShowExperienceModalRecord(false)}
-                className="px-4 py-2 cursor-pointer border border-stone-200 text-stone-100  rounded-[3px] hover:scale-105 transition-transform ease-in-out "
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => setShowExperienceModalRecord(false)}
-                className="px-4 py-2 cursor-pointer bg-stone-200 text-stone-900 rounded-[3px]  font-semibold hover:scale-105 transition-transform ease-in-out"
-              >
-                Add
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {showSkillsModalRecord && (
-        <div
-          onClick={() => setShowSkillsModalRecord(false)}
-          className="fixed inset-0 z-50 bg-black/65 flex items-center justify-center"
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className="bg-[#2b2a27]  text-[#f6f4ed]  p-4  rounded w-[90%] max-w-2xl"
-          >
-            <VoiceInput
-              value={form.skills}
-              onTextChangeAction={(newText) =>
-                setForm((prev) => ({ ...prev, skills: newText }))
-              }
-            />
-            <p className="text-sm md:text-md text-stone-100 mt-2">
-              Voice commands supported: say{" "}
-              <strong>&lsquo;new line&lsquo;</strong> to break a line,{" "}
-              <strong>&lsquo;comma&lsquo;</strong> for <code>,</code>,{" "}
-              <strong>&lsquo;dot&lsquo;</strong> for{" "}
-              <code className="mr-1.5">.</code>
-              <button
-                type="button"
-                onClick={() => setShowVoiceCommands((prev) => !prev)}
-                className=" underline cursor-pointer text-stone-100 hover:text-stone-200 text-sm"
-              >
-                {showVoiceCommands ? "Hide all commands" : "Show all commands"}
-              </button>
-            </p>
-            <h2 className="text-md  font-semibold mt-2">Skills</h2>
-            <ResizableTextarea
-              value={form.skills}
-              onChange={(val) => handleChange("skills", val)}
-              placeholder="Add your skills"
-            />
-            <div className="w-full mt-2">
+            <motion.div
+              onClick={(e) => e.stopPropagation()}
+              className="bg-[#2b2a27] text-[#f6f4ed] p-4 rounded w-[90%] max-w-2xl"
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+            >
               <VoiceInput
-                value={form.other}
+                value={form.fullAddress}
                 onTextChangeAction={(newText) =>
-                  setForm((prev) => ({ ...prev, other: newText }))
+                  setForm((prev) => ({ ...prev, fullAddress: newText }))
                 }
               />
-            </div>
-            <h2 className="text-md font-semibold mt-2">Other(Optional)</h2>
-            <ResizableTextarea
-              value={form.other}
-              onChange={(val) => handleChange("other", val)}
-              placeholder="Other information (optional)"
-            />
-            <div className="flex justify-end mt-4 gap-2">
-              <button
-                onClick={() => setShowSkillsModalRecord(false)}
-                className="px-4 py-2 cursor-pointer border border-stone-200 text-stone-100  rounded-[3px] hover:scale-105 transition-transform ease-in-out "
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => setShowSkillsModalRecord(false)}
-                className="px-4 py-2 cursor-pointer bg-stone-200 text-stone-900 rounded-[3px]  font-semibold hover:scale-105 transition-transform ease-in-out"
-              >
-                Add
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+
+              <p className="text-sm md:text-md text-stone-100 mt-2">
+                Voice commands supported: say{" "}
+                <strong>&lsquo;new line&lsquo;</strong> to break a line,{" "}
+                <strong>&lsquo;comma&lsquo;</strong> for <code>,</code>,{" "}
+                <strong>&lsquo;dot&lsquo;</strong> for <code>.</code>
+                <button
+                  type="button"
+                  onClick={() => setShowVoiceCommands((prev) => !prev)}
+                  className="underline cursor-pointer text-stone-100 hover:text-stone-200 text-sm"
+                >
+                  {showVoiceCommands
+                    ? "Hide all commands"
+                    : "Show all commands"}
+                </button>
+              </p>
+              <h2 className="text-lg font-semibold ml-0.5 mt-1.5">Address</h2>
+
+              <ResizableTextarea
+                value={form.fullAddress}
+                onChange={(val) => handleChange("fullAddress", val)}
+                placeholder="Add your full address here (country, city, street, etc.)"
+              />
+
+              <div className="flex justify-end mt-4 gap-2">
+                <button
+                  onClick={() => setShowAddressModalRecord(false)}
+                  className="px-4 py-2 cursor-pointer border border-stone-200 text-stone-100 rounded-[3px] hover:scale-105 transition-transform ease-in-out"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => setShowAddressModalRecord(false)}
+                  className="px-4 py-2 cursor-pointer bg-stone-200 text-stone-900 rounded-[3px] font-semibold hover:scale-105 transition-transform ease-in-out"
+                >
+                  Add
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showExperienceModalRecord && (
+          <motion.div
+            onClick={() => setShowExperienceModalRecord(false)}
+            className="fixed inset-0 z-50 bg-black/65 flex items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              onClick={(e) => e.stopPropagation()}
+              className="bg-[#2b2a27] text-[#f6f4ed] p-4 rounded w-[90%] max-w-2xl"
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+            >
+              <VoiceInput
+                value={form.experience}
+                onTextChangeAction={(newText) =>
+                  setForm((prev) => ({ ...prev, experience: newText }))
+                }
+              />
+
+              <p className="text-sm md:text-md text-stone-100 mt-2">
+                Voice commands supported: say{" "}
+                <strong>&lsquo;new line&lsquo;</strong> to break a line,{" "}
+                <strong>&lsquo;comma&lsquo;</strong> for <code>,</code>,{" "}
+                <strong>&lsquo;dot&lsquo;</strong> for <code>.</code>
+                <button
+                  type="button"
+                  onClick={() => setShowVoiceCommands((prev) => !prev)}
+                  className="underline cursor-pointer text-stone-100 hover:text-stone-200 text-sm"
+                >
+                  {showVoiceCommands
+                    ? "Hide all commands"
+                    : "Show all commands"}
+                </button>
+              </p>
+              <h2 className="text-md mt-2 font-semibold">
+                Work Experience & Education
+              </h2>
+
+              <ResizableTextarea
+                value={form.experience}
+                onChange={(val) => handleChange("experience", val)}
+                placeholder="Add your experience and education"
+              />
+
+              <div className="flex justify-end mt-4 gap-2">
+                <button
+                  onClick={() => setShowExperienceModalRecord(false)}
+                  className="px-4 py-2 cursor-pointer border border-stone-200 text-stone-100 rounded-[3px] hover:scale-105 transition-transform ease-in-out"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => setShowExperienceModalRecord(false)}
+                  className="px-4 py-2 cursor-pointer bg-stone-200 text-stone-900 rounded-[3px] font-semibold hover:scale-105 transition-transform ease-in-out"
+                >
+                  Add
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showSkillsModalRecord && (
+          <motion.div
+            onClick={() => setShowSkillsModalRecord(false)}
+            className="fixed inset-0 z-50 bg-black/65 flex items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              onClick={(e) => e.stopPropagation()}
+              className="bg-[#2b2a27] text-[#f6f4ed] p-4 rounded w-[90%] max-w-2xl"
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+            >
+              <VoiceInput
+                value={form.skills}
+                onTextChangeAction={(newText) =>
+                  setForm((prev) => ({ ...prev, skills: newText }))
+                }
+              />
+
+              <p className="text-sm md:text-md text-stone-100 mt-2">
+                Voice commands supported: say{" "}
+                <strong>&lsquo;new line&lsquo;</strong> to break a line,{" "}
+                <strong>&lsquo;comma&lsquo;</strong> for <code>,</code>,{" "}
+                <strong>&lsquo;dot&lsquo;</strong> for <code>.</code>
+                <button
+                  type="button"
+                  onClick={() => setShowVoiceCommands((prev) => !prev)}
+                  className="underline cursor-pointer text-stone-100 hover:text-stone-200 text-sm"
+                >
+                  {showVoiceCommands
+                    ? "Hide all commands"
+                    : "Show all commands"}
+                </button>
+              </p>
+
+              <h2 className="text-md font-semibold mt-2">Skills</h2>
+              <ResizableTextarea
+                value={form.skills}
+                onChange={(val) => handleChange("skills", val)}
+                placeholder="Add your skills"
+              />
+
+              <div className="w-full mt-2">
+                <VoiceInput
+                  value={form.other}
+                  onTextChangeAction={(newText) =>
+                    setForm((prev) => ({ ...prev, other: newText }))
+                  }
+                />
+              </div>
+
+              <h2 className="text-md font-semibold mt-2">Other (Optional)</h2>
+              <ResizableTextarea
+                value={form.other}
+                onChange={(val) => handleChange("other", val)}
+                placeholder="Other information (optional)"
+              />
+
+              <div className="flex justify-end mt-4 gap-2">
+                <button
+                  onClick={() => setShowSkillsModalRecord(false)}
+                  className="px-4 py-2 cursor-pointer border border-stone-200 text-stone-100 rounded-[3px] hover:scale-105 transition-transform ease-in-out"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => setShowSkillsModalRecord(false)}
+                  className="px-4 py-2 cursor-pointer bg-stone-200 text-stone-900 rounded-[3px] font-semibold hover:scale-105 transition-transform ease-in-out"
+                >
+                  Add
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <main className="max-w-3xl mx-auto px-4 md:px-8">
         <div className="mb-3 text-sm mt-2 text-[#f6f4ed] dark:text-[#2b2a27]">
