@@ -414,7 +414,7 @@ export default function FindJobsPage() {
       <div className="max-w-7xl relative h-full mx-auto flex justify-center flex-col w-full">
         <div className="flex justify-center items-center flex-col w-full">
           <div className="w-full max-w-3xl">
-            <h1 className="text-[25px] md:mt-10 md:text-3xl h-full px-6 font-bold">
+            <h1 className="text-[25px] md:mt-10 mt-10 md:text-3xl h-full px-6 font-bold">
               Find Jobs With AI Tools
             </h1>
             <p className="px-6 w-full mt-0.5 text-lg md:text-lg mb-3 text-gray-200 dark:text-gray-700">
