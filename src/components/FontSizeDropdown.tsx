@@ -20,10 +20,20 @@ const fontSizes = [
   "32px",
 ];
 
-export default function FontSizeDropdown() {
+interface FontSizeDropdownProps {
+  onOpen?: () => void;
+  onApply?: () => void;
+}
+
+export default function FontSizeDropdown({
+  onOpen,
+  onApply,
+}: FontSizeDropdownProps) {
   const [selectedSize, setSelectedSize] = useState("14px");
 
   const applyFontSize = (size: string) => {
+    onApply?.(); // restore saved selection before applying
+
     const selection = window.getSelection();
     if (!selection?.rangeCount) return;
 
@@ -42,12 +52,21 @@ export default function FontSizeDropdown() {
   };
 
   return (
-    <div className="inline-block">
+    <div
+      className="inline-block"
+      onMouseDown={(e) => {
+        e.preventDefault();
+        onOpen?.(); // save selection before dropdown steals focus
+      }}
+      onTouchStart={() => {
+        onOpen?.(); // also save on touch for mobile
+      }}
+    >
       <Select
         value={selectedSize}
         onValueChange={(value) => applyFontSize(value)}
       >
-        <SelectTrigger className="mt-1  h-[36px] px-3 py-1 rounded-[3px] text-xs md:text-sm  cursor-pointer border border-white/20 bg-transparent text-[#f6f4ed] focus:outline-none focus:ring-0 ">
+        <SelectTrigger className="mt-1 h-[36px] px-3 py-1 rounded-[3px] text-xs md:text-sm cursor-pointer border border-white/20 bg-transparent text-[#f6f4ed] focus:outline-none focus:ring-0">
           <SelectValue />
         </SelectTrigger>
         <SelectContent className="bg-stone-800 text-stone-100 rounded-[4px] border border-white/20">

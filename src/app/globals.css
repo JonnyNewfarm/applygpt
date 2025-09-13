@@ -102,7 +102,7 @@ background: #f6f4ed;}
   height: 150%;
 left: -25%;
 top: -25%;
-  background: conic-gradient(#cccac4 0deg, #d7cdb4 0deg, transparent 80deg);
+  background: conic-gradient(#fdfcfa 0deg, #dbd8cf 0deg, transparent 80deg);
   animation: border-spin 7s linear infinite;
 }
 

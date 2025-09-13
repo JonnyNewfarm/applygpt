@@ -25,16 +25,31 @@ const fonts = [
   "Lucida Sans",
 ];
 
-export default function FontDropdown() {
+interface FontDropdownProps {
+  onOpen?: () => void;
+  onApply?: () => void;
+}
+
+export default function FontDropdown({ onOpen, onApply }: FontDropdownProps) {
   const [selectedFont, setSelectedFont] = useState("Arial");
 
   const applyFont = (font: string) => {
+    onApply?.();
     document.execCommand("fontName", false, font);
     setSelectedFont(font);
   };
 
   return (
-    <div className="inline-block">
+    <div
+      className="inline-block"
+      onMouseDown={(e) => {
+        e.preventDefault();
+        onOpen?.();
+      }}
+      onTouchStart={() => {
+        onOpen?.();
+      }}
+    >
       <Select value={selectedFont} onValueChange={(value) => applyFont(value)}>
         <SelectTrigger className="mt-1 mr-3 px-3 py-0 rounded-[3px] mb-10 text-xs md:text-sm cursor-pointer border border-white/20 bg-transparent text-[#f6f4ed] focus:outline-none focus:ring-0 max-w-[80px] truncate">
           <SelectValue placeholder="Font" />
