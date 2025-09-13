@@ -34,9 +34,18 @@ export default function FontDropdown({ onOpen, onApply }: FontDropdownProps) {
   const [selectedFont, setSelectedFont] = useState("Arial");
 
   const applyFont = (font: string) => {
+    // Restore selection in parent
     onApply?.();
-    document.execCommand("fontName", false, font);
-    setSelectedFont(font);
+
+    // Delay slightly so focus/selection is re-applied (helps mobile)
+    setTimeout(() => {
+      try {
+        document.execCommand("fontName", false, font);
+        setSelectedFont(font);
+      } catch (err) {
+        console.warn("applyFont failed", err);
+      }
+    }, 60);
   };
 
   return (
@@ -47,6 +56,11 @@ export default function FontDropdown({ onOpen, onApply }: FontDropdownProps) {
         onOpen?.();
       }}
       onTouchStart={() => {
+        onOpen?.();
+      }}
+      onPointerDown={(e) => {
+        // extra safety for pointer events
+        e.preventDefault();
         onOpen?.();
       }}
     >

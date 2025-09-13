@@ -27,7 +27,29 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
   const resumeEditorRef = useRef<HTMLDivElement>(null);
   const resumePdfRef = useRef<HTMLDivElement>(null);
 
-  let savedSelection: Range | null = null;
+  const savedSelectionRef = useRef<Range | null>(null);
+  const saveSelection = () => {
+    const selection = window.getSelection();
+    if (selection && selection.rangeCount > 0) {
+      try {
+        savedSelectionRef.current = selection.getRangeAt(0).cloneRange();
+      } catch (err) {
+        // defensive
+        console.warn("saveSelection failed", err);
+        savedSelectionRef.current = null;
+      }
+    }
+  };
+
+  const restoreSelection = () => {
+    const selection = window.getSelection();
+    if (!selection) return;
+    if (savedSelectionRef.current) {
+      selection.removeAllRanges();
+      selection.addRange(savedSelectionRef.current);
+      resumeEditorRef.current?.focus();
+    }
+  };
 
   const markAllText = () => {
     if (!resumeEditorRef.current) return;
@@ -38,45 +60,60 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
     const selection = window.getSelection();
     if (!selection) return;
 
-    // Save current scroll position
     const scrollX = window.scrollX;
     const scrollY = window.scrollY;
 
     selection.removeAllRanges();
     selection.addRange(range);
 
-    // Restore scroll so the page doesn't jump down
     window.scrollTo(scrollX, scrollY);
-
-    savedSelection = range.cloneRange();
-  };
-
-  const restoreSelection = () => {
-    const selection = window.getSelection();
-    if (savedSelection && selection) {
-      selection.removeAllRanges();
-      selection.addRange(savedSelection);
-    }
+    savedSelectionRef.current = range.cloneRange();
   };
 
   const onBoldSelection = (e?: React.MouseEvent) => {
     e?.preventDefault();
+    // restore selection & focus
     restoreSelection();
-    document.execCommand("bold");
-    setTimeout(syncContent, 0);
+
+    // small delay so browser can focus & reapply range (helps on mobile)
+    setTimeout(() => {
+      document.execCommand("bold");
+      syncContent();
+    }, 50);
   };
 
   useEffect(() => {
     if (resumeEditorRef.current) {
-      resumeEditorRef.current.innerHTML = content!;
+      resumeEditorRef.current.innerHTML = content ?? "";
     }
-  }, [content]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resume]);
 
   useEffect(() => {
     if (!resume || resume.trim() === "") {
       setShowEmptyModal(true);
     }
   }, [resume]);
+
+  useEffect(() => {
+    const handleSelectionChange = () => {
+      try {
+        setIsBoldActive(document.queryCommandState("bold"));
+      } catch {
+        setIsBoldActive(false);
+      }
+    };
+    document.addEventListener("selectionchange", handleSelectionChange);
+    return () => {
+      document.removeEventListener("selectionchange", handleSelectionChange);
+    };
+  }, []);
+
+  const syncContent = () => {
+    if (resumeEditorRef.current) {
+      setContent(resumeEditorRef.current.innerHTML);
+    }
+  };
 
   const handleSave = async () => {
     if (!resumeEditorRef.current) return;
@@ -123,12 +160,6 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
     } finally {
       setIsDeleting(false);
       setShowDeleteModal(false);
-    }
-  };
-
-  const syncContent = () => {
-    if (resumeEditorRef.current) {
-      setContent(resumeEditorRef.current.innerHTML);
     }
   };
 
@@ -239,27 +270,10 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
               B
             </button>
 
-            <FontDropdown
-              onOpen={() => {
-                const selection = window.getSelection();
-                if (selection && selection.rangeCount > 0) {
-                  savedSelection = selection.getRangeAt(0).cloneRange();
-                }
-              }}
-              onApply={() => {
-                restoreSelection();
-              }}
-            />
+            <FontDropdown onOpen={saveSelection} onApply={restoreSelection} />
             <FontSizeDropdown
-              onOpen={() => {
-                const selection = window.getSelection();
-                if (selection && selection.rangeCount > 0) {
-                  savedSelection = selection.getRangeAt(0).cloneRange();
-                }
-              }}
-              onApply={() => {
-                restoreSelection();
-              }}
+              onOpen={saveSelection}
+              onApply={restoreSelection}
             />
             <button
               onClick={markAllText}

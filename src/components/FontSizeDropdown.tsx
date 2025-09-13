@@ -32,23 +32,25 @@ export default function FontSizeDropdown({
   const [selectedSize, setSelectedSize] = useState("14px");
 
   const applyFontSize = (size: string) => {
-    onApply?.(); // restore saved selection before applying
+    onApply?.();
 
-    const selection = window.getSelection();
-    if (!selection?.rangeCount) return;
+    setTimeout(() => {
+      const selection = window.getSelection();
+      if (!selection?.rangeCount) return;
 
-    const range = selection.getRangeAt(0);
-    const selectedText = selection.toString();
+      const range = selection.getRangeAt(0);
+      const selectedText = selection.toString();
 
-    if (!selectedText) return;
+      if (!selectedText) return;
 
-    const span = document.createElement("span");
-    span.style.fontSize = size;
-    span.textContent = selectedText;
+      const span = document.createElement("span");
+      span.style.fontSize = size;
+      span.textContent = selectedText;
 
-    range.deleteContents();
-    range.insertNode(span);
-    setSelectedSize(size);
+      range.deleteContents();
+      range.insertNode(span);
+      setSelectedSize(size);
+    }, 60);
   };
 
   return (
@@ -56,10 +58,14 @@ export default function FontSizeDropdown({
       className="inline-block"
       onMouseDown={(e) => {
         e.preventDefault();
-        onOpen?.(); // save selection before dropdown steals focus
+        onOpen?.();
       }}
       onTouchStart={() => {
-        onOpen?.(); // also save on touch for mobile
+        onOpen?.();
+      }}
+      onPointerDown={(e) => {
+        e.preventDefault();
+        onOpen?.();
       }}
     >
       <Select
