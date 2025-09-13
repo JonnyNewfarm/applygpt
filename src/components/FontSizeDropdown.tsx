@@ -36,26 +36,27 @@ export default function FontSizeDropdown({
 
     setTimeout(() => {
       const selection = window.getSelection();
-      if (!selection || selection.rangeCount === 0) return;
+      if (!selection?.rangeCount) return;
 
-      try {
-        // Use execCommand for mobile compatibility
-        document.execCommand("fontSize", false, "7"); // 1-7 scale
+      const range = selection.getRangeAt(0);
+      const selectedText = selection.toString();
+      if (!selectedText) return;
 
-        // Replace <font size="7"> with actual px
-        const editor = document.activeElement as HTMLElement;
-        if (editor) {
-          editor.querySelectorAll('font[size="7"]').forEach((el) => {
-            (el as HTMLElement).style.fontSize = size;
-            el.removeAttribute("size");
-          });
-        }
+      const span = document.createElement("span");
+      span.style.fontSize = size;
+      span.textContent = selectedText;
 
-        setSelectedSize(size);
-      } catch (err) {
-        console.warn("applyFontSize failed", err);
-      }
-    }, 100);
+      range.deleteContents();
+      range.insertNode(span);
+
+      // move caret after span
+      range.setStartAfter(span);
+      range.collapse(true);
+      selection.removeAllRanges();
+      selection.addRange(range);
+
+      setSelectedSize(size);
+    }, 50);
   };
 
   return (

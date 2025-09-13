@@ -36,18 +36,29 @@ export default function FontDropdown({ onOpen, onApply }: FontDropdownProps) {
   const applyFont = (font: string) => {
     onApply?.(); // restore selection
 
-    // small delay for mobile browsers to restore focus
     setTimeout(() => {
       const selection = window.getSelection();
-      if (!selection || selection.rangeCount === 0) return;
+      if (!selection?.rangeCount) return;
 
-      try {
-        document.execCommand("fontName", false, font);
-        setSelectedFont(font);
-      } catch (err) {
-        console.warn("applyFont failed", err);
-      }
-    }, 100);
+      const range = selection.getRangeAt(0);
+      const selectedText = selection.toString();
+      if (!selectedText) return;
+
+      const span = document.createElement("span");
+      span.style.fontFamily = font;
+      span.textContent = selectedText;
+
+      range.deleteContents();
+      range.insertNode(span);
+
+      // move caret after span
+      range.setStartAfter(span);
+      range.collapse(true);
+      selection.removeAllRanges();
+      selection.addRange(range);
+
+      setSelectedFont(font);
+    }, 50);
   };
 
   return (
