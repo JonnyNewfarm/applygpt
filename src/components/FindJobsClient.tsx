@@ -558,7 +558,7 @@ export default function FindJobsPage() {
               <div className="flex justify-between px-6 md:px-8">
                 <button
                   onClick={() => setShowResumeModal((prev) => !prev)}
-                  className="border sticky cursor-pointer px-4 py-2 mb-2 mt-1 rounded-[5px] text-md font-semibold dark:border-[#2b2a27] border-white/40 text-[#ebe9e2] dark:text-[#2b2a27] hover:scale-105 transform transition-transform duration-200"
+                  className="border sticky cursor-pointer px-4 py-2 mb-2 mt-1 rounded-[5px] text-md font-semibold dark:border-[#2b2a27] border-white/40 text-[#ebe9e2] dark:text-[#2b2a27] hover:scale-105 transform text-nowrap transition-transform duration-200"
                 >
                   {showResumeModal ? "Close" : "Your Resume"}
                 </button>
@@ -576,7 +576,7 @@ export default function FindJobsPage() {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     onClick={() => setShowResumeModal(false)}
-                    className="fixed inset-0 flex items-center justify-center bg-black/70 z-50"
+                    className="fixed h-[100dvh]  inset-0 flex items-center justify-center bg-black/70 z-50"
                   >
                     <motion.div
                       key="modal"
@@ -589,7 +589,7 @@ export default function FindJobsPage() {
                     >
                       <button
                         onClick={() => setShowResumeModal(false)}
-                        className="absolute  hover:scale-103 top-3 transition-transform ease-in-out bg-[#eaeae584] rounded-full p-[3px] right-3.5 text-lg z-[99999] cursor-pointer text-stone-900 "
+                        className="absolute  hover:scale-103 top-3 transition-transform ease-in-out  rounded-full p-[3px] right-3.5 text-lg z-[99999] cursor-pointer bg-stone-500/30 text-stone-200 "
                       >
                         <IoMdClose />
                       </button>
@@ -603,7 +603,7 @@ export default function FindJobsPage() {
                 )}
               </AnimatePresence>
               {showNoResumePopup && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-40">
+                <div className="fixed inset-0 h-[100dvh]  bg-black/50 flex items-center justify-center z-40">
                   <div className="bg-white ml-3  mr-3 z-50  relative transform  text-black p-6 rounded  max-w-md py-10">
                     <div className="flex ml-2 justify-between items-center">
                       <div>
@@ -987,7 +987,7 @@ export default function FindJobsPage() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setShowCoverLetterModal(false)}
-            className="fixed inset-0 flex items-center justify-center bg-black/70 z-50"
+            className="fixed inset-0 h-[100dvh] flex items-center justify-center bg-black/70 z-50"
           >
             <motion.div
               id="custom-scrollbar"
@@ -1000,7 +1000,7 @@ export default function FindJobsPage() {
               className="mr-1.5 overflow-y-scroll h-[95%] ml-1.5 bg-[#1c1c1b] text-[#f6f4ed] md:px-2.5 px-1.5 py-4 rounded-[5px] max-w-8xl w-full relative"
             >
               <button
-                className="absolute top-3 hover:scale-103 transition-transform ease-in-out bg-[#eaeae592]  rounded-full p-[3px] right-3.5 text-lg z-[99999] cursor-pointer text-stone-900 dark:text-gray-100 dark:bg-stone-700/90 "
+                className="absolute top-3 hover:scale-103 transition-transform ease-in-out  rounded-full p-[3px] right-3.5 text-lg z-[99999] cursor-pointer bg-stone-500/30 text-stone-200"
                 onClick={() => setShowCoverLetterModal(false)}
               >
                 <IoMdClose />

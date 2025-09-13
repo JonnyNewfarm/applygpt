@@ -29,7 +29,7 @@ const ProfileDetailsTab = ({ children, buttonTitle }: Props) => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setShowUploadModal(false)}
-              className="fixed inset-0 flex items-center justify-center bg-black/80 z-50"
+              className="fixed inset-0 h-[100dvh]  flex items-center justify-center bg-black/80 z-50"
             >
               <motion.div
                 key="modal"
@@ -42,7 +42,7 @@ const ProfileDetailsTab = ({ children, buttonTitle }: Props) => {
               >
                 <button
                   onClick={() => setShowUploadModal(false)}
-                  className="absolute top-3 hover:scale-103 transition-transform ease-in-out bg-[#eaeae592]  rounded-full p-[3px] right-3.5 text-lg z-[99999] cursor-pointer text-stone-900  "
+                  className="absolute top-3 hover:scale-103 transition-transform ease-in-out   rounded-full p-[3px] right-3.5 text-lg z-[99999] cursor-pointer bg-stone-500/30 text-stone-200  "
                 >
                   <IoMdClose />
                 </button>

@@ -233,7 +233,7 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
         {showGeneralInfoRecord && (
           <motion.div
             onClick={() => setShowGeneralInfoRecord(false)}
-            className="fixed inset-0 z-50 bg-black/65 flex items-center justify-center"
+            className="fixed inset-0 z-50 h-[dvh] bg-black/65 flex items-center justify-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -344,7 +344,7 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
         {showAddressModalRecord && (
           <motion.div
             onClick={() => setShowAddressModalRecord(false)}
-            className="fixed inset-0 z-50 bg-black/65 flex items-center justify-center"
+            className="fixed h-[100dvh] inset-0 z-50 bg-black/65 flex items-center justify-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -410,7 +410,7 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
         {showExperienceModalRecord && (
           <motion.div
             onClick={() => setShowExperienceModalRecord(false)}
-            className="fixed inset-0 z-50 bg-black/65 flex items-center justify-center"
+            className="fixed h-[100dvh] inset-0 z-50 bg-black/65 flex items-center justify-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -478,7 +478,7 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
         {showSkillsModalRecord && (
           <motion.div
             onClick={() => setShowSkillsModalRecord(false)}
-            className="fixed inset-0 z-50 bg-black/65 flex items-center justify-center"
+            className="fixed h-[100dvh] inset-0 z-50 bg-black/65 flex items-center justify-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -609,7 +609,7 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
         {showEditResumeModal && (
           <div
             onClick={() => setShowEditResumeModal(false)}
-            className="fixed inset-0 z-50 bg-stone-900/65 flex items-center justify-center"
+            className="fixed h-[100dvh] inset-0 z-50 bg-stone-900/65 flex items-center justify-center"
           >
             <div
               onClick={(e) => e.stopPropagation()}
@@ -617,7 +617,7 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
             >
               <button
                 onClick={() => setShowEditResumeModal(false)}
-                className="absolute top-3 hover:scale-103 transition-transform ease-in-out bg-[#eaeae592]  rounded-full p-[3px] right-3.5 text-lg z-[99999] cursor-pointer text-stone-900 dark:text-gray-100 dark:bg-stone-700/90 "
+                className="absolute top-3 hover:scale-103 transition-transform ease-in-out   rounded-full p-[3px] right-3.5 text-lg z-[99999] cursor-pointer bg-stone-500/30 text-stone-200 "
               >
                 <IoMdClose />
               </button>

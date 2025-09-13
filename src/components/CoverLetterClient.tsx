@@ -411,7 +411,7 @@ export default function CoverLetterClient() {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={() => setShowResumeModal(false)}
-                        className="fixed inset-0 flex items-center justify-center bg-black/80 z-50"
+                        className="fixed h-[100dvh]  inset-0 flex items-center justify-center bg-black/80 z-50"
                       >
                         <motion.div
                           key="modal"
@@ -424,7 +424,7 @@ export default function CoverLetterClient() {
                         >
                           <button
                             onClick={() => setShowResumeModal(false)}
-                            className="absolute top-3 hover:scale-103 transition-transform ease-in-out bg-[#eaeae592]  rounded-full p-[3px] right-3.5 text-lg z-[99999] cursor-pointer text-stone-900 "
+                            className="absolute top-3 hover:scale-103 transition-transform ease-in-out bg-stone-500/30  rounded-full p-[3px] right-3.5 text-lg z-[99999] cursor-pointer text-stone-200 "
                           >
                             <IoMdClose />
                           </button>
