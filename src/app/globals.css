@@ -118,43 +118,16 @@ position: absolute;
 }
 
 
-/* DARK MODE */
-@media (prefers-color-scheme: dark) {
-  #custom-scrollbar {
-    scrollbar-color: #bbb #1c1c1b; /* Firefox */
-  }
-
-  #custom-scrollbar::-webkit-scrollbar-track {
-    background: #1c1c1b; /* darker background for track */
-  }
-
-  #custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: #bbb; /* lighter thumb for dark bg */
-    border-radius: 4px;
-    border: 2px solid #1c1c1b; /* match track */
-  }
-
-  #custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background-color: #ddd; /* slightly lighter on hover */
-  }
-
-  .card-wrapper::before {
-  content: '';
-  position: absolute;
-  width: 150%;
-  height: 150%;
-left: -25%;
-top: -25%;
-  background: conic-gradient(#0c0c0c 0deg, #0f0f0f 0deg, transparent 80deg);
-  animation: border-spin 7s linear infinite;
-}
 
 
 
 
 
 
-}
+
+
+
+
 
 
 
