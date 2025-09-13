@@ -113,18 +113,16 @@ const HeroSection = () => {
             </p>
           </div>
 
-          <div className="mt-3 md:mt-5 ">
+          <div className="mt-3 md:mt-5">
             <MagneticComp>
-              <Link
-                className="w-full cursor-pointer py-3 mb-3 rounded-[5px] uppercase tracking-wide px-3 text-[12px] md:text-[15px]
-             font-bold bg-gradient-to-tr from-[#f6f4ed] to-[#e2dfc7]
-             dark:from-[#2c2c2c] dark:to-[#3a3a3a]
-             text-black dark:text-white shadow-inner hover:shadow-lg
-             transition-all duration-300 ease-in-out"
-                href={"/jobs"}
-              >
-                Get Started
-              </Link>
+              <div className="card-wrapper w-[150px] h-[50px]">
+                <Link
+                  href="/jobs"
+                  className="card-content flex items-center justify-center text-md "
+                >
+                  Get Started
+                </Link>
+              </div>
             </MagneticComp>
           </div>
         </div>

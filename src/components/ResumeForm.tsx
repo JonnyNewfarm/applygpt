@@ -31,11 +31,22 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
 
   const markAllText = () => {
     if (!resumeEditorRef.current) return;
+
     const range = document.createRange();
     range.selectNodeContents(resumeEditorRef.current);
+
     const selection = window.getSelection();
-    selection?.removeAllRanges();
-    selection?.addRange(range);
+    if (!selection) return;
+
+    // Save current scroll position
+    const scrollX = window.scrollX;
+    const scrollY = window.scrollY;
+
+    selection.removeAllRanges();
+    selection.addRange(range);
+
+    // Restore scroll so the page doesn't jump down
+    window.scrollTo(scrollX, scrollY);
 
     savedSelection = range.cloneRange();
   };
@@ -48,7 +59,8 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
     }
   };
 
-  const onBoldSelection = () => {
+  const onBoldSelection = (e?: React.MouseEvent) => {
+    e?.preventDefault();
     restoreSelection();
     document.execCommand("bold");
     setTimeout(syncContent, 0);
@@ -217,11 +229,11 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
             )}
             <button
               onClick={onBoldSelection}
-              className={`mt-1 mr-3 border  cursor-pointer px-3 py-1.5 rounded-[3px]  text-sm transition-all duration-200
+              className={`mt-1 mr-3 border  cursor-pointer px-4 py-[9px] rounded-[3px]  text-xs md:text-sm transition-all duration-200
     ${
       isBoldActive
-        ? "bg-[#f6f4ed]  border-white/60 text-black "
-        : "bg-transparent font-semibold text-[#f6f4ed] border-white/40 "
+        ? "bg-[#f6f4ed]  border-white/40 text-black "
+        : "bg-transparent font-semibold text-[#f6f4ed] border-white/20 "
     }`}
             >
               B
@@ -231,7 +243,7 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
             <FontSizeDropdown />
             <button
               onClick={markAllText}
-              className="mt-1  ml-3 font-bold  cursor-pointer px-3 py-1.5 rounded-[3px] text-sm bg-transparent text-[#f6f4ed]  border border-white/40    "
+              className="mt-1  ml-3   cursor-pointer px-3 py-[9px] rounded-[3px] text-xs md:text-sm bg-transparent text-[#f6f4ed]  border border-white/20    "
             >
               Mark All
             </button>

@@ -47,10 +47,10 @@ export default function FontSizeDropdown() {
         value={selectedSize}
         onValueChange={(value) => applyFontSize(value)}
       >
-        <SelectTrigger className="mt-1  h-[36px] px-3 py-1.5 rounded-[3px] text-sm font-semibold cursor-pointer border border-white/40 bg-transparent text-[#f6f4ed] focus:outline-none focus:ring-0 ">
+        <SelectTrigger className="mt-1  h-[36px] px-3 py-1 rounded-[3px] text-xs md:text-sm  cursor-pointer border border-white/20 bg-transparent text-[#f6f4ed] focus:outline-none focus:ring-0 ">
           <SelectValue />
         </SelectTrigger>
-        <SelectContent className="bg-stone-800 text-stone-100 rounded-[4px] border border-white/40">
+        <SelectContent className="bg-stone-800 text-stone-100 rounded-[4px] border border-white/20">
           {fontSizes.map((size) => (
             <SelectItem
               key={size}
