@@ -28,18 +28,6 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
   const resumePdfRef = useRef<HTMLDivElement>(null);
 
   const savedSelectionRef = useRef<Range | null>(null);
-  const saveSelection = () => {
-    const selection = window.getSelection();
-    if (selection && selection.rangeCount > 0) {
-      try {
-        savedSelectionRef.current = selection.getRangeAt(0).cloneRange();
-      } catch (err) {
-        // defensive
-        console.warn("saveSelection failed", err);
-        savedSelectionRef.current = null;
-      }
-    }
-  };
 
   const restoreSelection = () => {
     const selection = window.getSelection();
@@ -248,7 +236,7 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
             <p className="text-md ">Select the text you want to modify.</p>
           </div>
 
-          <div className=" relative -mb-8 h-full">
+          <div className=" space-x-2 mb-1">
             {resume ? (
               <h2 className="text-lg mb- font-semibold sm:hidden ">
                 Edit Resume
@@ -260,7 +248,7 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
             )}
             <button
               onClick={onBoldSelection}
-              className={`mt-1 mr-3 border  cursor-pointer px-4 py-[9px] rounded-[3px]  text-xs md:text-sm transition-all duration-200
+              className={`mt-1  border  cursor-pointer px-4 py-[9px] rounded-[3px]  text-xs md:text-sm transition-all duration-200
     ${
       isBoldActive
         ? "bg-[#f6f4ed]  border-white/40 text-black "
@@ -270,16 +258,16 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
               B
             </button>
 
-            <FontDropdown onOpen={saveSelection} onApply={restoreSelection} />
-            <FontSizeDropdown
-              onOpen={saveSelection}
+            <FontDropdown
               onApply={restoreSelection}
+              editorRef={resumeEditorRef}
             />
+            <FontSizeDropdown editorRef={resumeEditorRef} />
             <button
               onClick={markAllText}
-              className="mt-1  ml-3   cursor-pointer px-3 py-[9px] rounded-[3px] text-xs md:text-sm bg-transparent text-[#f6f4ed]  border border-white/20    "
+              className="mt-1     cursor-pointer px-3 py-[9px] rounded-[3px] text-nowrap text-xs md:text-sm bg-transparent text-[#f6f4ed]  border border-white/20    "
             >
-              Mark All
+              Mark
             </button>
           </div>
         </div>

@@ -1,13 +1,5 @@
 "use client";
-
-import { useState } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { useState, useEffect } from "react";
 
 const fonts = [
   "Arial",
@@ -26,77 +18,82 @@ const fonts = [
 ];
 
 interface FontDropdownProps {
-  onOpen?: () => void;
   onApply?: () => void;
+  editorRef: React.RefObject<HTMLDivElement | null>;
 }
 
-export default function FontDropdown({ onOpen, onApply }: FontDropdownProps) {
+export default function FontDropdown({
+  onApply,
+  editorRef,
+}: FontDropdownProps) {
   const [selectedFont, setSelectedFont] = useState("Arial");
 
   const applyFont = (font: string) => {
-    onApply?.(); // restore selection
-
+    onApply?.();
     setTimeout(() => {
       const selection = window.getSelection();
       if (!selection?.rangeCount) return;
-
       const range = selection.getRangeAt(0);
-      const selectedText = selection.toString();
-      if (!selectedText) return;
+      const text = selection.toString();
+      if (!text) return;
 
       const span = document.createElement("span");
       span.style.fontFamily = font;
-      span.textContent = selectedText;
+      span.textContent = text;
 
       range.deleteContents();
       range.insertNode(span);
 
-      // move caret after span
       range.setStartAfter(span);
       range.collapse(true);
       selection.removeAllRanges();
       selection.addRange(range);
 
       setSelectedFont(font);
+      editorRef.current?.focus();
     }, 50);
   };
 
+  useEffect(() => {
+    const updateFont = () => {
+      const selection = window.getSelection();
+      if (!selection?.rangeCount) return;
+      const node = selection.anchorNode as HTMLElement;
+      if (!node) return;
+      const computedFont = window.getComputedStyle(
+        node.nodeType === 3 ? node.parentElement! : node
+      ).fontFamily;
+      if (fonts.includes(computedFont)) setSelectedFont(computedFont);
+    };
+
+    document.addEventListener("selectionchange", updateFont);
+    return () => document.removeEventListener("selectionchange", updateFont);
+  }, []);
+
+  const displayFont = (font: string) =>
+    font.length > 12 ? font.slice(0, 12) + "…" : font;
+
   return (
-    <div
-      className="inline-block"
-      onMouseDown={(e) => {
-        e.preventDefault();
-        onOpen?.(); // ✅ save selection before dropdown opens
-      }}
-      onTouchStart={(e) => {
-        e.preventDefault();
-        onOpen?.(); // ✅ also for mobile
-      }}
+    <select
+      value={selectedFont}
+      onChange={(e) => applyFont(e.target.value)}
+      className="px-3 py-[9px] text-xs md:text-sm bg-[bg-[#1c1c1b] text-stone-100 border border-white/20 rounded-[3px] cursor-pointer max-w-[60px] truncate appearance-none"
+      title={selectedFont}
+      style={{ WebkitAppearance: "none", MozAppearance: "none" }}
     >
-      <Select
-        value={selectedFont}
-        onOpenChange={(open) => {
-          if (open) onOpen?.(); // ✅ save selection only when menu opens
-        }}
-        onValueChange={(value) => applyFont(value)}
-      >
-        {" "}
-        <SelectTrigger className="mt-1 mr-3 px-3 py-0 rounded-[3px] mb-10 text-xs md:text-sm cursor-pointer border border-white/20 bg-transparent text-[#f6f4ed] focus:outline-none focus:ring-0 max-w-[80px] truncate">
-          <SelectValue placeholder="Font" />
-        </SelectTrigger>
-        <SelectContent className="bg-stone-800 text-stone-100 rounded-[3px] border border-white/20 max-w-[150px]">
-          {fonts.map((font) => (
-            <SelectItem
-              key={font}
-              value={font}
-              style={{ fontFamily: font }}
-              className="cursor-pointer hover:bg-black hover:text-white truncate"
-            >
-              {font}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </div>
+      {fonts.map((f) => (
+        <option
+          key={f}
+          value={f}
+          style={{
+            fontFamily: f,
+            backgroundColor: "#2a2a2a",
+            color: "#f6f4ed",
+          }}
+        >
+          {displayFont(f)}
+        </option>
+      ))}
+    </select>
   );
 }

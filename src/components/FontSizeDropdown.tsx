@@ -1,13 +1,5 @@
 "use client";
-
 import { useState } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 const fontSizes = [
   "12px",
@@ -21,78 +13,54 @@ const fontSizes = [
 ];
 
 interface FontSizeDropdownProps {
-  onOpen?: () => void;
-  onApply?: () => void;
+  editorRef: React.RefObject<HTMLDivElement | null>;
 }
 
-export default function FontSizeDropdown({
-  onOpen,
-  onApply,
-}: FontSizeDropdownProps) {
+export default function FontSizeDropdown({ editorRef }: FontSizeDropdownProps) {
   const [selectedSize, setSelectedSize] = useState("14px");
 
   const applyFontSize = (size: string) => {
-    onApply?.(); // restore selection
+    setSelectedSize(size);
 
-    setTimeout(() => {
-      const selection = window.getSelection();
-      if (!selection?.rangeCount) return;
+    const selection = window.getSelection();
+    if (!selection?.rangeCount) return;
 
-      const range = selection.getRangeAt(0);
-      const selectedText = selection.toString();
-      if (!selectedText) return;
+    const range = selection.getRangeAt(0);
+    const text = selection.toString();
+    if (!text) return;
 
-      const span = document.createElement("span");
-      span.style.fontSize = size;
-      span.textContent = selectedText;
+    const span = document.createElement("span");
+    span.style.fontSize = size;
+    span.textContent = text;
 
-      range.deleteContents();
-      range.insertNode(span);
+    range.deleteContents();
+    range.insertNode(span);
 
-      // move caret after span
-      range.setStartAfter(span);
-      range.collapse(true);
-      selection.removeAllRanges();
-      selection.addRange(range);
+    range.setStartAfter(span);
+    range.collapse(true);
+    selection.removeAllRanges();
+    selection.addRange(range);
 
-      setSelectedSize(size);
-    }, 50);
+    editorRef.current?.focus();
   };
 
   return (
-    <div
-      className="inline-block"
-      onMouseDown={(e) => {
-        e.preventDefault();
-        onOpen?.();
-      }}
-      onTouchStart={(e) => {
-        e.preventDefault();
-        onOpen?.();
-      }}
+    <select
+      value={selectedSize}
+      onChange={(e) => applyFontSize(e.target.value)}
+      className="px-3 py-[9px] text-xs md:text-sm bg-[#1c1c1b] text-stone-100 border border-white/20 rounded-[3px] cursor-pointer max-w-[80px] truncate appearance-none"
+      title={selectedSize}
+      style={{ WebkitAppearance: "none", MozAppearance: "none" }}
     >
-      <Select
-        value={selectedSize}
-        onOpenChange={(open) => {
-          if (open) onOpen?.();
-        }}
-        onValueChange={(value) => applyFontSize(value)}
-      >
-        <SelectTrigger className="mt-1 h-[36px] px-3 py-1 rounded-[3px] text-xs md:text-sm cursor-pointer border border-white/20 bg-transparent text-[#f6f4ed] focus:outline-none focus:ring-0">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent className="bg-stone-800 text-stone-100 rounded-[4px] border border-white/20">
-          {fontSizes.map((size) => (
-            <SelectItem
-              key={size}
-              value={size}
-              className="cursor-pointer hover:bg-black hover:text-white"
-            >
-              {size}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </div>
+      {fontSizes.map((s) => (
+        <option
+          key={s}
+          value={s}
+          style={{ backgroundColor: "#2a2a2a", color: "#f6f4ed" }}
+        >
+          {s}
+        </option>
+      ))}
+    </select>
   );
 }

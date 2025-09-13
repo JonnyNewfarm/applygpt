@@ -517,8 +517,9 @@ export default function CoverLetterClientModal({ job }: Props) {
                   >
                     B
                   </button>
-                  <FontDropdown />
-                  <FontSizeDropdown />
+                  <FontDropdown editorRef={editableRef} />
+                  <FontSizeDropdown editorRef={editableRef} />
+
                   <button
                     onClick={onMarkAll}
                     className="mt-2 border ml-2 font-semibold cursor-pointer px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] "
