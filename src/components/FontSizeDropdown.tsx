@@ -32,25 +32,30 @@ export default function FontSizeDropdown({
   const [selectedSize, setSelectedSize] = useState("14px");
 
   const applyFontSize = (size: string) => {
-    onApply?.();
+    onApply?.(); // restore selection
 
     setTimeout(() => {
       const selection = window.getSelection();
-      if (!selection?.rangeCount) return;
+      if (!selection || selection.rangeCount === 0) return;
 
-      const range = selection.getRangeAt(0);
-      const selectedText = selection.toString();
+      try {
+        // Use execCommand for mobile compatibility
+        document.execCommand("fontSize", false, "7"); // 1-7 scale
 
-      if (!selectedText) return;
+        // Replace <font size="7"> with actual px
+        const editor = document.activeElement as HTMLElement;
+        if (editor) {
+          editor.querySelectorAll('font[size="7"]').forEach((el) => {
+            (el as HTMLElement).style.fontSize = size;
+            el.removeAttribute("size");
+          });
+        }
 
-      const span = document.createElement("span");
-      span.style.fontSize = size;
-      span.textContent = selectedText;
-
-      range.deleteContents();
-      range.insertNode(span);
-      setSelectedSize(size);
-    }, 60);
+        setSelectedSize(size);
+      } catch (err) {
+        console.warn("applyFontSize failed", err);
+      }
+    }, 100);
   };
 
   return (
@@ -60,10 +65,7 @@ export default function FontSizeDropdown({
         e.preventDefault();
         onOpen?.();
       }}
-      onTouchStart={() => {
-        onOpen?.();
-      }}
-      onPointerDown={(e) => {
+      onTouchStart={(e) => {
         e.preventDefault();
         onOpen?.();
       }}

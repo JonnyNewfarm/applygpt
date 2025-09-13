@@ -34,18 +34,20 @@ export default function FontDropdown({ onOpen, onApply }: FontDropdownProps) {
   const [selectedFont, setSelectedFont] = useState("Arial");
 
   const applyFont = (font: string) => {
-    // Restore selection in parent
-    onApply?.();
+    onApply?.(); // restore selection
 
-    // Delay slightly so focus/selection is re-applied (helps mobile)
+    // small delay for mobile browsers to restore focus
     setTimeout(() => {
+      const selection = window.getSelection();
+      if (!selection || selection.rangeCount === 0) return;
+
       try {
         document.execCommand("fontName", false, font);
         setSelectedFont(font);
       } catch (err) {
         console.warn("applyFont failed", err);
       }
-    }, 60);
+    }, 100);
   };
 
   return (
@@ -53,15 +55,11 @@ export default function FontDropdown({ onOpen, onApply }: FontDropdownProps) {
       className="inline-block"
       onMouseDown={(e) => {
         e.preventDefault();
-        onOpen?.();
+        onOpen?.(); // ✅ save selection before dropdown opens
       }}
-      onTouchStart={() => {
-        onOpen?.();
-      }}
-      onPointerDown={(e) => {
-        // extra safety for pointer events
+      onTouchStart={(e) => {
         e.preventDefault();
-        onOpen?.();
+        onOpen?.(); // ✅ also for mobile
       }}
     >
       <Select value={selectedFont} onValueChange={(value) => applyFont(value)}>
@@ -73,8 +71,8 @@ export default function FontDropdown({ onOpen, onApply }: FontDropdownProps) {
             <SelectItem
               key={font}
               value={font}
-              className="cursor-pointer hover:bg-black hover:text-white truncate"
               style={{ fontFamily: font }}
+              className="cursor-pointer hover:bg-black hover:text-white truncate"
             >
               {font}
             </SelectItem>
