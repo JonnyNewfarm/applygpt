@@ -72,6 +72,9 @@ export default function FontSizeDropdown({
     >
       <Select
         value={selectedSize}
+        onOpenChange={(open) => {
+          if (open) onOpen?.();
+        }}
         onValueChange={(value) => applyFontSize(value)}
       >
         <SelectTrigger className="mt-1 h-[36px] px-3 py-1 rounded-[3px] text-xs md:text-sm cursor-pointer border border-white/20 bg-transparent text-[#f6f4ed] focus:outline-none focus:ring-0">

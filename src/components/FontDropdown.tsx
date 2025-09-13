@@ -62,7 +62,14 @@ export default function FontDropdown({ onOpen, onApply }: FontDropdownProps) {
         onOpen?.(); // ✅ also for mobile
       }}
     >
-      <Select value={selectedFont} onValueChange={(value) => applyFont(value)}>
+      <Select
+        value={selectedFont}
+        onOpenChange={(open) => {
+          if (open) onOpen?.(); // ✅ save selection only when menu opens
+        }}
+        onValueChange={(value) => applyFont(value)}
+      >
+        {" "}
         <SelectTrigger className="mt-1 mr-3 px-3 py-0 rounded-[3px] mb-10 text-xs md:text-sm cursor-pointer border border-white/20 bg-transparent text-[#f6f4ed] focus:outline-none focus:ring-0 max-w-[80px] truncate">
           <SelectValue placeholder="Font" />
         </SelectTrigger>
