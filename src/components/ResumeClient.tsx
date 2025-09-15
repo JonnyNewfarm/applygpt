@@ -613,7 +613,7 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
           >
             <div
               onClick={(e) => e.stopPropagation()}
-              className="bg-[#1c1c1b] relative py-6 border-white/20 dark:border-black/20 border dark:bg-white rounded w-[90%] max-w-6xl"
+              className="bg-[#1c1c1b] relative py-6 border-white/20  border  rounded w-[90%] max-w-6xl"
             >
               <button
                 onClick={() => setShowEditResumeModal(false)}
