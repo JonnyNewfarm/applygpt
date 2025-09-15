@@ -36,16 +36,18 @@ export default function FontSizeDropdown() {
 
   return (
     <select
-      className="px-2 py-1 text-sm   mb-10  border ml-2 rounded cursor-pointer dark:border-stone-600 border-white/40 "
+      className="px-2 py-[7px] text-sm mb-10 border ml-2 rounded cursor-pointer dark:border-stone-600 border-white/40  text-white dark:text-stone-600"
       value={selectedSize}
       onChange={(e) => applyFontSize(e.target.value)}
     >
       {fontSizes.map((size) => (
         <option
-          style={{ background: "white", color: "black" }}
-          className=""
           key={size}
           value={size}
+          style={{
+            backgroundColor: "#2b2a27",
+            color: "#ffffff",
+          }}
         >
           {size}
         </option>

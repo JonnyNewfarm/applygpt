@@ -424,7 +424,7 @@ export default function CoverLetterClient() {
                         >
                           <button
                             onClick={() => setShowResumeModal(false)}
-                            className="absolute top-3 hover:scale-103 transition-transform ease-in-out bg-stone-500/30  rounded-full p-[3px] right-3.5 text-lg z-[99999] cursor-pointer text-stone-200 "
+                            className="absolute top-3 hover:scale-103 transition-transform ease-in-out bg-stone-500/30 text-stone-200  rounded-full p-[3px] right-3.5 text-lg z-[99999] cursor-pointer  "
                           >
                             <IoMdClose />
                           </button>
@@ -512,13 +512,13 @@ export default function CoverLetterClient() {
                   <div className="flex gap-x-2 items-center">
                     <button
                       onClick={onCopy}
-                      className="mt-1 border cursor-pointer px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-xs text-[#f6f4ed] dark:text-[#2b2a27] dark:border-stone-700"
+                      className="mt-1 border cursor-pointer px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-xs md:text-sm text-[#f6f4ed] dark:text-[#2b2a27] dark:border-stone-700"
                     >
                       Copy
                     </button>
                     <button
                       onClick={onDownload}
-                      className="mt-1 border cursor-pointer font-semibold px-3 py-1.5 rounded-[3px] bg-[#f6f4ed] text-xs text-[#2b2a27] dark:text-[#f6f4ed] dark:bg-[#2b2a27]"
+                      className="mt-1 border cursor-pointer font-semibold px-3 py-1.5 rounded-[3px] md:text-sm bg-[#f6f4ed] text-xs text-[#2b2a27] dark:text-[#f6f4ed] dark:bg-[#2b2a27]"
                     >
                       Download as PDF
                     </button>
@@ -528,8 +528,8 @@ export default function CoverLetterClient() {
                       onClick={onBoldSelection}
                       className={`mt-1 mr-2 border font-bold cursor-pointer px-3 py-1.5 rounded-[3px] text-sm transition-all duration-200 ${
                         isBoldActive
-                          ? "bg-[#f6f4ed] text-[#2b2a27] border-[#f6f4ed] dark:bg-[#2b2a27] dark:text-[#f6f4ed] dark:border-[#2b2a27]"
-                          : "bg-transparent text-[#f6f4ed] border-[#f6f4ed] dark:text-[#2b2a27] dark:border-[#2b2a27]"
+                          ? "bg-[#f6f4ed] text-[#2b2a27] border-stone-300/30 dark:bg-[#2b2a27] dark:text-[#f6f4ed] dark:border-[#2b2a27]"
+                          : "bg-transparent text-[#f6f4ed] border-stone-300/30 dark:text-[#2b2a27] dark:border-[#2b2a27]"
                       }`}
                     >
                       B
@@ -538,7 +538,7 @@ export default function CoverLetterClient() {
                     <FontSizeDropdownWithDarkmode />
                     <button
                       onClick={onMarkAll}
-                      className="mt-1 border ml-2 font-semibold cursor-pointer px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] dark:text-[#2b2a27] dark:border-stone-600"
+                      className="mt-1 border ml-2 font-semibold cursor-pointer px-3 py-1.5 rounded-[3px] border-stone-300/30 text-sm text-[#f6f4ed] dark:text-[#2b2a27] dark:border-stone-600"
                     >
                       Mark All
                     </button>

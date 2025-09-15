@@ -15,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import { FaExternalLinkAlt } from "react-icons/fa";
 
 interface Props {
   job: {
@@ -476,9 +477,9 @@ export default function CoverLetterClientModal({ job }: Props) {
 
             {loading ? (
               <div className="mt-8 animate-pulse flex gap-x-4 items-center">
-                <div className="h-2 w-2 bg-white/80 "></div>
-                <div className="h-2 w-2 bg-white/80"></div>
-                <div className="h-2 w-2 bg-white/80"></div>
+                <div className="h-2 w-2 rounded-full bg-white/80 "></div>
+                <div className="h-2 w-2 rounded-full bg-white/80"></div>
+                <div className="h-2 w-2 rounded-full bg-white/80"></div>
               </div>
             ) : coverLetter ? (
               <>
@@ -488,9 +489,9 @@ export default function CoverLetterClientModal({ job }: Props) {
                       href={url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="bg-[#f6f4ed] text-[#2b2a27]  py-1 px-3 rounded-[3px] hover:opacity-90 mt-2 inline-block font-bold"
+                      className="bg-[#f6f4ed] flex text-[#2b2a27]  py-1 px-3 rounded-[3px] hover:opacity-90 mt-2 items-center gap-x-1 font-semibold"
                     >
-                      Apply
+                      <FaExternalLinkAlt /> Open
                     </a>
                   )}
                   <button
@@ -506,13 +507,13 @@ export default function CoverLetterClientModal({ job }: Props) {
                     Download as PDF
                   </button>
                 </div>
-                <div className="-mb-8 mt-2">
+                <div className=" space-x-2 mt-2">
                   <button
                     onClick={onBoldSelection}
                     className={`mt-2 mr-2 border font-bold cursor-pointer px-3 py-1.5 rounded-[3px] text-sm transition-all duration-200 ${
                       isBoldActive
-                        ? "bg-[#f6f4ed] text-[#2b2a27] border-[#f6f4ed] "
-                        : "bg-transparent text-[#f6f4ed] border-[#f6f4ed] "
+                        ? "bg-[#f6f4ed] text-[#2b2a27] border-stone-300/30 "
+                        : "bg-transparent text-[#f6f4ed] border-stone-300/30 "
                     }`}
                   >
                     B
@@ -522,7 +523,7 @@ export default function CoverLetterClientModal({ job }: Props) {
 
                   <button
                     onClick={onMarkAll}
-                    className="mt-2 border ml-2 font-semibold cursor-pointer px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] "
+                    className="mt-2 border  font-semibold cursor-pointer px-3 py-1.5 rounded-[3px] border-stone-300/30 text-sm text-[#f6f4ed] "
                   >
                     Mark All
                   </button>
