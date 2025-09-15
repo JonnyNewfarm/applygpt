@@ -8,7 +8,6 @@ interface VoiceInputProps {
   onTextChangeAction: (newText: string) => void;
 }
 
-// Extend the window interface to include speech recognition types
 interface SpeechRecognition extends EventTarget {
   continuous: boolean;
   interimResults: boolean;

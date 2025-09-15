@@ -6,12 +6,12 @@ export const metadata: Metadata = {
   description:
     "Generate professional cover letters in seconds using AI. Match your resume to any job and create customized, compelling applications fast.",
   icons: {
-    icon: "/og-image.png",
+    icon: "/og-image-v2.png",
   },
   openGraph: {
     images: [
       {
-        url: "https://www.jobscriptor.com/og-image.png",
+        url: "https://www.jobscriptor.com/og-image-v2.png",
         width: 1200,
         height: 630,
         alt: "Find Jobs in New York with AI tools.",

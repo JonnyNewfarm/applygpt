@@ -14,11 +14,9 @@ export default function ResumeExampleSection() {
     if (!imgRef.current) return;
 
     if (isZoomed) {
-      // Reset zoom
       setIsZoomed(false);
       setTransformOrigin("center center");
     } else {
-      // Zoom in at click position
       const rect = imgRef.current.getBoundingClientRect();
       const x = ((e.clientX - rect.left) / rect.width) * 100;
       const y = ((e.clientY - rect.top) / rect.height) * 100;

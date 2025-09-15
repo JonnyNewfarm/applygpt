@@ -16,7 +16,6 @@ type SavedJob = {
   description: string;
 };
 
-// Lazy-load the modal to improve performance
 const CoverLetterClientModal = lazy(() => import("./CoverLetterClientModal"));
 
 export default function ProfilePage() {

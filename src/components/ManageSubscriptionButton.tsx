@@ -1,4 +1,3 @@
-// components/ManageSubscriptionButton.tsx
 "use client";
 
 export default function ManageSubscriptionButton() {

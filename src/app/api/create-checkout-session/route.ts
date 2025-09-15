@@ -51,8 +51,6 @@ export async function POST(req: Request) {
     customerId = customer.id;
   }
 
-  // ✅ DO NOT cancel old subscriptions here anymore.
-  // This is now handled in the webhook after payment confirmation.
 
   const stripeSession = await stripe.checkout.sessions.create({
     customer: customerId,

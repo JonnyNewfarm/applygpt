@@ -104,7 +104,6 @@ export default function CoverLetterExampleSection() {
               className="max-w-[90%] md:max-w-[80%] mx-auto max-h-[90%] border border-gray-400"
             />
 
-            {/* Zoom icons */}
             {!isZoomed ? (
               <ZoomIn className="absolute top-4 left-4 w-8 h-8 text-white opacity-70 pointer-events-none" />
             ) : (

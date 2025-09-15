@@ -21,13 +21,12 @@ model User {
   accounts Account[]
   sessions Session[]
 
-  // New relations
   resume       Resume?
   coverLetters CoverLetter[]
   usages       Usage[]
   savedJobs    SavedJob[]
 
-  generationLimit Int? // null means unlimited
+  generationLimit Int?
   generationCount Int  @default(0)
 }
 
@@ -43,7 +42,7 @@ model SavedJob {
   description String
   savedAt     DateTime @default(now())
 
-  @@unique([userId, jobId]) // Prevent saving same job twice
+  @@unique([userId, jobId])
 }
 
 model Account {
@@ -105,7 +104,7 @@ model Usage {
   id     String @id @default(cuid())
   user   User   @relation(fields: [userId], references: [id])
   userId String
-  month  String // format "YYYY-MM", e.g. "2025-06"
+  month  String
   count  Int    @default(0)
 
   @@unique([userId, month])

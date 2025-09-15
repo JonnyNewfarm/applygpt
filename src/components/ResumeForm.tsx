@@ -60,10 +60,8 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
 
   const onBoldSelection = (e?: React.MouseEvent) => {
     e?.preventDefault();
-    // restore selection & focus
     restoreSelection();
 
-    // small delay so browser can focus & reapply range (helps on mobile)
     setTimeout(() => {
       document.execCommand("bold");
       syncContent();
@@ -74,7 +72,6 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
     if (resumeEditorRef.current) {
       resumeEditorRef.current.innerHTML = content ?? "";
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resume]);
 
   useEffect(() => {

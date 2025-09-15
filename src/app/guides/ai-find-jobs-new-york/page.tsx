@@ -1,4 +1,3 @@
-// app/blog/ai-find-jobs-new-york/page.tsx
 import { Metadata } from "next";
 import Link from "next/link";
 

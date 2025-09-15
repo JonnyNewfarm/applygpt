@@ -1,5 +1,3 @@
-// /pages/api/match-to-resume.ts (eller /app/api/match-to-resume/route.ts i app-router)
-
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 import { getServerSession } from "next-auth";
@@ -42,7 +40,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Call OpenAI to get matching score
     const gptResponse = await openai.chat.completions.create({
       model: "gpt-4",
       messages: [
@@ -64,7 +61,6 @@ export async function POST(req: NextRequest) {
         explanation: "Could not evaluate",
       };
 
-    // Increment generation count
     await prisma.user.update({
       where: { id: user.id },
       data: {

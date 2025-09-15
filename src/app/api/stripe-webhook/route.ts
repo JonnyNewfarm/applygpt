@@ -64,7 +64,6 @@ export async function POST(req: NextRequest) {
           break;
         }
 
-        // ✅ Cancel any previous active subscription except the new one
         const existingSubscriptions = await stripe.subscriptions.list({
           customer: customerId,
           status: "active",
