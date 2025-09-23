@@ -1,5 +1,12 @@
 "use client";
 import { useState, useEffect } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const fonts = [
   "Arial",
@@ -74,26 +81,21 @@ export default function FontDropdown({
     font.length > 12 ? font.slice(0, 12) + "…" : font;
 
   return (
-    <select
-      value={selectedFont}
-      onChange={(e) => applyFont(e.target.value)}
-      className="px-3 py-[9px] text-xs md:text-sm bg-[bg-[#1c1c1b] text-stone-100 border border-white/20 rounded-[3px] cursor-pointer max-w-[60px] truncate appearance-none"
-      title={selectedFont}
-      style={{ WebkitAppearance: "none", MozAppearance: "none" }}
-    >
-      {fonts.map((f) => (
-        <option
-          key={f}
-          value={f}
-          style={{
-            fontFamily: f,
-            backgroundColor: "#2a2a2a",
-            color: "#f6f4ed",
-          }}
-        >
-          {displayFont(f)}
-        </option>
-      ))}
-    </select>
+    <Select value={selectedFont} onValueChange={(val) => applyFont(val)}>
+      <SelectTrigger className="w-32 border cursor-pointer  bg-transparent max-w-[80px] border-stone-300/30   text-white">
+        <SelectValue placeholder="Select font" />
+      </SelectTrigger>
+      <SelectContent className="bg-stone-800 text-white">
+        {fonts.map((f) => (
+          <SelectItem
+            key={f}
+            value={f}
+            className="hover:bg-stone-600 cursor-pointer"
+          >
+            <span style={{ fontFamily: f }}>{displayFont(f)}</span>
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   );
 }

@@ -1,5 +1,12 @@
 "use client";
 import { useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
 const fontSizes = [
   "12px",
@@ -45,22 +52,23 @@ export default function FontSizeDropdown({ editorRef }: FontSizeDropdownProps) {
   };
 
   return (
-    <select
-      value={selectedSize}
-      onChange={(e) => applyFontSize(e.target.value)}
-      className="px-3 py-[9px] text-xs md:text-sm bg-[#1c1c1b] text-stone-100 border border-white/20 rounded-[3px] cursor-pointer max-w-[80px] truncate appearance-none"
-      title={selectedSize}
-      style={{ WebkitAppearance: "none", MozAppearance: "none" }}
-    >
-      {fontSizes.map((s) => (
-        <option
-          key={s}
-          value={s}
-          style={{ backgroundColor: "#2a2a2a", color: "#f6f4ed" }}
-        >
-          {s}
-        </option>
-      ))}
-    </select>
+    <div>
+      <Select value={selectedSize} onValueChange={(val) => applyFontSize(val)}>
+        <SelectTrigger className="w-32 border cursor-pointer  bg-transparent max-w-[80px] border-stone-300/30   text-white">
+          <SelectValue placeholder="Font size" />
+        </SelectTrigger>
+        <SelectContent className="bg-stone-800 text-white">
+          {fontSizes.map((size) => (
+            <SelectItem
+              key={size}
+              value={size}
+              className="hover:bg-stone-600 cursor-pointer"
+            >
+              {size}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
   );
 }

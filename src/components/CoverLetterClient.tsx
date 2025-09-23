@@ -25,6 +25,8 @@ export default function CoverLetterClient() {
   const printRef = useRef<HTMLDivElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
 
+  const [isCoverExpanded, setIsCoverExpanded] = useState(false);
+
   const [company, setCompany] = useState("");
   const [isBoldActive, setIsBoldActive] = useState(false);
 
@@ -227,23 +229,63 @@ export default function CoverLetterClient() {
   async function onDownload() {
     if (!printRef.current || !editableRef.current) return;
 
+    // Copy content to hidden printRef
     printRef.current.innerHTML = editableRef.current.innerHTML;
 
     const html2canvas = (await import("html2canvas")).default;
     const jsPDF = (await import("jspdf")).default;
 
+    const pdf = new jsPDF("p", "mm", "a4");
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = pdf.internal.pageSize.getHeight();
+    const padding = 10;
+
+    // Render hidden element to canvas
     const canvas = await html2canvas(printRef.current, {
       scale: 2,
       backgroundColor: "#ffffff",
     });
 
-    const imgData = canvas.toDataURL("image/jpeg", 1.0);
-    const pdf = new jsPDF("p", "mm", "a4");
+    const imgWidth = pdfWidth - 2 * padding;
+    let positionY = 0;
 
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+    while (positionY < canvas.height) {
+      const remainingHeight = canvas.height - positionY;
 
-    pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight);
+      // Calculate height of this "slice" in px
+      const pageHeightPx = Math.min(
+        (pdfHeight - 2 * padding) * (canvas.width / imgWidth),
+        remainingHeight
+      );
+
+      const pageCanvas = document.createElement("canvas");
+      pageCanvas.width = canvas.width;
+      pageCanvas.height = pageHeightPx;
+
+      const ctx = pageCanvas.getContext("2d");
+      if (ctx) {
+        ctx.drawImage(
+          canvas,
+          0,
+          positionY,
+          canvas.width,
+          pageHeightPx,
+          0,
+          0,
+          canvas.width,
+          pageHeightPx
+        );
+      }
+
+      const imgData = pageCanvas.toDataURL("image/jpeg", 1.0);
+      const imgPageHeight = (pageHeightPx * imgWidth) / canvas.width;
+
+      if (positionY > 0) pdf.addPage();
+      pdf.addImage(imgData, "JPEG", padding, padding, imgWidth, imgPageHeight);
+
+      positionY += pageHeightPx;
+    }
+
     pdf.save("cover_letter.pdf");
   }
 
@@ -290,7 +332,7 @@ export default function CoverLetterClient() {
                     id="custom-scrollbar"
                     ref={descriptionRef}
                     rows={6}
-                    className="w-full h-full p-3 outline-none border-stone-400/60 border rounded-[3px] resize-none max-h-[250px]"
+                    className="w-full h-full p-3 outline-none border-stone-400/60 dark:border-stone-700 border rounded-[3px] resize-none max-h-[250px]"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder="Paste job description here..."
@@ -359,7 +401,7 @@ export default function CoverLetterClient() {
                   <SelectValue placeholder="Select tone" />
                 </SelectTrigger>
 
-                <SelectContent className="bg-stone-800  text-stone-100 border-stone-400/30">
+                <SelectContent className="bg-stone-600  text-stone-100 border-stone-400/30">
                   <SelectItem
                     className="hover:bg-stone-700 cursor-pointer"
                     value="professional"
@@ -508,8 +550,8 @@ export default function CoverLetterClient() {
               </div>
             ) : coverLetter ? (
               <>
-                <div className="flex  w-full  -mb-6 justify-between flex-col gap-y-2 mt-1 ">
-                  <div className="flex gap-x-2 items-center">
+                <div className="flex  w-full  justify-between flex-col gap-y-2 mt-1 ">
+                  <div className="flex flex-row w-full gap-x-2 items-center">
                     <button
                       onClick={onCopy}
                       className="mt-1 border cursor-pointer px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-xs md:text-sm text-[#f6f4ed] dark:text-[#2b2a27] dark:border-stone-700"
@@ -523,10 +565,10 @@ export default function CoverLetterClient() {
                       Download as PDF
                     </button>
                   </div>
-                  <div className="">
+                  <div className="flex flex-row py-1 items-center ">
                     <button
                       onClick={onBoldSelection}
-                      className={`mt-1 mr-2 border font-bold cursor-pointer px-3 py-1.5 rounded-[3px] text-sm transition-all duration-200 ${
+                      className={`mr-2 border font-bold cursor-pointer px-3 py-1.5 rounded-[3px]  text-sm transition-all duration-200 ${
                         isBoldActive
                           ? "bg-[#f6f4ed] text-[#2b2a27] border-stone-300/30 dark:bg-[#2b2a27] dark:text-[#f6f4ed] dark:border-[#2b2a27]"
                           : "bg-transparent text-[#f6f4ed] border-stone-300/30 dark:text-[#2b2a27] dark:border-[#2b2a27]"
@@ -535,32 +577,46 @@ export default function CoverLetterClient() {
                       B
                     </button>
                     <FontDropdownWithDarkmode />
-                    <FontSizeDropdownWithDarkmode />
+                    <div>
+                      <FontSizeDropdownWithDarkmode />
+                    </div>
                     <button
                       onClick={onMarkAll}
-                      className="mt-1 border ml-2 font-semibold cursor-pointer px-3 py-1.5 rounded-[3px] border-stone-300/30 text-sm text-[#f6f4ed] dark:text-[#2b2a27] dark:border-stone-600"
+                      className=" border ml-2 font-semibold cursor-pointer px-3 py-1.5 rounded-[3px] border-stone-300/30 text-sm text-[#f6f4ed] dark:text-[#2b2a27] dark:border-stone-600"
                     >
                       Mark All
                     </button>
                   </div>
                 </div>
 
-                <div
-                  ref={editableRef}
-                  className="p-4 bg-white border text-black border-gray-300 rounded-[3px] whitespace-pre-wrap text-sm min-h-[300px]"
-                  contentEditable
-                  suppressContentEditableWarning
+                <motion.div
+                  animate={{ height: isCoverExpanded ? 400 : 250 }}
+                  transition={{ duration: 0.4, ease: "easeInOut" }}
+                  className="overflow-hidden relative  border rounded bg-white"
                 >
-                  {coverLetter}
+                  <div
+                    ref={editableRef}
+                    style={{ scrollbarWidth: "thin" }}
+                    contentEditable
+                    suppressContentEditableWarning
+                    className="p-4 h-full overflow-y-auto text-black whitespace-pre-wrap min-h-[200px]"
+                  >
+                    {coverLetter}
+                  </div>
+                </motion.div>
+                <div className="flex justify-end mt-2">
+                  <button
+                    onClick={() => setIsCoverExpanded(!isCoverExpanded)}
+                    className="text-sm font-semibold cursor-pointer"
+                  >
+                    {isCoverExpanded ? "Show Less" : "Show More"}
+                  </button>
                 </div>
 
                 <div
                   ref={printRef}
+                  className=" max-w-[800px]  w-full bg-white text-black"
                   style={{
-                    width: "800px",
-                    padding: "24px",
-                    backgroundColor: "white",
-                    color: "black",
                     fontSize: "14px",
                     lineHeight: "1.6",
                     whiteSpace: "pre-wrap",

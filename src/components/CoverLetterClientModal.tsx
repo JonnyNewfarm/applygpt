@@ -39,6 +39,8 @@ export default function CoverLetterClientModal({ job }: Props) {
   const [resume, setResume] = useState("");
   const [isBoldActive, setIsBoldActive] = useState(false);
 
+  const [isCoverExpanded, setIsCoverExpanded] = useState(false);
+
   const [jobAd, setJobAd] = useState("");
   const [isExpanded, setIsExpanded] = useState(false);
   const [isExpandedResume, setIsExpandedResume] = useState(false);
@@ -186,29 +188,70 @@ export default function CoverLetterClientModal({ job }: Props) {
     setJobAd("");
     setLoadingDelete(false);
   };
+
   async function onDownload() {
     if (!printRef.current || !editableRef.current) return;
 
-    const editedHTML = editableRef.current.innerHTML;
-    printRef.current.innerHTML = editedHTML;
+    // Copy content to hidden printRef
+    printRef.current.innerHTML = editableRef.current.innerHTML;
 
     const html2canvas = (await import("html2canvas")).default;
     const jsPDF = (await import("jspdf")).default;
 
+    const pdf = new jsPDF("p", "mm", "a4");
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = pdf.internal.pageSize.getHeight();
+    const padding = 10;
+
+    // Render hidden element to canvas
     const canvas = await html2canvas(printRef.current, {
       scale: 2,
       backgroundColor: "#ffffff",
     });
 
-    const imgData = canvas.toDataURL("image/jpeg", 1.0);
-    const pdf = new jsPDF("p", "mm", "a4");
+    const imgWidth = pdfWidth - 2 * padding;
+    let positionY = 0;
 
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+    while (positionY < canvas.height) {
+      const remainingHeight = canvas.height - positionY;
 
-    pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight);
+      // Calculate height of this "slice" in px
+      const pageHeightPx = Math.min(
+        (pdfHeight - 2 * padding) * (canvas.width / imgWidth),
+        remainingHeight
+      );
+
+      const pageCanvas = document.createElement("canvas");
+      pageCanvas.width = canvas.width;
+      pageCanvas.height = pageHeightPx;
+
+      const ctx = pageCanvas.getContext("2d");
+      if (ctx) {
+        ctx.drawImage(
+          canvas,
+          0,
+          positionY,
+          canvas.width,
+          pageHeightPx,
+          0,
+          0,
+          canvas.width,
+          pageHeightPx
+        );
+      }
+
+      const imgData = pageCanvas.toDataURL("image/jpeg", 1.0);
+      const imgPageHeight = (pageHeightPx * imgWidth) / canvas.width;
+
+      if (positionY > 0) pdf.addPage();
+      pdf.addImage(imgData, "JPEG", padding, padding, imgWidth, imgPageHeight);
+
+      positionY += pageHeightPx;
+    }
+
     pdf.save("cover_letter.pdf");
   }
+
   const onMarkAll = () => {
     if (!editableRef.current) return;
     const range = document.createRange();
@@ -507,10 +550,10 @@ export default function CoverLetterClientModal({ job }: Props) {
                     Download as PDF
                   </button>
                 </div>
-                <div className=" space-x-2 mt-2">
+                <div className="flex flex-row items-center py-2 gap-x-2">
                   <button
                     onClick={onBoldSelection}
-                    className={`mt-2 mr-2 border font-bold cursor-pointer px-3 py-1.5 rounded-[3px] text-sm transition-all duration-200 ${
+                    className={` mr-2  border font-bold cursor-pointer px-3 py-[7px] rounded-[3px] text-sm transition-all duration-200 ${
                       isBoldActive
                         ? "bg-[#f6f4ed] text-[#2b2a27] border-stone-300/30 "
                         : "bg-transparent text-[#f6f4ed] border-stone-300/30 "
@@ -523,28 +566,40 @@ export default function CoverLetterClientModal({ job }: Props) {
 
                   <button
                     onClick={onMarkAll}
-                    className="mt-2 border  font-semibold cursor-pointer px-3 py-1.5 rounded-[3px] border-stone-300/30 text-sm text-[#f6f4ed] "
+                    className="border  font-semibold cursor-pointer px-3 py-1.5 rounded-[3px] border-stone-300/30 text-sm text-[#f6f4ed] "
                   >
                     Mark All
                   </button>
                 </div>
 
-                <div
-                  ref={editableRef}
-                  className="p-4 bg-white mt-2 border text-black border-gray-300 rounded-[3px] whitespace-pre-wrap text-sm min-h-[300px]"
-                  contentEditable
-                  suppressContentEditableWarning
+                <motion.div
+                  animate={{ height: isCoverExpanded ? 400 : 250 }}
+                  transition={{ duration: 0.4, ease: "easeInOut" }}
+                  className="overflow-hidden relative  border rounded bg-white"
                 >
-                  {coverLetter}
+                  <div
+                    ref={editableRef}
+                    style={{ scrollbarWidth: "thin" }}
+                    contentEditable
+                    suppressContentEditableWarning
+                    className="p-4 h-full overflow-y-auto text-black whitespace-pre-wrap min-h-[200px]"
+                  >
+                    {coverLetter}
+                  </div>
+                </motion.div>
+                <div className="flex justify-end mt-2">
+                  <button
+                    onClick={() => setIsCoverExpanded(!isCoverExpanded)}
+                    className="text-sm font-semibold cursor-pointer"
+                  >
+                    {isCoverExpanded ? "Show Less" : "Show More"}
+                  </button>
                 </div>
 
                 <div
                   ref={printRef}
+                  className=" max-w-[800px]  w-full bg-white text-black"
                   style={{
-                    width: "800px",
-                    padding: "24px",
-                    backgroundColor: "white",
-                    color: "black",
                     fontSize: "14px",
                     lineHeight: "1.6",
                     whiteSpace: "pre-wrap",

@@ -243,29 +243,32 @@ export default function ResumeForm({ resume }: ResumeFormProps) {
                 Upload & Edit
               </h2>
             )}
-            <button
-              onClick={onBoldSelection}
-              className={`mt-1  border  cursor-pointer px-4 py-[9px] rounded-[3px]  text-xs md:text-sm transition-all duration-200
+
+            <div className="flex flex-row w-full items-center gap-x-2 ">
+              <button
+                onClick={onBoldSelection}
+                className={`  border  cursor-pointer px-4 py-[8px] rounded-[3px]  text-xs md:text-sm transition-all duration-200
     ${
       isBoldActive
         ? "bg-[#f6f4ed]  border-white/40 text-black "
         : "bg-transparent font-semibold text-[#f6f4ed] border-white/20 "
     }`}
-            >
-              B
-            </button>
+              >
+                B
+              </button>
 
-            <FontDropdown
-              onApply={restoreSelection}
-              editorRef={resumeEditorRef}
-            />
-            <FontSizeDropdown editorRef={resumeEditorRef} />
-            <button
-              onClick={markAllText}
-              className="mt-1     cursor-pointer px-3 py-[9px] rounded-[3px] text-nowrap text-xs md:text-sm bg-transparent text-[#f6f4ed]  border border-white/20    "
-            >
-              Mark
-            </button>
+              <FontDropdown
+                onApply={restoreSelection}
+                editorRef={resumeEditorRef}
+              />
+              <FontSizeDropdown editorRef={resumeEditorRef} />
+              <button
+                onClick={markAllText}
+                className="mt-1     cursor-pointer px-3 py-[9px] rounded-[3px] text-nowrap text-xs md:text-sm bg-transparent text-[#f6f4ed]  border border-white/20    "
+              >
+                Mark
+              </button>
+            </div>
           </div>
         </div>
         <div
