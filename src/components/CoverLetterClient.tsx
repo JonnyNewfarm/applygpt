@@ -65,44 +65,13 @@ export default function CoverLetterClient() {
 
   const onBoldSelection = () => {
     const selection = window.getSelection();
-    if (!selection?.rangeCount) return;
+    if (!selection || selection.isCollapsed) return;
 
-    const range = selection.getRangeAt(0);
-    const selectedText = selection.toString();
+    document.execCommand("bold");
 
-    if (!selectedText) return;
-
-    const commonAncestor = range.commonAncestorContainer;
-    let parentElement: HTMLElement | null = null;
-
-    if (commonAncestor.nodeType === Node.TEXT_NODE) {
-      parentElement = commonAncestor.parentElement;
-    } else if (commonAncestor.nodeType === Node.ELEMENT_NODE) {
-      parentElement = commonAncestor as HTMLElement;
-    }
-
-    if (
-      parentElement &&
-      (parentElement.tagName === "B" || parentElement.tagName === "STRONG")
-    ) {
-      const unwrapped = document.createTextNode(selectedText);
-      const parent = parentElement.parentNode;
-      if (parent) {
-        parent.replaceChild(unwrapped, parentElement);
-        selection.removeAllRanges();
-        const newRange = document.createRange();
-        newRange.selectNodeContents(unwrapped);
-        selection.addRange(newRange);
-      }
-      setIsBoldActive(false);
-      return;
-    }
-
-    const boldNode = document.createElement("b");
-    boldNode.appendChild(range.extractContents());
-    range.insertNode(boldNode);
-
-    setIsBoldActive(true);
+    const isActive =
+      document.queryCommandState && document.queryCommandState("bold");
+    setIsBoldActive(isActive);
   };
 
   useEffect(() => {
@@ -229,7 +198,6 @@ export default function CoverLetterClient() {
   async function onDownload() {
     if (!printRef.current || !editableRef.current) return;
 
-    // Copy content to hidden printRef
     printRef.current.innerHTML = editableRef.current.innerHTML;
 
     const html2canvas = (await import("html2canvas")).default;
@@ -240,7 +208,6 @@ export default function CoverLetterClient() {
     const pdfHeight = pdf.internal.pageSize.getHeight();
     const padding = 10;
 
-    // Render hidden element to canvas
     const canvas = await html2canvas(printRef.current, {
       scale: 2,
       backgroundColor: "#ffffff",
@@ -252,7 +219,6 @@ export default function CoverLetterClient() {
     while (positionY < canvas.height) {
       const remainingHeight = canvas.height - positionY;
 
-      // Calculate height of this "slice" in px
       const pageHeightPx = Math.min(
         (pdfHeight - 2 * padding) * (canvas.width / imgWidth),
         remainingHeight
@@ -590,16 +556,16 @@ export default function CoverLetterClient() {
                 </div>
 
                 <motion.div
-                  animate={{ height: isCoverExpanded ? 400 : 250 }}
+                  style={{ scrollbarWidth: "thin" }}
+                  animate={{ maxHeight: isCoverExpanded ? 9999 : 350 }}
                   transition={{ duration: 0.4, ease: "easeInOut" }}
-                  className="overflow-hidden relative  border rounded bg-white"
+                  className="overflow-y-scroll relative border rounded bg-white"
                 >
                   <div
                     ref={editableRef}
-                    style={{ scrollbarWidth: "thin" }}
                     contentEditable
                     suppressContentEditableWarning
-                    className="p-4 h-full overflow-y-auto text-black whitespace-pre-wrap min-h-[200px]"
+                    className="p-4 text-black whitespace-pre-wrap"
                   >
                     {coverLetter}
                   </div>
@@ -609,10 +575,9 @@ export default function CoverLetterClient() {
                     onClick={() => setIsCoverExpanded(!isCoverExpanded)}
                     className="text-sm font-semibold cursor-pointer"
                   >
-                    {isCoverExpanded ? "Show Less" : "Show More"}
+                    {isCoverExpanded ? "Collapse" : "Expand"}
                   </button>
                 </div>
-
                 <div
                   ref={printRef}
                   className=" max-w-[800px]  w-full bg-white text-black"

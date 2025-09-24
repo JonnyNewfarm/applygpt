@@ -81,21 +81,39 @@ export default function FontDropdown({
     font.length > 12 ? font.slice(0, 12) + "…" : font;
 
   return (
-    <Select value={selectedFont} onValueChange={(val) => applyFont(val)}>
-      <SelectTrigger className="w-32 border cursor-pointer  bg-transparent max-w-[80px] border-stone-300/30   text-white">
-        <SelectValue placeholder="Select font" />
-      </SelectTrigger>
-      <SelectContent className="bg-stone-800 text-white">
-        {fonts.map((f) => (
-          <SelectItem
-            key={f}
-            value={f}
-            className="hover:bg-stone-600 cursor-pointer"
-          >
-            <span style={{ fontFamily: f }}>{displayFont(f)}</span>
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+    <div>
+      <div className="hidden md:block">
+        <Select onValueChange={(val) => applyFont(val)}>
+          <SelectTrigger className="w-32 border cursor-pointer bg-transparent max-w-[80px] border-stone-300/30 text-white">
+            <SelectValue placeholder={selectedFont} />
+          </SelectTrigger>
+          <SelectContent className="bg-stone-800 text-white">
+            {fonts.map((f) => (
+              <SelectItem
+                key={f}
+                value={f}
+                className="hover:bg-stone-600 cursor-pointer"
+              >
+                <span style={{ fontFamily: f }}>{displayFont(f)}</span>
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="block md:hidden">
+        <select
+          value={selectedFont}
+          onChange={(e) => applyFont(e.target.value)}
+          className="w-32 max-w-[80px] border border-stone-300/30 bg-stone-800 text-white rounded px-2 py-1"
+        >
+          {fonts.map((f) => (
+            <option key={f} value={f} style={{ fontFamily: f }}>
+              {displayFont(f)}
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
   );
 }

@@ -38,27 +38,47 @@ export default function FontSizeDropdown() {
 
     range.deleteContents();
     range.insertNode(span);
+
     setSelectedSize(size);
   };
 
   return (
     <div>
-      <Select value={selectedSize} onValueChange={(val) => applyFontSize(val)}>
-        <SelectTrigger className="w-32 border cursor-pointer  bg-transparent max-w-[80px] border-stone-300/30 dark:border-stone-600  text-white dark:text-black">
-          <SelectValue placeholder="Font size" />
-        </SelectTrigger>
-        <SelectContent className="bg-stone-800 text-white">
+      <div className="hidden md:block">
+        <Select
+          value={selectedSize}
+          onValueChange={(val) => applyFontSize(val)}
+        >
+          <SelectTrigger className="w-32 border cursor-pointer bg-transparent max-w-[80px] border-stone-300/30 dark:border-stone-600 text-white dark:text-black">
+            <SelectValue placeholder="Font size" />
+          </SelectTrigger>
+          <SelectContent className="bg-stone-800 text-white">
+            {fontSizes.map((size) => (
+              <SelectItem
+                key={size}
+                value={size}
+                className="hover:bg-stone-600 cursor-pointer"
+              >
+                {size}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="block md:hidden">
+        <select
+          value={selectedSize}
+          onChange={(e) => applyFontSize(e.target.value)}
+          className="w-32 max-w-[80px] border border-stone-300/30 dark:border-stone-600 bg-stone-800 text-white dark:text-black rounded px-2 py-1"
+        >
           {fontSizes.map((size) => (
-            <SelectItem
-              key={size}
-              value={size}
-              className="hover:bg-stone-600 cursor-pointer"
-            >
+            <option key={size} value={size}>
               {size}
-            </SelectItem>
+            </option>
           ))}
-        </SelectContent>
-      </Select>
+        </select>
+      </div>
     </div>
   );
 }

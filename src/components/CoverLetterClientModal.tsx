@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from "./ui/select";
 import { FaExternalLinkAlt } from "react-icons/fa";
+import MagneticCompWide from "./MagneticCompWide";
 
 interface Props {
   job: {
@@ -192,7 +193,6 @@ export default function CoverLetterClientModal({ job }: Props) {
   async function onDownload() {
     if (!printRef.current || !editableRef.current) return;
 
-    // Copy content to hidden printRef
     printRef.current.innerHTML = editableRef.current.innerHTML;
 
     const html2canvas = (await import("html2canvas")).default;
@@ -203,7 +203,6 @@ export default function CoverLetterClientModal({ job }: Props) {
     const pdfHeight = pdf.internal.pageSize.getHeight();
     const padding = 10;
 
-    // Render hidden element to canvas
     const canvas = await html2canvas(printRef.current, {
       scale: 2,
       backgroundColor: "#ffffff",
@@ -215,7 +214,6 @@ export default function CoverLetterClientModal({ job }: Props) {
     while (positionY < canvas.height) {
       const remainingHeight = canvas.height - positionY;
 
-      // Calculate height of this "slice" in px
       const pageHeightPx = Math.min(
         (pdfHeight - 2 * padding) * (canvas.width / imgWidth),
         remainingHeight
@@ -263,44 +261,13 @@ export default function CoverLetterClientModal({ job }: Props) {
 
   const onBoldSelection = () => {
     const selection = window.getSelection();
-    if (!selection?.rangeCount) return;
+    if (!selection || selection.isCollapsed) return;
 
-    const range = selection.getRangeAt(0);
-    const selectedText = selection.toString();
+    document.execCommand("bold");
 
-    if (!selectedText) return;
-
-    const commonAncestor = range.commonAncestorContainer;
-    let parentElement: HTMLElement | null = null;
-
-    if (commonAncestor.nodeType === Node.TEXT_NODE) {
-      parentElement = commonAncestor.parentElement;
-    } else if (commonAncestor.nodeType === Node.ELEMENT_NODE) {
-      parentElement = commonAncestor as HTMLElement;
-    }
-
-    if (
-      parentElement &&
-      (parentElement.tagName === "B" || parentElement.tagName === "STRONG")
-    ) {
-      const unwrapped = document.createTextNode(selectedText);
-      const parent = parentElement.parentNode;
-      if (parent) {
-        parent.replaceChild(unwrapped, parentElement);
-        selection.removeAllRanges();
-        const newRange = document.createRange();
-        newRange.selectNodeContents(unwrapped);
-        selection.addRange(newRange);
-      }
-      setIsBoldActive(false);
-      return;
-    }
-
-    const boldNode = document.createElement("b");
-    boldNode.appendChild(range.extractContents());
-    range.insertNode(boldNode);
-
-    setIsBoldActive(true);
+    const isActive =
+      document.queryCommandState && document.queryCommandState("bold");
+    setIsBoldActive(isActive);
   };
 
   const isAtLimit =
@@ -433,23 +400,35 @@ export default function CoverLetterClientModal({ job }: Props) {
             <div>
               <label className="block text-sm font-medium mb-1">Tone</label>
               <Select value={tone} onValueChange={setTone}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select tone" />
+                <SelectTrigger className="w-full cursor-pointer">
+                  <SelectValue
+                    className="cursor-pointer"
+                    placeholder="Select tone"
+                  />
                 </SelectTrigger>
                 <SelectContent className="bg-white text-black ">
                   <SelectItem
                     value="professional"
-                    className="focus:bg-stone-100 "
+                    className="focus:bg-stone-100 cursor-pointer "
                   >
                     Professional
                   </SelectItem>
-                  <SelectItem value="casual" className="focus:bg-stone-100 ">
+                  <SelectItem
+                    value="casual"
+                    className="focus:bg-stone-100 cursor-pointer "
+                  >
                     Casual
                   </SelectItem>
-                  <SelectItem value="friendly" className="focus:bg-stone-100 ">
+                  <SelectItem
+                    value="friendly"
+                    className="focus:bg-stone-100 cursor-pointer "
+                  >
                     Friendly
                   </SelectItem>
-                  <SelectItem value="confident" className="focus:bg-stone-100">
+                  <SelectItem
+                    value="confident"
+                    className="focus:bg-stone-100 cursor-pointer"
+                  >
                     Confident
                   </SelectItem>
                 </SelectContent>
@@ -486,24 +465,26 @@ export default function CoverLetterClientModal({ job }: Props) {
                 </div>
               ) : (
                 <div className="sticky bottom-4 z-20   rounded">
-                  <button
-                    onClick={onGenerate}
-                    disabled={loading || !resume || !jobAd}
-                    className={`w-full mt-3 cursor-pointer py-3 rounded-[5px] uppercase tracking-wide px-3 text-lg
+                  <MagneticCompWide>
+                    <button
+                      onClick={onGenerate}
+                      disabled={loading}
+                      className={`w-full cursor-pointer py-3 rounded-[5px] uppercase tracking-wide px-3 text-lg
     bg-gradient-to-tr from-[#f5f4edd0] via-[#e2dfc7] to-[#f5f4edad]
-    
-    text-black  font-bold transform transition-transform duration-300 ease-in-out hover:scale-105 ${
+    dark:from-[#2c2c2cd2] dark:via-[#3a3a3a] dark:to-[#2c2c2cc2]
+    text-black dark:text-white font-bold transform transition-transform duration-300 ease-in-out hover:scale-105 ${
       loading ? "cursor-not-allowed" : "hover:opacity-90"
     }`}
-                  >
-                    {coverLetter
-                      ? loading
-                        ? "Regenerating..."
-                        : "Regenerate"
-                      : loading
-                      ? "Generating..."
-                      : "Generate Cover Letter"}
-                  </button>
+                    >
+                      {coverLetter
+                        ? loading
+                          ? "Regenerating..."
+                          : "Regenerate"
+                        : loading
+                        ? "Generating..."
+                        : "Generate Cover Letter"}
+                    </button>
+                  </MagneticCompWide>
                 </div>
               )}
             </div>
@@ -526,7 +507,7 @@ export default function CoverLetterClientModal({ job }: Props) {
               </div>
             ) : coverLetter ? (
               <>
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-wrap gap-x-3 mb-1">
                   {url && (
                     <a
                       href={url}
@@ -541,7 +522,7 @@ export default function CoverLetterClientModal({ job }: Props) {
                     onClick={onCopy}
                     className="mt-2 border font-semibold cursor-pointer px-3 py-1.5 rounded-[3px] border-[#f6f4ed] text-sm text-[#f6f4ed] "
                   >
-                    Copy to Clipboard
+                    Copy
                   </button>
                   <button
                     onClick={onDownload}
@@ -550,10 +531,10 @@ export default function CoverLetterClientModal({ job }: Props) {
                     Download as PDF
                   </button>
                 </div>
-                <div className="flex flex-row items-center py-2 gap-x-2">
+                <div className="flex flex-row items-center py-2 gap-x-3">
                   <button
                     onClick={onBoldSelection}
-                    className={` mr-2  border font-bold cursor-pointer px-3 py-[7px] rounded-[3px] text-sm transition-all duration-200 ${
+                    className={`   border font-bold cursor-pointer px-3 py-[4px] md:py-[6px] rounded-[3px] text-sm transition-all duration-200 ${
                       isBoldActive
                         ? "bg-[#f6f4ed] text-[#2b2a27] border-stone-300/30 "
                         : "bg-transparent text-[#f6f4ed] border-stone-300/30 "
@@ -573,16 +554,16 @@ export default function CoverLetterClientModal({ job }: Props) {
                 </div>
 
                 <motion.div
-                  animate={{ height: isCoverExpanded ? 400 : 250 }}
+                  style={{ scrollbarWidth: "thin" }}
+                  animate={{ maxHeight: isCoverExpanded ? 9999 : 300 }}
                   transition={{ duration: 0.4, ease: "easeInOut" }}
-                  className="overflow-hidden relative  border rounded bg-white"
+                  className="overflow-y-scroll relative border rounded bg-white"
                 >
                   <div
                     ref={editableRef}
-                    style={{ scrollbarWidth: "thin" }}
                     contentEditable
                     suppressContentEditableWarning
-                    className="p-4 h-full overflow-y-auto text-black whitespace-pre-wrap min-h-[200px]"
+                    className="p-4 text-black whitespace-pre-wrap"
                   >
                     {coverLetter}
                   </div>
@@ -592,7 +573,7 @@ export default function CoverLetterClientModal({ job }: Props) {
                     onClick={() => setIsCoverExpanded(!isCoverExpanded)}
                     className="text-sm font-semibold cursor-pointer"
                   >
-                    {isCoverExpanded ? "Show Less" : "Show More"}
+                    {isCoverExpanded ? "Collapse" : "Expand"}
                   </button>
                 </div>
 
