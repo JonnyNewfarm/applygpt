@@ -1,6 +1,5 @@
 import ResumeExampleSection from "@/components/home/Examples";
 import CoverLetterExampleSection from "@/components/home/ExamplesCoverLetter";
-import JobsExampleSection from "@/components/home/ExamplesJobs";
 import HeroSection from "@/components/home/HeroSection";
 import SmoothScrollCards from "@/components/home/SmoothScrollCards";
 import SmoothScroll from "@/components/SmoothScroll";
@@ -47,7 +46,6 @@ const Homepage = () => {
 
         <div className="space-y-5 w-full bg-[#2b2a27] text-[#f5f4ef]  dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
           <ResumeExampleSection />
-          <JobsExampleSection />
           <CoverLetterExampleSection />
         </div>
       </main>
