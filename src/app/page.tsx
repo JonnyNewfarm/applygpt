@@ -31,7 +31,7 @@ export const metadata: Metadata = {
 const Homepage = () => {
   return (
     <SmoothScroll>
-      <main className="h-full bg-[#2b2a27] text-[#f5f4ef] dark:bg-[#f6f4f2] dark:text-[#2b2a27] border-b-white/50 border-b dark:border-b-black/80  flex flex-col justify-center items-center  w-full">
+      <main className="h-full bg-[#2b2a27] text-[#f5f4ef] dark:bg-[#f6f4f2] dark:text-[#2b2a27] border-b-white/10 border-b dark:border-b-black/80  flex flex-col justify-center items-center  w-full">
         <div className="sr-only">
           <h1>AI Career Tools – Create Resumes, Cover Letters & Find Jobs</h1>
           <p>

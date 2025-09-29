@@ -40,7 +40,7 @@ export default function ResumeExampleSection() {
               alt="Resume Example"
               className="w-full max-w-lg border border-gray-200 cursor-pointer"
             />
-            <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 group-hover:opacity-100 transition">
+            <div className="absolute inset-0 flex items-center justify-center bg-black/30 max-h-[98%] mt-5 opacity-0 group-hover:opacity-100 transition">
               <Maximize2 className="w-10 h-10 text-white" />
             </div>
           </button>
@@ -74,7 +74,7 @@ export default function ResumeExampleSection() {
 
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/90 flex items-center justify-center z-50"
+          className="fixed inset-0  bg-black/90 flex items-center justify-center z-50"
           onClick={() => {
             setIsOpen(false);
             setIsZoomed(false);
@@ -98,11 +98,11 @@ export default function ResumeExampleSection() {
               onClick={handleImageClick}
               style={{
                 transform: isZoomed ? "scale(2)" : "scale(1)",
-                transformOrigin,
+                transformOrigin, // use state from click
                 transition: "transform 0.3s ease",
                 cursor: isZoomed ? "zoom-out" : "zoom-in",
               }}
-              className="max-w-[90%] md:max-w-[80%] mx-auto max-h-[90%] border border-gray-400"
+              className="mx-auto max-h-[90vh] max-w-[90vw] object-contain"
             />
 
             {!isZoomed ? (
