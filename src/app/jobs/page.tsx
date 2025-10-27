@@ -27,7 +27,7 @@ export default async function FindJobsPage() {
   const session = await getServerSession();
   if (!session) {
     return (
-      <main className="p-20 bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4f2] dark:text-[#2b2a27] min-h-screen">
+      <main className="p-6 md:p-20 bg-[#2b2a27] text-[#f6f4ed] dark:bg-[#f6f4f2] dark:text-[#2b2a27] min-h-screen">
         <h1 className="text-2xl font-bold mb-4">
           Find Jobs Near You or Remotely
         </h1>
