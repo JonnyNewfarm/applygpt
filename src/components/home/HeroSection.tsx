@@ -132,7 +132,7 @@ export default function HeroSection() {
 
         <motion.div
           variants={fadeUp}
-          className="flex sm:-mt-6 flex-col gap-y-3 md:gap-y-1"
+          className="flex sm:-mt-6 flex-col gap-y-1 md:gap-y-1"
         >
           <div className="md:text-xl text-base lg:text-2xl sm:text-lg">
             <p className="mb-2">
@@ -146,7 +146,7 @@ export default function HeroSection() {
             </p>
           </div>
 
-          <motion.div variants={fadeUp} className=" -ml-7">
+          <motion.div variants={fadeUp} className=" -ml-7 -mt-6 md:-mt-4">
             <ThreeButton />
           </motion.div>
         </motion.div>
