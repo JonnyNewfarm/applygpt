@@ -95,7 +95,7 @@ export default function ThreeButton() {
       <Float rotationIntensity={0.3} floatIntensity={0.5}>
         <RoundedBox
           ref={boxRef}
-          args={[6, 2.7, 0.1]}
+          args={[6, 2.5, 0.1]}
           radius={0.2}
           smoothness={4}
           onPointerOver={() => setHovered(true)}
@@ -112,7 +112,7 @@ export default function ThreeButton() {
           <group ref={textGroupRef} position={[0, 0, 0.06]}>
             <Text
               font="/fonts/Montserrat-SemiBold.ttf"
-              fontSize={0.77}
+              fontSize={0.73}
               color={textColor}
               anchorX="center"
               anchorY="middle"

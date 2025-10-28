@@ -89,7 +89,7 @@ export default function HeroSection() {
       >
         <motion.h1
           variants={fadeUp}
-          className="sm:text-3xl md:text-4xl uppercase text-xl font-bold"
+          className="sm:text-3xl md:text-4xl uppercase text-2xl font-bold"
         >
           Simplify Job Searching
         </motion.h1>
