@@ -50,7 +50,7 @@ export default function SectionGallery() {
               initial={{ opacity: 0 }}
               animate={{ opacity: isActive ? 1 : 0.4, x: isActive ? 10 : 0 }}
               transition={{ duration: 0.4, ease: "easeOut" }}
-              className={`text-4xl md:text-4xl lg:text-6xl font-extrabold tracking-widest uppercase transition-colors duration-500 block ${
+              className={`text-2xl md:text-3xl lg:text-5xl xl:text-5xl font-extrabold tracking-widest uppercase transition-colors duration-500 block ${
                 isActive
                   ? "text-white whitespace-nowrap dark:text-black"
                   : "text-gray-400 whitespace-nowrap hover:text-white dark:hover:text-black"
@@ -62,7 +62,7 @@ export default function SectionGallery() {
         })}
       </div>
 
-      <div className="flex-1 flex justify-center items-center p-6 md:p-12 relative overflow-hidden">
+      <div className="flex-1 flex justify-center items-center    p-6 md:p-12 relative overflow-hidden">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentIndex}
@@ -70,7 +70,7 @@ export default function SectionGallery() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -30 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
-            className="w-full max-w-5xl"
+            className="w-full ml-16 lg:ml-8 max-w-4xl"
           >
             {sections[currentIndex].component}
           </motion.div>
