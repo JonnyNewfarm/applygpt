@@ -1,10 +1,13 @@
-import ResumeExampleSection from "@/components/home/Examples";
-import CoverLetterExampleSection from "@/components/home/ExamplesCoverLetter";
 import HeroSection from "@/components/home/HeroSection";
-import SmoothScrollCards from "@/components/home/SmoothScrollCards";
 import SmoothScroll from "@/components/SmoothScroll";
+
 import { Metadata } from "next";
 import React from "react";
+import SectionGallery from "@/components/home/SectionLoader";
+import ThreeResumeMobile from "@/components/home/ThreeResumeMobile";
+import ThreeCoverLetterMobile from "@/components/home/ThreeCoverLetterMobile";
+import FindJobsIntroMobile from "@/components/home/FindJobsIntroMobile";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Create Resumes & Cover Letters, Find Jobs Instantly",
@@ -41,12 +44,40 @@ const Homepage = () => {
           </p>
         </div>
         <HeroSection />
+        <div className="w-full min-h-screen hidden md:block">
+          <SectionGallery />
+        </div>
+        <div className="w-full flex flex-col items-center justify-center min-h-screen md:hidden ">
+          <div className="w-full relative min-h-[80vh] ">
+            <h1 className="font-semibold text-xl absolute left-6 up">Resume</h1>
+            <p className="absolute left-6 mt-6">Generate a resume with AI. </p>
 
-        <SmoothScrollCards />
-
-        <div className="space-y-5 w-full bg-[#2b2a27] text-[#f5f4ef]  dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
-          <ResumeExampleSection />
-          <CoverLetterExampleSection />
+            <ThreeResumeMobile />
+            <Link
+              className="absolute text-xl left-6 underline underline-offset-4 font-semibold uppercase bottom-12"
+              href={"/resume-generator"}
+            >
+              Generate Resume
+            </Link>
+          </div>
+          <div className="w-full relative min-h-[80vh] mt-6">
+            <h1 className="font-semibold text-xl absolute left-6 up">
+              Cover Letter
+            </h1>
+            <p className="absolute left-6 mt-6">
+              Generate a Cover Letter with AI.{" "}
+            </p>
+            <ThreeCoverLetterMobile />
+            <Link
+              className="absolute text-xl underline underline-offset-4 left-6 font-semibold uppercase bottom-10"
+              href={"/cover-letter"}
+            >
+              Generate cover letter
+            </Link>
+          </div>
+          <div className="min-h-[80vh] w-full mt-6">
+            <FindJobsIntroMobile />
+          </div>
         </div>
       </main>
     </SmoothScroll>

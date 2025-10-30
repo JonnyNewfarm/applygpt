@@ -156,7 +156,7 @@ export default function HeroSection() {
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.7, duration: 0.6, ease: "easeOut" as const }}
-        className="absolute bottom-26 left-0 w-full flex justify-between px-6 sm:px-20 z-10 font-bold text-lg sm:text-2xl md:text-4xl"
+        className="absolute bottom-26 left-0 w-full flex justify-between px-6 sm:px-20 z-10 font-bold text-2xl sm:text-2xl md:text-4xl"
       >
         <AnimatePresence>
           {isGenerateModalOpen && (

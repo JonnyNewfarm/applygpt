@@ -1,119 +1,80 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
-import FindJobSection from "@/components/home/FindJobSection";
-import LiveCoverLetterDemo from "@/components/home/CoverletterDemo";
-import GenerateResumeDemo from "@/components/home/ResumeDemo";
-import { CirclePause, CirclePlay } from "lucide-react";
-import { useInView } from "framer-motion";
+import ThreeResume from "./ThreeResume";
+import ThreeCoverLetter from "./ThreeCoverLetter";
+import FindJobsIntro from "./FindJobsIntro";
 
 const sections = [
-  { id: 0, component: <GenerateResumeDemo />, label: "Resume" },
-  { id: 1, component: <FindJobSection />, label: "Jobs" },
-  { id: 2, component: <LiveCoverLetterDemo />, label: "Cover Letter" },
+  {
+    id: 0,
+    component: <ThreeResume />,
+    label: "RESUME",
+    link: "/resume-generator",
+  },
+  {
+    id: 1,
+    component: <ThreeCoverLetter />,
+    label: "COVER LETTER",
+    link: "/cover-letter",
+  },
+  { id: 2, component: <FindJobsIntro />, label: "FIND JOBS", link: "/jobs" },
 ];
 
-export default function SectionLoader() {
+export default function SectionGallery() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [progress, setProgress] = useState(0);
-  const [paused, setPaused] = useState(false);
+  const [hoverIndex, setHoverIndex] = useState<number | null>(null);
 
-  const ref = useRef(null);
-  const inView = useInView(ref);
+  const currentIndex = hoverIndex !== null ? hoverIndex : activeIndex;
 
-  useEffect(() => {
-    if (!inView || paused) return;
-
-    if (paused) return;
-
-    let interval: NodeJS.Timeout;
-
-    if (progress < 100) {
-      interval = setInterval(() => {
-        setProgress((prev) => prev + 2);
-      }, 100);
-    } else {
-      if (activeIndex === sections.length - 1) {
-        setPaused(true);
-      } else {
-        const timeout = setTimeout(() => {
-          setActiveIndex((prevIndex) => prevIndex + 1);
-          setProgress(0);
-        }, 500);
-
-        return () => clearTimeout(timeout);
-      }
-    }
-
-    return () => clearInterval(interval);
-  }, [progress, paused, activeIndex, inView]);
-
-  const handleClick = (idx: number) => {
-    setActiveIndex(idx);
-    setProgress(0);
+  const handleMouseEnter = (idx: number) => setHoverIndex(idx);
+  const handleMouseLeave = () => {
+    if (hoverIndex !== null) setActiveIndex(hoverIndex);
+    setHoverIndex(null);
   };
 
   return (
-    <div className="pb-20 min-h-screen pt-30 bg-[#2b2a27] text-[#f5f4ef]  dark:bg-[#f6f4f2] dark:text-[#2b2a27] -mt-8 w-full">
-      <div className="max-w-3xl w-full mx-auto">
-        <div className="flex w-full space-x-2 px-4" ref={ref}>
-          {sections.map((section, idx) => (
-            <div
-              key={section.id}
-              className="flex-1 relative h-2 rounded  cursor-pointer"
-              onClick={() => handleClick(idx)}
+    <div className="flex flex-col md:flex-row w-full min-h-screen bg-[#2b2a27] text-[#f5f4ef] dark:bg-[#f6f4f2] dark:text-[#2b2a27] transition-colors duration-700">
+      <div
+        className="flex md:flex-col justify-center items-center md:items-start w-full md:w-1/3 p-8 space-x-8 md:space-x-0 md:space-y-8"
+        onMouseLeave={handleMouseLeave}
+      >
+        {sections.map((section, idx) => {
+          const isActive = currentIndex === idx;
+          return (
+            <motion.a
+              key={section.label}
+              href={section.link}
+              onMouseEnter={() => handleMouseEnter(idx)}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: isActive ? 1 : 0.4, x: isActive ? 10 : 0 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              className={`text-4xl md:text-4xl lg:text-6xl font-extrabold tracking-widest uppercase transition-colors duration-500 block ${
+                isActive
+                  ? "text-white whitespace-nowrap dark:text-black"
+                  : "text-gray-400 whitespace-nowrap hover:text-white dark:hover:text-black"
+              }`}
             >
-              <div className="absolute inset-0 bg-gray-200 dark:bg-stone-500 opacity-40 rounded" />
-              <div
-                className="sticky left-0 top-0 h-2 bg-gray-100 dark:bg-stone-600 rounded transition-all"
-                style={{
-                  width:
-                    idx === activeIndex
-                      ? `${progress}%`
-                      : idx < activeIndex
-                      ? "100%"
-                      : "0%",
-                }}
-              />
-            </div>
-          ))}
-        </div>
+              {section.label}
+            </motion.a>
+          );
+        })}
+      </div>
 
-        <div className="flex justify-end my-2">
-          <button
-            onClick={() => {
-              if (
-                paused &&
-                activeIndex === sections.length - 1 &&
-                progress >= 100
-              ) {
-                setActiveIndex(0);
-                setProgress(0);
-                setPaused(false);
-              } else {
-                setPaused((p) => !p);
-              }
-            }}
-            className="px-4 py-1 cursor-pointer  rounded"
+      <div className="flex-1 flex justify-center items-center p-6 md:p-12 relative overflow-hidden">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentIndex}
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -30 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="w-full max-w-5xl"
           >
-            {paused ? (
-              <p>
-                <CirclePlay size={30} className="text-white dark:text-black " />
-              </p>
-            ) : (
-              <p>
-                <CirclePause
-                  size={30}
-                  className="text-white dark:text-black "
-                />
-              </p>
-            )}
-          </button>
-        </div>
-
-        <div className=" w-full md:-mt-16">
-          {sections[activeIndex].component}
-        </div>
+            {sections[currentIndex].component}
+          </motion.div>
+        </AnimatePresence>
       </div>
     </div>
   );
