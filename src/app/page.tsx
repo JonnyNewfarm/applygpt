@@ -34,7 +34,8 @@ export const metadata: Metadata = {
 const Homepage = () => {
   return (
     <SmoothScroll>
-      <main className="h-full bg-[#2b2a27] text-[#f5f4ef] dark:bg-[#f6f4f2] dark:text-[#2b2a27] border-b-white/10 border-b dark:border-b-black/80  flex flex-col justify-center items-center  w-full">
+      <main className="bg-[#2b2a27] text-[#f5f4ef] dark:bg-[#f6f4f2] dark:text-[#2b2a27] border-b-white/10 border-b dark:border-b-black/80 flex flex-col w-full">
+        {/* Hidden SEO header */}
         <div className="sr-only">
           <h1>AI Career Tools – Create Resumes, Cover Letters & Find Jobs</h1>
           <p>
@@ -43,42 +44,58 @@ const Homepage = () => {
             stand out and apply with confidence.
           </p>
         </div>
-        <HeroSection />
-        <div className="w-full min-h-screen hidden md:block">
+
+        {/* Hero Section — make sure this has a natural layout height */}
+        <section className="relative flex flex-col justify-center items-center min-h-[100dvh] w-full">
+          <HeroSection />
+        </section>
+
+        {/* Desktop */}
+        <section className="hidden md:block min-h-[100dvh] w-full">
           <SectionGallery />
-        </div>
-        <div className="w-full flex flex-col items-center justify-center min-h-screen md:hidden ">
-          <div className="w-full relative min-h-[80vh] ">
-            <h1 className="font-semibold text-xl absolute left-6 up">Resume</h1>
-            <p className="absolute left-6 mt-6">Generate a resume with AI. </p>
+        </section>
+
+        {/* Mobile sections */}
+        <section className="flex flex-col items-center justify-center md:hidden w-full">
+          {/* Resume */}
+          <div className="relative w-full flex flex-col justify-center items-center min-h-[100dvh] px-6">
+            <div className="absolute top-8 left-6">
+              <h1 className="font-semibold text-xl">Resume</h1>
+              <p className="mt-2">Generate a resume with AI.</p>
+            </div>
 
             <ThreeResumeMobile />
+
             <Link
-              className="absolute text-xl left-6 underline underline-offset-4 font-semibold uppercase bottom-12"
+              className="absolute text-xl whitespace-nowrap underline underline-offset-4 font-semibold uppercase bottom-10 left-1/2 -translate-x-1/2"
               href={"/resume-generator"}
             >
               Generate Resume
             </Link>
           </div>
-          <div className="w-full relative min-h-[80vh] mt-6">
-            <h1 className="font-semibold text-xl absolute left-6 up">
-              Cover Letter
-            </h1>
-            <p className="absolute left-6 mt-6">
-              Generate a Cover Letter with AI.{" "}
-            </p>
+
+          {/* Cover Letter */}
+          <div className="relative w-full flex flex-col justify-center items-center min-h-[100dvh] px-6">
+            <div className="absolute top-8 left-6">
+              <h1 className="font-semibold text-xl">Cover Letter</h1>
+              <p className="mt-2">Generate a Cover Letter with AI.</p>
+            </div>
+
             <ThreeCoverLetterMobile />
+
             <Link
-              className="absolute text-xl underline underline-offset-4 left-6 font-semibold uppercase bottom-10"
+              className="absolute text-xl whitespace-nowrap underline underline-offset-4 font-semibold uppercase bottom-10 left-1/2 -translate-x-1/2"
               href={"/cover-letter"}
             >
-              Generate cover letter
+              Generate Cover Letter
             </Link>
           </div>
-          <div className="min-h-[80vh] w-full mt-6">
+
+          {/* Find Jobs */}
+          <div className="relative w-full flex flex-col justify-center items-center min-h-[100dvh]">
             <FindJobsIntroMobile />
           </div>
-        </div>
+        </section>
       </main>
     </SmoothScroll>
   );

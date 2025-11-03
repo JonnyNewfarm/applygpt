@@ -64,9 +64,7 @@ export default function HeroSection() {
   const container = {
     hidden: {},
     show: {
-      transition: {
-        staggerChildren: 0.25,
-      },
+      transition: { staggerChildren: 0.25 },
     },
   };
 
@@ -80,9 +78,9 @@ export default function HeroSection() {
   };
 
   return (
-    <div className="relative min-h-screen w-full bg-[#2b2a27] text-[#f6f4ed] px-4 sm:px-20 flex justify-center items-center overflow-hidden dark:bg-[#f6f4f2] dark:text-[#2b2a27]">
+    <div className="relative h-dvh w-full bg-[#2b2a27] text-[#f6f4ed] px-4 sm:px-20 flex justify-center items-center overflow-hidden dark:bg-[#f6f4f2] dark:text-[#2b2a27] landscape:items-center landscape:pt-4">
       <motion.div
-        className="w-full text-left -mt-10 h-full flex flex-col sm:gap-y-6 gap-y-2 relative z-10"
+        className="w-full text-left h-full flex flex-col sm:gap-y-6 gap-y-2 relative z-10 justify-center"
         variants={container}
         initial="hidden"
         animate="show"
@@ -94,6 +92,7 @@ export default function HeroSection() {
           Simplify Job Searching
         </motion.h1>
 
+        {/* SVG Line */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -130,9 +129,10 @@ export default function HeroSection() {
           </motion.svg>
         </motion.div>
 
+        {/* Text + Button */}
         <motion.div
           variants={fadeUp}
-          className="flex sm:-mt-6 flex-col gap-y-1 md:gap-y-1"
+          className="flex flex-col gap-y-1 md:gap-y-1"
         >
           <div className="md:text-xl text-base lg:text-2xl sm:text-lg">
             <p className="mb-2">
@@ -146,17 +146,18 @@ export default function HeroSection() {
             </p>
           </div>
 
-          <motion.div variants={fadeUp} className=" -ml-7 -mt-6 md:-mt-4">
+          <motion.div variants={fadeUp} className="-ml-7 -mt-6 md:-mt-4">
             <ThreeButton />
           </motion.div>
         </motion.div>
       </motion.div>
 
+      {/* Bottom Buttons */}
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.7, duration: 0.6, ease: "easeOut" as const }}
-        className="absolute bottom-26 left-0 w-full flex justify-between px-6 sm:px-20 z-10 font-bold text-2xl sm:text-2xl md:text-4xl"
+        className="absolute hidden md:flex bottom-10 sm:bottom-16 landscape:bottom-6 left-0 w-full  justify-between px-6 sm:px-20 z-10 font-bold text-2xl sm:text-2xl md:text-4xl"
       >
         <AnimatePresence>
           {isGenerateModalOpen && (
@@ -167,7 +168,7 @@ export default function HeroSection() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 50 }}
               transition={{ duration: 0.3, ease: "easeInOut" as const }}
-              className="bg-stone-200 backdrop-blur-md z-50 min-h-[150px] text-sm absolute items-center flex justify-center bottom-10 left-6 md:left-20 min-w-[200px] rounded-[5px] shadow-lg"
+              className="bg-stone-200 backdrop-blur-md z-50 min-h-[150px] text-sm absolute items-center flex justify-center bottom-10 left-6 md:left-20 min-w-[200px] rounded-[5px]"
             >
               <div className="flex w-full h-full flex-col gap-y-4 p-4">
                 <Link
