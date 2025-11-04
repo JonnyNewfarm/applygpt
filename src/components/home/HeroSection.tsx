@@ -78,7 +78,7 @@ export default function HeroSection() {
   };
 
   return (
-    <div className="relative h-dvh w-full bg-[#2b2a27] text-[#f6f4ed] px-4 sm:px-20 flex justify-center items-center overflow-hidden dark:bg-[#f6f4f2] dark:text-[#2b2a27] landscape:items-center landscape:pt-4">
+    <div className="relative min-h-screen w-full bg-[#2b2a27] text-[#f6f4ed] px-4 sm:px-20 flex justify-center items-center overflow-hidden dark:bg-[#f6f4f2] dark:text-[#2b2a27] landscape:items-center landscape:pt-4">
       <motion.div
         className="w-full text-left h-full flex flex-col sm:gap-y-6 gap-y-2 relative z-10 justify-center"
         variants={container}

@@ -13,7 +13,7 @@ export default function ThreeCoverLetterMobile() {
   return (
     <div
       ref={containerRef}
-      className="w-full h-[70vh] flex justify-center items-center overflow-hidden"
+      className="w-full h-[80vh]  flex justify-center items-center overflow-hidden"
     >
       <Canvas camera={{ position: [0, 0, 6], fov: 50 }}>
         <ambientLight intensity={0.6} />

@@ -58,16 +58,16 @@ const Homepage = () => {
         {/* Mobile sections */}
         <section className="flex flex-col items-center justify-center md:hidden w-full">
           {/* Resume */}
-          <div className="relative w-full flex flex-col justify-center items-center min-h-[100dvh] px-6">
-            <div className="absolute top-8 left-6">
+          <div className="relative text-center w-full  justify-center  min-h-screen px-6">
+            <div className=" text-left">
               <h1 className="font-semibold text-xl">Resume</h1>
-              <p className="mt-2">Generate a resume with AI.</p>
+              <p className="">Generate a resume with AI.</p>
             </div>
 
             <ThreeResumeMobile />
 
             <Link
-              className="absolute text-xl whitespace-nowrap underline underline-offset-4 font-semibold uppercase bottom-10 left-1/2 -translate-x-1/2"
+              className=" text-xl whitespace-nowrap underline underline-offset-4 font-semibold uppercase "
               href={"/resume-generator"}
             >
               Generate Resume
@@ -75,16 +75,16 @@ const Homepage = () => {
           </div>
 
           {/* Cover Letter */}
-          <div className="relative w-full flex flex-col justify-center items-center min-h-[100dvh] px-6">
-            <div className="absolute top-8 left-6">
+          <div className="relative text-center w-full mt-14 flex flex-col justify-center items-center min-h-screen px-6">
+            <div className="text-left">
               <h1 className="font-semibold text-xl">Cover Letter</h1>
-              <p className="mt-2">Generate a Cover Letter with AI.</p>
+              <p className="">Generate a Cover Letter with AI.</p>
             </div>
 
             <ThreeCoverLetterMobile />
 
             <Link
-              className="absolute text-xl whitespace-nowrap underline underline-offset-4 font-semibold uppercase bottom-10 left-1/2 -translate-x-1/2"
+              className="text-xl whitespace-nowrap underline underline-offset-4 font-semibold uppercase"
               href={"/cover-letter"}
             >
               Generate Cover Letter
