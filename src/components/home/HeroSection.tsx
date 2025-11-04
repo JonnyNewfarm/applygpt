@@ -78,9 +78,9 @@ export default function HeroSection() {
   };
 
   return (
-    <div className="relative min-h-screen w-full bg-[#2b2a27] text-[#f6f4ed] px-4 sm:px-20 flex justify-center items-center overflow-hidden dark:bg-[#f6f4f2] dark:text-[#2b2a27] landscape:items-center landscape:pt-4">
+    <div className="relative min-h-screen md:min-h-[80vh] w-full bg-[#2b2a27] text-[#f6f4ed] px-4 sm:px-20 flex justify-center items-center overflow-hidden dark:bg-[#f6f4f2] dark:text-[#2b2a27] pb-28">
       <motion.div
-        className="w-full text-left h-full flex flex-col sm:gap-y-6 gap-y-2 relative z-10 justify-center"
+        className="w-full text-left h-full flex flex-col mt-6  sm:gap-y-6 gap-y-2 relative z-10 justify-center"
         variants={container}
         initial="hidden"
         animate="show"
@@ -92,7 +92,6 @@ export default function HeroSection() {
           Simplify Job Searching
         </motion.h1>
 
-        {/* SVG Line */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -134,7 +133,7 @@ export default function HeroSection() {
           variants={fadeUp}
           className="flex flex-col gap-y-1 md:gap-y-1"
         >
-          <div className="md:text-xl text-base lg:text-2xl sm:text-lg">
+          <div className="md:text-xl text-base md:-mt-4 lg:text-2xl sm:text-lg">
             <p className="mb-2">
               All-in-one <strong>AI tools</strong> to build resumes, write
               tailored cover letters, and discover

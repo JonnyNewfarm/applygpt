@@ -35,7 +35,6 @@ const Homepage = () => {
   return (
     <SmoothScroll>
       <main className="bg-[#2b2a27] text-[#f5f4ef] dark:bg-[#f6f4f2] dark:text-[#2b2a27] border-b-white/10 border-b dark:border-b-black/80 flex flex-col w-full">
-        {/* Hidden SEO header */}
         <div className="sr-only">
           <h1>AI Career Tools – Create Resumes, Cover Letters & Find Jobs</h1>
           <p>
@@ -45,19 +44,15 @@ const Homepage = () => {
           </p>
         </div>
 
-        {/* Hero Section — make sure this has a natural layout height */}
         <section className="relative flex flex-col justify-center items-center min-h-[100dvh] w-full">
           <HeroSection />
         </section>
 
-        {/* Desktop */}
         <section className="hidden md:block min-h-[100dvh] w-full">
           <SectionGallery />
         </section>
 
-        {/* Mobile sections */}
         <section className="flex flex-col items-center justify-center md:hidden w-full">
-          {/* Resume */}
           <div className="relative text-center w-full  justify-center  min-h-screen px-6">
             <div className=" text-left">
               <h1 className="font-semibold text-xl">Resume</h1>
@@ -74,7 +69,6 @@ const Homepage = () => {
             </Link>
           </div>
 
-          {/* Cover Letter */}
           <div className="relative text-center w-full mt-14 flex flex-col justify-center items-center min-h-screen px-6">
             <div className="text-left">
               <h1 className="font-semibold text-xl">Cover Letter</h1>
@@ -91,7 +85,6 @@ const Homepage = () => {
             </Link>
           </div>
 
-          {/* Find Jobs */}
           <div className="relative w-full flex flex-col justify-center items-center min-h-[100dvh]">
             <FindJobsIntroMobile />
           </div>
