@@ -128,13 +128,9 @@ export default function HeroSection() {
           </motion.svg>
         </motion.div>
 
-        {/* Text + Button */}
-        <motion.div
-          variants={fadeUp}
-          className="flex flex-col gap-y-1 md:gap-y-1"
-        >
-          <div className="md:text-xl text-base md:-mt-4 lg:text-2xl sm:text-lg">
-            <p className="mb-2">
+        <motion.div variants={fadeUp} className="flex flex-col gap-y-1 ">
+          <div className="md:text-xl text-base landscape:-mt-5 lg:text-2xl sm:text-lg">
+            <p className="mb-2.5">
               All-in-one <strong>AI tools</strong> to build resumes, write
               tailored cover letters, and discover
             </p>
@@ -145,13 +141,12 @@ export default function HeroSection() {
             </p>
           </div>
 
-          <motion.div variants={fadeUp} className="-ml-7 -mt-6 md:-mt-4">
+          <motion.div variants={fadeUp} className="-ml-7 -mt-4 md:-mt-4">
             <ThreeButton />
           </motion.div>
         </motion.div>
       </motion.div>
 
-      {/* Bottom Buttons */}
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
